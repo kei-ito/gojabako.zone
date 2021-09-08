@@ -3,121 +3,23 @@
     "name": "wemo.me",
     "version": "0.0.0",
     "scripts": {
-        "start": "ts-node ./ci/build.ts --watch",
-        "build": "ts-node ./ci/build.ts",
+        "start": "ts-node ./build/serve.ts --watch",
+        "build": "ts-node ./build/build.ts",
         "test:tsc": "tsc",
         "test": "run-s test:*"
     },
     "devDependencies": {
-        "@commitlint/cli": "^8.2.0",
-        "@commitlint/config-conventional": "^8.2.0",
-        "@nlib/afs": "^3.13.4",
-        "@nlib/lint": "^3.13.4",
-        "@svgr/rollup": "^4.3.3",
-        "@types/cheerio": "^0.22.13",
-        "@types/connect": "^3.4.32",
-        "@types/node": "^12.11.7",
-        "@types/react": "^16.9.11",
-        "@types/react-dom": "^16.9.3",
-        "@types/react-router-dom": "^5.1.0",
-        "@typescript-eslint/eslint-plugin": "^2.5.0",
-        "@typescript-eslint/parser": "^2.5.0",
-        "ava": "^2.4.0",
-        "cheerio": "^1.0.0-rc.3",
-        "connect": "^3.7.0",
-        "conventional-changelog-cli": "^2.0.25",
-        "eslint": "^6.6.0",
-        "eslint-plugin-react": "^7.16.0",
-        "eslint-plugin-react-hooks": "^2.2.0",
-        "globby": "^10.0.1",
-        "husky": "^3.0.9",
-        "lint-staged": "^9.4.2",
-        "middleware-static-livereload": "^1.2.8",
+        "@nlib/eslint-config": "^3.17.25",
+        "@nlib/githooks": "^0.1.0",
+        "@types/connect": "3.4.35",
+        "@typescript-eslint/eslint-plugin": "^4.31.0",
+        "@typescript-eslint/parser": "^4.31.0",
+        "connect": "3.7.0",
+        "eslint": "^7.32.0",
+        "lint-staged": "^11.1.2",
+        "middleware-static-livereload": "1.2.21",
         "npm-run-all": "^4.1.5",
-        "react": "^16.11.0",
-        "react-dom": "^16.11.0",
-        "react-spring": "^8.0.27",
-        "rimraf": "^3.0.0",
-        "rollup": "^1.25.2",
-        "rollup-plugin-commonjs": "^10.1.0",
-        "rollup-plugin-embed-css": "^1.0.7",
-        "rollup-plugin-node-resolve": "^5.2.0",
-        "rollup-plugin-replace": "^2.2.0",
-        "rollup-plugin-sucrase": "^2.1.0",
-        "rollup-plugin-terser": "^5.1.2",
-        "rollup-plugin-url": "^3.0.0",
-        "ts-node": "^8.4.1",
-        "typescript": "^3.6.4"
-    },
-    "ava": {
-        "compileEnhancements": false,
-        "extensions": [
-            "ts"
-        ],
-        "require": [
-            "ts-node/register"
-        ],
-        "files": [
-            "lib/**/*.test.js",
-            "lib-test/**/*.test.js"
-        ]
-    },
-    "commitlint": {
-        "extends": [
-            "@commitlint/config-conventional"
-        ],
-        "rules": {
-            "subject-case": [
-                0
-            ]
-        }
-    },
-    "husky": {
-        "hooks": {
-            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-            "pre-commit": "lint-staged"
-        }
-    },
-    "lint-staged": {
-        "*.ts": [
-            "eslint"
-        ]
-    },
-    "browserslist": [
-        "last 1 version",
-        "> 1%"
-    ],
-    "eslintConfig": {
-        "extends": [
-            "./node_modules/@nlib/lint/.eslintrc.json"
-        ],
-        "env": {
-            "es6": true
-        },
-        "overrides": [
-            {
-                "files": [
-                    "ci/**/*"
-                ],
-                "env": {
-                    "node": true
-                },
-                "rules": {
-                    "no-console": "off"
-                }
-            },
-            {
-                "files": [
-                    "src/**/*"
-                ],
-                "plugins": [
-                    "react",
-                    "react-hooks"
-                ],
-                "env": {
-                    "browser": true
-                }
-            }
-        ]
+        "ts-node": "10.2.1",
+        "typescript": "4.4.2"
     }
 }
