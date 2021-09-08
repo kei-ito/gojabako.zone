@@ -2,24 +2,21 @@
     "private": true,
     "name": "wemo.me",
     "version": "0.0.0",
+    "type": "module",
     "scripts": {
-        "start": "ts-node ./build/serve.ts --watch",
-        "build": "ts-node ./build/build.ts",
-        "test:tsc": "tsc",
-        "test": "run-s test:*"
+        "start": "node ./build/serve.js --watch",
+        "build": "node ./build/build.js"
     },
     "devDependencies": {
         "@nlib/eslint-config": "^3.17.25",
         "@nlib/githooks": "^0.1.0",
-        "@types/connect": "3.4.35",
         "@typescript-eslint/eslint-plugin": "^4.31.0",
         "@typescript-eslint/parser": "^4.31.0",
         "connect": "3.7.0",
+        "esbuild": "0.12.25",
         "eslint": "^7.32.0",
         "lint-staged": "^11.1.2",
         "middleware-static-livereload": "1.2.21",
-        "npm-run-all": "^4.1.5",
-        "ts-node": "10.2.1",
-        "typescript": "4.4.2"
+        "npm-run-all": "^4.1.5"
     }
 }
