@@ -1,0 +1,45 @@
+.header {
+    z-index: var(--zHeader);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--headerHeight);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0.3rem #0002;
+    background-color: var(--mainColor);
+    line-height: 1;
+}
+
+.container {
+    width: var(--baseWidth);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.sns {
+    margin-inline-start: 0.5rem;
+    font-size: 90%;
+    color: inherit;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+}
+
+.logo {
+    height: 1rem;
+    margin-inline-end: 0.5rem;
+    border-radius: 0.1rem;
+    fill: currentColor;
+}
