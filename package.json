@@ -23,10 +23,14 @@
         "eslint": "7.32.0",
         "eslint-config-next": "11.1.2",
         "lint-staged": "11.1.2",
+        "lowlight": "2.3.0",
+        "mdast-util-from-markdown": "1.0.2",
+        "mdast-util-gfm": "1.0.0",
         "next": "11.1.2",
         "npm-run-all": "4.1.5",
         "react": "17.0.2",
-        "react-dom": "17.0.2"
+        "react-dom": "17.0.2",
+        "ts-node": "^10.2.1"
     },
     "eslintConfig": {
         "extends": [
@@ -35,6 +39,19 @@
         ],
         "ignorePatterns": [
             "next-env.d.ts"
+        ],
+        "overrides": [
+            {
+                "files": [
+                    "./*.js"
+                ],
+                "env": {
+                    "node": true
+                },
+                "rules": {
+                    "@nlib/no-globals": "off"
+                }
+            }
         ]
     },
     "lint-staged": {

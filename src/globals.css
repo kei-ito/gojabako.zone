@@ -62,3 +62,7 @@ a {
     color: rgb(0, 0, 207);
     text-decoration: underline;
 }
+pre, code {
+    white-space: pre;
+    font-family: monospace;
+}
