@@ -64,7 +64,16 @@ const serializeMarkdownNodeToJsx = function* (context: SerializeContext, node: M
         yield* serializeMarkdownNodeToJsxElement(context, node.ordered ? 'ol' : 'ul', null, node.children);
         break;
     case 'listItem':
-        yield* serializeMarkdownNodeToJsxElement(context, 'li', null, node.children);
+        if (typeof node.checked === 'boolean') {
+            yield '<li data-checkbox="">';
+            yield `<input type="checkbox" readOnly={true} checked={${node.checked}}/>`;
+        } else {
+            yield '<li>';
+        }
+        for (const child of node.children) {
+            yield* serializeMarkdownNodeToJsx(context, child);
+        }
+        yield '</li>';
         break;
     case 'table': {
         yield '<table>';

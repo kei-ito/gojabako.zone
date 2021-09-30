@@ -163,6 +163,14 @@ li>p {
     margin-block-start: 0;
     margin-block-end: 0;
 }
+li[data-checkbox]::before {
+    content: none;
+}
+li>input[type=checkbox] {
+    position: absolute;
+    inset-block-start: 0.4rem;
+    inset-inline-start: calc(var(--listIndexSize) - 1.4rem);
+}
 ol[data-lang] {
     overflow-x: auto;
     font-family: var(--font-monospace);
@@ -197,12 +205,11 @@ table {
     border-collapse: collapse;
 }
 td, th {
-    padding-block-start: 0.3rem;
-    padding-block-end: 0.3rem;
+    padding-block-start: 0.4rem;
+    padding-block-end: 0.2rem;
     padding-inline-start: 0.5rem;
     padding-inline-end: 0.5rem;
     border-style: solid;
-    font-size: smaller;
 }
 
 .raw-xml .raw-hljs-meta{color:silver}
