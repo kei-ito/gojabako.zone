@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import {Main} from '../../../components/Main';
 import {Section} from '../../../components/Section';
 import Post from './post.md';
 
@@ -16,9 +15,9 @@ const Page = () => <>
         <meta property="og:locale" content="ja_JP"/>
         <meta property="og:site_name" content="Kei Ito"/>
     </Head>
-    <Main>
+    <main>
         <Section><Post/></Section>
-    </Main>
+    </main>
 </>;
 
 export default Page;

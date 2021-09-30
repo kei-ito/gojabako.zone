@@ -5,9 +5,9 @@ import {className} from './style.module.css';
 export const Header = () => <header className={className.header}>
     <div className={className.container}>
         <Link href="/">
-            <a className={className.title}>
+            <a className={className.titleLink}>
                 <Logo className={className.logo}/>
-                <h1>Kei Ito</h1>
+                <h1 className={className.title}>Kei Ito</h1>
             </a>
         </Link>
         <div className={className.spacer}/>

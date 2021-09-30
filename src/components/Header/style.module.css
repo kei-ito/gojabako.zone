@@ -1,10 +1,8 @@
 .header {
     z-index: var(--zHeader);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: var(--headerHeight);
+    position: sticky;
+    inset-block-start: 0;
+    block-size: var(--headerHeight);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -12,33 +10,35 @@
     background-color: var(--mainColor);
     line-height: 1;
 }
-
 .container {
-    width: var(--baseWidth);
+    inline-size: var(--baseWidth);
     display: flex;
     align-items: center;
     justify-content: flex-start;
 }
-
 .sns {
     margin-inline-start: 0.5rem;
     font-size: 90%;
     color: inherit;
 }
-
 .spacer {
     flex-grow: 1;
 }
-
-.title {
+.titleLink {
     display: flex;
     align-items: center;
     color: inherit;
     text-decoration: none;
 }
-
+.title {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    line-height: 1;
+    /* (Exception) Use the physical position for visual adjustment on displaying horizontally. */
+    padding-top: 1px;
+}
 .logo {
-    height: 1rem;
+    block-size: 1rem;
     margin-inline-end: 0.5rem;
     border-radius: 0.1rem;
     fill: currentColor;

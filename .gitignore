@@ -36,3 +36,6 @@ yarn-error.log*
 # css
 *.css.ts
 /src/app.css
+
+# loader
+/loader/*.mjs

@@ -7,12 +7,18 @@ export interface SectionProps {
 }
 
 export const Section = ({title, id = title, children}: PropsWithChildren<SectionProps>) => <section className={className.section}>
-    <div className={className.anchor} id={id}></div>
     {title ? <Title title={title} id={id}/> : null}
     {children}
 </section>;
 
-const Title = ({title, id = title}: SectionProps) => <h1 className={className.heading}>
-    {title}
-    <a className={className.link} href={`#${id}`}>link</a>
-</h1>;
+const Title = ({title, id: rawId}: SectionProps) => {
+    if (rawId) {
+        const id = rawId.replace(/\s+/, '_');
+        return <h1 className={className.heading}>
+            <div className="anchor" id={id}/>
+            {title}&nbsp;
+            <a className="link" href={`#${id}`}>link</a>
+        </h1>;
+    }
+    return <h1 className={className.heading}>{title}</h1>;
+};

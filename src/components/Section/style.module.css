@@ -1,31 +1,8 @@
 .section {
     width: var(--baseWidth);
-    padding-bottom: 1rem;
+    margin-block-start: 1rem;
+    margin-block-end: 1rem;
 }
-
-.section>p::before {
-    content: '';
-    display: inline-block;
-    width: 1em;
-}
-
 .heading {
-    padding: 1rem 0;
-    font-size: 120%;
-    line-height: 1.5;
-}
-
-.link {
-    margin-inline-start: 0.5rem;
-    font-size: 70%;
-    color: inherit;
-    opacity: 0.8;
-    user-select: none;
-    text-decoration: none;
-}
-
-.anchor {
-    position: absolute;
-    opacity: 0;
-    margin-top: calc(var(--headerHeight) * -1 - 1rem);
+    margin-block-end: 1rem;
 }

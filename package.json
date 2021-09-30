@@ -3,10 +3,14 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "dev": "run-p dev:*",
-        "dev:css": "esifycss --css=src/app.css --ext=.ts --watch src",
-        "dev:next": "next dev",
+        "dev": "run-s build:loader dev:*",
+        "dev:watch": "run-p dev:watch:*",
+        "dev:watch:css": "esifycss --css=src/app.css --ext=.ts --watch src",
+        "dev:watch:next": "next dev",
         "build": "run-s build:*",
+        "build:loader": "run-s build:loader:*",
+        "build:loader:tsc": "tsc --project tsconfig.loader.json",
+        "build:loader:mjs": "npx @nlib/change-ext --directory loader --mapping js/mjs",
         "build:css": "esifycss --css=src/app.css --ext=.ts src",
         "build:next": "next build",
         "start": "next start",
@@ -26,19 +30,26 @@
         "lowlight": "2.3.0",
         "mdast-util-from-markdown": "1.0.2",
         "mdast-util-gfm": "1.0.0",
+        "micromark-extension-gfm": "1.0.0",
         "next": "11.1.2",
         "npm-run-all": "4.1.5",
         "react": "17.0.2",
         "react-dom": "17.0.2",
         "ts-node": "^10.2.1"
     },
+    "browserslist": [
+        ">5%",
+        "not ie 11",
+        "not dead"
+    ],
     "eslintConfig": {
         "extends": [
             "next/core-web-vitals",
             "@nlib/eslint-config"
         ],
         "ignorePatterns": [
-            "next-env.d.ts"
+            "next-env.d.ts",
+            "loader/**/*.mjs"
         ],
         "overrides": [
             {

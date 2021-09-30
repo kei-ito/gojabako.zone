@@ -1,7 +1,7 @@
 .footer {
     display: flex;
     justify-content: center;
-    padding-top: 2rem;
-    padding-bottom: 1rem;
+    padding-block-start: 1rem;
+    padding-block-end: 1rem;
     line-height: 1;
 }

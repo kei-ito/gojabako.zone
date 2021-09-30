@@ -1,0 +1,10 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "noEmit": false,
+        "outDir": "./loader"
+    },
+    "include": [
+        "./loader/**/*.ts",
+    ]
+}

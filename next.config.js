@@ -5,7 +5,7 @@ module.exports = {
     webpack: (config, options) => {
         config.module.rules.push({
             test: /\.md$/,
-            use: [options.defaultLoaders.babel, './markdownLoader.js'],
+            use: [options.defaultLoaders.babel, './loader/markdown.cjs'],
         });
         config.resolve.plugins.push(new EsifyCSSWebpackPlugin());
         return config;
