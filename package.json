@@ -21,7 +21,7 @@
         "build:css": "esifycss --css=src/app.css --ext=.ts src",
         "build:next": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "eslint --ext .js,.ts,.tsx loader src"
     },
     "devDependencies": {
         "@nlib/eslint-config": "3.17.25",
@@ -68,9 +68,6 @@
             "next/core-web-vitals",
             "@nlib/eslint-config"
         ],
-        "plugins": [
-            "jest"
-        ],
         "ignorePatterns": [
             "next-env.d.ts",
             "loader/**/*.mjs"
@@ -91,6 +88,9 @@
             {
                 "files": [
                     "*.test.ts"
+                ],
+                "plugins": [
+                    "jest"
                 ],
                 "env": {
                     "jest/globals": true
