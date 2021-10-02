@@ -3,7 +3,7 @@
  * @returns {string}
  */
 module.exports = async function markdownLoader(source) {
-    const {getJsxCode} = await import('./util/getJsxCode.mjs');
+    const {getJsxCode} = await import('../.loader/util/getJsxCode.mjs');
     const {preamble, jsx} = await getJsxCode(source);
     return [
         preamble,

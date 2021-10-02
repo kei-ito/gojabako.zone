@@ -27,7 +27,7 @@
     --zHeader: 1;
     --headerHeight: 1.5rem;
     --listIndexSize: 2rem;
-    --font-default: Georgia, serif;
+    --font-default: Georgia, 'BIZ UDMincho', serif;
     --font-monospace: 'Roboto Mono', monospace;
     font-size: 16px;
     font-family: var(--font-default);
