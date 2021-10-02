@@ -25,6 +25,13 @@ export const serializeMarkdownToJsx = function* (
     yield* serialize(context, context.fromMarkdown(source), []);
 };
 
+export const serializeMarkdownRootToJsx = function* (
+    context: SerializeMarkdownContext,
+    root: Markdown.Root,
+) {
+    yield* serialize(context, root, []);
+};
+
 // eslint-disable-next-line max-lines-per-function, complexity
 const serialize = function* (
     context: SerializeMarkdownContext,
