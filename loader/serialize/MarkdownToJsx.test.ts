@@ -201,4 +201,19 @@ describe(serializeMarkdownToJsx.name, () => {
         ].join('');
         expect(actual).toBe(expected);
     });
+    it('decoration', async () => {
+        const context = await createSerializeMarkdownContext();
+        const source = [
+            '*emphasis* **strong** ~~delete~~ `inline code`',
+        ].join('\n');
+        const actual = [...serializeMarkdownToJsx(context, source)].join('');
+        const expected = [
+            '<>',
+            '<p>',
+            '<i>emphasis</i> <b>strong</b> <s>delete</s> <code>inline code</code>',
+            '</p>',
+            '</>',
+        ].join('');
+        expect(actual).toBe(expected);
+    });
 });
