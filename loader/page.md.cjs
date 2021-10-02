@@ -17,9 +17,9 @@ const serializeCode = function* (
     yield '        <Head>';
     yield '        </Head>';
     yield '        <main>';
-    yield '            <Section>';
+    yield '            <article>';
     yield `                ${jsx}`;
-    yield '            </Section>';
+    yield '            </article>';
     yield '        </main>';
     yield '    </>;';
     yield '}';

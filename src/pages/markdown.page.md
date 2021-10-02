@@ -20,14 +20,17 @@ Code block
 
 ### without caption
 
-```typescript
-const foo = 'bar';
+```diff
+- const message = `修正${'前'}`;
++ const message = `修正${'後'}`;
 ```
 
 ### with caption
 
 ```typescript example.ts
-const foo = 'bar';
+const fooooooooooooooooooooooooooooooooo = 'baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar';
+const f000000000000000000000000000000000 = 'baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar';
+const fOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO = 'baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaar';
 ```
 
 ### with linked caption
@@ -36,21 +39,25 @@ const foo = 'bar';
 const foo = 'bar';
 ```
 
-ここは本文で`p`で**表示**されるんだと*思う*。
+Decoration
+----------
 
-そんなむずかしい役なら雇う前にこれこれだと話すがいい。おれは嘘をつくのが嫌いだから、仕方がない、だまされて来たのだとあきらめて、思い切りよく、ここで断わって帰っちまおうと思った。<ruby>明日<rp>(</rp><rt>あした</rt><rp>)</rp></ruby>の話そんなむずかしい役なら雇う前にこれこれだと話すがいい。おれは嘘をつくのが嫌いだから、仕方がない、だまされて来たのだとあきらめて、思い切りよく、ここで断わって帰っちまおうと思った。
+*強調*と**太字**と~~打ち消し線~~と[リンク](https://example.com)。
 
-# GFM
+~~打ち消しと*強調*~~ **太字と~~打ち消し線~~** [リンクと**太字**](https://example.com)。
 
-## Autolink literals
+Ruby
+----
+
+<ruby>明日<rp>(</rp><rt>あした</rt><rp>)</rp></ruby>の話。
+
+Autolink literals
+-----------------
 
 www.example.com, https://example.com, and contact@example.com.
 
-## Strikethrough
-
-~one~ or ~~two~~ tildes.
-
-## Table
+Table
+-----
 
 | aaaaa | bbbbb | ccccc | dddddd |
 | - | :- | -: | :-: |
@@ -64,81 +71,40 @@ www.example.com, https://example.com, and contact@example.com.
 | a | b  |  c |  d  |
 | a | b  |  c |  d  |
 
-## Tasklist
+Checkbox
+--------
 
-* [ ] to do
-* [x] done
+* [ ] Item1
+* [x] Item2
 
-- [ ] to do
-- [x] done
+- [ ] Item3
+- [x] Item4
 
-1. [ ] 法外な注文
-1. [x] 月給四十円で遥々
-
-校長の云うようにはとても出来ない。おれみたような無鉄砲なものをつらまえて、生徒の模範になれの、一校の師表と仰がれなくてはいかんの、学問以外に個人の徳化を及ぼさなくては教育者になれないの、と無暗に法外な注文をする。
+1. [ ] Item5
+1. [x] Item6
 
 Blockquote
 ----------
 
 > 校長の云うようにはとても出来ない。おれみたような無鉄砲なものをつらまえて、生徒の模範になれの、一校の師表と仰がれなくてはいかんの、学問以外に個人の徳化を及ぼさなくては教育者になれないの、と無暗に法外な注文をする。そんなえらい人が月給四十円で遥々こんな田舎へくるもんか。人間は大概似たもんだ。
-> > 腹が立てば喧嘩の一つぐらいは誰でもするだろうと思ってたが、この様子じゃめったに口も聞けない、散歩も出来ない。そんなむずかしい役なら雇う前にこれこれだと話すがいい。おれは嘘をつくのが嫌いだから、仕方がない、だまされて来たのだとあきらめて、思い切りよく、ここで断わって帰っちまおうと思った。
+> > Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
-## これは見出し
+Image
+-----
 
-```typescript
-const message = 'これはTypeScriptのシンタックスハイライトを効かせたいこれはTypeScriptのシンタックスハイライトを効かせたい';
-const msg = () => {
-    return message.repeat(123);
-};
-export class Messenger {
-    public static foo() {
-        return 'Hello!<\'escaped!\'>';
-    }
-    private message: string;
-    public constructor(message: string) {
-        this.message = message;
-    }
-}
-```
-
-```diff
-- const message = `修正${'前'}`;
-+ const message = `修正${'後'}`;
-```
-
-```css
-ol[data-lang]>li::before {
-    content: counter(listItemIndex) '番';
-    opacity: 0.6;
-    border-inline-end-width: 1px;
-    border-inline-end-style: solid;
-    border-inline-end-color: currentColor;
-}
-ol[data-lang]>li>code {
-    padding-inline-start: 0.5rem;
-    padding-inline-end: 0.5rem;
-}
-```
-
-そんなえらい人が月給四十円で遥々こんな田舎へくるもんか。人間は大概似たもんだ。腹が立てば喧嘩の一つぐらいは誰でもするだろうと思ってたが、この様子じゃめったに口も聞けない、散歩も出来ない。そんなむずかしい役なら雇う前にこれこれだと話すがいい。おれは嘘をつくのが嫌いだから、仕方がない、だまされて来たのだとあきらめて、思い切りよく、ここで断わって帰っちまおうと思った。
-
-![画像の説明](../../public/logo.png)
+![ここはキャプション](../../public/logo.png)
 
 -------------
 
-- 番号なし箇条書きの1番目
-- 番号なし箇条書きの2番目
-- 校長の云うようにはとても出来ない。おれみたような無鉄砲なものをつらまえて、生徒の模範になれの、一校の師表と仰がれなくてはいかんの、学問以外に個人の徳化を及ぼさなくては教育者になれないの、と無暗に法外な注文をする。そんなえらい人が月給四十円で遥々こんな田舎へくるもんか。人間は大概似たもんだ。腹が立てば喧嘩の一つぐらいは誰でもするだろうと思ってたが、この様子じゃめったに口も聞けない、散歩も出来ない。そんなむずかしい役なら雇う前にこれこれだと話すがいい。おれは嘘をつくのが嫌いだから、仕方がない、だまされて来たのだとあきらめて、思い切りよく、ここで断わって帰っちまおうと思った。
-- 番号なし箇条書きの4番目
+List
+----
 
-1. 番号あり箇条書きの1番目
-1. 番号あり箇条書きの2番目
-1. 校長の云うようにはとても出来ない。おれみたような無鉄砲なものをつらまえて、生徒の模範になれの、一校の師表と仰がれなくてはいかんの、学問以外に個人の徳化を及ぼさなくては教育者になれないの、と無暗に法外な注文をする。そんなえらい人が月給四十円で遥々こんな田舎へくるもんか。人間は大概似たもんだ。腹が立てば喧嘩の一つぐらいは誰でもするだろうと思ってたが、この様子じゃめったに口も聞けない、散歩も出来ない。そんなむずかしい役なら雇う前にこれこれだと話すがいい。おれは嘘をつくのが嫌いだから、仕方がない、だまされて来たのだとあきらめて、思い切りよく、ここで断わって帰っちまおうと思った。
-1. 番号あり箇条書きの4番目
+- Item1
+- Item2
+- 校長の云うようにはとても出来ない。おれみたような無鉄砲なものをつらまえて、生徒の模範になれの、一校の師表と仰がれなくてはいかんの、学問以外に個人の徳化を及ぼさなくては教育者になれないの、と無暗に法外な注文をする。そんなえらい人が月給四十円で遥々こんな田舎へくるもんか。人間は大概似たもんだ。腹が立てば喧嘩の一つぐらいは誰でもするだろうと思ってたが、この様子じゃめったに口も聞けない、散歩も出来ない。
+- Item4
 
-1. 番号あり[箇条書き]の1番目
-1. 番号あり箇条書きの2番目
-1. 番号あり箇条書きの3番目
-1. 番号あり箇条書きの4番目
-
-[箇条書き]: https://example.com/
+1. Item1
+1. Item2
+1. 校長の云うようにはとても出来ない。おれみたような無鉄砲なものをつらまえて、生徒の模範になれの、一校の師表と仰がれなくてはいかんの、学問以外に個人の徳化を及ぼさなくては教育者になれないの、と無暗に法外な注文をする。そんなえらい人が月給四十円で遥々こんな田舎へくるもんか。人間は大概似たもんだ。腹が立てば喧嘩の一つぐらいは誰でもするだろうと思ってたが、この様子じゃめったに口も聞けない、散歩も出来ない。
+1. Item4

@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import type {PropsWithChildren} from 'react';
-import {Section} from '../Section';
 
 export interface PageProps {
     title: string,
@@ -15,8 +14,8 @@ export const Page = ({title, description, url, children}: PropsWithChildren<Page
         <meta name="og:url" content={url}/>
     </Head>
     <main>
-        <Section title={title}>
+        <section>
             {children}
-        </Section>
+        </section>
     </main>
 </>;
