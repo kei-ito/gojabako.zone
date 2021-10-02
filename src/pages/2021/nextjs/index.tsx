@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import {Section} from '../../../components/Section';
-import Post from './body.md';
+import Post from './body.module.md';
 
 const Page = () => <>
     <Head>
