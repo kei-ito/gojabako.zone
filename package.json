@@ -8,7 +8,9 @@
         "email": "kei.itof@gmail.com"
     },
     "scripts": {
-        "test": "jest",
+        "test": "run-s test:*",
+        "test:type": "tsc --noEmit",
+        "test:jest": "jest",
         "dev": "run-s build:loader dev:*",
         "dev:watch": "run-p dev:watch:*",
         "dev:watch:css": "esifycss --css=src/app.css --ext=.ts --watch src",
