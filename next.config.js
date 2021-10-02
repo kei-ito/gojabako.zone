@@ -2,11 +2,12 @@ const EsifyCSSWebpackPlugin = require('esifycss-webpack-plugin');
 
 module.exports = {
     reactStrictMode: true,
-    webpack: (config, options) => {
-        config.module.rules.push({
-            test: /\.md$/,
-            use: [options.defaultLoaders.babel, './loader/markdown.cjs'],
-        });
+    pageExtensions: ['page.md', 'tsx'],
+    webpack: (config, {defaultLoaders: {babel}}) => {
+        config.module.rules.push(
+            {test: /\.module\.md$/, use: [babel, './loader/module.md.cjs']},
+            {test: /\.page\.md$/, use: [babel, './loader/page.md.cjs']},
+        );
         config.resolve.plugins.push(new EsifyCSSWebpackPlugin());
         return config;
     },

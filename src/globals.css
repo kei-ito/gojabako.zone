@@ -34,6 +34,8 @@
     line-height: 1.5;
     text-rendering: optimizeSpeed;
     color: var(--textColor);
+    block-size: 100%;
+    background-color: var(--backgroundColor);
 }
 @media (max-width: 710px) {
     :root {
@@ -45,7 +47,6 @@
 }
 body {
     min-height: 100vh;
-    background-color: var(--backgroundColor);
 }
 main {
     display: flex;
@@ -57,7 +58,7 @@ img, svg, picture {
     display: block;
 }
 rt {
-    font-size: 12px;
+    font-size: 60%;
 }
 @media (prefers-reduced-motion: reduce) {
     html:focus-within {
@@ -96,22 +97,34 @@ blockquote {
     padding-inline-start: 1rem;
     border-inline-start-style: solid;
     border-inline-start-width: 0.2rem;
+    opacity: 0.85;
 }
 h1, h2, h3, h4, h5, h6 {
     margin-block-start: 1rem;
     margin-block-end: 1rem;
-    font-size: 120%;
-    font-weight: 700;
+    font-weight: bolder;
 }
 h1, h2, h3 {
     margin-block-start: 2rem;
 }
+h1 {
+    font-size: 130%;
+}
+h2 {
+    font-size: 112%;
+}
+h3 {
+    font-size: 106%;
+}
 .raw-link {
     font-size: 70%;
     color: inherit;
-    opacity: 0.8;
+    opacity: 0.4;
     user-select: none;
     text-decoration: none;
+}
+.raw-link:hover {
+    opacity: 1;
 }
 .raw-anchor {
     position: absolute;
@@ -132,6 +145,13 @@ p::before {
 }
 li>p::before {
     content: none;
+}
+figure {
+    margin-block-start: 1rem;
+    margin-block-end: 1rem;
+}
+figcaption {
+    font-size: 80%;
 }
 ol, ul {
     counter-reset: listItemIndex;
@@ -172,6 +192,8 @@ li>input[type=checkbox] {
     inset-inline-start: calc(var(--listIndexSize) - 1.4rem);
 }
 ol[data-lang] {
+    margin-block-start: 0;
+    margin-block-end: 0;
     overflow-x: auto;
     font-family: var(--font-monospace);
     font-size: smaller;
@@ -200,8 +222,6 @@ hr {
 }
 table {
     max-width: 100%;
-    margin-block-start: 1rem;
-    margin-block-end: 1rem;
     border-collapse: collapse;
 }
 td, th {

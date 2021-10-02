@@ -21,9 +21,6 @@
     font-size: 90%;
     color: inherit;
 }
-.spacer {
-    flex-grow: 1;
-}
 .titleLink {
     display: flex;
     align-items: center;
@@ -36,6 +33,7 @@
     line-height: 1;
     /* (Exception) Use the physical position for visual adjustment on displaying horizontally. */
     padding-top: 1px;
+    font-size: 120%;
 }
 .logo {
     block-size: 1rem;

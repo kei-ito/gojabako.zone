@@ -6,5 +6,9 @@
     },
     "include": [
         "./loader/**/*.ts",
+    ],
+    "exclude": [
+        "**/*.test.ts",
+        "**/*.test.tsx"
     ]
 }

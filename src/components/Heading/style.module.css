@@ -1,0 +1,8 @@
+.section {
+    width: var(--baseWidth);
+    margin-block-start: 1rem;
+    margin-block-end: 1rem;
+}
+.heading {
+    margin-block-end: 1rem;
+}
