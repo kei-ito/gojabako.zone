@@ -21,7 +21,8 @@
         "build:css": "esifycss --css=src/app.css --ext=.ts src",
         "build:next": "next build",
         "start": "next start",
-        "lint": "eslint --ext .js,.ts,.tsx loader src"
+        "lint": "run-s build:css lint:*",
+        "lint:eslint": "eslint --ext .js,.ts,.tsx loader src"
     },
     "devDependencies": {
         "@nlib/eslint-config": "3.17.25",
