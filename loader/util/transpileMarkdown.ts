@@ -1,10 +1,10 @@
 import {serializeMarkdownToJsx} from '../serialize/MarkdownToJsx';
-import {serializeSerializeContext} from '../serialize/SerializeContext';
+import {listImportDeclarations} from './listImportDeclarations';
 import {createSerializeMarkdownContext} from './createSerializeMarkdownContext';
 
-export const getJsxCode = async (source: string) => {
+export const transpileMarkdown = async (source: string) => {
     const context = await createSerializeMarkdownContext();
     const jsx = [...serializeMarkdownToJsx(context, source)].join('');
-    const preamble = [...serializeSerializeContext(context)].join('');
-    return {jsx, preamble};
+    const imports = [...listImportDeclarations(context)].join('\n');
+    return {jsx, imports};
 };
