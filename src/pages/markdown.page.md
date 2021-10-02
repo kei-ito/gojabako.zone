@@ -15,18 +15,6 @@ Headings
 
 ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。
 
-#### これはh4の見出し
-
-ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。
-
-#### これはh5の見出し
-
-ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。
-
-#### これはh6の見出し
-
-ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。
-
 Code block
 ----------
 

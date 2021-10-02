@@ -216,4 +216,51 @@ describe(serializeMarkdownToJsx.name, () => {
         ].join('');
         expect(actual).toBe(expected);
     });
+    it('code with linked caption', async () => {
+        const context = await createSerializeMarkdownContext();
+        const source = [
+            '```markdown [sample.md](https://example.com)',
+            'hello.',
+            '```',
+        ].join('\n');
+        const actual = [...serializeMarkdownToJsx(context, source)].join('');
+        const expected = [
+            '<>',
+            '<figure>',
+            '<figcaption>',
+            '<a href="https://example.com">sample.md</a>',
+            '</figcaption>',
+            '<ol data-lang="markdown">',
+            '<li>',
+            '<code>hello.</code>',
+            '</li>',
+            '</ol>',
+            '</figure>',
+            '</>',
+        ].join('');
+        expect(actual).toBe(expected);
+    });
+    it('code without lang', async () => {
+        const context = await createSerializeMarkdownContext();
+        const source = [
+            '```',
+            '$ echo 123',
+            '```',
+        ].join('\n');
+        const actual = [...serializeMarkdownToJsx(context, source)].join('');
+        const expected = [
+            '<>',
+            '<figure>',
+            '<ol data-lang="shell">',
+            '<li>',
+            '<code>',
+            '<span className="hljs-meta">$ </span><span className="bash"><span className="hljs-built_in">echo</span> 123</span>',
+            '</code>',
+            '</li>',
+            '</ol>',
+            '</figure>',
+            '</>',
+        ].join('');
+        expect(actual).toBe(expected);
+    });
 });

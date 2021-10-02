@@ -126,7 +126,10 @@ const serialize = function* (
     case 'code':
         yield '<figure>';
         if (node.meta) {
-            yield `<figcaption>${node.meta}</figcaption>`;
+            const {children: [caption]} = context.fromMarkdown(node.meta);
+            if ('children' in caption) {
+                yield* serializeToElement(context, 'figcaption', null, caption, nextAncestors);
+            }
         }
         if (node.lang) {
             yield* serializeLowlightToJsx(context.highlight(node.lang, node.value));
