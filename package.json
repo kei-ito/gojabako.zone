@@ -63,7 +63,8 @@
         "preset": "ts-jest/presets/js-with-ts",
         "transformIgnorePatterns": [
             "node_modules/(?!(mdast-|unist-|micromark|parse-entities|character-entities|ccount|escape-string-regexp|markdown-table|lowlight|fault))"
-        ]
+        ],
+        "collectCoverage": true
     },
     "eslintConfig": {
         "extends": [
