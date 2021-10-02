@@ -16,8 +16,8 @@
         "build": "run-s build:*",
         "build:loader": "run-s build:loader:*",
         "build:loader:tsc": "tsc --project tsconfig.loader.json",
-        "build:loader:mjs": "npx @nlib/change-ext --directory loader --mapping js/mjs",
-        "build:loader:resolve": "npx @nlib/resolve-imports --directory loader --ext mjs",
+        "build:loader:mjs": "npx @nlib/change-ext --directory .loader --mapping js/mjs",
+        "build:loader:resolve": "npx @nlib/resolve-imports --include \".loader/**/*.mjs\"",
         "build:css": "esifycss --css=src/app.css --ext=.ts src",
         "build:next": "next build",
         "start": "next start",
@@ -38,8 +38,10 @@
         "jest": "27.2.4",
         "lint-staged": "11.1.2",
         "lowlight": "2.3.0",
+        "mdast-util-footnote": "1.0.0",
         "mdast-util-from-markdown": "1.0.2",
         "mdast-util-gfm": "1.0.0",
+        "micromark-extension-footnote": "1.0.1",
         "micromark-extension-gfm": "1.0.0",
         "next": "11.1.2",
         "npm-run-all": "4.1.5",
@@ -70,7 +72,7 @@
         ],
         "ignorePatterns": [
             "next-env.d.ts",
-            "loader/**/*.mjs"
+            "./.loader/**/*"
         ],
         "overrides": [
             {

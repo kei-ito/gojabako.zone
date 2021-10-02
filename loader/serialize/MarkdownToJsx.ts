@@ -7,38 +7,60 @@ import {createUnsupportedTypeError} from '../util/createUnsupportedTypeError';
 import {serializeLowlightToJsx} from './LowlightToJsx';
 import type {Attributes} from './Attributes';
 import {serializeAttributes} from './Attributes';
+import {walkNodes} from '../util/walkNodes';
 
 export interface SerializeMarkdownContext {
     fromMarkdown: (source: string) => Markdown.Root,
     highlight: (language: string, value: string) => LowlightRoot,
     highlightAuto: (value: string) => LowlightRoot,
     images: Map<string, string>,
+    definitions: Map<string, Markdown.Definition>,
+    footnotes: Map<string, Markdown.FootnoteDefinition>,
 }
 
 export const serializeMarkdownToJsx = function* (
     context: SerializeMarkdownContext,
     source: string,
 ) {
-    yield* serialize(context, context.fromMarkdown(source));
+    yield* serialize(context, context.fromMarkdown(source), []);
 };
 
 // eslint-disable-next-line max-lines-per-function, complexity
 const serialize = function* (
     context: SerializeMarkdownContext,
     node: Markdown.Content | Markdown.Root,
+    ancestors: Array<Markdown.Content | Markdown.Root>,
 ): Generator<string> {
+    const nextAncestors = [node, ...ancestors];
     switch (node.type) {
     case 'root':
-        yield* serializeToElement(context, '', null, node.children);
+        // console.info(JSON.stringify(node, null, 2));
+        for (const n of walkNodes(node)) {
+            switch (n.type) {
+            case 'definition':
+                context.definitions.set(n.identifier, n);
+                break;
+            case 'footnoteDefinition':
+                context.footnotes.set(n.identifier, n);
+                break;
+            default:
+            }
+        }
+        yield '<>';
+        for (const child of node.children) {
+            yield* serialize(context, child, nextAncestors);
+        }
+        yield* serializeFootnotes(context, nextAncestors);
+        yield '</>';
         break;
     case 'paragraph': {
         const {children} = node;
         if (children.every(({type}) => type === 'image')) {
             for (const child of children) {
-                yield* serialize(context, child);
+                yield* serialize(context, child, nextAncestors);
             }
         } else {
-            yield* serializeToElement(context, 'p', null, children);
+            yield* serializeToElement(context, 'p', null, node, nextAncestors);
         }
         break;
     }
@@ -49,7 +71,7 @@ const serialize = function* (
             yield `<div className="anchor" id="${id}"/>`;
         }
         for (const child of node.children) {
-            yield* serialize(context, child);
+            yield* serialize(context, child, nextAncestors);
         }
         if (1 < node.depth) {
             yield `&nbsp;<a className="link" href="#${id}" title="#${id}">#link</a>`;
@@ -61,10 +83,10 @@ const serialize = function* (
         yield '<hr/>';
         break;
     case 'blockquote':
-        yield* serializeToElement(context, 'blockquote', null, node.children);
+        yield* serializeToElement(context, 'blockquote', null, node, nextAncestors);
         break;
     case 'list':
-        yield* serializeToElement(context, node.ordered ? 'ol' : 'ul', null, node.children);
+        yield* serializeToElement(context, node.ordered ? 'ol' : 'ul', null, node, nextAncestors);
         break;
     case 'listItem':
         if (typeof node.checked === 'boolean') {
@@ -74,7 +96,7 @@ const serialize = function* (
             yield '<li>';
         }
         for (const child of node.children) {
-            yield* serialize(context, child);
+            yield* serialize(context, child, nextAncestors);
         }
         yield '</li>';
         break;
@@ -84,11 +106,11 @@ const serialize = function* (
         const aligns = node.align || [];
         const [first, ...rows] = node.children;
         yield '<thead>';
-        yield* serializeTableRow(context, 'th', aligns, first);
+        yield* serializeTableRow(context, 'th', aligns, first, nextAncestors);
         yield '</thead>';
         yield '<tbody>';
         for (const row of rows) {
-            yield* serializeTableRow(context, 'td', aligns, row);
+            yield* serializeTableRow(context, 'td', aligns, row, nextAncestors);
         }
         yield '</tbody>';
         yield '</table>';
@@ -96,7 +118,6 @@ const serialize = function* (
         break;
     }
     case 'tableRow':
-        throw createUnsupportedTypeError(node);
     case 'tableCell':
         throw createUnsupportedTypeError(node);
     case 'html':
@@ -117,25 +138,18 @@ const serialize = function* (
     case 'yaml':
         throw createUnsupportedTypeError(node);
     case 'definition':
-        if (node.label) {
-            yield '<a';
-            yield* serializeAttributes({href: node.url, title: node.title});
-            yield `>${node.label}</a>`;
-        }
         break;
-    case 'footnoteDefinition':
-        throw createUnsupportedTypeError(node);
     case 'text':
         yield* serializeStringToJsxSafeString(node.value);
         break;
     case 'emphasis':
-        yield* serializeToElement(context, 'i', null, node.children);
+        yield* serializeToElement(context, 'i', null, node, nextAncestors);
         break;
     case 'strong':
-        yield* serializeToElement(context, 'b', null, node.children);
+        yield* serializeToElement(context, 'b', null, node, nextAncestors);
         break;
     case 'delete':
-        yield* serializeToElement(context, 's', null, node.children);
+        yield* serializeToElement(context, 's', null, node, nextAncestors);
         break;
     case 'inlineCode':
         yield '<code>';
@@ -143,34 +157,46 @@ const serialize = function* (
         yield '</code>';
         break;
     case 'break':
-        throw createUnsupportedTypeError(node);
+        yield '<br/>';
+        break;
     case 'link':
-        yield* serializeToElement(
-            context,
-            'a',
-            {href: node.url, title: node.title},
-            node.children,
-        );
+        yield* serializeToElement(context, 'a', {href: node.url}, node, nextAncestors);
         break;
     case 'image': {
-        const localName = `image${context.images.size}`;
-        context.images.set(localName, node.url);
-        yield '<figure>';
-        if (node.alt) {
-            yield `<figcaption>${node.alt}</figcaption>`;
+        const isNotInLink = ancestors.every(({type}) => type !== 'link' && type !== 'linkReference');
+        if (isNotInLink) {
+            yield '<figure>';
+            if (node.alt) {
+                yield `<figcaption>${node.alt}</figcaption>`;
+            }
         }
+        const localName = generateImageLocalName(context, node);
         yield `<Image src={${localName}} alt="${node.alt}" placeholder="blur"/>`;
-        yield '</figure>';
+        if (isNotInLink) {
+            yield '</figure>';
+        }
         break;
     }
-    case 'linkReference':
+    case 'linkReference': {
+        const definition = context.definitions.get(node.identifier);
+        yield* serializeToElement(context, 'a', {href: definition && definition.url}, node, nextAncestors);
         break;
-    case 'imageReference':
+    }
+    case 'imageReference': {
+        const definition = context.definitions.get(node.identifier);
+        if (definition) {
+            const image: Markdown.Image = {...node, ...definition, type: 'image'};
+            yield* serialize(context, image, nextAncestors);
+        }
         break;
+    }
     case 'footnote':
         throw createUnsupportedTypeError(node);
     case 'footnoteReference':
-        throw createUnsupportedTypeError(node);
+        yield `<sup data-footnote="${node.identifier}">${node.identifier}</sup>`;
+        break;
+    case 'footnoteDefinition':
+        break;
     default:
         throw createUnsupportedTypeError(node);
     }
@@ -180,13 +206,14 @@ const serializeToElement = function* (
     context: SerializeMarkdownContext,
     tag: string,
     attrs: Attributes | null,
-    children: Array<Markdown.Content>,
+    {children}: {children: Array<Markdown.Content>},
+    nextAncestors: Array<Markdown.Content | Markdown.Root>,
 ): Generator<string> {
     yield `<${tag}`;
     yield* serializeAttributes(attrs);
     yield '>';
     for (const node of children) {
-        yield* serialize(context, node);
+        yield* serialize(context, node, nextAncestors);
     }
     yield `</${tag}>`;
 };
@@ -196,13 +223,47 @@ const serializeTableRow = function* (
     cellTag: string,
     aligns: Array<Markdown.AlignType>,
     row: Markdown.TableRow,
+    nextAncestors: Array<Markdown.Content | Markdown.Root>,
 ) {
     yield '<tr>';
     let columnIndex = 0;
     for (const cell of row.children) {
         const align = aligns[columnIndex] || '';
-        yield* serializeToElement(context, cellTag, {align}, cell.children);
+        yield* serializeToElement(
+            context,
+            cellTag,
+            {align},
+            cell,
+            [cell, row, ...nextAncestors],
+        );
         columnIndex += 1;
     }
     yield '</tr>';
+};
+
+const serializeFootnotes = function* (
+    context: SerializeMarkdownContext,
+    nextAncestors: Array<Markdown.Content | Markdown.Root>,
+) {
+    const {footnotes} = context;
+    if (footnotes.size === 0) {
+        return;
+    }
+    yield '<aside>';
+    yield '<dl class="footnotes">';
+    for (const footnote of footnotes.values()) {
+        yield `<dt>${footnote.identifier}</dt>`;
+        yield* serializeToElement(context, 'dd', null, footnote, nextAncestors);
+    }
+    yield '</dl>';
+    yield '</aside>';
+};
+
+const generateImageLocalName = (
+    context: SerializeMarkdownContext,
+    node: {url: string},
+): string => {
+    const localName = `image${context.images.size}`;
+    context.images.set(localName, node.url);
+    return localName;
 };

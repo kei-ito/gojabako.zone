@@ -1,6 +1,6 @@
-import type {SerializeMarkdownContext} from './MarkdownToJsx';
+import type {SerializeMarkdownContext} from '../serialize/MarkdownToJsx';
 
-export const serializeSerializeContext = function* (
+export const listImportDeclarations = function* (
     {images}: SerializeMarkdownContext,
 ): Generator<string> {
     if (0 < images.size) {
