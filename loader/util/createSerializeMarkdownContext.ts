@@ -1,5 +1,6 @@
 import type Markdown from 'mdast';
 import type {MarkdownContent, SerializeMarkdownContext} from '../serialize/MarkdownToJsx';
+import {removeHtmlComments} from './removeHtmlComments';
 import {walkContentNodes} from './walkContentNodes';
 
 export const createSerializeMarkdownContext = async (): Promise<SerializeMarkdownContext> => {
@@ -21,7 +22,7 @@ export const createSerializeMarkdownContext = async (): Promise<SerializeMarkdow
     const findDefinition = (id: string): Markdown.Definition | null => nodeListOf('definition').find(({identifier}) => identifier === id) || null;
     return {
         fromMarkdown: (source: string) => {
-            const root = fromMarkdown(source, {
+            const root = fromMarkdown(removeHtmlComments(source), {
                 extensions: [gfm(), footnote()],
                 mdastExtensions: [gfmFromMarkdown, footnoteFromMarkdown],
             });
