@@ -19,7 +19,7 @@
     background-size: cover;
 }
 :root {
-    --baseWidth: 639px;
+    --baseWidth: 630px;
     --mainColor: #c4c07e;
     --textColor: #4f4310;
     --accentColor: #c13a1e;
@@ -36,11 +36,6 @@
     color: var(--textColor);
     block-size: 100%;
     background-color: var(--backgroundColor);
-}
-@media (max-width: 710px) {
-    :root {
-        --baseWidth: 90%;
-    }
 }
 :root:focus-within {
     scroll-behavior: smooth;
@@ -139,6 +134,7 @@ p, li {
 p {
     margin-block-start: 1rem;
     margin-block-end: 1rem;
+    text-align: justify;
 }
 p::before {
     content: '';
@@ -291,3 +287,14 @@ blockquote {
 .raw-hljs-emphasis{font-style:italic}
 .raw-hljs-addition{color:#22863a;background-color:#f0fff4}
 .raw-hljs-deletion{color:#b31d28;background-color:#ffeef0}
+
+@media (max-width: 700px) {
+    :root {
+        --baseWidth: 90%;
+    }
+}
+@media (max-width: 500px) {
+    p {
+        text-align: unset;
+    }
+}

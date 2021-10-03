@@ -5,3 +5,9 @@
     padding-block-end: 1rem;
     line-height: 1;
 }
+.line {
+    display: grid;
+    grid-auto-flow: column;
+    column-gap: 0.5rem;
+    align-items: center;
+}

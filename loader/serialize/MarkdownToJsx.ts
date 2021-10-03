@@ -67,7 +67,7 @@ const serialize = function* (
         const id = toSafeString(getTextContent(node).toLowerCase().replace(/\s+/, '_'));
         yield `<h${node.depth}>`;
         if (1 < node.depth) {
-            yield `<div className="anchor" id="${id}"/>`;
+            yield `<span className="anchor" id="${id}"/>`;
         }
         for (const child of node.children) {
             yield* serialize(context, child, nextAncestors);
@@ -196,7 +196,7 @@ const serialize = function* (
         throw createUnsupportedTypeError(node);
     case 'footnoteReference':
         yield `<sup data-footnote="${node.identifier}">`;
-        yield `<div className="anchor" id="footnoteRef-${node.identifier}" />`;
+        yield `<span className="anchor" id="footnoteRef-${node.identifier}"/>`;
         yield `<a className="footnoteId" href="#footnote-${node.identifier}">[${node.identifier}]</a>`;
         yield '</sup>';
         break;
@@ -258,7 +258,7 @@ const serializeFootnotes = function* (
     yield '<dl className="footnotes">';
     for (const footnote of footnotes) {
         yield '<dt>';
-        yield `<div className="anchor" id="footnote-${footnote.identifier}"/>`;
+        yield `<span className="anchor" id="footnote-${footnote.identifier}"/>`;
         yield `<a className="footnoteId" href="#footnoteRef-${footnote.identifier}">[${footnote.identifier}]</a>`;
         yield '</dt>';
         yield* serializeToElement(context, 'dd', null, footnote, nextAncestors);

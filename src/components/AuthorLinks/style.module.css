@@ -1,0 +1,22 @@
+.link {
+    display: grid;
+    grid-auto-flow: column;
+    column-gap: 0.2em;
+    align-items: center;
+    color: inherit;
+    text-decoration: none;
+}
+.link>svg {
+    block-size: 1.3em;
+    inline-size: 1.3em;
+}
+.link>span {
+    /* (Exception) Use the physical position for visual adjustment on displaying horizontally. */
+    padding-top: 2px;
+    font-size: 90%;
+}
+@media (max-width: 310px) {
+    .link>span {
+        display: none;
+    }
+}

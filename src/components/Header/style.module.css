@@ -2,9 +2,9 @@
     z-index: var(--zHeader);
     position: sticky;
     inset-block-start: 0;
-    block-size: var(--headerHeight);
+    min-block-size: var(--headerHeight);
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     box-shadow: 0 0 0.3rem #0002;
     background-color: var(--mainColor);
@@ -12,18 +12,17 @@
 }
 .container {
     inline-size: var(--baseWidth);
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-}
-.sns {
-    margin-inline-start: 0.5rem;
-    font-size: 90%;
-    color: inherit;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: auto 1fr repeat(2, auto);
+    column-gap: 0.5rem;
+    align-items: stretch;
 }
 .titleLink {
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
     align-items: center;
+    column-gap: 0.4rem;
     color: inherit;
     text-decoration: none;
 }
@@ -32,12 +31,16 @@
     margin-block-end: 0;
     line-height: 1;
     /* (Exception) Use the physical position for visual adjustment on displaying horizontally. */
-    padding-top: 1px;
-    font-size: 120%;
+    padding-top: 2px;
+    font-size: 100%;
 }
 .logo {
     block-size: 1rem;
-    margin-inline-end: 0.5rem;
     border-radius: 0.1rem;
     fill: currentColor;
+}
+@media (max-width: 350px) {
+    .logo {
+        display: none;
+    }
 }

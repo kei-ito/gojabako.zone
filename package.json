@@ -101,7 +101,17 @@
                     "jest/globals": true
                 },
                 "rules": {
-                    "max-lines-per-function": "off"
+                    "max-lines-per-function": "off",
+                    "@nlib/no-globals": [
+                        "error",
+                        {
+                            "allowed": [
+                                "describe",
+                                "it",
+                                "expect"
+                            ]
+                        }
+                    ]
                 }
             }
         ]

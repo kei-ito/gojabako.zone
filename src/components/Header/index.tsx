@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import packageJson from '../../../package.json';
-import {FlexGrow} from '../FlexGrow';
+import {AuthorLinks} from '../AuthorLinks';
 import {Logo} from '../Logo';
 import {className} from './style.module.css';
 
@@ -12,8 +12,7 @@ export const Header = () => <header className={className.header}>
                 <h1 className={className.title}>{packageJson.siteName}</h1>
             </a>
         </Link>
-        <FlexGrow/>
-        <a className={className.sns} href="https://github.com/kei-ito">GitHub</a>
-        <a className={className.sns} href="https://twitter.com/gjbkz">Twitter</a>
+        <div/>
+        <AuthorLinks/>
     </div>
 </header>;
