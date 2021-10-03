@@ -195,7 +195,10 @@ const serialize = function* (
     case 'footnote':
         throw createUnsupportedTypeError(node);
     case 'footnoteReference':
-        yield `<sup data-footnote="${node.identifier}">${node.identifier}</sup>`;
+        yield `<sup data-footnote="${node.identifier}">`;
+        yield `<div className="anchor" id="footnoteRef-${node.identifier}" />`;
+        yield `<a className="footnoteId" href="#footnote-${node.identifier}">[${node.identifier}]</a>`;
+        yield '</sup>';
         break;
     case 'footnoteDefinition':
         break;
@@ -252,9 +255,12 @@ const serializeFootnotes = function* (
         return;
     }
     yield '<aside>';
-    yield '<dl class="footnotes">';
+    yield '<dl className="footnotes">';
     for (const footnote of footnotes) {
-        yield `<dt>${footnote.identifier}</dt>`;
+        yield '<dt>';
+        yield `<div className="anchor" id="footnote-${footnote.identifier}"/>`;
+        yield `<a className="footnoteId" href="#footnoteRef-${footnote.identifier}">[${footnote.identifier}]</a>`;
+        yield '</dt>';
         yield* serializeToElement(context, 'dd', null, footnote, nextAncestors);
     }
     yield '</dl>';

@@ -15,6 +15,15 @@ Headings
 
 これはh3の見出しの次の本文です。Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
+Footnote
+--------
+
+Lorem ipsum dolor sit amet[^1], consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi[^2] ut[^3] aliquip ex ea commodo consequat.
+
+[^1]: これはfootnoteの1つ目 consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+[^2]: これはfootnoteの2つ目
+[^3]: これはfootnoteの3つ目 consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
 Code block
 ----------
 
