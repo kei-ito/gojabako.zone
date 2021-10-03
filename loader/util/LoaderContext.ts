@@ -1,9 +1,10 @@
 import * as path from 'path';
-import {getSiteData} from './getSiteData';
 export interface LoaderThis {
     context: string,
     resourcePath: string,
 }
+
+const rootPath = new URL('../..', import.meta.url).pathname;
 
 export class LoaderContext {
 
@@ -20,11 +21,11 @@ export class LoaderContext {
     }
 
     public get filePath() {
-        return path.relative(getSiteData().rootPath, this.loaderThis.resourcePath);
+        return path.relative(rootPath, this.loaderThis.resourcePath);
     }
 
     public get pathname() {
-        const contextRoot = path.join(getSiteData().rootPath, 'src/pages');
+        const contextRoot = path.join(rootPath, 'src/pages');
         let pathname = path.relative(contextRoot, this.loaderThis.resourcePath);
         if (pathname.endsWith(this.ext)) {
             pathname = pathname.slice(0, -this.ext.length);
@@ -32,14 +33,10 @@ export class LoaderContext {
         return pathname;
     }
 
-    public get url() {
-        return new URL(this.pathname, getSiteData().baseUrl);
-    }
-
     public getRelativePath(
         pathFromProjectRoot: string,
     ): string {
-        const absolutePath = path.join(getSiteData().rootPath, pathFromProjectRoot);
+        const absolutePath = path.join(rootPath, pathFromProjectRoot);
         let relativePath = path.relative(this.loaderThis.context, absolutePath);
         if (!relativePath.startsWith('.')) {
             relativePath = `./${relativePath}`;

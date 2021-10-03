@@ -117,11 +117,3 @@ HTML
 ----
 
 <ruby>明日<rp>(</rp><rt>あした</rt><rp>)</rp></ruby>の話
-
-<input type="date" value="2021-10-01"/>
-
-<input type="time" value="12:34"/>
-
-<textarea>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-</textarea>

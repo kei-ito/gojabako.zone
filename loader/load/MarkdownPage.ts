@@ -5,7 +5,6 @@ import {createSerializeMarkdownContext} from '../util/createSerializeMarkdownCon
 import {getExcerpt} from '../util/getExcerpt';
 import type {FileData} from '../util/getFileData';
 import {getFileData} from '../util/getFileData';
-import {getSiteData} from '../util/getSiteData';
 import {listImportDeclarations} from '../util/listImportDeclarations';
 import type {LoaderThis} from '../util/LoaderContext';
 import {LoaderContext} from '../util/LoaderContext';
@@ -32,24 +31,28 @@ export const loadMarkdownPage = async (
     const fileData = await getFileData(loaderContext.filePath);
     return `
 import Head from 'next/head';
-import {Page} from '${loaderContext.getRelativePath('src/components/Page')}';
+import {PageHead} from '${loaderContext.getRelativePath('src/components/PageHead')}';
 import {ArticleHeader} from '${loaderContext.getRelativePath('src/components/ArticleHeader')}';
 ${imports}
 export default function MarkdownPage() {
-    return <Page
-        title="${toSafeString(title)}"
-        description="${toSafeString(excerpt)}"
-        url="${loaderContext.url}"
-        author="${toSafeString(getSiteData().author.name)}"
-    >
-        <ArticleHeader${[...serializeDateAttributes(fileData)].join('')}>
-            ${titleJsx}
-        </ArticleHeader>
-        <section>
-            ${body}
-        </section>
-        ${footnote}
-    </Page>;
+    return <>
+        <PageHead
+            title="${toSafeString(title)}"
+            description="${toSafeString(excerpt)}"
+            pathname="${loaderContext.pathname}"
+        />
+        <main>
+            <article>
+                <ArticleHeader${[...serializeDateAttributes(fileData)].join('')}>
+                    ${titleJsx}
+                </ArticleHeader>
+                <section>
+                    ${body}
+                </section>
+                ${footnote}
+            </article>
+        </main>
+    </>;
 }`.trim();
 };
 

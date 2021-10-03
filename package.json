@@ -1,12 +1,7 @@
 {
     "name": "gojabako.zone",
-    "siteName": "Gojabako Zone",
     "version": "0.0.0",
     "private": true,
-    "author": {
-        "name": "伊藤　慶 / Kei Ito",
-        "email": "kei.itof@gmail.com"
-    },
     "scripts": {
         "test": "run-s test:*",
         "test:type": "tsc --noEmit",
