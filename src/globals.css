@@ -52,9 +52,17 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    inline-size: var(--baseWidth);
+    margin-inline-start: auto;
+    margin-inline-end: auto;
+}
+article {
+    max-inline-size: 100%;
+    margin-inline-start: auto;
+    margin-inline-end: auto;
 }
 img, svg, picture {
-    max-width: 100%;
+    max-inline-size: 100%;
     display: block;
 }
 rt {
@@ -221,7 +229,7 @@ hr {
     margin-block-end: 2rem;
 }
 table {
-    max-width: 100%;
+    max-inline-size: 100%;
     border-collapse: collapse;
 }
 td, th {

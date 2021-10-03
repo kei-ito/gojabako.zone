@@ -14,8 +14,10 @@ export const Page = ({title, description, url, children}: PropsWithChildren<Page
         <meta name="og:url" content={url}/>
     </Head>
     <main>
-        <section>
-            {children}
-        </section>
+        <article>
+            <section>
+                {children}
+            </section>
+        </article>
     </main>
 </>;

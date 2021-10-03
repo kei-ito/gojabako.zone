@@ -9,11 +9,11 @@ Headings
 これはh2の見出し
 -----------------
 
-ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。
+これはh2の見出しの次の本文です。Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
 ### これはh3の見出し
 
-ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。
+これはh3の見出しの次の本文です。Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
 Code block
 ----------
