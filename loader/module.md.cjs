@@ -1,12 +1,10 @@
 /**
+ * @this {import('./util/LoaderContext').LoaderThis}
  * @param {string} source
  * @returns {string}
  */
-module.exports = async function markdownLoader(source) {
-    const {transpileMarkdown} = await import('../.loader/util/transpileMarkdown.mjs');
-    const {imports, jsx} = await transpileMarkdown(source);
-    return [
-        imports,
-        `export default function Document() {return ${jsx}}`,
-    ].join('\n');
+module.exports = async function markdownModuleLoader(source) {
+    const {loadMarkdownModule} = await import('../.loader/load/MarkdownModule.mjs');
+    const code = await loadMarkdownModule(this, source);
+    return code;
 };

@@ -7,15 +7,18 @@ import {createUnsupportedTypeError} from '../util/createUnsupportedTypeError';
 import {serializeLowlightToJsx} from './LowlightToJsx';
 import type {Attributes} from './Attributes';
 import {serializeAttributes} from './Attributes';
-import {walkNodes} from '../util/walkNodes';
 
+type FilterContent<C extends Markdown.Content, T extends Markdown.Content['type']> = C extends {type: T} ? C : never;
+export type MarkdownContent<T extends Markdown.Content['type']> = FilterContent<Markdown.Content, T>;
 export interface SerializeMarkdownContext {
     fromMarkdown: (source: string) => Markdown.Root,
     highlight: (language: string, value: string) => LowlightRoot,
     highlightAuto: (value: string) => LowlightRoot,
     images: Map<string, string>,
-    definitions: Map<string, Markdown.Definition>,
-    footnotes: Map<string, Markdown.FootnoteDefinition>,
+    nodeListOf: <T extends Markdown.Content['type']>(
+        type: T,
+    ) => Array<MarkdownContent<T>>,
+    findDefinition: (id: string) => Markdown.Definition | null,
 }
 
 export const serializeMarkdownToJsx = function* (
@@ -42,17 +45,6 @@ const serialize = function* (
     switch (node.type) {
     case 'root':
         // console.info(JSON.stringify(node, null, 2));
-        for (const n of walkNodes(node)) {
-            switch (n.type) {
-            case 'definition':
-                context.definitions.set(n.identifier, n);
-                break;
-            case 'footnoteDefinition':
-                context.footnotes.set(n.identifier, n);
-                break;
-            default:
-            }
-        }
         yield '<>';
         for (const child of node.children) {
             yield* serialize(context, child, nextAncestors);
@@ -188,12 +180,12 @@ const serialize = function* (
         break;
     }
     case 'linkReference': {
-        const definition = context.definitions.get(node.identifier);
+        const definition = context.findDefinition(node.identifier);
         yield* serializeToElement(context, 'a', {href: definition && definition.url}, node, nextAncestors);
         break;
     }
     case 'imageReference': {
-        const definition = context.definitions.get(node.identifier);
+        const definition = context.findDefinition(node.identifier);
         if (definition) {
             const image: Markdown.Image = {...node, ...definition, type: 'image'};
             yield* serialize(context, image, nextAncestors);
@@ -255,13 +247,13 @@ const serializeFootnotes = function* (
     context: SerializeMarkdownContext,
     nextAncestors: Array<Markdown.Content | Markdown.Root>,
 ) {
-    const {footnotes} = context;
-    if (footnotes.size === 0) {
+    const footnotes = context.nodeListOf('footnoteDefinition');
+    if (footnotes.length === 0) {
         return;
     }
     yield '<aside>';
     yield '<dl class="footnotes">';
-    for (const footnote of footnotes.values()) {
+    for (const footnote of footnotes) {
         yield `<dt>${footnote.identifier}</dt>`;
         yield* serializeToElement(context, 'dd', null, footnote, nextAncestors);
     }

@@ -1,15 +1,17 @@
 // eslint-disable-next-line @typescript-eslint/ban-types
-type Node = {} | {children: Iterable<Node>} | {value: string};
+type Node = {type: string, children: Iterable<Node>} | {type: string, value: string} | {type: string};
 
-export const serializeTextContent = function* (input: Node): Generator<string> {
-    if ('value' in input) {
-        yield input.value;
+export const serializeTextContent = function* (node: Node): Generator<string> {
+    if (node.type === 'text' && 'value' in node) {
+        yield node.value;
     }
-    if ('children' in input) {
-        for (const child of input.children) {
+    if ('children' in node) {
+        for (const child of node.children) {
             yield* serializeTextContent(child);
         }
     }
 };
 
-export const getTextContent = (input: Node) => [...serializeTextContent(input)].join('');
+export const getTextContent = (
+    input: Node,
+) => [...serializeTextContent(input)].join('');
