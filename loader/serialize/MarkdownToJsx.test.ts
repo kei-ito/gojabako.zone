@@ -1,5 +1,5 @@
 import {createSerializeMarkdownContext} from '../util/createSerializeMarkdownContext';
-import {serializeMarkdownToJsx, serializeMarkdownRootToJsx} from './MarkdownToJsx';
+import {serializeMarkdownToJsx, serializeMarkdownRootToJsx, serializeFootnotes} from './MarkdownToJsx';
 
 describe(serializeMarkdownToJsx.name, () => {
     it('heading', async () => {
@@ -185,7 +185,10 @@ describe(serializeMarkdownToJsx.name, () => {
             '',
             '[^1]: My reference.',
         ].join('\n');
-        const actual = [...serializeMarkdownToJsx(context, source)].join('');
+        const actual = [
+            ...serializeMarkdownToJsx(context, source),
+            ...serializeFootnotes(context),
+        ].join('');
         const expected = [
             '<>',
             '<p>Here is a simple footnote<sup data-footnote="1">',
@@ -194,6 +197,7 @@ describe(serializeMarkdownToJsx.name, () => {
             '</sup>',
             '.',
             '</p>',
+            '</>',
             '<aside>',
             '<dl className="footnotes">',
             '<dt>',
@@ -207,7 +211,6 @@ describe(serializeMarkdownToJsx.name, () => {
             '</dd>',
             '</dl>',
             '</aside>',
-            '</>',
         ].join('');
         expect(actual).toBe(expected);
     });
