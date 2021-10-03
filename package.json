@@ -110,7 +110,13 @@
         "*.ts": [
             "eslint"
         ],
+        "*.tsx": [
+            "eslint"
+        ],
         "*.js": [
+            "eslint"
+        ],
+        "*.jsx": [
             "eslint"
         ]
     },
