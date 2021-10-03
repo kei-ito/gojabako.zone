@@ -1,12 +1,18 @@
 import * as path from 'path';
 import * as fs from 'fs';
 
+interface Author {
+    name: string,
+    email: string,
+}
 interface SiteData {
     rootPath: string,
     baseUrl: string,
     siteName: string,
+    author: Author,
 }
 
+const isString = (input: unknown): input is string => typeof input === 'string';
 const isRecordLike = (input: unknown): input is Record<string, unknown> => {
     if (input) {
         switch (typeof input) {
@@ -15,6 +21,13 @@ const isRecordLike = (input: unknown): input is Record<string, unknown> => {
             return true;
         default:
         }
+    }
+    return false;
+};
+const isAuthor = (input: unknown): input is Author => {
+    if (isRecordLike(input)) {
+        const {name, email} = input;
+        return isString(name) && isString(email);
     }
     return false;
 };
@@ -31,11 +44,14 @@ export const getSiteData = (): SiteData => {
     if (!isRecordLike(parsed)) {
         throw new Error(`Invalid package.json: ${json}`);
     }
-    const {name: domainName, siteName} = parsed;
+    const {name: domainName, siteName, author} = parsed;
     const baseUrl = new URL(`https://${domainName}`).href;
-    if (typeof siteName === 'string') {
-        cached = {rootPath, baseUrl, siteName};
-        return cached;
+    if (!isString(siteName)) {
+        throw new Error(`Invalid siteName: ${siteName}`);
     }
-    throw new Error(`Invalid siteName: ${siteName}`);
+    if (!isAuthor(author)) {
+        throw new Error(`Invalid author: ${JSON.stringify(author, null, 4)}`);
+    }
+    cached = {rootPath, baseUrl, siteName, author};
+    return cached;
 };

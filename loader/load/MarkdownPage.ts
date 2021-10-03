@@ -1,9 +1,11 @@
-import {LoaderContext} from '../util/LoaderContext';
-import type {LoaderThis} from '../util/LoaderContext';
-import type {TranspileMarkdownResult} from '../util/transpileMarkdown';
-import {transpileMarkdown} from '../util/transpileMarkdown';
+import {toSafeString} from '../serialize/StringToJsxSafeString';
 import {getTextContent} from '../serialize/TextContent';
 import {getExcerpt} from '../util/getExcerpt';
+import {getSiteData} from '../util/getSiteData';
+import type {LoaderThis} from '../util/LoaderContext';
+import {LoaderContext} from '../util/LoaderContext';
+import type {TranspileMarkdownResult} from '../util/transpileMarkdown';
+import {transpileMarkdown} from '../util/transpileMarkdown';
 
 const getCode = (
     ctx: LoaderContext,
@@ -14,9 +16,10 @@ import {Page} from '${ctx.getRelativePath('src/components/Page')}';
 ${result.imports}
 export default function MarkdownPage() {
     return <Page
-        title="${getTextContent(result.nodeListOf('heading')[0])}"
-        description="${getExcerpt(result.root, 200)}"
+        title="${toSafeString(getTextContent(result.nodeListOf('heading')[0]))}"
+        description="${toSafeString(getExcerpt(result.root, 200))}"
         url="${ctx.url}"
+        author="${toSafeString(getSiteData().author.name)}"
     >
         ${result.jsx}
     </Page>;
