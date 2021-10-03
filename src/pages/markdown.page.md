@@ -55,11 +55,6 @@ Decoration
 
 ~~打ち消しと*強調*~~ **太字と~~打ち消し線~~** [リンクと**太字**](https://example.com)。
 
-Ruby
-----
-
-<ruby>明日<rp>(</rp><rt>あした</rt><rp>)</rp></ruby>の話。
-
 Autolink literals
 -----------------
 
@@ -117,3 +112,16 @@ List
 1. Item2
 1. 校長の云うようにはとても出来ない。おれみたような無鉄砲なものをつらまえて、生徒の模範になれの、一校の師表と仰がれなくてはいかんの、学問以外に個人の徳化を及ぼさなくては教育者になれないの、と無暗に法外な注文をする。そんなえらい人が月給四十円で遥々こんな田舎へくるもんか。人間は大概似たもんだ。腹が立てば喧嘩の一つぐらいは誰でもするだろうと思ってたが、この様子じゃめったに口も聞けない、散歩も出来ない。
 1. Item4
+
+HTML
+----
+
+<ruby>明日<rp>(</rp><rt>あした</rt><rp>)</rp></ruby>の話
+
+<input type="date" value="2021-10-01"/>
+
+<input type="time" value="12:34"/>
+
+<textarea>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+</textarea>

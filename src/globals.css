@@ -17,6 +17,7 @@
     color: inherit;
     text-decoration: inherit;
     background-size: cover;
+    background-color: transparent;
 }
 :root {
     --baseWidth: 630px;
@@ -24,6 +25,7 @@
     --textColor: #4f4310;
     --accentColor: #c13a1e;
     --backgroundColor: #f8f7e6;
+    --white: #fffff8;
     --zHeader: 1;
     --headerHeight: 1.5rem;
     --listIndexSize: 2rem;
@@ -95,6 +97,33 @@ code {
 rt {
     font-size: 60%;
 }
+input, textarea {
+    transition-property: box-shadow;
+    transition-duration: 0.2s;
+}
+input:focus, textarea:focus {
+    background-color: var(--white);
+    box-shadow: 0 0.2rem 1rem #0003;
+}
+input {
+    padding-inline-start: 0.5rem;
+    padding-inline-end: 0.5rem;
+    border-block-end-style: solid;
+}
+textarea {
+    display: block;
+    inline-size: 100%;
+    min-inline-size: unset;
+    min-block-size: 8rem;
+    padding-block-start: 0.6rem;
+    padding-block-end: 0.6rem;
+    padding-inline-start: 1rem;
+    padding-inline-end: 1rem;
+    margin-block-start: 1rem;
+    margin-block-end: 1rem;
+    border-style: solid;
+    resize: vertical;
+}
 
 h1, h2, h3, h4, h5, h6 {
     margin-block-start: 1rem;
@@ -149,7 +178,8 @@ figure {
     margin-block-end: 1rem;
 }
 figcaption {
-    font-size: 80%;
+    font-size: 90%;
+    margin-block-end: 0.25em;
 }
 ol, ul {
     counter-reset: listItemIndex;
@@ -238,7 +268,7 @@ blockquote {
     opacity: 0.85;
 }
 [data-footnote] {
-    font-size: 80%;
+    font-size: 90%;
 }
 .raw-footnotes {
     display: grid;
