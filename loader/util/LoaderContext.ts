@@ -5,9 +5,6 @@ export interface LoaderThis {
     resourcePath: string,
 }
 
-const projectRoot = new URL('../..', import.meta.url).pathname;
-const contextRoot = path.join(projectRoot, 'src/pages');
-
 export class LoaderContext {
 
     protected readonly loaderThis: LoaderThis;
@@ -23,6 +20,7 @@ export class LoaderContext {
     }
 
     public get pathname() {
+        const contextRoot = path.join(getSiteData().rootPath, 'src/pages');
         let pathname = path.relative(contextRoot, this.loaderThis.resourcePath);
         if (pathname.endsWith(this.ext)) {
             pathname = pathname.slice(0, -this.ext.length);
@@ -37,7 +35,7 @@ export class LoaderContext {
     public getRelativePath(
         pathFromProjectRoot: string,
     ): string {
-        const absolutePath = path.join(projectRoot, pathFromProjectRoot);
+        const absolutePath = path.join(getSiteData().rootPath, pathFromProjectRoot);
         let relativePath = path.relative(this.loaderThis.context, absolutePath);
         if (!relativePath.startsWith('.')) {
             relativePath = `./${relativePath}`;
