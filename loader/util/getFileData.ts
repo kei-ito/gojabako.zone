@@ -4,6 +4,7 @@ import {exec} from './exec';
 import {readline} from './readline';
 
 export interface FileData {
+    filePath: string,
     firstCommitAt: Date | null,
     lastCommitAt: Date | null,
 }
@@ -15,7 +16,7 @@ export const getFileData = async (
         getFirstCommitterDate(filePath),
         getLastCommitterDate(filePath),
     ]);
-    return {firstCommitAt, lastCommitAt};
+    return {filePath, firstCommitAt, lastCommitAt};
 };
 
 const parseCommandOutput = (

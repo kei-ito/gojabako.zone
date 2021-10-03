@@ -19,6 +19,10 @@ export class LoaderContext {
         this.ext = ext;
     }
 
+    public get filePath() {
+        return path.relative(getSiteData().rootPath, this.loaderThis.resourcePath);
+    }
+
     public get pathname() {
         const contextRoot = path.join(getSiteData().rootPath, 'src/pages');
         let pathname = path.relative(contextRoot, this.loaderThis.resourcePath);

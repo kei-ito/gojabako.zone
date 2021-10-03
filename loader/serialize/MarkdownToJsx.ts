@@ -35,6 +35,26 @@ export const serializeMarkdownRootToJsx = function* (
     yield* serialize(context, root, []);
 };
 
+export const serializeFootnotes = function* (
+    context: SerializeMarkdownContext,
+) {
+    const footnotes = context.nodeListOf('footnoteDefinition');
+    if (footnotes.length === 0) {
+        return;
+    }
+    yield '<aside>';
+    yield '<dl className="footnotes">';
+    for (const footnote of footnotes) {
+        yield '<dt>';
+        yield `<span className="anchor" id="footnote-${footnote.identifier}"/>`;
+        yield `<a className="footnoteId" href="#footnoteRef-${footnote.identifier}">[${footnote.identifier}]</a>`;
+        yield '</dt>';
+        yield* serializeToElement(context, 'dd', null, footnote, []);
+    }
+    yield '</dl>';
+    yield '</aside>';
+};
+
 // eslint-disable-next-line max-lines-per-function, complexity
 const serialize = function* (
     context: SerializeMarkdownContext,
@@ -46,18 +66,13 @@ const serialize = function* (
     case 'root':
         // console.info(JSON.stringify(node, null, 2));
         yield '<>';
-        for (const child of node.children) {
-            yield* serialize(context, child, nextAncestors);
-        }
-        yield* serializeFootnotes(context, nextAncestors);
+        yield* serializeChildren(context, node, nextAncestors);
         yield '</>';
         break;
     case 'paragraph': {
         const {children} = node;
         if (children.every(({type}) => type === 'image')) {
-            for (const child of children) {
-                yield* serialize(context, child, nextAncestors);
-            }
+            yield* serializeChildren(context, node, nextAncestors);
         } else {
             yield* serializeToElement(context, 'p', null, node, nextAncestors);
         }
@@ -69,9 +84,7 @@ const serialize = function* (
         if (1 < node.depth) {
             yield `<span className="anchor" id="${id}"/>`;
         }
-        for (const child of node.children) {
-            yield* serialize(context, child, nextAncestors);
-        }
+        yield* serializeChildren(context, node, nextAncestors);
         if (1 < node.depth) {
             yield `&nbsp;<a className="link" href="#${id}" title="#${id}">#link</a>`;
         }
@@ -94,9 +107,7 @@ const serialize = function* (
         } else {
             yield '<li>';
         }
-        for (const child of node.children) {
-            yield* serialize(context, child, nextAncestors);
-        }
+        yield* serializeChildren(context, node, nextAncestors);
         yield '</li>';
         break;
     case 'table': {
@@ -207,19 +218,27 @@ const serialize = function* (
     }
 };
 
+const serializeChildren = function* (
+    context: SerializeMarkdownContext,
+    {children}: {children: Array<Markdown.Content>},
+    nextAncestors: Array<Markdown.Content | Markdown.Root>,
+) {
+    for (const node of children) {
+        yield* serialize(context, node, nextAncestors);
+    }
+};
+
 const serializeToElement = function* (
     context: SerializeMarkdownContext,
     tag: string,
     attrs: Attributes | null,
-    {children}: {children: Array<Markdown.Content>},
+    node: {children: Array<Markdown.Content>},
     nextAncestors: Array<Markdown.Content | Markdown.Root>,
 ): Generator<string> {
     yield `<${tag}`;
     yield* serializeAttributes(attrs);
     yield '>';
-    for (const node of children) {
-        yield* serialize(context, node, nextAncestors);
-    }
+    yield* serializeChildren(context, node, nextAncestors);
     yield `</${tag}>`;
 };
 
@@ -244,27 +263,6 @@ const serializeTableRow = function* (
         columnIndex += 1;
     }
     yield '</tr>';
-};
-
-const serializeFootnotes = function* (
-    context: SerializeMarkdownContext,
-    nextAncestors: Array<Markdown.Content | Markdown.Root>,
-) {
-    const footnotes = context.nodeListOf('footnoteDefinition');
-    if (footnotes.length === 0) {
-        return;
-    }
-    yield '<aside>';
-    yield '<dl className="footnotes">';
-    for (const footnote of footnotes) {
-        yield '<dt>';
-        yield `<span className="anchor" id="footnote-${footnote.identifier}"/>`;
-        yield `<a className="footnoteId" href="#footnoteRef-${footnote.identifier}">[${footnote.identifier}]</a>`;
-        yield '</dt>';
-        yield* serializeToElement(context, 'dd', null, footnote, nextAncestors);
-    }
-    yield '</dl>';
-    yield '</aside>';
 };
 
 const generateImageLocalName = (

@@ -8,7 +8,9 @@ export interface PageProps {
     author?: string,
 }
 
-export const Page = ({title, description, url, author, children}: PropsWithChildren<PageProps>) => <>
+export const Page = (
+    {title, description, url, author, children}: PropsWithChildren<PageProps>,
+) => <>
     <Head>
         <title>{title}</title>
         <link rel="canonical" href={url}/>
@@ -18,9 +20,7 @@ export const Page = ({title, description, url, author, children}: PropsWithChild
     </Head>
     <main>
         <article>
-            <section>
-                {children}
-            </section>
+            {children}
         </article>
     </main>
 </>;

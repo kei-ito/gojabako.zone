@@ -2,12 +2,9 @@ import type * as Markdown from 'mdast';
 import {getTextContent} from '../serialize/TextContent';
 import {walkContentNodes} from './walkContentNodes';
 
-export const getExcerpt = (
-    root: Markdown.Root,
-    maxLength: number,
-): string => {
+export const getExcerpt = (maxLength: number, ...nodes: Array<Markdown.Content>): string => {
     let result = '';
-    for (const node of walkContentNodes(...root.children)) {
+    for (const node of walkContentNodes(...nodes)) {
         if (node.type === 'paragraph') {
             result += getTextContent(node);
             if (maxLength < result.length) {
