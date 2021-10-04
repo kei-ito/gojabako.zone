@@ -26,7 +26,7 @@ export const loadMarkdownPage = async (
     root.children = bodyNodes;
     const body = [...serializeMarkdownRootToJsx(context, root)].join('');
     const loaderContext = new LoaderContext(loaderThis, '.page.md');
-    const imports = [...listImportDeclarations(context)].join('\n');
+    const imports = [...listImportDeclarations(context), ...context.head].join('\n');
     const footnote = [...serializeFootnotes(context)].join('');
     const fileData = await getFileData(loaderContext.filePath);
     return `

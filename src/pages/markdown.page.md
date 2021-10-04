@@ -117,3 +117,14 @@ HTML
 ----
 
 <ruby>明日<rp>(</rp><rt>あした</rt><rp>)</rp></ruby>の話
+
+include TSX
+-----------
+
+```typescript (head)
+import {Counter} from '../components/Counter';
+```
+
+```jsx (include)
+<Counter/>
+```

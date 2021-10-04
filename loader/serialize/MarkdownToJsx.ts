@@ -15,6 +15,7 @@ export interface SerializeMarkdownContext {
     highlight: (language: string, value: string) => LowlightRoot,
     highlightAuto: (value: string) => LowlightRoot,
     images: Map<string, string>,
+    head: Set<string>,
     nodeListOf: <T extends Markdown.Content['type']>(
         type: T,
     ) => Array<MarkdownContent<T>>,
@@ -134,19 +135,25 @@ const serialize = function* (
         yield node.value;
         break;
     case 'code':
-        yield '<figure>';
-        if (node.meta) {
-            const {children: [caption]} = context.fromMarkdown(node.meta);
-            if ('children' in caption) {
-                yield* serializeToElement(context, 'figcaption', null, caption, nextAncestors);
-            }
-        }
-        if (node.lang) {
-            yield* serializeLowlightToJsx(context.highlight(node.lang, node.value));
+        if (node.lang === 'typescript' && node.meta === '(head)') {
+            context.head.add(node.value);
+        } else if (node.lang === 'jsx' && node.meta === '(include)') {
+            yield node.value;
         } else {
-            yield* serializeLowlightToJsx(context.highlightAuto(node.value));
+            yield '<figure>';
+            if (node.meta) {
+                const {children: [caption]} = context.fromMarkdown(node.meta);
+                if ('children' in caption) {
+                    yield* serializeToElement(context, 'figcaption', null, caption, nextAncestors);
+                }
+            }
+            if (node.lang) {
+                yield* serializeLowlightToJsx(context.highlight(node.lang, node.value));
+            } else {
+                yield* serializeLowlightToJsx(context.highlightAuto(node.value));
+            }
+            yield '</figure>';
         }
-        yield '</figure>';
         break;
     case 'yaml':
         throw createUnsupportedTypeError(node);
