@@ -1,0 +1,19 @@
+.counter {
+    display: flex;
+    justify-items: center;
+    align-items: baseline;
+    text-align: center;
+}
+.count {
+    min-inline-size: 3.5rem;
+    padding-inline-start: 0.5rem;
+    padding-inline-end: 0.5rem;
+    font-size: 140%;
+}
+.button {
+    inline-size: 1.5rem;
+    padding: 0.2rem;
+    border-style: solid;
+    line-height: 1;
+    border-radius: 0.2rem;
+}

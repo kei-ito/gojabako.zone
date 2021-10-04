@@ -4,4 +4,6 @@ export const {
     Array,
     Date,
     URL,
+    requestAnimationFrame,
+    cancelAnimationFrame,
 } = globalThis;
