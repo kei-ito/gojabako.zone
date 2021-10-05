@@ -2,10 +2,11 @@
     z-index: var(--zHeader);
     position: sticky;
     inset-block-start: 0;
-    min-block-size: var(--headerHeight);
     display: flex;
     align-items: stretch;
     justify-content: center;
+    padding-block-start: 0.2rem;
+    padding-block-end: 0.2rem;
     box-shadow: 0 0 0.3rem #0002;
     background-color: var(--mainColor);
     line-height: 1;
@@ -32,14 +33,14 @@
     line-height: 1;
     /* (Exception) Use the physical position for visual adjustment on displaying horizontally. */
     padding-top: 2px;
-    font-size: 100%;
+    font-size: 110%;
 }
 .logo {
     block-size: 1rem;
     border-radius: 0.1rem;
     fill: currentColor;
 }
-@media (max-width: 350px) {
+@media (max-width: 280px) {
     .logo {
         display: none;
     }

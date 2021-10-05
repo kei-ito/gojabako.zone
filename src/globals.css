@@ -27,7 +27,6 @@
     --backgroundColor: #f8f7e6;
     --white: #fffff8;
     --zHeader: 1;
-    --headerHeight: 1.5rem;
     --listIndexSize: 2rem;
     --font-default: Georgia, 'BIZ UDMincho', serif;
     --font-monospace: 'Roboto Mono', monospace;
@@ -157,7 +156,7 @@ h3 {
 }
 .raw-anchor {
     position: absolute;
-    inset-block-start: calc(var(--headerHeight) * -1 - 2rem);
+    inset-block-start: -4rem;
     visibility: hidden;
 }
 p, li {
@@ -179,6 +178,7 @@ li>p::before {
 figure {
     margin-block-start: 1rem;
     margin-block-end: 1rem;
+    overflow: auto;
 }
 figcaption {
     font-size: 90%;
@@ -253,6 +253,7 @@ hr {
 }
 table {
     max-inline-size: 100%;
+    min-inline-size: 20rem;
     border-collapse: collapse;
 }
 td, th {
@@ -278,7 +279,7 @@ blockquote {
     grid-template-columns: var(--listIndexSize) 1fr;
     grid-template-rows: 0.5rem;
     row-gap: 0.5rem;
-    margin-block-start: 2rem;
+    margin-block-start: 3rem;
     margin-block-end: 1rem;
     font-size: 90%;
     line-height: 1.6;
