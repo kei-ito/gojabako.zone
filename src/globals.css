@@ -136,13 +136,13 @@ h1, h2, h3 {
     margin-block-start: 2rem;
 }
 h1 {
-    font-size: 130%;
+    font-size: 140%;
 }
 h2 {
-    font-size: 112%;
+    font-size: 116%;
 }
 h3 {
-    font-size: 106%;
+    font-size: 108%;
 }
 .raw-link {
     font-size: 70%;
@@ -185,15 +185,25 @@ figcaption {
     margin-block-end: 0.25em;
 }
 ol, ul {
+    inline-size: 100%;
     counter-reset: listItemIndex;
     margin-block-start: 1rem;
     margin-block-end: 1rem;
 }
 li {
     counter-increment: listItemIndex;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
     padding-inline-start: var(--listIndexSize);
     margin-block-start: 0.4rem;
     margin-block-end: 0.4rem;
+}
+li>ol, li>ul {
+    padding-inline-start: calc(var(--listIndexSize) - 1rem);
+    margin-block-start: 0;
+    margin-block-end: 0;
 }
 li::before {
     position: absolute;
@@ -211,16 +221,18 @@ ul>li::before {
     content: '●';
 }
 li>p {
+    flex: 1;
     margin-block-start: 0;
     margin-block-end: 0;
+}
+li[data-checkbox] {
+    padding-inline-start: calc(var(--listIndexSize) - 1.3rem);
 }
 li[data-checkbox]::before {
     content: none;
 }
-li>input[type=checkbox] {
-    position: absolute;
-    inset-block-start: 0.4rem;
-    inset-inline-start: calc(var(--listIndexSize) - 1.4rem);
+li[data-checkbox]>input {
+    margin-inline-end: 0.5rem;
 }
 ol[data-lang] {
     margin-block-start: 0;
