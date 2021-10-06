@@ -41,6 +41,7 @@ export const createSerializeMarkdownContext = async (): Promise<SerializeMarkdow
         },
         ...lowlight,
         head: new Set(),
+        links: new Set(),
         images: new Map(),
         nodeListOf,
         findDefinition,

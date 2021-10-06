@@ -1,4 +1,4 @@
-markdownテストページ
+Markdownテストページ
 =================
 
 ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。
@@ -121,10 +121,8 @@ HTML
 include TSX
 -----------
 
-```typescript (head)
-import {Counter} from '../components/Counter';
-```
-
 ```jsx (include)
+import {Counter} from '../components/Counter';
+/****************/
 <Counter/>
 ```

@@ -14,6 +14,7 @@ export interface SerializeMarkdownContext {
     fromMarkdown: (source: string) => Markdown.Root,
     highlight: (language: string, value: string) => LowlightRoot,
     highlightAuto: (value: string) => LowlightRoot,
+    links: Set<string>,
     images: Map<string, string>,
     head: Set<string>,
     nodeListOf: <T extends Markdown.Content['type']>(
@@ -50,7 +51,7 @@ export const serializeFootnotes = function* (
         yield `<span className="anchor" id="footnote-${footnote.identifier}"/>`;
         yield `<a className="footnoteId" href="#footnoteRef-${footnote.identifier}">[${footnote.identifier}]</a>`;
         yield '</dt>';
-        yield* serializeToElement(context, 'dd', null, footnote, []);
+        yield* serializeElement(context, 'dd', null, footnote, []);
     }
     yield '</dl>';
     yield '</aside>';
@@ -75,7 +76,7 @@ const serialize = function* (
         if (children.every(({type}) => type === 'image')) {
             yield* serializeChildren(context, node, nextAncestors);
         } else {
-            yield* serializeToElement(context, 'p', null, node, nextAncestors);
+            yield* serializeElement(context, 'p', null, node, nextAncestors);
         }
         break;
     }
@@ -96,10 +97,10 @@ const serialize = function* (
         yield '<hr/>';
         break;
     case 'blockquote':
-        yield* serializeToElement(context, 'blockquote', null, node, nextAncestors);
+        yield* serializeElement(context, 'blockquote', null, node, nextAncestors);
         break;
     case 'list':
-        yield* serializeToElement(context, node.ordered ? 'ol' : 'ul', null, node, nextAncestors);
+        yield* serializeElement(context, node.ordered ? 'ol' : 'ul', null, node, nextAncestors);
         break;
     case 'listItem':
         if (typeof node.checked === 'boolean') {
@@ -135,16 +136,20 @@ const serialize = function* (
         yield node.value;
         break;
     case 'code':
-        if (node.lang === 'typescript' && node.meta === '(head)') {
-            context.head.add(node.value);
-        } else if (node.lang === 'jsx' && node.meta === '(include)') {
-            yield node.value;
+        if (node.lang === 'jsx' && node.meta === '(include)') {
+            let code = node.value;
+            const comment = (/\/\*{16}\/\s*?/).exec(code);
+            if (comment) {
+                context.head.add(code.slice(0, comment.index).trim());
+                code = code.slice(comment.index + comment[0].length).trim();
+            }
+            yield code;
         } else {
             yield '<figure>';
             if (node.meta) {
                 const {children: [caption]} = context.fromMarkdown(node.meta);
                 if ('children' in caption) {
-                    yield* serializeToElement(context, 'figcaption', null, caption, nextAncestors);
+                    yield* serializeElement(context, 'figcaption', null, caption, nextAncestors);
                 }
             }
             if (node.lang) {
@@ -163,13 +168,13 @@ const serialize = function* (
         yield* serializeStringToJsxSafeString(node.value);
         break;
     case 'emphasis':
-        yield* serializeToElement(context, 'i', null, node, nextAncestors);
+        yield* serializeElement(context, 'i', null, node, nextAncestors);
         break;
     case 'strong':
-        yield* serializeToElement(context, 'b', null, node, nextAncestors);
+        yield* serializeElement(context, 'b', null, node, nextAncestors);
         break;
     case 'delete':
-        yield* serializeToElement(context, 's', null, node, nextAncestors);
+        yield* serializeElement(context, 's', null, node, nextAncestors);
         break;
     case 'inlineCode':
         yield '<code>';
@@ -180,7 +185,7 @@ const serialize = function* (
         yield '<br/>';
         break;
     case 'link':
-        yield* serializeToElement(context, 'a', {href: node.url}, node, nextAncestors);
+        yield* serializeLinkElement(context, {href: node.url}, node, nextAncestors);
         break;
     case 'image': {
         const isNotInLink = ancestors.every(({type}) => type !== 'link' && type !== 'linkReference');
@@ -199,7 +204,7 @@ const serialize = function* (
     }
     case 'linkReference': {
         const definition = context.findDefinition(node.identifier);
-        yield* serializeToElement(context, 'a', {href: definition && definition.url}, node, nextAncestors);
+        yield* serializeLinkElement(context, {href: definition && definition.url}, node, nextAncestors);
         break;
     }
     case 'imageReference': {
@@ -235,7 +240,7 @@ const serializeChildren = function* (
     }
 };
 
-const serializeToElement = function* (
+const serializeElement = function* (
     context: SerializeMarkdownContext,
     tag: string,
     attrs: Attributes | null,
@@ -249,6 +254,29 @@ const serializeToElement = function* (
     yield `</${tag}>`;
 };
 
+const serializeLinkElement = function* (
+    context: SerializeMarkdownContext,
+    {href, ...attrs}: Attributes,
+    node: {children: Array<Markdown.Content>},
+    nextAncestors: Array<Markdown.Content | Markdown.Root>,
+): Generator<string> {
+    if (typeof href !== 'string') {
+        throw new Error(`Invalid href: ${href}`);
+    }
+    context.links.add(href);
+    if (href.startsWith('/')) {
+        yield '<Link';
+        yield* serializeAttributes({href});
+        yield '>';
+        yield* serializeElement(context, 'a', attrs, node, nextAncestors);
+        yield '</Link>';
+    } else if (href.startsWith('.')) {
+        throw new Error(`The href should be a route pattern like absolute path: ${href}`);
+    } else {
+        yield* serializeElement(context, 'a', {href, ...attrs}, node, nextAncestors);
+    }
+};
+
 const serializeTableRow = function* (
     context: SerializeMarkdownContext,
     cellTag: string,
@@ -260,7 +288,7 @@ const serializeTableRow = function* (
     let columnIndex = 0;
     for (const cell of row.children) {
         const align = aligns[columnIndex] || '';
-        yield* serializeToElement(
+        yield* serializeElement(
             context,
             cellTag,
             {align},
