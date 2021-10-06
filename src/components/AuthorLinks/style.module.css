@@ -11,8 +11,6 @@
     inline-size: 1.3em;
 }
 .link>span {
-    /* (Exception) Use the physical position for visual adjustment on displaying horizontally. */
-    padding-top: 2px;
     font-size: 90%;
 }
 @media (max-width: 360px) {
