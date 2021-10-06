@@ -11,9 +11,7 @@ const Home = () => <>
     />
     <main>
         <article>
-            <section>
-                <Body/>
-            </section>
+            <Body/>
         </article>
     </main>
 </>;

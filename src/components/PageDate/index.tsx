@@ -10,19 +10,19 @@ export interface PageDateProps {
 const Ms1Day = 86400000;
 export const PageDate = ({filePath, publishedAt, updatedAt}: PageDateProps) => {
     if (publishedAt && updatedAt && Ms1Day < updatedAt.getTime() - publishedAt.getTime()) {
-        return <div className={className.container}>
+        return <section className={className.container}>
             <DateString date={publishedAt}/>
             &ensp;
             (<DateString date={updatedAt}/>更新)
             &ensp;
             <HistoryLink filePath={filePath}/>
-        </div>;
+        </section>;
     } else if (publishedAt) {
-        return <div className={className.container}>
+        return <section className={className.container}>
             <DateString date={updatedAt || publishedAt}/>
             &ensp;
             <HistoryLink filePath={filePath}/>
-        </div>;
+        </section>;
     }
     return null;
 };

@@ -2,9 +2,10 @@
     z-index: var(--zHeader);
     position: sticky;
     inset-block-start: 0;
-    display: flex;
+    display: grid;
     align-items: center;
-    justify-content: center;
+    justify-content: stretch;
+    justify-items: center;
     padding-block-start: 0.2rem;
     padding-block-end: 0.2rem;
     box-shadow: 0 0 0.3rem #0002;
@@ -28,8 +29,6 @@
     text-decoration: none;
 }
 .title {
-    margin-block-start: 0;
-    margin-block-end: 0;
     line-height: 1;
     /* (Exception) Use the physical position for visual adjustment on displaying horizontally. */
     padding-top: 2px;

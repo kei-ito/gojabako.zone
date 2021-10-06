@@ -46,9 +46,7 @@ export default function MarkdownPage() {
                 <ArticleHeader${[...serializeDateAttributes(fileData)].join('')}>
                     ${titleJsx}
                 </ArticleHeader>
-                <section>
-                    ${body}
-                </section>
+                ${body}
                 ${footnote}
             </article>
         </main>
