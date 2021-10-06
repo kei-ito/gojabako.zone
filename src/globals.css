@@ -29,14 +29,20 @@
     --zHeader: 1;
     --listIndexSize: 2rem;
     --font-default: Georgia, 'BIZ UDMincho', serif;
+    --font-numeric: 'BIZ UDMincho', serif;
     --font-monospace: 'Roboto Mono', monospace;
-    font-size: 16px;
+    font-size: 17px;
     font-family: var(--font-default);
     line-height: 1.5;
     text-rendering: optimizeSpeed;
     color: var(--textColor);
     block-size: 100%;
     background-color: var(--backgroundColor);
+}
+@media (max-width: 600px) {
+    :root {
+        font-size: 16px;
+    }
 }
 :root:focus-within {
     scroll-behavior: smooth;
@@ -53,7 +59,7 @@ main {
     margin-inline-end: auto;
 }
 article {
-    max-inline-size: 100%;
+    inline-size: 100%;
     margin-inline-start: auto;
     margin-inline-end: auto;
 }
@@ -136,7 +142,7 @@ h1, h2, h3 {
     margin-block-start: 2rem;
 }
 h1 {
-    font-size: 140%;
+    font-size: 130%;
 }
 h2 {
     font-size: 116%;
@@ -215,7 +221,7 @@ li::before {
 }
 ol>li::before {
     content: counter(listItemIndex) '.';
-    font-variant-numeric: tabular-nums;
+    font-family: var(--font-numeric);
 }
 ul>li::before {
     content: '●';

@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import {PageHead} from '../components/PageHead';
 import {authorName} from '../util/constants';
+import Body from './index.module.md';
 
 const Home = () => <>
     <PageHead
@@ -10,9 +10,11 @@ const Home = () => <>
         author={authorName}
     />
     <main>
-        <section>
-            <p><Link href="/markdown"><a>markdown</a></Link></p>
-        </section>
+        <article>
+            <section>
+                <Body/>
+            </section>
+        </article>
     </main>
 </>;
 
