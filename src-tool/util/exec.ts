@@ -1,4 +1,5 @@
 import * as childProcess from 'child_process';
+import * as console from 'console';
 
 export interface ExecResult {
     stdout: string,
@@ -9,14 +10,18 @@ export const exec = async (
     command: string,
     options: childProcess.ExecOptions = {},
 ): Promise<ExecResult> => await new Promise<ExecResult>((resolve, reject) => {
-    childProcess.exec(command, options, (error, stdout, stderr) => {
+    console.info(command);
+    childProcess.exec(command, options, (error, rawStdout, rawStderr) => {
         if (error) {
             reject(error);
         } else {
-            resolve({
-                stdout: stdout.trim(),
-                stderr: stderr.trim(),
-            });
+            const stdout = rawStdout.trim();
+            const stderr = rawStderr.trim();
+            console.info(stdout);
+            if (stderr) {
+                console.error(stderr);
+            }
+            resolve({stdout, stderr});
         }
     });
 });

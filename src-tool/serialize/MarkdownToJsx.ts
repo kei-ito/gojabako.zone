@@ -1,4 +1,5 @@
 // https://github.com/syntax-tree/mdast
+import * as console from 'console';
 import type Markdown from 'mdast';
 import type {LowlightRoot} from 'lowlight/lib/core';
 import {getTextContent} from './TextContent';
@@ -270,9 +271,10 @@ const serializeLinkElement = function* (
         yield '>';
         yield* serializeElement(context, 'a', attrs, node, nextAncestors);
         yield '</Link>';
-    } else if (href.startsWith('.')) {
-        throw new Error(`The href should be a route pattern like absolute path: ${href}`);
     } else {
+        if (href.startsWith('.')) {
+            console.warn(`The href is relative but does't start with "/": ${href}`);
+        }
         yield* serializeElement(context, 'a', {href, ...attrs}, node, nextAncestors);
     }
 };

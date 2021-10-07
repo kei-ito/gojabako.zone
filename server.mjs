@@ -1,4 +1,3 @@
-import * as path from 'path';
 import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
@@ -6,12 +5,12 @@ import * as console from 'console';
 import next from 'next';
 
 const getServer = async () => {
-    const directory = 'certificates/localhost.gojabako.zone';
+    const directoryUrl = new URL('certificates/localhost.gojabako.zone/', import.meta.url);
     let certificates = null;
     try {
         const [key, cert] = await Promise.all([
-            fs.promises.readFile(path.join(directory, 'privkey.pem')),
-            fs.promises.readFile(path.join(directory, 'cert.pem')),
+            fs.promises.readFile(new URL('privkey.pem', directoryUrl)),
+            fs.promises.readFile(new URL('cert.pem', directoryUrl)),
         ]);
         certificates = {key, cert};
     } catch (error) {

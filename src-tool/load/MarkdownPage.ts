@@ -4,16 +4,22 @@ import {getTextContent} from '../serialize/TextContent';
 import {createSerializeMarkdownContext} from '../util/createSerializeMarkdownContext';
 import {getExcerpt} from '../util/getExcerpt';
 import type {FileData} from '../util/getFileData';
-import {getFileData} from '../util/getFileData';
+import {getPageData} from '../util/getPageData';
+import {getRelativePath} from '../util/getRelativePath';
 import {listImportDeclarations} from '../util/listImportDeclarations';
-import type {LoaderThis} from '../util/LoaderContext';
-import {LoaderContext} from '../util/LoaderContext';
+import type {LoaderThis} from '../util/LoaderThis';
+import {componentsUrl} from '../util/url';
 
 export const loadMarkdownPage = async (
     loaderThis: LoaderThis,
     source: string,
 ) => {
-    const context = await createSerializeMarkdownContext();
+    // const pages: Array<unknown> = [];
+    // for await (const page of listPages()) {
+    //     pages.push(page);
+    // }
+    // console.info(pages);
+    const context = createSerializeMarkdownContext();
     const root = context.fromMarkdown(source);
     const [titleNode, ...bodyNodes] = root.children;
     if (!(titleNode.type === 'heading' && titleNode.depth === 1)) {
@@ -25,25 +31,25 @@ export const loadMarkdownPage = async (
     const titleJsx = [...serializeMarkdownRootToJsx(context, root)].join('');
     root.children = bodyNodes;
     const body = [...serializeMarkdownRootToJsx(context, root)].join('');
-    const loaderContext = new LoaderContext(loaderThis, '.page.md');
     const imports = [...listImportDeclarations(context), ...context.head].join('\n');
     const footnote = [...serializeFootnotes(context)].join('');
-    const fileData = await getFileData(loaderContext.filePath);
+    const pageFileUrl = new URL(`file://${loaderThis.resourcePath}`);
+    const page = await getPageData(pageFileUrl);
     return `
 import Head from 'next/head';
-import {PageHead} from '${loaderContext.getRelativePath('src/components/PageHead')}';
-import {ArticleHeader} from '${loaderContext.getRelativePath('src/components/ArticleHeader')}';
+import {PageHead} from '${getCompoentPath(pageFileUrl, 'PageHead')}';
+import {ArticleHeader} from '${getCompoentPath(pageFileUrl, 'ArticleHeader')}';
 ${imports}
 export default function MarkdownPage() {
     return <>
         <PageHead
             title="${toSafeString(title)}"
             description="${toSafeString(excerpt)}"
-            pathname="${loaderContext.pathname}"
+            pathname="${page.pathname}"
         />
         <main>
             <article>
-                <ArticleHeader${[...serializeDateAttributes(fileData)].join('')}>
+                <ArticleHeader${[...serializeDateAttributes(page)].join('')}>
                     ${titleJsx}
                 </ArticleHeader>
                 ${body}
@@ -64,4 +70,10 @@ const serializeDateAttributes = function* (
     if (lastCommitAt) {
         yield ` updatedAt={new Date('${lastCommitAt.toISOString()}')}`;
     }
+};
+const getCompoentPath = (pageUrl: URL, componentName: string) => {
+    const componentUrl = new URL(`${componentName}/index.tsx`, componentsUrl);
+    let pageDir = pageUrl.pathname;
+    pageDir = pageDir.slice(0, Math.max(0, pageDir.lastIndexOf('/')));
+    return getRelativePath(pageDir, componentUrl.pathname);
 };

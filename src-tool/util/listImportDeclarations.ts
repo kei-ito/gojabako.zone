@@ -4,7 +4,7 @@ export const listImportDeclarations = function* (
     {images, links}: SerializeMarkdownContext,
 ): Generator<string> {
     for (const href of links) {
-        if (href.startsWith('/')) {
+        if (href.startsWith('/') || href.startsWith('.')) {
             yield 'import Link from \'next/link\';';
             break;
         }

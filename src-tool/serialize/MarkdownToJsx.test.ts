@@ -2,8 +2,8 @@ import {createSerializeMarkdownContext} from '../util/createSerializeMarkdownCon
 import {serializeMarkdownToJsx, serializeMarkdownRootToJsx, serializeFootnotes} from './MarkdownToJsx';
 
 describe(serializeMarkdownToJsx.name, () => {
-    it('heading', async () => {
-        const context = await createSerializeMarkdownContext();
+    it('heading', () => {
+        const context = createSerializeMarkdownContext();
         const source = [
             '# Title{1}',
             '## Title{2}',
@@ -22,8 +22,8 @@ describe(serializeMarkdownToJsx.name, () => {
         ].join('');
         expect(actual).toBe(expected);
     });
-    it('ol', async () => {
-        const context = await createSerializeMarkdownContext();
+    it('ol', () => {
+        const context = createSerializeMarkdownContext();
         const source = [
             '1. foo',
             '2. bar',
@@ -39,8 +39,8 @@ describe(serializeMarkdownToJsx.name, () => {
         ].join('');
         expect(actual).toBe(expected);
     });
-    it('ul', async () => {
-        const context = await createSerializeMarkdownContext();
+    it('ul', () => {
+        const context = createSerializeMarkdownContext();
         const source = [
             '- foo',
             '- bar',
@@ -56,8 +56,8 @@ describe(serializeMarkdownToJsx.name, () => {
         ].join('');
         expect(actual).toBe(expected);
     });
-    it('hr', async () => {
-        const context = await createSerializeMarkdownContext();
+    it('hr', () => {
+        const context = createSerializeMarkdownContext();
         const source = [
             'foo',
             '',
@@ -75,8 +75,8 @@ describe(serializeMarkdownToJsx.name, () => {
         ].join('');
         expect(actual).toBe(expected);
     });
-    it('blockquote', async () => {
-        const context = await createSerializeMarkdownContext();
+    it('blockquote', () => {
+        const context = createSerializeMarkdownContext();
         const source = [
             'foo',
             '',
@@ -93,8 +93,8 @@ describe(serializeMarkdownToJsx.name, () => {
         ].join('');
         expect(actual).toBe(expected);
     });
-    it('table', async () => {
-        const context = await createSerializeMarkdownContext();
+    it('table', () => {
+        const context = createSerializeMarkdownContext();
         const source = [
             '| Cell11 | Cell12 | Cell13 |',
             '|--------|--------|--------|',
@@ -119,8 +119,8 @@ describe(serializeMarkdownToJsx.name, () => {
         ].join('');
         expect(actual).toBe(expected);
     });
-    it('break', async () => {
-        const context = await createSerializeMarkdownContext();
+    it('break', () => {
+        const context = createSerializeMarkdownContext();
         const source = [
             'foo\\',
             'bar  ',
@@ -134,8 +134,8 @@ describe(serializeMarkdownToJsx.name, () => {
         ].join('');
         expect(actual).toBe(expected);
     });
-    it('definition', async () => {
-        const context = await createSerializeMarkdownContext();
+    it('definition', () => {
+        const context = createSerializeMarkdownContext();
         const source = [
             'foo[bar1]baz[bar**2**][bar2]',
             '',
@@ -153,8 +153,8 @@ describe(serializeMarkdownToJsx.name, () => {
         ].join('');
         expect(actual).toBe(expected);
     });
-    it('image', async () => {
-        const context = await createSerializeMarkdownContext();
+    it('image', () => {
+        const context = createSerializeMarkdownContext();
         const source = [
             '![image1](./image1)',
             '',
@@ -178,8 +178,8 @@ describe(serializeMarkdownToJsx.name, () => {
         ].join('');
         expect(actual).toBe(expected);
     });
-    it('footnote', async () => {
-        const context = await createSerializeMarkdownContext();
+    it('footnote', () => {
+        const context = createSerializeMarkdownContext();
         const source = [
             'Here is a simple footnote[^1].',
             '',
@@ -214,8 +214,8 @@ describe(serializeMarkdownToJsx.name, () => {
         ].join('');
         expect(actual).toBe(expected);
     });
-    it('decoration', async () => {
-        const context = await createSerializeMarkdownContext();
+    it('decoration', () => {
+        const context = createSerializeMarkdownContext();
         const source = [
             '*emphasis* **strong** ~~delete~~ `inline code`',
         ].join('\n');
@@ -229,8 +229,8 @@ describe(serializeMarkdownToJsx.name, () => {
         ].join('');
         expect(actual).toBe(expected);
     });
-    it('code with linked caption', async () => {
-        const context = await createSerializeMarkdownContext();
+    it('code with linked caption', () => {
+        const context = createSerializeMarkdownContext();
         const source = [
             '```markdown [sample.md](https://example.com)',
             'hello.',
@@ -253,8 +253,8 @@ describe(serializeMarkdownToJsx.name, () => {
         ].join('');
         expect(actual).toBe(expected);
     });
-    it('code without lang', async () => {
-        const context = await createSerializeMarkdownContext();
+    it('code without lang', () => {
+        const context = createSerializeMarkdownContext();
         const source = [
             '```',
             '$ echo 123',
@@ -279,8 +279,8 @@ describe(serializeMarkdownToJsx.name, () => {
 });
 
 describe(serializeMarkdownRootToJsx.name, () => {
-    it('heading', async () => {
-        const context = await createSerializeMarkdownContext();
+    it('heading', () => {
+        const context = createSerializeMarkdownContext();
         const source = [
             '# Title{1}',
             '## Title{2}',

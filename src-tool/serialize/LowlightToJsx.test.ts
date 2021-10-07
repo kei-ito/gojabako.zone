@@ -104,4 +104,21 @@ describe(serializeLowlightToJsx.name, () => {
         ].join('');
         expect([...serializeLowlightToJsx(input)].join('')).toBe(expected);
     });
+    it('throw at unknown node', () => {
+        const input: LowlightRoot = {
+            type: 'root',
+            data: {language: 'typescript', relevance: 3},
+            children: [
+                {
+                    type: '_' as 'element',
+                    tagName: 'span',
+                    properties: {className: ['hljs-keyword']},
+                    children: [{type: 'text', value: 'const'}],
+                },
+            ],
+        };
+        expect(() => {
+            [...serializeLowlightToJsx(input)].slice();
+        }).toThrow(/^UnsupportedType:/);
+    });
 });

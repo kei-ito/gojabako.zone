@@ -10,10 +10,10 @@ export interface TranspileMarkdownResult extends SerializeMarkdownContext {
     root: Markdown.Root,
 }
 
-export const transpileMarkdown = async (
+export const transpileMarkdown = (
     source: string,
-): Promise<TranspileMarkdownResult> => {
-    const context = await createSerializeMarkdownContext();
+): TranspileMarkdownResult => {
+    const context = createSerializeMarkdownContext();
     const root = context.fromMarkdown(source);
     const jsx = [...serializeMarkdownRootToJsx(context, root)].join('');
     const imports = [...listImportDeclarations(context)].join('\n');

@@ -1,17 +1,15 @@
+import {lowlight} from 'lowlight';
 import type Markdown from 'mdast';
+import {footnoteFromMarkdown} from 'mdast-util-footnote';
+import {fromMarkdown} from 'mdast-util-from-markdown';
+import {gfmFromMarkdown} from 'mdast-util-gfm';
+import {footnote} from 'micromark-extension-footnote';
+import {gfm} from 'micromark-extension-gfm';
 import type {MarkdownContent, SerializeMarkdownContext} from '../serialize/MarkdownToJsx';
 import {removeHtmlComments} from './removeHtmlComments';
 import {walkContentNodes} from './walkContentNodes';
 
-export const createSerializeMarkdownContext = async (): Promise<SerializeMarkdownContext> => {
-    const [{fromMarkdown}, {gfm}, {footnote}, {gfmFromMarkdown}, {footnoteFromMarkdown}, {lowlight}] = await Promise.all([
-        import('mdast-util-from-markdown'),
-        import('micromark-extension-gfm'),
-        import('micromark-extension-footnote'),
-        import('mdast-util-gfm'),
-        import('mdast-util-footnote'),
-        import('lowlight'),
-    ]);
+export const createSerializeMarkdownContext = (): SerializeMarkdownContext => {
     let nodes: Map<Markdown.Content['type'], Array<Markdown.Content> | undefined> | null = null;
     const nodeListOf = <T extends Markdown.Content['type']>(type: T): Array<MarkdownContent<T>> => {
         if (!nodes) {

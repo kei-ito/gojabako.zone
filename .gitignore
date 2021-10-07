@@ -37,8 +37,8 @@ yarn-error.log*
 *.css.ts
 /src/app.css
 
-# loader
-.loader
+# tools
+.tool
 
 # certificates
 *.pem

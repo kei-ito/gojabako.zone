@@ -5,16 +5,17 @@
     "scripts": {
         "test": "run-s test:*",
         "test:type": "tsc --noEmit",
-        "test:jest": "jest",
-        "dev": "run-s build:loader dev:*",
+        "test:jest": "npx jest",
+        "dev": "run-s build:tool dev:*",
         "dev:watch": "run-p dev:watch:*",
         "dev:watch:css": "esifycss --css=src/app.css --ext=.ts --watch src",
         "dev:watch:next": "node server.mjs",
         "build": "run-s build:*",
-        "build:loader": "run-s build:loader:*",
-        "build:loader:tsc": "tsc --project tsconfig.loader.json",
-        "build:loader:mjs": "npx @nlib/change-ext --directory .loader --mapping js/mjs",
-        "build:loader:resolve": "npx @nlib/resolve-imports --include \".loader/**/*.mjs\"",
+        "build:tool": "run-s build:tool:*",
+        "build:tool:tsc": "tsc --project tsconfig.tool.json",
+        "build:tool:copy": "ts-node -O {\\\"module\\\":\\\"commonjs\\\"} src-tool/copy.ts",
+        "build:tool:mjs": "npx @nlib/change-ext --directory .tool --mapping js/mjs",
+        "build:tool:resolve": "npx @nlib/resolve-imports --include \".tool/**/*.mjs\"",
         "build:css": "esifycss --css=src/app.css --ext=.ts src",
         "build:next": "next build",
         "start": "NODE_ENV=production node server.mjs",
@@ -55,7 +56,15 @@
     "jest": {
         "roots": [
             "<rootDir>/src",
-            "<rootDir>/loader"
+            "<rootDir>/src-tool"
+        ],
+        "moduleFileExtensions": [
+            "cjs",
+            "mjs",
+            "js",
+            "jsx",
+            "ts",
+            "tsx"
         ],
         "preset": "ts-jest/presets/js-with-ts",
         "transformIgnorePatterns": [
@@ -69,14 +78,15 @@
             "@nlib/eslint-config"
         ],
         "ignorePatterns": [
-            "next-env.d.ts",
-            "./.loader/**/*"
+            "./next-env.d.ts",
+            "./.tool/**/*"
         ],
         "overrides": [
             {
                 "files": [
                     "./*",
-                    "./loader/**/*"
+                    "./loader/**/*",
+                    "./src-tool/**/*"
                 ],
                 "env": {
                     "node": true
@@ -97,16 +107,7 @@
                 },
                 "rules": {
                     "max-lines-per-function": "off",
-                    "@nlib/no-globals": [
-                        "error",
-                        {
-                            "allowed": [
-                                "describe",
-                                "it",
-                                "expect"
-                            ]
-                        }
-                    ]
+                    "@nlib/no-globals": "off"
                 }
             }
         ]
