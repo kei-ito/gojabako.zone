@@ -22,7 +22,7 @@ export const createSerializeMarkdownContext = (): SerializeMarkdownContext => {
         fromMarkdown: (source: string) => {
             const root = fromMarkdown(removeHtmlComments(source), {
                 extensions: [gfm(), footnote()],
-                mdastExtensions: [gfmFromMarkdown, footnoteFromMarkdown],
+                mdastExtensions: [gfmFromMarkdown(), footnoteFromMarkdown],
             });
             if (!nodes) {
                 nodes = new Map();
