@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Gojabako Zone</title>
+  <link href="https://gojabako.zone/"/>
+  <updated>2021-10-06T11:24:31.000Z</updated>
+  <id>https://gojabako.zone/</id>
+  <entry>
+    <id>https://gojabako.zone/2021/nextjs</id>
+    <title>Next.js + Vercelにしました</title>
+    <link href="https://gojabako.zone/2021/nextjs"/>
+    <updated>2021-10-06T11:24:31.000Z</updated>
+    <published>2021-10-05T14:51:46.000Z</published>
+  </entry>
+  <entry>
+    <id>https://gojabako.zone/markdown</id>
+    <title>Markdownテストページ</title>
+    <link href="https://gojabako.zone/markdown"/>
+    <updated>2021-10-06T14:00:52.000Z</updated>
+    <published>2021-10-02T03:18:07.000Z</published>
+  </entry>
+  <entry>
+    <id>https://gojabako.zone/index</id>
+    <title></title>
+    <link href="https://gojabako.zone/index"/>
+    <updated>2021-10-08T13:28:58.000Z</updated>
+    <published>2021-09-28T15:33:31.000Z</published>
+  </entry>
+</feed>

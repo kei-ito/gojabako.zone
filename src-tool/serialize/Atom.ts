@@ -23,7 +23,6 @@ export const serializeAtom = async function* () {
         yield `    <updated>${(page.lastCommitAt || now).toISOString()}</updated>`;
         yield `    <published>${(page.firstCommitAt || now).toISOString()}</published>`;
         yield '  </entry>';
-        yield page.title;
         if (20 < ++index) {
             break;
         }
