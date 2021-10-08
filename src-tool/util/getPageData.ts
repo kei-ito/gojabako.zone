@@ -19,11 +19,9 @@ export const getPageData = async (...args: Parameters<typeof findPageData>): Pro
     return pageData;
 };
 
-export const findPageData = async (
-    fileUrl: URL,
-): Promise<PageData | null> => {
+export const findPageData = async (fileUrl: URL): Promise<PageData | null> => {
     const pathname = getPathName(fileUrl);
-    if (!pathname) {
+    if (pathname === null) {
         return null;
     }
     const [title, fileData, {homepage}] = await Promise.all([
@@ -35,9 +33,7 @@ export const findPageData = async (
     return {pathname, url, title, ...fileData};
 };
 
-const getPathName = (
-    fileUrl: URL,
-): string | null => {
+const getPathName = (fileUrl: URL): string | null => {
     let pathname = fileUrl.pathname.slice(pagesUrl.pathname.length);
     if (pathname.endsWith('.page.md')) {
         pathname = pathname.slice(0, -8);
@@ -58,8 +54,5 @@ const getPathName = (
             return null;
         }
     }
-    if (pathname.endsWith('/index')) {
-        pathname = pathname.slice(0, -5);
-    }
-    return pathname;
+    return pathname.replace(/\/?(index)?$/, '');
 };

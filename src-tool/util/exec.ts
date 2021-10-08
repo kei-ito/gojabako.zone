@@ -17,7 +17,6 @@ export const exec = async (
         } else {
             const stdout = rawStdout.trim();
             const stderr = rawStderr.trim();
-            console.info(stdout);
             if (stderr) {
                 console.error(stderr);
             }
