@@ -1,6 +1,8 @@
 import {PageHead} from '../components/PageHead';
-import {authorName} from '../util/constants';
+import packageJson from '../../package.json';
 import Body from './index.module.md';
+
+const {authorName} = packageJson;
 
 const Home = () => <>
     <PageHead

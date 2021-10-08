@@ -1,7 +1,9 @@
 import Head from 'next/head';
 import type {PropsWithChildren} from 'react';
+import packageJson from '../../../package.json';
 import {URL} from '../../global';
-import {authorName, baseUrl, siteName} from '../../util/constants';
+
+const {homepage, siteName, authorName} = packageJson;
 
 export interface PageHeadProps {
     title: string,
@@ -13,7 +15,7 @@ export interface PageHeadProps {
 export const PageHead = (
     {title, description, pathname, author, children}: PropsWithChildren<PageHeadProps>,
 ) => {
-    const url = new URL(pathname, baseUrl).href;
+    const url = new URL(pathname, homepage).href;
     return <Head>
         <title>{title} ・ {siteName}</title>
         <link rel="canonical" href={url}/>

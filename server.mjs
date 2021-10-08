@@ -10,7 +10,7 @@ const getServer = async () => {
     try {
         const [key, cert] = await Promise.all([
             fs.promises.readFile(new URL('privkey.pem', directoryUrl)),
-            fs.promises.readFile(new URL('cert.pem', directoryUrl)),
+            fs.promises.readFile(new URL('fullchain.pem', directoryUrl)),
         ]);
         certificates = {key, cert};
     } catch (error) {

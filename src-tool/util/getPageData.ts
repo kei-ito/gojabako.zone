@@ -1,13 +1,12 @@
-import * as fs from 'fs';
-import type {FileData} from './getFileData';
 import {getExtension} from './getExtension';
+import type {FileData} from './getFileData';
 import {getFileData} from './getFileData';
-import {walkContentNodes} from './walkContentNodes';
-import {fromMarkdown} from 'mdast-util-from-markdown';
-import {getTextContent} from '../serialize/TextContent';
+import {getPageTitle} from './getPageTitle';
+import {loadPackageJson} from './loadPackageJson';
 import {pagesUrl} from './url';
 
 export interface PageData extends FileData {
+    url: URL,
     pathname: string,
     title: string,
 }
@@ -27,17 +26,13 @@ export const findPageData = async (
     if (!pathname) {
         return null;
     }
-    const code = await fs.promises.readFile(fileUrl, 'utf8');
-    const ext = getExtension(fileUrl.pathname);
-    let title = '';
-    switch (ext) {
-    case '.md':
-        title = getTitleFromMarkdown(code);
-        break;
-    default:
-    }
-    const fileData = await getFileData(fileUrl);
-    return {pathname, title, ...fileData};
+    const [title, fileData, {homepage}] = await Promise.all([
+        getPageTitle(fileUrl),
+        getFileData(fileUrl),
+        loadPackageJson(),
+    ]);
+    const url = new URL(pathname, homepage);
+    return {pathname, url, title, ...fileData};
 };
 
 const getPathName = (
@@ -67,13 +62,4 @@ const getPathName = (
         pathname = pathname.slice(0, -5);
     }
     return pathname;
-};
-
-const getTitleFromMarkdown = (code: string): string => {
-    for (const node of walkContentNodes(...fromMarkdown(code).children)) {
-        if (node.type === 'heading' && node.depth === 1) {
-            return getTextContent(node);
-        }
-    }
-    return '';
 };

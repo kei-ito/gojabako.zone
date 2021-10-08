@@ -1,8 +1,10 @@
 import Link from 'next/link';
-import {siteName} from '../../util/constants';
+import packageJson from '../../../package.json';
 import {AuthorLinks} from '../AuthorLinks';
 import {Logo} from '../Logo';
 import {className} from './style.module.css';
+
+const {siteName} = packageJson;
 
 export const Header = () => <header className={className.header}>
     <div className={className.container}>

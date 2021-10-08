@@ -1,5 +1,8 @@
 /* eslint-disable @next/next/no-page-custom-font */
 import {Html, Head, Main, NextScript} from 'next/document';
+import packageJson from '../../package.json';
+
+const {siteName} = packageJson;
 
 const Document = () => <Html lang="ja">
     <Head>
@@ -9,7 +12,7 @@ const Document = () => <Html lang="ja">
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin=""/>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"/>
-        <meta name="og:site_name" content="Gojabako Zone"/>
+        <meta name="og:site_name" content={siteName}/>
     </Head>
     <Main/>
     <NextScript/>
