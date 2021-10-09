@@ -1,8 +1,11 @@
 .footer {
+    position: sticky;
+    inset-block-start: 100%;
     display: flex;
     justify-content: center;
     padding-block-start: 1rem;
     padding-block-end: 1rem;
+    margin-block-start: 1rem;
     line-height: 1;
 }
 .line {

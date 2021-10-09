@@ -48,20 +48,21 @@
 :root:focus-within {
     scroll-behavior: smooth;
 }
-body {
+body, #raw-__next {
     min-height: 100vh;
 }
 main {
     display: grid;
     grid-auto-flow: row;
+    row-gap: 1rem;
 }
-article {
+article, section {
     display: grid;
     grid-auto-flow: row;
     justify-items: center;
     row-gap: var(--baseGap);
 }
-article>* {
+article>*, section>* {
     inline-size: var(--baseWidth);
 }
 article>header {

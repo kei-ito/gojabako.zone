@@ -1,6 +1,5 @@
 import type {NextApiHandler} from 'next';
-import {Date} from '../../global';
-import {pageList} from '../../util/pageList.generated';
+import {pageListByPublishedAt} from '../../util/pageList.generated';
 
 const handler: NextApiHandler = async (_req, res) => {
     res.writeHead(200, {
@@ -16,11 +15,10 @@ const handler: NextApiHandler = async (_req, res) => {
 const serialize = async function* () {
     yield '<?xml version="1.0" encoding="UTF-8"?>';
     yield '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-    const now = new Date().toISOString();
-    for await (const page of pageList) {
+    for await (const page of pageListByPublishedAt) {
         yield '  <url>';
         yield `    <loc>${page.url}</loc>`;
-        yield `    <lastmod>${page.lastCommitAt || now}</lastmod>`;
+        yield `    <lastmod>${page.updatedAt}</lastmod>`;
         yield '  </url>';
     }
     yield '</urlset>';

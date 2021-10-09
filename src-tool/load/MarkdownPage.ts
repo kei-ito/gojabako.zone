@@ -3,7 +3,6 @@ import {toJsxSafeString} from '../serialize/StringToJsxSafeString';
 import {getTextContent} from '../serialize/TextContent';
 import {createSerializeMarkdownContext} from '../util/createSerializeMarkdownContext';
 import {getExcerpt} from '../util/getExcerpt';
-import type {FileData} from '../util/getFileData';
 import {getPageData} from '../util/getPageData';
 import {getRelativePath} from '../util/getRelativePath';
 import {listImportDeclarations} from '../util/listImportDeclarations';
@@ -61,14 +60,18 @@ export default function MarkdownPage() {
 };
 
 const serializeDateAttributes = function* (
-    {filePath, firstCommitAt, lastCommitAt}: FileData,
+    {filePath, publishedAt, updatedAt}: {
+        filePath: string,
+        publishedAt: string,
+        updatedAt: string,
+    },
 ): Generator<string> {
     yield ` filePath="${filePath}"`;
-    if (firstCommitAt) {
-        yield ` publishedAt="${firstCommitAt}"`;
+    if (publishedAt) {
+        yield ` publishedAt="${publishedAt}"`;
     }
-    if (lastCommitAt) {
-        yield ` updatedAt="${lastCommitAt}"`;
+    if (updatedAt) {
+        yield ` updatedAt="${updatedAt}"`;
     }
 };
 const getCompoentPath = (pageUrl: URL, componentName: string) => {

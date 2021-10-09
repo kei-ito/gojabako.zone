@@ -12,8 +12,6 @@ export const getPathName = (fileUrl: URL): string | null => {
         }
         const extname = getExtension(pathname);
         switch (extname) {
-        case '.ts':
-        case '.js':
         case '.tsx':
         case '.jsx':
             pathname = pathname.slice(0, -extname.length);
