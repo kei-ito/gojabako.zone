@@ -42,7 +42,7 @@
         "lint-staged": "11.2.0",
         "lowlight": "2.3.0",
         "mdast-util-footnote": "1.0.0",
-        "mdast-util-from-markdown": "1.0.3",
+        "mdast-util-from-markdown": "1.0.4",
         "mdast-util-gfm": "2.0.0",
         "micromark-extension-footnote": "1.0.1",
         "micromark-extension-gfm": "2.0.0",
