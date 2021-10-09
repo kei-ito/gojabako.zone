@@ -1,10 +1,26 @@
-import type {LoaderThis} from './LoaderThis';
+import {getExtension} from './getExtension';
 import {pagesUrl} from './url';
 
-export const getPathName = (
-    loaderThis: LoaderThis,
-    ext: string,
-): string => {
-    const fileUrl = new URL(loaderThis.resourcePath);
-    return fileUrl.href.slice(pagesUrl.href.length, -ext.length);
+export const getPathName = (fileUrl: URL): string | null => {
+    let pathname = `/${fileUrl.pathname.slice(pagesUrl.pathname.length)}`;
+    if (pathname.endsWith('.page.md')) {
+        pathname = pathname.slice(0, -8);
+    } else {
+        const basename = pathname.slice(pathname.lastIndexOf('/') + 1);
+        if (basename.startsWith('_')) {
+            return null;
+        }
+        const extname = getExtension(pathname);
+        switch (extname) {
+        case '.ts':
+        case '.js':
+        case '.tsx':
+        case '.jsx':
+            pathname = pathname.slice(0, -extname.length);
+            break;
+        default:
+            return null;
+        }
+    }
+    return pathname.replace(/\/?(index)?$/, '');
 };

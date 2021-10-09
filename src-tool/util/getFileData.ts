@@ -5,8 +5,8 @@ import {readline} from './readline';
 import {projectRootUrl} from './url';
 
 export interface FileData {
-    firstCommitAt: Date | null,
-    lastCommitAt: Date | null,
+    firstCommitAt: string | null,
+    lastCommitAt: string | null,
     /** Use to create a link to history on GitHub */
     filePath: string,
 }
@@ -24,13 +24,13 @@ export const getFileData = async (
 
 const parseCommandOutput = (
     {stderr, stdout}: ExecResult,
-): Date | null => {
+): string | null => {
     if (stderr) {
         throw new Error(stderr);
     }
     const result = readline(stdout).next();
     const dateString = result.done ? null : result.value;
-    return dateString ? new Date(dateString) : null;
+    return dateString ? new Date(dateString).toISOString() : null;
 };
 
 const getFirstCommitterDate = async (

@@ -65,10 +65,10 @@ const serializeDateAttributes = function* (
 ): Generator<string> {
     yield ` filePath="${filePath}"`;
     if (firstCommitAt) {
-        yield ` publishedAt={new Date('${firstCommitAt.toISOString()}')}`;
+        yield ` publishedAt="${firstCommitAt}"`;
     }
     if (lastCommitAt) {
-        yield ` updatedAt={new Date('${lastCommitAt.toISOString()}')}`;
+        yield ` updatedAt="${lastCommitAt}"`;
     }
 };
 const getCompoentPath = (pageUrl: URL, componentName: string) => {

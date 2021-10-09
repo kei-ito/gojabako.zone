@@ -3,13 +3,12 @@ import {className} from './style.module.css';
 
 export interface PageDateProps {
     filePath: string,
-    publishedAt?: Date,
-    updatedAt?: Date,
+    publishedAt?: string,
+    updatedAt?: string,
 }
 
-const Ms1Day = 86400000;
 export const PageDate = ({filePath, publishedAt, updatedAt}: PageDateProps) => {
-    if (publishedAt && updatedAt && Ms1Day < updatedAt.getTime() - publishedAt.getTime()) {
+    if (publishedAt && updatedAt && publishedAt !== updatedAt) {
         return <section className={className.container}>
             <DateString date={publishedAt}/>
             &ensp;

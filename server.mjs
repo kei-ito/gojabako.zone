@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
 import * as console from 'console';
+import * as url from 'url';
 import next from 'next';
 
 const getServer = async () => {
@@ -33,11 +34,23 @@ await app.prepare();
 server.once('error', (error) => {
     console.error(error);
 });
-server.on('request', (req, res) => {
-    const url = new URL(req.url, rootUrl);
-    app.render(req, res, url.pathname, url.search);
-});
 server.on('listening', () => {
     console.info(`> Ready on ${rootUrl.href}`);
 });
 server.listen(Number(rootUrl.port), rootUrl.hostname);
+
+const handleApiRequest = app.getRequestHandler();
+server.on('request', (req, res) => {
+    if (!req.url.startsWith('/_')) {
+        console.info(`${req.method} ${req.url}`);
+    }
+    const parsedUrl = url.parse(new URL(req.url, rootUrl).href, true);
+    if (!parsedUrl.query) {
+        parsedUrl.query = {};
+    }
+    if (req.url.startsWith('/api/')) {
+        handleApiRequest(req, res, parsedUrl);
+    } else {
+        app.render(req, res, parsedUrl.pathname, parsedUrl.query);
+    }
+});
