@@ -5,6 +5,7 @@ import {pageList} from '../../util/pageList.generated';
 const handler: NextApiHandler = async (_req, res) => {
     res.writeHead(200, {
         'content-type': 'application/xml; charset=utf-8',
+        'cache-control': 'public, max-age=3600',
     });
     for await (const line of serialize()) {
         res.write(`${line}\n`);

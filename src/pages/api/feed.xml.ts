@@ -7,6 +7,7 @@ import {sanitize} from '../../util/sanitize';
 const handler: NextApiHandler = async (_req, res) => {
     res.writeHead(200, {
         'content-type': 'application/atom+xml; charset=utf-8',
+        'cache-control': 'public, max-age=3600',
     });
     for await (const line of serialize()) {
         res.write(`${line}\n`);

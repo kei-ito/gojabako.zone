@@ -11,4 +11,11 @@ module.exports = {
         config.resolve.plugins.push(new EsifyCSSWebpackPlugin());
         return config;
     },
+    rewrites: async () => {
+        await Promise.resolve();
+        return [
+            {source: '/sitemap.xml', destination: '/api/sitemap'},
+            {source: '/feed.atom', destination: '/api/feed'},
+        ];
+    },
 };
