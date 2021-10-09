@@ -1,6 +1,6 @@
 import {getPageList} from '../util/getPageList';
 import {loadPackageJson} from '../util/loadPackageJson';
-import {toSafeString} from './StringToJsxSafeString';
+import {toJsxSafeString} from './StringToJsxSafeString';
 
 export const serializeAtom = async function* () {
     yield '<?xml version="1.0" encoding="utf-8"?>';
@@ -16,7 +16,7 @@ export const serializeAtom = async function* () {
     for await (const page of pageList) {
         yield '  <entry>';
         yield `    <id>${page.url}</id>`;
-        yield `    <title>${toSafeString(page.title)}</title>`;
+        yield `    <title>${toJsxSafeString(page.title)}</title>`;
         yield `    <link href="${page.url}"/>`;
         yield `    <updated>${page.lastCommitAt || now}</updated>`;
         yield `    <published>${page.firstCommitAt || now}</published>`;

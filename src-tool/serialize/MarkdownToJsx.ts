@@ -3,7 +3,7 @@ import * as console from 'console';
 import type Markdown from 'mdast';
 import type {LowlightRoot} from 'lowlight/lib/core';
 import {getTextContent} from './TextContent';
-import {serializeStringToJsxSafeString, toSafeString} from './StringToJsxSafeString';
+import {serializeStringToJsxSafeString, toJsxSafeString} from './StringToJsxSafeString';
 import {createUnsupportedTypeError} from '../util/createUnsupportedTypeError';
 import {serializeLowlightToJsx} from './LowlightToJsx';
 import type {Attributes} from './Attributes';
@@ -82,7 +82,7 @@ const serialize = function* (
         break;
     }
     case 'heading': {
-        const id = toSafeString(getTextContent(node).toLowerCase().replace(/\s+/, '_'));
+        const id = toJsxSafeString(getTextContent(node).toLowerCase().replace(/\s+/, '_'));
         yield `<h${node.depth}>`;
         if (1 < node.depth) {
             yield `<span className="anchor" id="${id}"/>`;

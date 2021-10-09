@@ -1,5 +1,5 @@
 import {serializeFootnotes, serializeMarkdownRootToJsx} from '../serialize/MarkdownToJsx';
-import {toSafeString} from '../serialize/StringToJsxSafeString';
+import {toJsxSafeString} from '../serialize/StringToJsxSafeString';
 import {getTextContent} from '../serialize/TextContent';
 import {createSerializeMarkdownContext} from '../util/createSerializeMarkdownContext';
 import {getExcerpt} from '../util/getExcerpt';
@@ -43,8 +43,8 @@ ${imports}
 export default function MarkdownPage() {
     return <>
         <PageHead
-            title="${toSafeString(title)}"
-            description="${toSafeString(excerpt)}"
+            title="${toJsxSafeString(title)}"
+            description="${toJsxSafeString(excerpt)}"
             pathname="${page.pathname}"
         />
         <main>

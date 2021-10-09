@@ -12,4 +12,4 @@ export const serializeStringToJsxSafeString = function* (
     }
 };
 
-export const toSafeString = (input: string) => [...serializeStringToJsxSafeString(input)].join('');
+export const toJsxSafeString = (input: string) => [...serializeStringToJsxSafeString(input)].join('');
