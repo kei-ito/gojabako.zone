@@ -5,8 +5,12 @@ import {getExtension} from './getExtension';
 import {walkContentNodes} from './walkContentNodes';
 
 export const getPageTitle = async (
+    pathname: string,
     fileUrl: URL,
 ): Promise<string> => {
+    if (pathname === '/') {
+        return 'トップページ';
+    }
     const code = await fs.promises.readFile(fileUrl, 'utf8');
     const ext = getExtension(fileUrl.pathname);
     switch (ext) {

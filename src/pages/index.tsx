@@ -39,7 +39,7 @@ const Published = ({pathname, title, publishedAt, updatedAt}: PageData) => <li c
                 <DateString date={publishedAt}/>
                 {publishedAt < updatedAt && <>（<DateString date={updatedAt}/>更新）</>}
             </span>
-            {title || '（タイトルなし）'}
+            {title}
         </a>
     </Link>
 </li>;
@@ -51,7 +51,7 @@ const Updated = ({pathname, title, publishedAt, updatedAt}: PageData) => <li cla
                 <DateString date={updatedAt}/>更新
                 {publishedAt < updatedAt && <>（<DateString date={publishedAt}/>公開）</>}
             </span>
-            {title || '（タイトルなし）'}
+            {title}
         </a>
     </Link>
 </li>;

@@ -26,7 +26,7 @@ export const findPageData = async (fileUrl: URL): Promise<PageData | null> => {
         return null;
     }
     const [title, {filePath, firstCommitAt, lastCommitAt}, {homepage}] = await Promise.all([
-        getPageTitle(fileUrl),
+        getPageTitle(pathname, fileUrl),
         getFileData(fileUrl),
         loadPackageJson(),
     ]);

@@ -20,5 +20,5 @@ export const getPathName = (fileUrl: URL): string | null => {
             return null;
         }
     }
-    return pathname.replace(/\/?(index)?$/, '');
+    return pathname.replace(/(\/?)index$/, '/');
 };
