@@ -18,7 +18,7 @@ export const Home = () => <>
     <main>
         <section>
             <h1 className={className.title}>{authorName}</h1>
-            <p>ここは決まったら書きます。</p>
+            <p>ここなに書こう。</p>
             <ul>
                 {pageListByPublishedAt.map((page) => <Published {...page} key={page.pathname}/>)}
             </ul>

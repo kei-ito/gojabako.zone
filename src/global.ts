@@ -1,4 +1,6 @@
 /* eslint-disable @nlib/no-globals, no-undef */
+const g = globalThis;
+export {g as globalThis};
 export const {
     Boolean,
     Number,
@@ -11,4 +13,4 @@ export const {
     requestAnimationFrame,
     cancelAnimationFrame,
     MutationObserver,
-} = globalThis;
+} = g;

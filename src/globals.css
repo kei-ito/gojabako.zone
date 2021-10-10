@@ -184,7 +184,7 @@ figure {
     overflow: auto;
 }
 figcaption {
-    font-size: 90%;
+    font-size: 80%;
 }
 ol, ul {
     counter-reset: listItemIndex;
