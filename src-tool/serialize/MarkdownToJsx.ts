@@ -148,7 +148,7 @@ const serialize = function* (
                 throw new Error(`UnmatchedService: You requested ${node.lang} but ${embedding.type} was detected.`);
             }
             context.components.add('Embed');
-            yield `<Embed>${embedding.jsx}</Embed>`;
+            yield `<Embed type="${embedding.type}">${embedding.jsx}</Embed>`;
         } else if (node.lang === 'jsx' && node.meta === '(include)') {
             let code = node.value;
             const comment = (/\/\*{16}\/\s*?/).exec(code);

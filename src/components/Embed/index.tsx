@@ -4,7 +4,9 @@ import {MutationObserver, Number} from '../../global';
 import {isHTMLElement} from '../../util/isHTMLElement';
 import {className} from './style.module.css';
 
-interface EmbedProps {}
+interface EmbedProps {
+    type: string,
+}
 
 export const Embed = ({children}: PropsWithChildren<EmbedProps>) => {
     const ref = useRef<HTMLElement>(null);
