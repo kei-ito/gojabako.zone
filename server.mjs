@@ -9,11 +9,13 @@ const getServer = async () => {
     const directoryUrl = new URL('certificates/localhost.gojabako.zone/', import.meta.url);
     let certificates = null;
     try {
-        const [key, cert] = await Promise.all([
-            fs.promises.readFile(new URL('privkey.pem', directoryUrl)),
-            fs.promises.readFile(new URL('fullchain.pem', directoryUrl)),
-        ]);
-        certificates = {key, cert};
+        if (!process.argv.includes('--http')) {
+            const [key, cert] = await Promise.all([
+                fs.promises.readFile(new URL('privkey.pem', directoryUrl)),
+                fs.promises.readFile(new URL('fullchain.pem', directoryUrl)),
+            ]);
+            certificates = {key, cert};
+        }
     } catch (error) {
         console.error(error);
     }
@@ -24,21 +26,13 @@ const getServer = async () => {
         };
     }
     return {
-        rootUrl: new URL('https://0.0.0.0:3000'),
+        rootUrl: new URL('https://localhost:3000'),
         server: http.createServer(),
     };
 };
 const {rootUrl, server} = await getServer();
 const app = next({dev: process.env.NODE_ENV !== 'production'});
 await app.prepare();
-server.once('error', (error) => {
-    console.error(error);
-});
-server.on('listening', () => {
-    console.info(`> Ready on ${rootUrl.href}`);
-});
-server.listen(Number(rootUrl.port));
-
 const handleApiRequest = app.getRequestHandler();
 server.on('request', (req, res) => {
     if (!req.url.startsWith('/_')) {
@@ -54,3 +48,10 @@ server.on('request', (req, res) => {
         app.render(req, res, parsedUrl.pathname, parsedUrl.query);
     }
 });
+server.once('error', (error) => {
+    console.error(error);
+});
+server.on('listening', () => {
+    console.info(`> Ready on ${rootUrl.href}`);
+});
+server.listen(Number(rootUrl.port));
