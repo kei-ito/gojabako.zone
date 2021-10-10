@@ -1,5 +1,2 @@
 #!/bin/sh
-npm run setup || exit 1
-npm run updatePageList || exit 1
-git diff --exit-code || exit 1
 npx lint-staged
