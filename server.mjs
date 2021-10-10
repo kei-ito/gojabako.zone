@@ -37,7 +37,7 @@ server.once('error', (error) => {
 server.on('listening', () => {
     console.info(`> Ready on ${rootUrl.href}`);
 });
-server.listen(Number(rootUrl.port), rootUrl.hostname);
+server.listen(Number(rootUrl.port));
 
 const handleApiRequest = app.getRequestHandler();
 server.on('request', (req, res) => {
