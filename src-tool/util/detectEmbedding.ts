@@ -1,12 +1,11 @@
 import {Parser as HTMLParser} from 'htmlparser2';
 import type {HTMLASTNode} from '../serialize/HTMLASTNode';
 import {serializeHTMLASTNode} from '../serialize/HTMLASTNode';
-import type {SerializeOption} from './serializeOption';
+import type {SerializeMarkdownOption} from './serializeMarkdownOption';
 
 export interface Embedding {
     type: string,
     jsx: string,
-    scripts: Array<HTMLASTNode>,
 }
 
 export const supportedEmbeddingType = new Set([
@@ -24,13 +23,11 @@ class ParseContext {
 
     private readonly root: Array<HTMLASTNode> = [];
 
-    private readonly scripts: Array<HTMLASTNode> = [];
-
     private get currentElement() {
         return this.stack[0] as HTMLASTNode | undefined;
     }
 
-    private *serialize(option: SerializeOption): Generator<string> {
+    private *serialize(option: SerializeMarkdownOption): Generator<string> {
         for (const node of this.root) {
             yield* serializeHTMLASTNode(node, option);
         }
@@ -49,15 +46,11 @@ class ParseContext {
     }
 
     private enter(element: HTMLASTNode) {
-        if (element.tag.toLowerCase() === 'script') {
-            this.scripts.push(element);
+        const {currentElement} = this;
+        if (currentElement) {
+            currentElement.children.push(element);
         } else {
-            const {currentElement} = this;
-            if (currentElement) {
-                currentElement.children.push(element);
-            } else {
-                this.root.push(element);
-            }
+            this.root.push(element);
         }
         this.stack.unshift(element);
     }
@@ -131,8 +124,8 @@ class ParseContext {
         if (!type) {
             return null;
         }
-        const {jsx, scripts} = this;
-        return {type, jsx, scripts};
+        const {jsx} = this;
+        return {type, jsx};
     }
 
 }

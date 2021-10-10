@@ -5,6 +5,7 @@ import {listFiles} from './util/listFiles';
 import {spawn} from './util/spawn';
 
 const directoryUrl = new URL(`file://${__dirname}/`);
+const cacheDirectoryUrl = new URL('../.next', directoryUrl);
 const hashFileUrl = new URL('../.tool/hash.txt', directoryUrl);
 
 export const setupIfRequired = async () => {
@@ -15,7 +16,10 @@ export const setupIfRequired = async () => {
     if (current === previous) {
         console.info('setup is not required.');
     } else {
-        await spawn('npm run setup');
+        await Promise.all([
+            clearCache(),
+            spawn('npm run setup'),
+        ]);
     }
     await fs.promises.writeFile(hashFileUrl, current);
 };
@@ -36,6 +40,12 @@ const loadPreviousHash = async (): Promise<string> => {
             return '';
         }
         throw error;
+    }
+};
+
+const clearCache = async () => {
+    for await (const fileUrl of listFiles(cacheDirectoryUrl)) {
+        await fs.promises.unlink(fileUrl);
     }
 };
 

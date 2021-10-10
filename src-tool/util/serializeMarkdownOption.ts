@@ -1,10 +1,10 @@
-export interface SerializeOption {
+export interface SerializeMarkdownOption {
     jsx: boolean,
 }
 
 export const filterAttribute = (
     attributeName: string,
-    {jsx}: SerializeOption,
+    {jsx}: SerializeMarkdownOption,
 ) => {
     if (!jsx) {
         return attributeName;
@@ -12,6 +12,8 @@ export const filterAttribute = (
     switch (attributeName) {
     case 'class':
         return 'className';
+    case 'charset':
+        return 'charSet';
     case 'frameborder':
         return 'frameBorder';
     case 'allowfullscreen':

@@ -1,4 +1,4 @@
-import type {SerializeOption} from '../util/serializeOption';
+import type {SerializeMarkdownOption} from '../util/serializeMarkdownOption';
 import {serializeAttributes} from './Attributes';
 
 export interface HTMLASTNode<T extends string = string> {
@@ -9,7 +9,7 @@ export interface HTMLASTNode<T extends string = string> {
 
 export const serializeHTMLASTNode = function* (
     node: HTMLASTNode | string,
-    option: SerializeOption,
+    option: SerializeMarkdownOption,
 ): Generator<string> {
     if (typeof node === 'string') {
         yield node;

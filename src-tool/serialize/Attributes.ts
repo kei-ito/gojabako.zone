@@ -1,12 +1,12 @@
-import type {SerializeOption} from '../util/serializeOption';
-import {filterAttribute} from '../util/serializeOption';
+import type {SerializeMarkdownOption} from '../util/serializeMarkdownOption';
+import {filterAttribute} from '../util/serializeMarkdownOption';
 import {serializeStringToJsxSafeString} from './StringToJsxSafeString';
 
 export type Attributes = Record<string, boolean | string | null | undefined>;
 
 export const serializeAttributes = function* (
     attributes: Attributes | null | undefined,
-    option: SerializeOption,
+    option: SerializeMarkdownOption,
 ): Generator<string> {
     if (attributes) {
         for (const [key, value] of Object.entries(attributes)) {

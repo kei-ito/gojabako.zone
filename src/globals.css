@@ -180,7 +180,7 @@ figure {
     display: grid;
     grid-auto-flow: row;
     row-gap: 0.25rem;
-    justify-content: center;
+    justify-content: stretch;
     overflow: auto;
 }
 figcaption {

@@ -1,5 +1,7 @@
 /* eslint-disable @nlib/no-globals, no-undef */
 export const {
+    Boolean,
+    Number,
     Object,
     Array,
     Date,
@@ -8,4 +10,5 @@ export const {
     Promise,
     requestAnimationFrame,
     cancelAnimationFrame,
+    MutationObserver,
 } = globalThis;

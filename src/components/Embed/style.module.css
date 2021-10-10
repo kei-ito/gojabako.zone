@@ -1,0 +1,17 @@
+.embed {
+    align-items: stretch;
+}
+
+.raw-twitter-tweet>* {
+    inline-size: 100%;
+}
+
+iframe[src^="https://www.youtube.com/"] {
+    position: absolute;
+    block-size: 100%;
+    inline-size: 100%;
+    inset-block-start: 0;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+}

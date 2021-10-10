@@ -17,7 +17,7 @@ export interface SerializeMarkdownContext {
     highlight: (language: string, value: string) => LowlightRoot,
     highlightAuto: (value: string) => LowlightRoot,
     links: Set<string>,
-    scripts: Set<string>,
+    components: Set<string>,
     images: Map<string, string>,
     head: Set<string>,
     nodeListOf: <T extends Markdown.Content['type']>(
@@ -147,10 +147,8 @@ const serialize = function* (
             if (embedding.type !== node.lang) {
                 throw new Error(`UnmatchedService: You requested ${node.lang} but ${embedding.type} was detected.`);
             }
-            yield `<figure>${embedding.jsx}</figure>`;
-            for (const script of embedding.scripts) {
-                context.scripts.add(script.attributes.src);
-            }
+            context.components.add('Embed');
+            yield `<Embed>${embedding.jsx}</Embed>`;
         } else if (node.lang === 'jsx' && node.meta === '(include)') {
             let code = node.value;
             const comment = (/\/\*{16}\/\s*?/).exec(code);
