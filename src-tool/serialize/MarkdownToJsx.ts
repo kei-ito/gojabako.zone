@@ -8,6 +8,7 @@ import {createUnsupportedTypeError} from '../util/createUnsupportedTypeError';
 import {serializeLowlightToJsx} from './LowlightToJsx';
 import type {Attributes} from './Attributes';
 import {serializeAttributes} from './Attributes';
+import {detectEmbedding, supportedEmbeddingType} from '../util/detectEmbedding';
 
 type FilterContent<C extends Markdown.Content, T extends Markdown.Content['type']> = C extends {type: T} ? C : never;
 export type MarkdownContent<T extends Markdown.Content['type']> = FilterContent<Markdown.Content, T>;
@@ -16,6 +17,7 @@ export interface SerializeMarkdownContext {
     highlight: (language: string, value: string) => LowlightRoot,
     highlightAuto: (value: string) => LowlightRoot,
     links: Set<string>,
+    scripts: Set<string>,
     images: Map<string, string>,
     head: Set<string>,
     nodeListOf: <T extends Markdown.Content['type']>(
@@ -137,7 +139,19 @@ const serialize = function* (
         yield node.value;
         break;
     case 'code':
-        if (node.lang === 'jsx' && node.meta === '(include)') {
+        if (supportedEmbeddingType.has(`${node.lang}`)) {
+            const embedding = detectEmbedding(node.value);
+            if (!embedding) {
+                throw new Error(`NoServicesDetected: ${node.value}`);
+            }
+            if (embedding.type !== node.lang) {
+                throw new Error(`UnmatchedService: You requested ${node.lang} but ${embedding.type} was detected.`);
+            }
+            yield `<figure>${embedding.jsx}</figure>`;
+            for (const script of embedding.scripts) {
+                context.scripts.add(script.attributes.src);
+            }
+        } else if (node.lang === 'jsx' && node.meta === '(include)') {
             let code = node.value;
             const comment = (/\/\*{16}\/\s*?/).exec(code);
             if (comment) {
@@ -145,20 +159,10 @@ const serialize = function* (
                 code = code.slice(comment.index + comment[0].length).trim();
             }
             yield code;
+        } else if (node.lang) {
+            yield* serializeCodeBlock(context, node, nextAncestors);
         } else {
-            yield '<figure>';
-            if (node.meta) {
-                const {children: [caption]} = context.fromMarkdown(node.meta);
-                if ('children' in caption) {
-                    yield* serializeElement(context, 'figcaption', null, caption, nextAncestors);
-                }
-            }
-            if (node.lang) {
-                yield* serializeLowlightToJsx(context.highlight(node.lang, node.value));
-            } else {
-                yield* serializeLowlightToJsx(context.highlightAuto(node.value));
-            }
-            yield '</figure>';
+            yield* serializeCodeBlock(context, node, nextAncestors);
         }
         break;
     case 'yaml':
@@ -249,7 +253,7 @@ const serializeElement = function* (
     nextAncestors: Array<Markdown.Content | Markdown.Root>,
 ): Generator<string> {
     yield `<${tag}`;
-    yield* serializeAttributes(attrs);
+    yield* serializeAttributes(attrs, {jsx: true});
     yield '>';
     yield* serializeChildren(context, node, nextAncestors);
     yield `</${tag}>`;
@@ -267,7 +271,7 @@ const serializeLinkElement = function* (
     context.links.add(href);
     if (href.startsWith('/')) {
         yield '<Link';
-        yield* serializeAttributes({href});
+        yield* serializeAttributes({href}, {jsx: true});
         yield '>';
         yield* serializeElement(context, 'a', attrs, node, nextAncestors);
         yield '</Link>';
@@ -300,6 +304,26 @@ const serializeTableRow = function* (
         columnIndex += 1;
     }
     yield '</tr>';
+};
+
+const serializeCodeBlock = function* (
+    context: SerializeMarkdownContext,
+    node: Markdown.Code,
+    nextAncestors: Array<Markdown.Content | Markdown.Root>,
+) {
+    yield '<figure>';
+    if (node.meta) {
+        const {children: [caption]} = context.fromMarkdown(node.meta);
+        if ('children' in caption) {
+            yield* serializeElement(context, 'figcaption', null, caption, nextAncestors);
+        }
+    }
+    if (node.lang) {
+        yield* serializeLowlightToJsx(context.highlight(node.lang, node.value));
+    } else {
+        yield* serializeLowlightToJsx(context.highlightAuto(node.value));
+    }
+    yield '</figure>';
 };
 
 const generateImageLocalName = (

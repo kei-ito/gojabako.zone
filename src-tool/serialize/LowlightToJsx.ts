@@ -14,7 +14,7 @@ const serializeStart = function* (
     {tagName, attributes}: Ancestor,
 ) {
     yield `<${tagName}`;
-    yield* serializeAttributes(attributes);
+    yield* serializeAttributes(attributes, {jsx: true});
     yield '>';
 };
 

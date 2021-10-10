@@ -9,15 +9,11 @@ import {listImportDeclarations} from '../util/listImportDeclarations';
 import type {LoaderThis} from '../util/LoaderThis';
 import {componentsUrl} from '../util/url';
 
+// eslint-disable-next-line max-lines-per-function
 export const loadMarkdownPage = async (
     loaderThis: LoaderThis,
     source: string,
 ) => {
-    // const pages: Array<unknown> = [];
-    // for await (const page of listPages()) {
-    //     pages.push(page);
-    // }
-    // console.info(pages);
     const context = createSerializeMarkdownContext();
     const root = context.fromMarkdown(source);
     const [titleNode, ...bodyNodes] = root.children;
@@ -30,17 +26,27 @@ export const loadMarkdownPage = async (
     const titleJsx = [...serializeMarkdownRootToJsx(context, root)].join('');
     root.children = bodyNodes;
     const body = [...serializeMarkdownRootToJsx(context, root)].join('');
-    const imports = [...listImportDeclarations(context), ...context.head].join('\n');
+    let headIsRequired = false;
+    headIsRequired ||= 0 < context.scripts.size;
+    const imports = [
+        ...listImportDeclarations(context),
+        ...context.head,
+    ];
+    if (headIsRequired) {
+        imports.unshift('import Head from \'next/head\';');
+    }
     const footnote = [...serializeFootnotes(context)].join('');
     const pageFileUrl = new URL(`file://${loaderThis.resourcePath}`);
     const page = await getPageData(pageFileUrl);
     return `
-import Head from 'next/head';
 import {PageHead} from '${getCompoentPath(pageFileUrl, 'PageHead')}';
 import {ArticleHeader} from '${getCompoentPath(pageFileUrl, 'ArticleHeader')}';
-${imports}
+${imports.join('\n')}
 export default function MarkdownPage() {
     return <>
+        ${headIsRequired ? '<Head>' : ''}
+        ${[...context.scripts].map((src) => `<script src="${src}" async=""/>`).join('')}
+        ${headIsRequired ? '</Head>' : ''}
         <PageHead
             title="${toJsxSafeString(title)}"
             description="${toJsxSafeString(excerpt)}"
@@ -74,6 +80,7 @@ const serializeDateAttributes = function* (
         yield ` updatedAt="${updatedAt}"`;
     }
 };
+
 const getCompoentPath = (pageUrl: URL, componentName: string) => {
     const componentUrl = new URL(`${componentName}/index.tsx`, componentsUrl);
     let pageDir = pageUrl.pathname;

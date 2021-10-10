@@ -136,6 +136,9 @@ textarea {
 button {
     cursor: pointer;
 }
+iframe {
+    max-inline-size: 100%;
+}
 
 h1, h2, h3, h4, h5, h6 {
     font-weight: bolder;
@@ -177,6 +180,7 @@ figure {
     display: grid;
     grid-auto-flow: row;
     row-gap: 0.25rem;
+    justify-content: center;
     overflow: auto;
 }
 figcaption {
@@ -227,14 +231,14 @@ ol[data-lang] {
 ol[data-lang]>li::before {
     content: counter(listItemIndex);
     opacity: 0.6;
-    border-inline-end-width: 1px;
-    border-inline-end-style: solid;
-    border-inline-end-color: currentColor;
     font: inherit;
 }
 ol[data-lang]>li>code {
     padding-inline-start: 0.5rem;
     padding-inline-end: 0.5rem;
+    border-inline-start-width: 1px;
+    border-inline-start-style: solid;
+    border-inline-start-color: currentColor;
 }
 hr {
     block-size: 1px;

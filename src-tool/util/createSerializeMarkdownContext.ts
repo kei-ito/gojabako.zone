@@ -40,6 +40,7 @@ export const createSerializeMarkdownContext = (): SerializeMarkdownContext => {
         ...lowlight,
         head: new Set(),
         links: new Set(),
+        scripts: new Set(),
         images: new Map(),
         nodeListOf,
         findDefinition,
