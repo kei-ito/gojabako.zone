@@ -13,4 +13,5 @@ export const {
     requestAnimationFrame,
     cancelAnimationFrame,
     MutationObserver,
+    console,
 } = g;

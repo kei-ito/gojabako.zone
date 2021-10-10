@@ -19,14 +19,15 @@ export const Home = () => <>
         <section>
             <h1 className={className.title}>{authorName}</h1>
             <p>ここなに書こう。</p>
+            <h2>最近の更新</h2>
             <ul>
-                {pageListByPublishedAt.map((page) => <Published {...page} key={page.pathname}/>)}
+                {pageListByUpdatedAt.slice(0, 3).map((page) => <Updated {...page} key={page.pathname}/>)}
             </ul>
         </section>
         <section>
-            <h2>最近の更新</h2>
+            <h2>書いたもの</h2>
             <ul>
-                {pageListByUpdatedAt.slice(0, 5).map((page) => <Updated {...page} key={page.pathname}/>)}
+                {pageListByPublishedAt.map((page) => <Published {...page} key={page.pathname}/>)}
             </ul>
         </section>
     </main>

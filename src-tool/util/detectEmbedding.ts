@@ -46,11 +46,13 @@ class ParseContext {
     }
 
     private enter(element: HTMLASTNode) {
-        const {currentElement} = this;
-        if (currentElement) {
-            currentElement.children.push(element);
-        } else {
-            this.root.push(element);
+        if (element.tag !== 'script') {
+            const {currentElement} = this;
+            if (currentElement) {
+                currentElement.children.push(element);
+            } else {
+                this.root.push(element);
+            }
         }
         this.stack.unshift(element);
     }

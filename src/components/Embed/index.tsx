@@ -1,6 +1,7 @@
 import type {PropsWithChildren} from 'react';
 import {useEffect, useRef} from 'react';
-import {MutationObserver, Number} from '../../global';
+import {console, MutationObserver, Number} from '../../global';
+import {getTwitterSDK} from '../../util/getTwitterSDK';
 import {isHTMLElement} from '../../util/isHTMLElement';
 import {className} from './style.module.css';
 
@@ -8,54 +9,60 @@ interface EmbedProps {
     type: string,
 }
 
-export const Embed = ({children}: PropsWithChildren<EmbedProps>) => {
+export const Embed = ({type, children}: PropsWithChildren<EmbedProps>) => {
+    return <figure ref={useEmbed(type)} className={className.embed} data-type={type}>
+        {children}
+    </figure>;
+};
+
+const useEmbed = (type: string) => {
     const ref = useRef<HTMLElement>(null);
-    const {current: element} = ref;
     useEffect(() => {
-        const observer = new MutationObserver((records) => {
-            for (const record of records) {
-                if (record.target === element) {
-                    for (const node of record.addedNodes) {
-                        if (isHTMLElement(node)) {
-                            observer.observe(node, {
-                                attributes: true,
-                                attributeFilter: ['style'],
-                            });
-                        }
-                    }
-                }
-            }
+        const {current: element} = ref;
+        const observer = new MutationObserver((_records) => {
             if (element) {
-                processElement(element);
+                processElement(type, element);
             }
         });
         if (element) {
             observer.observe(element, {childList: true});
-            processElement(element);
+            processElement(type, element);
         }
-        return () => {
-            observer.disconnect();
-        };
-    }, [element]);
-    return <figure ref={ref} className={className.embed}>{children}</figure>;
+        return () => observer.disconnect();
+    }, [type, ref]);
+    return ref;
 };
 
-const processElement = (element: HTMLElement) => {
-    const iframe = element.querySelector('iframe');
-    if (!iframe) {
-        return;
-    }
-    if (iframe.src.startsWith('https://www.youtube.com/')) {
-        const width = iframe.getAttribute('width');
-        const height = iframe.getAttribute('height');
-        if (width && height) {
-            element.style.paddingBlockStart = `calc(var(--baseWidth) * ${(Number(height) / Number(width)).toFixed(3)})`;
-            iframe.removeAttribute('width');
-            iframe.removeAttribute('height');
+const processElement = (
+    type: string,
+    element: HTMLElement,
+) => {
+    switch (type) {
+    case 'youtube': {
+        const iframe = element.querySelector('iframe');
+        if (iframe) {
+            const width = element.getAttribute('width');
+            const height = element.getAttribute('height');
+            if (width && height) {
+                element.style.blockSize = `calc(var(--baseWidth) * ${(Number(height) / Number(width)).toFixed(3)})`;
+                element.removeAttribute('width');
+                element.removeAttribute('height');
+            }
         }
+        break;
     }
-    const tweet = element.querySelector('.twitter-tweet');
-    if (isHTMLElement(tweet)) {
-        tweet.style.margin = '0';
+    case 'twitter': {
+        getTwitterSDK()
+        .then((sdk) => {
+            sdk.widgets.load(element);
+            const {firstChild} = element;
+            if (isHTMLElement(firstChild)) {
+                firstChild.style.margin = '0';
+            }
+        })
+        .catch((error) => console.error(error));
+        break;
+    }
+    default:
     }
 };
