@@ -24,7 +24,7 @@ describe(serializeHTMLASTNode.name, () => {
             },
             children: [],
         };
-        const expected = '<iframe src="https://example.com" allowfullscreen=""/>';
+        const expected = '<iframe src="https://example.com" allowFullScreen=""/>';
         expect([...serializeHTMLASTNode(input, {jsx: true})].join('')).toBe(expected);
     });
 });

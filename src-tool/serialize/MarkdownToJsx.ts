@@ -293,7 +293,7 @@ const serializeTableRow = function* (
     yield '<tr>';
     let columnIndex = 0;
     for (const cell of row.children) {
-        const align = aligns[columnIndex] || '';
+        const align = aligns[columnIndex] || null;
         yield* serializeElement(
             context,
             cellTag,

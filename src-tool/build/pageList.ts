@@ -20,5 +20,5 @@ export interface PageData {
 export const pageListByPublishedAt: Array<PageData> = JSON.parse('${code}');
 export const pageListByUpdatedAt: Array<PageData> = (JSON.parse(${JSON.stringify(JSON.stringify(toListByUpdatedAt))}) as Array<number>).map((index) => pageListByPublishedAt[index]);
 `.trimStart();
-const dest = new URL('util/pageList.generated.ts', srcUrl);
+const dest = new URL('util/pageList.ts', srcUrl);
 await fs.promises.writeFile(dest, code);

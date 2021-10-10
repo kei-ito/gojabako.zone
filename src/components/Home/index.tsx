@@ -2,8 +2,8 @@ import Link from 'next/link';
 import packageJson from '../../../package.json';
 import {DateString} from '../DateString';
 import {PageHead} from '../PageHead';
-import type {PageData} from '../../util/pageList.generated';
-import {pageListByPublishedAt, pageListByUpdatedAt} from '../../util/pageList.generated';
+import type {PageData} from '../../util/pageList';
+import {pageListByPublishedAt, pageListByUpdatedAt} from '../../util/pageList';
 import {className} from './style.module.css';
 
 const {authorName} = packageJson;

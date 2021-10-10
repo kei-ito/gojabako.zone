@@ -1,5 +1,5 @@
 import type {NextApiHandler} from 'next';
-import {pageListByPublishedAt} from '../../util/pageList.generated';
+import {pageListByPublishedAt} from '../../util/pageList';
 
 const handler: NextApiHandler = async (_req, res) => {
     res.writeHead(200, {

@@ -1,6 +1,6 @@
 import type {NextApiHandler} from 'next';
 import packgeJson from '../../../package.json';
-import {pageListByUpdatedAt} from '../../util/pageList.generated';
+import {pageListByUpdatedAt} from '../../util/pageList';
 import {sanitize} from '../../util/sanitize';
 
 const handler: NextApiHandler = async (_req, res) => {
