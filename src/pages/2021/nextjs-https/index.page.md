@@ -112,3 +112,7 @@ server.listen(rootUrl.port);
 localhost.gojabako.zone:3000をHTTPSで表示できます。
 
 ![証明書の情報を表示しているところ](./https-works.png)
+
+## 別の端末から見たいです
+
+サーバーを動かしている端末以外から開発画面を見る場合はhostsを編集してlocalhost.gojabako.zoneがサーバーを向くようにしましょう。

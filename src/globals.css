@@ -228,6 +228,9 @@ ol[data-lang] {
     font-size: smaller;
     line-height: 1.5;
 }
+ol[data-lang]>li {
+    align-items: stretch;
+}
 ol[data-lang]>li::before {
     content: counter(listItemIndex);
     opacity: 0.6;
