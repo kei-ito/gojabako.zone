@@ -1,9 +1,9 @@
 import * as process from 'process';
-import {exec} from './exec';
+import {spawn} from './spawn';
 
-describe(exec.name, () => {
+describe(spawn.name, () => {
     it('node -v', async () => {
-        expect(await exec('node -v')).toMatchObject({
+        expect(await spawn('node -v')).toMatchObject({
             stderr: '',
             stdout: process.version,
         });

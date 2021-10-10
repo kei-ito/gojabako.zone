@@ -1,7 +1,6 @@
-import type * as childProcess from 'child_process';
-import type {ExecResult} from './exec';
-import {exec} from './exec';
 import {readline} from './readline';
+import type {SpawnResult} from './spawn';
+import {spawn} from './spawn';
 import {projectRootUrl} from './url';
 
 export interface FileData {
@@ -23,7 +22,7 @@ export const getFileData = async (
 };
 
 const parseCommandOutput = (
-    {stderr, stdout}: ExecResult,
+    {stderr, stdout}: SpawnResult,
 ): string | null => {
     if (stderr) {
         throw new Error(stderr);
@@ -35,16 +34,14 @@ const parseCommandOutput = (
 
 const getFirstCommitterDate = async (
     relativePath: string,
-    options?: childProcess.ExecOptions,
 ) => {
     const command = `git log --reverse --format="%aI" -- ${relativePath}`;
-    return parseCommandOutput(await exec(command, options));
+    return parseCommandOutput(await spawn(command, {quiet: true}));
 };
 
 const getLastCommitterDate = async (
     relativePath: string,
-    options?: childProcess.ExecOptions,
 ) => {
     const command = `git log -1 --format="%aI" -- ${relativePath}`;
-    return parseCommandOutput(await exec(command, options));
+    return parseCommandOutput(await spawn(command, {quiet: true}));
 };
