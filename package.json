@@ -40,7 +40,7 @@
         "eslint-plugin-jest": "24.5.2",
         "htmlparser2": "7.1.2",
         "jest": "27.2.5",
-        "lint-staged": "11.2.1",
+        "lint-staged": "11.2.3",
         "lowlight": "2.3.0",
         "mdast-util-footnote": "1.0.0",
         "mdast-util-from-markdown": "1.0.4",
