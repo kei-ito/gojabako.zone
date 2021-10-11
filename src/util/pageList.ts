@@ -8,6 +8,12 @@ export interface PageData {
     filePath: string,
     publishedAt: string,
     updatedAt: string,
+    commitCount: number,
 }
-export const pageListByPublishedAt: Array<PageData> = JSON.parse('[{"pathname":"/2021/nextjs-https/","url":"https://gojabako.zone/2021/nextjs-https/","title":"Next.jsの開発環境をHTTPSにしました","filePath":"src/pages/2021/nextjs-https/index.page.md","publishedAt":"2021-10-10T15:26:45.000Z","updatedAt":"2021-10-10T16:21:06.000Z"},{"pathname":"/markdown","url":"https://gojabako.zone/markdown","title":"Markdownテストページ","filePath":"src/pages/markdown.page.md","publishedAt":"2021-10-02T03:18:07.000Z","updatedAt":"2021-10-10T01:15:20.000Z"},{"pathname":"/2021/nextjs","url":"https://gojabako.zone/2021/nextjs","title":"Next.js + Vercelにしました","filePath":"src/pages/2021/nextjs.page.md","publishedAt":"2021-10-05T14:51:46.000Z","updatedAt":"2021-10-10T01:15:20.000Z"},{"pathname":"/","url":"https://gojabako.zone/","title":"トップページ","filePath":"src/pages/index.tsx","publishedAt":"2021-09-28T15:33:31.000Z","updatedAt":"2021-10-09T15:41:13.000Z"}]');
-export const pageListByUpdatedAt: Array<PageData> = (JSON.parse("[0,2,1,3]") as Array<number>).map((index) => pageListByPublishedAt[index]);
+export const pageListByPublishedAt: Array<PageData> = JSON.parse(`[
+{"pathname":"/2021/nextjs/","url":"https://gojabako.zone/2021/nextjs/","title":"Next.js + Vercelにしました","filePath":"src/pages/2021/nextjs/index.page.md","publishedAt":"2021-10-05T23:51:46+09:00","updatedAt":"2021-10-11T20:30:17+09:00","commitCount":7},
+{"pathname":"/2021/nextjs-https/","url":"https://gojabako.zone/2021/nextjs-https/","title":"Next.jsの開発環境をHTTPSにしました","filePath":"src/pages/2021/nextjs-https/index.page.md","publishedAt":"2021-10-11T00:26:45+09:00","updatedAt":"2021-10-11T19:35:39+09:00","commitCount":3},
+{"pathname":"/markdown","url":"https://gojabako.zone/markdown","title":"Markdownテストページ","filePath":"src/pages/markdown.page.md","publishedAt":"2021-09-30T00:39:26+09:00","updatedAt":"2021-10-10T10:15:20+09:00","commitCount":14},
+{"pathname":"/","url":"https://gojabako.zone/","title":"トップページ","filePath":"src/pages/index.tsx","publishedAt":"2021-09-29T00:33:31+09:00","updatedAt":"2021-10-10T00:41:13+09:00","commitCount":12}
+]`);
+export const pageListByUpdatedAt: Array<PageData> = (JSON.parse("[1,0,2,3]") as Array<number>).map((index) => pageListByPublishedAt[index]);

@@ -10,6 +10,7 @@ export const {
     URL,
     JSON,
     Promise,
+    Error,
     requestAnimationFrame,
     cancelAnimationFrame,
     MutationObserver,

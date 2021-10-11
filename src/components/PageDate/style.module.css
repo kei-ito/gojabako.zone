@@ -4,4 +4,5 @@
 }
 .container>a {
     font-size: 90%;
+    color: inherit;
 }

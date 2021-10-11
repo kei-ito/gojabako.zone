@@ -16,8 +16,11 @@ export interface PageData {
     filePath: string,
     publishedAt: string,
     updatedAt: string,
+    commitCount: number,
 }
-export const pageListByPublishedAt: Array<PageData> = JSON.parse('${code}');
+export const pageListByPublishedAt: Array<PageData> = JSON.parse(\`[
+${pageList.map((page) => JSON.stringify(page).replace(/`/g, '\\`')).join(',\n')}
+]\`);
 export const pageListByUpdatedAt: Array<PageData> = (JSON.parse(${JSON.stringify(JSON.stringify(toListByUpdatedAt))}) as Array<number>).map((index) => pageListByPublishedAt[index]);
 `.trimStart();
 const dest = new URL('util/pageList.ts', srcUrl);
