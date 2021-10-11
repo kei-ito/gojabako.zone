@@ -1,4 +1,4 @@
-# Next.js + Vercelにしました
+# サイトをNext.js + Vercelに移行しました
 
 これまでS3にHTMLを置いてCloudFrontで配信していたウェブサイトを[Next.js] + [Vercel]で配信するようにしました。`next dev`が快適でまず驚き、GitHubをVercelにつなぐとすぐにオンラインのプレビューを提供してくれてまた驚きました。以下はその詳細です。
 
