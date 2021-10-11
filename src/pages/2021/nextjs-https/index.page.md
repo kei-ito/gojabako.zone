@@ -10,7 +10,7 @@
     1. DNSはlocalhost.gojabako.zoneに127.0.0.1を返す
     1. ブラウザは127.0.0.1:3000にリクエストする
     1. ローカルで3000をlistenしているサーバーがコンテンツを返す
-1. 証明書はcertbot (Let's encrypt)でつくる
+1. 証明書はcertbot (Let's encrypt)で普通のやつをつくる
 
 ![やりたいことの図](./https-outline.jpg)
 
@@ -20,7 +20,7 @@ localhost.gojabako.zoneのAレコードを127.0.0.1にします。私の場合�
 
 ![Route53の管理画面](./route53-settings.png)
 
-[Google Admin Toolbox](https://toolbox.googleapps.com/apps/dig/#A/)で確認するとこうなっています。
+[Google Admin Toolbox](https://toolbox.googleapps.com/apps/dig/#A/)で確認すると次の画像のようになっています。
 
 ![Google Admin Toolboxの画面](./google-dns-dig.png)
 
@@ -113,6 +113,6 @@ localhost.gojabako.zone:3000をHTTPSで表示できます。
 
 ![証明書の情報を表示しているところ](./https-works.png)
 
-## 別の端末から見たいです
+## 別の端末でも見たい
 
 サーバーを動かしている端末以外から開発画面を見る場合はhostsを編集してlocalhost.gojabako.zoneがサーバーを向くようにしましょう。
