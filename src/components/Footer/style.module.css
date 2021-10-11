@@ -1,16 +1,28 @@
 .footer {
     position: sticky;
     inset-block-start: 100%;
-    display: flex;
+    display: grid;
+    grid-auto-flow: row;
     justify-content: center;
-    padding-block-start: 1rem;
-    padding-block-end: 1rem;
-    margin-block-start: 1rem;
-    line-height: 1;
+    row-gap: 1rem;
+    margin-block-start: 3rem;
 }
-.line {
+
+.footer::before {
+    content: '';
+    width: var(--baseWidth);
+    block-size: 1px;
+    background-color: currentColor;
+}
+
+.sign {
+    justify-self: end;
     display: grid;
     grid-auto-flow: column;
     column-gap: 0.5rem;
     align-items: center;
+    padding-block-start: 1rem;
+    padding-block-end: 1rem;
+    inline-size: unset;
+    line-height: 1;
 }

@@ -1,0 +1,21 @@
+.post::before {
+    line-height: 1;
+}
+
+.link {
+    justify-self: start;
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: 0.2rem;
+    text-decoration-line: none;
+}
+
+.link:hover {
+    text-decoration-line: underline;
+}
+
+.time {
+    line-height: 1;
+    color: var(--textColor);
+    font-size: 90%;
+}
