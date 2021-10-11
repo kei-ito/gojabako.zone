@@ -31,7 +31,6 @@
     --zHeader: 1;
     --listIndexSize: 1.5rem;
     --font-default: Georgia, 'BIZ UDMincho', serif;
-    --font-numeric: 'BIZ UDMincho', serif;
     --font-monospace: 'Roboto Mono', monospace;
     font-size: 17px;
     font-family: var(--font-default);
@@ -210,7 +209,6 @@ li::before {
 }
 ol>li::before {
     content: counter(listItemIndex) '.';
-    font-family: var(--font-numeric);
 }
 ul>li::before {
     content: '●';
@@ -272,7 +270,6 @@ blockquote {
     opacity: 0.85;
 }
 [data-footnote] {
-    font-family: var(--font-numeric);
     font-size: 80%;
 }
 [data-footnote]>a {
@@ -299,7 +296,6 @@ blockquote {
 .raw-footnotes>dt {
     padding-inline-end: 0.5rem;
     text-align: end;
-    font-family: var(--font-numeric);
 }
 .raw-footnotes>dt>a {
     text-decoration: none;
