@@ -6,13 +6,13 @@ export const serializeAtom = async function* () {
     yield '<?xml version="1.0" encoding="utf-8"?>';
     yield '<feed xmlns="http://www.w3.org/2005/Atom">';
     const {siteName, homepage} = await loadPackageJson();
-    const {pageList} = await getPageList();
+    const {pageListByPublishedAt} = await getPageList();
     yield `  <title>${siteName}</title>`;
     yield `  <link href="${homepage}"/>`;
-    yield `  <updated>${pageList[0].updatedAt}</updated>`;
+    yield `  <updated>${pageListByPublishedAt[0].updatedAt}</updated>`;
     yield `  <id>${homepage}</id>`;
     let index = 0;
-    for await (const page of pageList) {
+    for await (const page of pageListByPublishedAt) {
         yield '  <entry>';
         yield `    <id>${page.url}</id>`;
         yield `    <title>${toJsxSafeString(page.title)}</title>`;

@@ -15,11 +15,11 @@ export const getPageList = async () => {
     for await (const page of listPages()) {
         pageList.push(page);
     }
-    const pageListByPublishedAt = pageList.sort(byPublishedAt);
+    const pageListByPublishedAt = pageList.slice().sort(byPublishedAt);
     const indexMapping = new WeakMap(pageListByPublishedAt.map((page, index) => [page, index]));
-    const pageListByUpdatedAt = pageList.sort(byUpdatedAt);
+    const pageListByUpdatedAt = pageList.slice().sort(byUpdatedAt);
     return {
-        pageList: pageListByPublishedAt,
+        pageListByPublishedAt,
         toListByUpdatedAt: pageListByUpdatedAt.map((page) => {
             const index = indexMapping.get(page);
             if (typeof index !== 'number') {
