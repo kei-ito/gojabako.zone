@@ -190,7 +190,7 @@ ol, ul {
     counter-reset: listItemIndex;
     display: grid;
     grid-auto-flow: row;
-    row-gap: 0.6rem;
+    row-gap: 0.25rem;
 }
 li {
     counter-increment: listItemIndex;

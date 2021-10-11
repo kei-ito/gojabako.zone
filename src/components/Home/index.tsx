@@ -5,6 +5,7 @@ import {PageHead} from '../PageHead';
 import type {PageData} from '../../util/pageList';
 import {pageListByPublishedAt, pageListByUpdatedAt} from '../../util/pageList';
 import {className} from './style.module.css';
+import Introduction from './introduction.module.md';
 
 const {authorName} = packageJson;
 
@@ -18,7 +19,7 @@ export const Home = () => <>
     <main>
         <section>
             <h1 className={className.title}>{authorName}</h1>
-            <p>ここなに書こう。</p>
+            <Introduction/>
             <h2>最近の更新</h2>
             <ul>
                 {pageListByUpdatedAt.slice(0, 3).map((page) => <Updated {...page} key={page.pathname}/>)}
