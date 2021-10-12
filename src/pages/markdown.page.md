@@ -147,10 +147,16 @@ Twitter
 TeX
 ---
 
-```
+```latex
 F(w) = \dfrac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty}dx f(x) e^{-iwx}
 ```
 
 ```katex Fourier変換
 F(w) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty}dx f(x) e^{-iwx}
 ```
+
+```latex
+文章中にも$f(x)$や$x$のように出せます。
+```
+
+文章中にも$f(x)$や$x$のように出せます。

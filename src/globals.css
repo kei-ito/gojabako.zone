@@ -327,6 +327,10 @@ figure[data-lang=katex] {
 .raw-katex {
     justify-self: center;
 }
+p>.raw-katex {
+    margin-inline-start: 0.2rem;
+    margin-inline-end: 0.2rem;
+}
 
 @media (max-width: 700px) {
     :root {

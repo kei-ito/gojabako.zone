@@ -3,6 +3,7 @@ import * as console from 'console';
 import type Markdown from 'mdast';
 import {createUnsupportedTypeError} from '../util/createUnsupportedTypeError';
 import {detectEmbedding, supportedEmbeddingType} from '../util/detectEmbedding';
+import {executeRegExp} from '../util/executeRegExp';
 import type {Attributes} from './Attributes';
 import {serializeAttributes} from './Attributes';
 import {serializeCodeToJsx} from './CodeToJsx';
@@ -176,7 +177,13 @@ const serialize = function* (
     case 'definition':
         break;
     case 'text':
-        yield* serializeStringToJsxSafeString(node.value);
+        for (const matched of executeRegExp(node.value, /\$([^$]+)\$/g)) {
+            if (typeof matched === 'string') {
+                yield* serializeStringToJsxSafeString(matched);
+            } else {
+                yield* serializeTeXToJsx(matched[1]);
+            }
+        }
         break;
     case 'emphasis':
         yield* serializeElement(context, 'i', null, node, nextAncestors);
