@@ -1,4 +1,6 @@
 import type {NextApiHandler} from 'next';
+import packgeJson from '../../../package.json';
+import {URL} from '../../global';
 import {pageListByPublishedAt} from '../../util/pageList';
 
 const handler: NextApiHandler = async (_req, res) => {
@@ -16,8 +18,9 @@ const serialize = async function* () {
     yield '<?xml version="1.0" encoding="UTF-8"?>';
     yield '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
     for await (const page of pageListByPublishedAt) {
+        const url = new URL(page.pathname, packgeJson.homepage);
         yield '  <url>';
-        yield `    <loc>${page.url}</loc>`;
+        yield `    <loc>${url}</loc>`;
         yield `    <lastmod>${page.updatedAt}</lastmod>`;
         yield '  </url>';
     }

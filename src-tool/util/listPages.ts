@@ -1,9 +1,9 @@
 import {findPageData} from './getPageData';
 import {listFiles} from './listFiles';
+import {pagesUrl} from './url';
 
 export const listPages = async function* () {
-    const pagesDirectoryUrl = new URL('../../src/pages', import.meta.url);
-    for await (const fileUrl of listFiles(pagesDirectoryUrl)) {
+    for await (const fileUrl of listFiles(pagesUrl)) {
         const pageData = await findPageData(fileUrl);
         if (pageData) {
             yield pageData;

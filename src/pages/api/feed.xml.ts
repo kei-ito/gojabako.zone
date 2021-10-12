@@ -1,5 +1,6 @@
 import type {NextApiHandler} from 'next';
 import packgeJson from '../../../package.json';
+import {URL} from '../../global';
 import {pageListByUpdatedAt} from '../../util/pageList';
 import {sanitize} from '../../util/sanitize';
 
@@ -22,10 +23,11 @@ const serialize = async function* () {
     yield `  <updated>${pageListByUpdatedAt[0].updatedAt}</updated>`;
     yield `  <id>${packgeJson.homepage}</id>`;
     for await (const page of pageListByUpdatedAt.slice(0, 20)) {
+        const url = new URL(page.pathname, packgeJson.homepage);
         yield '  <entry>';
-        yield `    <id>${page.url}</id>`;
+        yield `    <id>${page.pathname}</id>`;
         yield `    <title>${sanitize(page.title)}</title>`;
-        yield `    <link href="${page.url}"/>`;
+        yield `    <link href="${url}"/>`;
         yield `    <updated>${page.updatedAt}</updated>`;
         yield `    <published>${page.publishedAt}</published>`;
         yield '  </entry>';

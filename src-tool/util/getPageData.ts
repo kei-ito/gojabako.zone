@@ -1,10 +1,8 @@
 import {getFileData} from './getFileData';
 import {getPageTitle} from './getPageTitle';
 import {getPathName} from './getPathName';
-import {loadPackageJson} from './loadPackageJson';
 
 export interface PageData {
-    url: string,
     pathname: string,
     title: string,
     filePath: string,
@@ -29,14 +27,11 @@ export const findPageData = async (fileUrl: URL): Promise<PageData | null> => {
     const [
         title,
         {filePath, firstCommitAt, lastCommitAt, commitCount},
-        {homepage},
     ] = await Promise.all([
         getPageTitle(pathname, fileUrl),
         getFileData(fileUrl),
-        loadPackageJson(),
     ]);
-    const url = new URL(pathname, homepage).href;
     const publishedAt = firstCommitAt;
     const updatedAt = lastCommitAt;
-    return {pathname, url, title, filePath, publishedAt, updatedAt, commitCount};
+    return {pathname, title, filePath, publishedAt, updatedAt, commitCount};
 };

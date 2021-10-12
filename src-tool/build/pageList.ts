@@ -8,7 +8,6 @@ const code = `
 /* eslint-disable */
 import {JSON} from '../global';
 export interface PageData {
-    url: string,
     pathname: string,
     title: string,
     filePath: string,
