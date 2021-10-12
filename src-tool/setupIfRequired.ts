@@ -5,7 +5,7 @@ import {listFiles} from './util/listFiles';
 import {spawn} from './util/spawn';
 
 const directoryUrl = new URL(`file://${__dirname}/`);
-const cacheDirectoryUrl = new URL('../.next', directoryUrl);
+const cacheDirectoryUrl = new URL('../.next/', directoryUrl);
 const hashFileUrl = new URL('../.tool/hash.txt', directoryUrl);
 
 export const setupIfRequired = async () => {
@@ -44,8 +44,16 @@ const loadPreviousHash = async (): Promise<string> => {
 };
 
 const clearCache = async () => {
-    for await (const fileUrl of listFiles(cacheDirectoryUrl)) {
-        await fs.promises.unlink(fileUrl);
+    try {
+        for await (const fileUrl of listFiles(cacheDirectoryUrl)) {
+            await fs.promises.unlink(fileUrl);
+        }
+    } catch (error: unknown) {
+        if (error && (error as {code: string}).code === 'ENOENT') {
+            await fs.promises.mkdir(cacheDirectoryUrl, {recursive: true});
+        } else {
+            throw error;
+        }
     }
 };
 
