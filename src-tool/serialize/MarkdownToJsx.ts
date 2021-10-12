@@ -157,8 +157,6 @@ const serialize = function* (
                 code = code.slice(comment.index + comment[0].length).trim();
             }
             yield code;
-        } else if (node.lang) {
-            yield* serializeCodeBlock(context, node, nextAncestors);
         } else {
             yield* serializeCodeBlock(context, node, nextAncestors);
         }

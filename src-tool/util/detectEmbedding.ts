@@ -1,7 +1,6 @@
 import {Parser as HTMLParser} from 'htmlparser2';
 import type {HTMLASTNode} from '../serialize/HTMLASTNode';
-import {serializeHTMLASTNode} from '../serialize/HTMLASTNode';
-import type {SerializeMarkdownOption} from './serializeMarkdownOption';
+import {ParseHTMLContext} from './ParseHTMLContext';
 
 export interface Embedding {
     type: string,
@@ -15,29 +14,11 @@ export const supportedEmbeddingType = new Set([
 
 const getUrl = (urlLike?: string) => new URL(`${urlLike}`, 'https://example.com');
 
-class ParseContext {
+class ParseContext extends ParseHTMLContext {
 
-    private readonly score = new Map<string, number>();
+    protected readonly score = new Map<string, number>();
 
-    private readonly stack: Array<HTMLASTNode> = [];
-
-    private readonly root: Array<HTMLASTNode> = [];
-
-    private get currentElement() {
-        return this.stack[0] as HTMLASTNode | undefined;
-    }
-
-    private *serialize(option: SerializeMarkdownOption): Generator<string> {
-        for (const node of this.root) {
-            yield* serializeHTMLASTNode(node, option);
-        }
-    }
-
-    private get jsx() {
-        return [...this.serialize({jsx: true})].join('');
-    }
-
-    private get type() {
+    protected get type() {
         const types = [...this.score]
         .filter(([, score]) => 5 <= score)
         .sort(([, a], [, b]) => a < b ? 1 : -1);
@@ -45,7 +26,7 @@ class ParseContext {
         return type ? type[0] : null;
     }
 
-    private enter(element: HTMLASTNode) {
+    protected enter(element: HTMLASTNode) {
         if (element.tag !== 'script') {
             const {currentElement} = this;
             if (currentElement) {
@@ -54,15 +35,15 @@ class ParseContext {
                 this.root.push(element);
             }
         }
-        this.stack.unshift(element);
+        super.enter(element);
     }
 
-    private addScore(type: string, diff: number) {
+    protected addScore(type: string, diff: number) {
         this.score.set(type, (this.score.get(type) || 0) + diff);
     }
 
     public onopentag(tag: string, attributes: Record<string, string>) {
-        this.enter({tag, attributes, children: []});
+        super.onopentag(tag, attributes);
         switch (tag) {
         case 'blockquote':
             if (attributes.class.includes('twitter-tweet')) {
@@ -99,25 +80,6 @@ class ParseContext {
             break;
         }
         default:
-        }
-    }
-
-    public ontext(text: string) {
-        const {currentElement} = this;
-        if (currentElement) {
-            currentElement.children.push(text);
-        } else if (text.trim()) {
-            throw new Error(`NoElementToAppend: ${JSON.stringify(text)}`);
-        }
-    }
-
-    public onclosetag(tag: string) {
-        const element = this.stack.shift();
-        if (!element) {
-            throw new Error(`UnexpectedClosing: ${tag}`);
-        }
-        if (tag !== element.tag) {
-            throw new Error(`UnmatchedTag: closing ${tag} but the context is ${element.tag}`);
         }
     }
 

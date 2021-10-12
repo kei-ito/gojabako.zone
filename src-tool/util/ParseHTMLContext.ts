@@ -1,0 +1,52 @@
+import type {HTMLASTNode} from '../serialize/HTMLASTNode';
+import {serializeHTMLASTNode} from '../serialize/HTMLASTNode';
+import type {SerializeMarkdownOption} from './serializeMarkdownOption';
+
+export class ParseHTMLContext {
+
+    protected readonly stack: Array<HTMLASTNode> = [];
+
+    protected readonly root: Array<HTMLASTNode> = [];
+
+    protected get currentElement() {
+        return this.stack[0] as HTMLASTNode | undefined;
+    }
+
+    protected *serialize(option: SerializeMarkdownOption): Generator<string> {
+        for (const node of this.root) {
+            yield* serializeHTMLASTNode(node, option);
+        }
+    }
+
+    protected get jsx() {
+        return [...this.serialize({jsx: true})].join('');
+    }
+
+    protected enter(element: HTMLASTNode) {
+        this.stack.unshift(element);
+    }
+
+    public onopentag(tag: string, attributes: Record<string, string>) {
+        this.enter({tag, attributes, children: []});
+    }
+
+    public ontext(text: string) {
+        const {currentElement} = this;
+        if (currentElement) {
+            currentElement.children.push(text);
+        } else if (text.trim()) {
+            throw new Error(`NoElementToAppend: ${JSON.stringify(text)}`);
+        }
+    }
+
+    public onclosetag(tag: string) {
+        const element = this.stack.shift();
+        if (!element) {
+            throw new Error(`UnexpectedClosing: ${tag}`);
+        }
+        if (tag !== element.tag) {
+            throw new Error(`UnmatchedTag: closing ${tag} but the context is ${element.tag}`);
+        }
+    }
+
+}
