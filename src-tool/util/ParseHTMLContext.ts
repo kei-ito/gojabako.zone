@@ -12,17 +12,19 @@ export class ParseHTMLContext {
         return this.stack[0] as HTMLASTNode | undefined;
     }
 
-    protected *serialize(option: SerializeMarkdownOption): Generator<string> {
+    public *serialize(option: SerializeMarkdownOption): Generator<string> {
         for (const node of this.root) {
             yield* serializeHTMLASTNode(node, option);
         }
     }
 
-    protected get jsx() {
-        return [...this.serialize({jsx: true})].join('');
-    }
-
     protected enter(element: HTMLASTNode) {
+        const {currentElement} = this;
+        if (currentElement) {
+            currentElement.children.push(element);
+        } else {
+            this.root.push(element);
+        }
         this.stack.unshift(element);
     }
 

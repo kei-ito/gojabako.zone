@@ -27,15 +27,11 @@ class ParseContext extends ParseHTMLContext {
     }
 
     protected enter(element: HTMLASTNode) {
-        if (element.tag !== 'script') {
-            const {currentElement} = this;
-            if (currentElement) {
-                currentElement.children.push(element);
-            } else {
-                this.root.push(element);
-            }
+        if (element.tag === 'script') {
+            this.stack.unshift(element);
+        } else {
+            super.enter(element);
         }
-        super.enter(element);
     }
 
     protected addScore(type: string, diff: number) {
@@ -88,7 +84,7 @@ class ParseContext extends ParseHTMLContext {
         if (!type) {
             return null;
         }
-        const {jsx} = this;
+        const jsx = [...this.serialize({jsx: true})].join('');
         return {type, jsx};
     }
 
