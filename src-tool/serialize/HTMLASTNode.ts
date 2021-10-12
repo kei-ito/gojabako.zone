@@ -1,5 +1,6 @@
 import type {SerializeMarkdownOption} from '../util/serializeMarkdownOption';
 import {serializeAttributes} from './Attributes';
+import {serializeStringToJsxSafeString} from './StringToJsxSafeString';
 
 export interface HTMLASTNode<T extends string = string> {
     tag: T,
@@ -12,7 +13,7 @@ export const serializeHTMLASTNode = function* (
     option: SerializeMarkdownOption,
 ): Generator<string> {
     if (typeof node === 'string') {
-        yield node;
+        yield* serializeStringToJsxSafeString(node);
         return;
     }
     const {tag, attributes, children} = node;

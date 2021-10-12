@@ -239,7 +239,7 @@ describe(serializeMarkdownToJsx.name, () => {
         const actual = [...serializeMarkdownToJsx(context, source)].join('');
         const expected = [
             '<>',
-            '<figure>',
+            '<figure data-lang="markdown">',
             '<figcaption>',
             '<a href="https://example.com">sample.md</a>',
             '</figcaption>',
@@ -263,7 +263,7 @@ describe(serializeMarkdownToJsx.name, () => {
         const actual = [...serializeMarkdownToJsx(context, source)].join('');
         const expected = [
             '<>',
-            '<figure>',
+            '<figure data-lang="">',
             '<ol data-lang="shell">',
             '<li>',
             '<code>',
@@ -285,7 +285,7 @@ describe(serializeMarkdownRootToJsx.name, () => {
             '# Title{1}',
             '## Title{2}',
         ].join('\n');
-        const root = context.fromMarkdown(source);
+        const root = context.parseMarkdown(source);
         const actual = [...serializeMarkdownRootToJsx(context, root)].join('');
         const expected = [
             '<>',

@@ -143,3 +143,20 @@ Twitter
 ```twitter
 <blockquote class="twitter-tweet"><p lang="ja" dir="ltr"><a href="https://t.co/l8969kKyb8">https://t.co/l8969kKyb8</a><br>天保十五甲辰新暦には「九時」がある。「くじ」って読んだのかな？<br>橋本万平著「日本の時刻制度 増補版」によるとこの「時」はいまの「時」とは違うけど、「時」一文字を単位に使う例としては今のところ最古 <a href="https://t.co/jGeg003vm8">pic.twitter.com/jGeg003vm8</a></p>&mdash; Kei Ito (@gjbkz) <a href="https://twitter.com/gjbkz/status/1330431107540471808?ref_src=twsrc%5Etfw">November 22, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 ```
+
+TeX
+---
+
+```latex
+F(w) = \dfrac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty}dx f(x) e^{-iwx}
+```
+
+```katex Fourier変換
+F(w) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty}dx f(x) e^{-iwx}
+```
+
+```latex
+文章中にも$f(x)$や$x$のように出せます。
+```
+
+文章中にも$f(x)$や$x$のように出せます。

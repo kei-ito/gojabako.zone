@@ -1,36 +1,33 @@
 // https://github.com/syntax-tree/mdast
 import * as console from 'console';
 import type Markdown from 'mdast';
-import type {LowlightRoot} from 'lowlight/lib/core';
-import {getTextContent} from './TextContent';
-import {serializeStringToJsxSafeString, toJsxSafeString} from './StringToJsxSafeString';
 import {createUnsupportedTypeError} from '../util/createUnsupportedTypeError';
-import {serializeLowlightToJsx} from './LowlightToJsx';
+import {detectEmbedding, supportedEmbeddingType} from '../util/detectEmbedding';
+import {executeRegExp} from '../util/executeRegExp';
 import type {Attributes} from './Attributes';
 import {serializeAttributes} from './Attributes';
-import {detectEmbedding, supportedEmbeddingType} from '../util/detectEmbedding';
+import {serializeCodeToJsx} from './CodeToJsx';
+import {serializeStringToJsxSafeString, toJsxSafeString} from './StringToJsxSafeString';
+import {getTextContent} from './TextContent';
+import {serializeTeXToJsx} from './TeXToJsx';
 
 type FilterContent<C extends Markdown.Content, T extends Markdown.Content['type']> = C extends {type: T} ? C : never;
 export type MarkdownContent<T extends Markdown.Content['type']> = FilterContent<Markdown.Content, T>;
 export interface SerializeMarkdownContext {
-    fromMarkdown: (source: string) => Markdown.Root,
-    highlight: (language: string, value: string) => LowlightRoot,
-    highlightAuto: (value: string) => LowlightRoot,
+    parseMarkdown: (source: string) => Markdown.Root,
+    nodeListOf: <T extends Markdown.Content['type']>(type: T) => Array<MarkdownContent<T>>,
+    findDefinition: (id: string) => Markdown.Definition | null,
     links: Set<string>,
     components: Set<string>,
     images: Map<string, string>,
     head: Set<string>,
-    nodeListOf: <T extends Markdown.Content['type']>(
-        type: T,
-    ) => Array<MarkdownContent<T>>,
-    findDefinition: (id: string) => Markdown.Definition | null,
 }
 
 export const serializeMarkdownToJsx = function* (
     context: SerializeMarkdownContext,
     source: string,
 ) {
-    yield* serialize(context, context.fromMarkdown(source), []);
+    yield* serialize(context, context.parseMarkdown(source), []);
 };
 
 export const serializeMarkdownRootToJsx = function* (
@@ -157,10 +154,22 @@ const serialize = function* (
                 code = code.slice(comment.index + comment[0].length).trim();
             }
             yield code;
-        } else if (node.lang) {
-            yield* serializeCodeBlock(context, node, nextAncestors);
         } else {
-            yield* serializeCodeBlock(context, node, nextAncestors);
+            yield `<figure data-lang="${node.lang || ''}">`;
+            if (node.meta) {
+                const {children: [caption]} = context.parseMarkdown(node.meta);
+                if ('children' in caption) {
+                    yield* serializeElement(context, 'figcaption', null, caption, nextAncestors);
+                }
+            }
+            switch (node.lang) {
+            case 'katex':
+                yield* serializeTeXToJsx(node.value);
+                break;
+            default:
+                yield* serializeCodeToJsx(node.lang, node.value);
+            }
+            yield '</figure>';
         }
         break;
     case 'yaml':
@@ -168,7 +177,13 @@ const serialize = function* (
     case 'definition':
         break;
     case 'text':
-        yield* serializeStringToJsxSafeString(node.value);
+        for (const matched of executeRegExp(node.value, /\$([^$]+)\$/g)) {
+            if (typeof matched === 'string') {
+                yield* serializeStringToJsxSafeString(matched);
+            } else {
+                yield* serializeTeXToJsx(matched[1]);
+            }
+        }
         break;
     case 'emphasis':
         yield* serializeElement(context, 'i', null, node, nextAncestors);
@@ -302,26 +317,6 @@ const serializeTableRow = function* (
         columnIndex += 1;
     }
     yield '</tr>';
-};
-
-const serializeCodeBlock = function* (
-    context: SerializeMarkdownContext,
-    node: Markdown.Code,
-    nextAncestors: Array<Markdown.Content | Markdown.Root>,
-) {
-    yield '<figure>';
-    if (node.meta) {
-        const {children: [caption]} = context.fromMarkdown(node.meta);
-        if ('children' in caption) {
-            yield* serializeElement(context, 'figcaption', null, caption, nextAncestors);
-        }
-    }
-    if (node.lang) {
-        yield* serializeLowlightToJsx(context.highlight(node.lang, node.value));
-    } else {
-        yield* serializeLowlightToJsx(context.highlightAuto(node.value));
-    }
-    yield '</figure>';
 };
 
 const generateImageLocalName = (

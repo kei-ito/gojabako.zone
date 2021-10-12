@@ -10,7 +10,7 @@ export const loadMarkdownModule = async (
     await Promise.resolve();
     const pageFileUrl = new URL(`file://${loaderThis.resourcePath}`);
     const context = createSerializeMarkdownContext();
-    const root = context.fromMarkdown(source);
+    const root = context.parseMarkdown(source);
     const jsx = [...serializeMarkdownRootToJsx(context, root)].join('');
     const {head, foot} = finalizeSerializeMarkdownContext(context, pageFileUrl);
     return [
