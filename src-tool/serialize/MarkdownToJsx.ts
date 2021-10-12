@@ -8,19 +8,18 @@ import {serializeAttributes} from './Attributes';
 import {serializeCodeToJsx} from './CodeToJsx';
 import {serializeStringToJsxSafeString, toJsxSafeString} from './StringToJsxSafeString';
 import {getTextContent} from './TextContent';
+import {serializeTeXToJsx} from './TeXToJsx';
 
 type FilterContent<C extends Markdown.Content, T extends Markdown.Content['type']> = C extends {type: T} ? C : never;
 export type MarkdownContent<T extends Markdown.Content['type']> = FilterContent<Markdown.Content, T>;
 export interface SerializeMarkdownContext {
     parseMarkdown: (source: string) => Markdown.Root,
+    nodeListOf: <T extends Markdown.Content['type']>(type: T) => Array<MarkdownContent<T>>,
+    findDefinition: (id: string) => Markdown.Definition | null,
     links: Set<string>,
     components: Set<string>,
     images: Map<string, string>,
     head: Set<string>,
-    nodeListOf: <T extends Markdown.Content['type']>(
-        type: T,
-    ) => Array<MarkdownContent<T>>,
-    findDefinition: (id: string) => Markdown.Definition | null,
 }
 
 export const serializeMarkdownToJsx = function* (
@@ -155,7 +154,21 @@ const serialize = function* (
             }
             yield code;
         } else {
-            yield* serializeCodeBlock(context, node, nextAncestors);
+            yield `<figure data-lang="${node.lang || ''}">`;
+            if (node.meta) {
+                const {children: [caption]} = context.parseMarkdown(node.meta);
+                if ('children' in caption) {
+                    yield* serializeElement(context, 'figcaption', null, caption, nextAncestors);
+                }
+            }
+            switch (node.lang) {
+            case 'katex':
+                yield* serializeTeXToJsx(node.value);
+                break;
+            default:
+                yield* serializeCodeToJsx(node.lang, node.value);
+            }
+            yield '</figure>';
         }
         break;
     case 'yaml':
@@ -297,22 +310,6 @@ const serializeTableRow = function* (
         columnIndex += 1;
     }
     yield '</tr>';
-};
-
-const serializeCodeBlock = function* (
-    context: SerializeMarkdownContext,
-    node: Markdown.Code,
-    nextAncestors: Array<Markdown.Content | Markdown.Root>,
-) {
-    yield '<figure>';
-    if (node.meta) {
-        const {children: [caption]} = context.parseMarkdown(node.meta);
-        if ('children' in caption) {
-            yield* serializeElement(context, 'figcaption', null, caption, nextAncestors);
-        }
-    }
-    yield* serializeCodeToJsx(node.lang, node.value);
-    yield '</figure>';
 };
 
 const generateImageLocalName = (

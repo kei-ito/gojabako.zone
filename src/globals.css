@@ -321,6 +321,13 @@ blockquote {
 .raw-hljs-addition{color:#22863a;background-color:#f0fff4}
 .raw-hljs-deletion{color:#b31d28;background-color:#ffeef0}
 
+figure[data-lang=katex] {
+    overflow: visible;
+}
+.raw-katex {
+    justify-self: center;
+}
+
 @media (max-width: 700px) {
     :root {
         --baseWidth: 90%;
