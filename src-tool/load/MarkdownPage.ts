@@ -13,7 +13,7 @@ export const loadMarkdownPage = async (
 ) => {
     await Promise.resolve();
     const context = createSerializeMarkdownContext();
-    const root = context.fromMarkdown(source);
+    const root = context.parseMarkdown(source);
     const [titleNode, ...bodyNodes] = root.children;
     if (!(titleNode.type === 'heading' && titleNode.depth === 1)) {
         throw new Error(`The 1st node is not <h1>: ${JSON.stringify(titleNode, null, 4)}`);

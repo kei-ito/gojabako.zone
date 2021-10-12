@@ -285,7 +285,7 @@ describe(serializeMarkdownRootToJsx.name, () => {
             '# Title{1}',
             '## Title{2}',
         ].join('\n');
-        const root = context.fromMarkdown(source);
+        const root = context.parseMarkdown(source);
         const actual = [...serializeMarkdownRootToJsx(context, root)].join('');
         const expected = [
             '<>',

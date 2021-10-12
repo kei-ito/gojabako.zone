@@ -1,4 +1,3 @@
-import {lowlight} from 'lowlight';
 import type Markdown from 'mdast';
 import {footnoteFromMarkdown} from 'mdast-util-footnote';
 import {fromMarkdown} from 'mdast-util-from-markdown';
@@ -10,23 +9,16 @@ import {removeHtmlComments} from './removeHtmlComments';
 import {walkContentNodes} from './walkContentNodes';
 
 export const createSerializeMarkdownContext = (): SerializeMarkdownContext => {
-    let nodes: Map<Markdown.Content['type'], Array<Markdown.Content> | undefined> | null = null;
+    const nodes = new Map<Markdown.Content['type'], Array<Markdown.Content> | undefined>();
     const nodeListOf = <T extends Markdown.Content['type']>(type: T): Array<MarkdownContent<T>> => {
-        if (!nodes) {
-            throw new Error('This context has never parsed a markdown.');
-        }
         return (nodes.get(type) || []).slice() as Array<MarkdownContent<T>>;
     };
-    const findDefinition = (id: string): Markdown.Definition | null => nodeListOf('definition').find(({identifier}) => identifier === id) || null;
     return {
-        fromMarkdown: (source: string) => {
+        parseMarkdown: (source: string) => {
             const root = fromMarkdown(removeHtmlComments(source), {
                 extensions: [gfm(), footnote()],
                 mdastExtensions: [gfmFromMarkdown(), footnoteFromMarkdown],
             });
-            if (!nodes) {
-                nodes = new Map();
-            }
             for (const node of walkContentNodes(...root.children)) {
                 let list = nodes.get(node.type);
                 if (!list) {
@@ -37,12 +29,11 @@ export const createSerializeMarkdownContext = (): SerializeMarkdownContext => {
             }
             return root;
         },
-        ...lowlight,
+        findDefinition: (id: string): Markdown.Definition | null => nodeListOf('definition').find(({identifier}) => identifier === id) || null,
+        nodeListOf,
         head: new Set(),
         links: new Set(),
         components: new Set(),
         images: new Map(),
-        nodeListOf,
-        findDefinition,
     };
 };

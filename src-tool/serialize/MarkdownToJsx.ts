@@ -1,21 +1,18 @@
 // https://github.com/syntax-tree/mdast
 import * as console from 'console';
 import type Markdown from 'mdast';
-import type {LowlightRoot} from 'lowlight/lib/core';
-import {getTextContent} from './TextContent';
-import {serializeStringToJsxSafeString, toJsxSafeString} from './StringToJsxSafeString';
 import {createUnsupportedTypeError} from '../util/createUnsupportedTypeError';
-import {serializeLowlightToJsx} from './LowlightToJsx';
+import {detectEmbedding, supportedEmbeddingType} from '../util/detectEmbedding';
 import type {Attributes} from './Attributes';
 import {serializeAttributes} from './Attributes';
-import {detectEmbedding, supportedEmbeddingType} from '../util/detectEmbedding';
+import {serializeCodeToJsx} from './CodeToJsx';
+import {serializeStringToJsxSafeString, toJsxSafeString} from './StringToJsxSafeString';
+import {getTextContent} from './TextContent';
 
 type FilterContent<C extends Markdown.Content, T extends Markdown.Content['type']> = C extends {type: T} ? C : never;
 export type MarkdownContent<T extends Markdown.Content['type']> = FilterContent<Markdown.Content, T>;
 export interface SerializeMarkdownContext {
-    fromMarkdown: (source: string) => Markdown.Root,
-    highlight: (language: string, value: string) => LowlightRoot,
-    highlightAuto: (value: string) => LowlightRoot,
+    parseMarkdown: (source: string) => Markdown.Root,
     links: Set<string>,
     components: Set<string>,
     images: Map<string, string>,
@@ -30,7 +27,7 @@ export const serializeMarkdownToJsx = function* (
     context: SerializeMarkdownContext,
     source: string,
 ) {
-    yield* serialize(context, context.fromMarkdown(source), []);
+    yield* serialize(context, context.parseMarkdown(source), []);
 };
 
 export const serializeMarkdownRootToJsx = function* (
@@ -309,16 +306,12 @@ const serializeCodeBlock = function* (
 ) {
     yield '<figure>';
     if (node.meta) {
-        const {children: [caption]} = context.fromMarkdown(node.meta);
+        const {children: [caption]} = context.parseMarkdown(node.meta);
         if ('children' in caption) {
             yield* serializeElement(context, 'figcaption', null, caption, nextAncestors);
         }
     }
-    if (node.lang) {
-        yield* serializeLowlightToJsx(context.highlight(node.lang, node.value));
-    } else {
-        yield* serializeLowlightToJsx(context.highlightAuto(node.value));
-    }
+    yield* serializeCodeToJsx(node.lang, node.value);
     yield '</figure>';
 };
 
