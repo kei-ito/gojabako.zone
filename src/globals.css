@@ -146,14 +146,17 @@ h1, h2, h3, h4, h5, h6 {
 h2, h3 {
     margin-block-start: 1rem;
 }
+header+h2, header+h3 {
+    margin-block-start: 0;
+}
 h1 {
     font-size: 130%;
 }
 h2 {
-    font-size: 116%;
+    font-size: 112%;
 }
 h3 {
-    font-size: 108%;
+    font-size: 106%;
 }
 .raw-link {
     font-size: 70%;
