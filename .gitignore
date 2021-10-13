@@ -40,8 +40,5 @@ yarn-error.log*
 # tools
 .tool
 
-# certificates
-*.pem
-
 # generated
 *.generated.*
