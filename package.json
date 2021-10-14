@@ -87,7 +87,7 @@
             "@nlib/eslint-config"
         ],
         "ignorePatterns": [
-            "./next-env.d.ts",
+            "next-env.d.ts",
             "./.tool/**/*"
         ],
         "overrides": [
@@ -97,9 +97,6 @@
                     "./loader/**/*",
                     "./src-tool/**/*"
                 ],
-                "env": {
-                    "node": true
-                },
                 "rules": {
                     "@nlib/no-globals": "off"
                 }
@@ -122,18 +119,7 @@
         ]
     },
     "lint-staged": {
-        "*.ts": [
-            "eslint"
-        ],
-        "*.tsx": [
-            "eslint"
-        ],
-        "*.js": [
-            "eslint"
-        ],
-        "*.jsx": [
-            "eslint"
-        ]
+        "*!(.d).{ts,tsx,js,mjs,cjs,jsx}": "eslint"
     },
     "renovate": {
         "extends": [
