@@ -54,7 +54,7 @@
         "postcss": "8.3.9",
         "react": "17.0.2",
         "react-dom": "17.0.2",
-        "ts-jest": "27.0.5",
+        "ts-jest": "27.0.7",
         "ts-node": "10.3.0"
     },
     "browserslist": [
