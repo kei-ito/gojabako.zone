@@ -43,7 +43,7 @@
         "jest": "27.2.5",
         "katex": "0.13.18",
         "lint-staged": "11.2.3",
-        "lowlight": "2.3.0",
+        "lowlight": "2.4.0",
         "mdast-util-footnote": "1.0.0",
         "mdast-util-from-markdown": "1.0.4",
         "mdast-util-gfm": "2.0.0",
