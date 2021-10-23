@@ -1,4 +1,4 @@
-/* eslint-disable @nlib/no-globals, no-undef */
+// eslint-disable-next-line @nlib/no-globals, no-undef
 const g = globalThis;
 export {g as globalThis};
 export const {
@@ -11,8 +11,5 @@ export const {
     JSON,
     Promise,
     Error,
-    requestAnimationFrame,
-    cancelAnimationFrame,
-    MutationObserver,
     console,
 } = g;

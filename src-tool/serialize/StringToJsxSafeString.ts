@@ -1,4 +1,4 @@
-import {executeRegExp} from '../util/executeRegExp';
+import {executeRegExp} from '../../packages/es/executeRegExp';
 
 export const serializeStringToJsxSafeString = function* (
     input: string,

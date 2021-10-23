@@ -1,7 +1,7 @@
 import fs from 'fs';
 import console from 'console';
 import {getExtension} from './util/getExtension';
-import {listFiles} from './util/listFiles';
+import {listFiles} from '../packages/node/listFiles';
 
 const copyFiles = async () => {
     const projectRootUrl = new URL('..', `file://${__dirname}/`);

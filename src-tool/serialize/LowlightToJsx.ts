@@ -1,6 +1,6 @@
 import type {LowlightRoot, LowlightElementSpan, Text} from 'lowlight/lib/core';
+import {readline} from '../../packages/node/readline';
 import {createUnsupportedTypeError} from '../util/createUnsupportedTypeError';
-import {readline} from '../util/readline';
 import {serializeAttributes} from './Attributes';
 import {serializeStringToJsxSafeString} from './StringToJsxSafeString';
 

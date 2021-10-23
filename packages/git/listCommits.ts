@@ -1,5 +1,6 @@
-import {readline} from './readline';
-import {spawn} from './spawn';
+import {Error} from '../es/global';
+import {readline} from '../node/readline';
+import {spawn} from '../node/spawn';
 
 /**
  * https://git-scm.com/docs/pretty-formats

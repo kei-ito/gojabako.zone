@@ -1,8 +1,8 @@
 import type {NextApiHandler} from 'next';
 import packgeJson from '../../../package.json';
-import {URL} from '../../global';
+import {URL} from '../../../packages/es/global';
+import {toJsxSafeString} from '../../../packages/es/toJsxSafeString';
 import {pageListByUpdatedAt} from '../../util/pageList';
-import {sanitize} from '../../util/sanitize';
 
 const handler: NextApiHandler = async (_req, res) => {
     res.writeHead(200, {
@@ -26,7 +26,7 @@ const serialize = async function* () {
         const url = new URL(page.pathname, packgeJson.homepage);
         yield '  <entry>';
         yield `    <id>${page.pathname}</id>`;
-        yield `    <title>${sanitize(page.title)}</title>`;
+        yield `    <title>${toJsxSafeString(page.title)}</title>`;
         yield `    <link href="${url}"/>`;
         yield `    <updated>${page.updatedAt}</updated>`;
         yield `    <published>${page.publishedAt}</published>`;

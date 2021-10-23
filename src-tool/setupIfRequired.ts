@@ -1,8 +1,8 @@
 import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as console from 'console';
-import {listFiles} from './util/listFiles';
-import {spawn} from './util/spawn';
+import {listFiles} from '../packages/node/listFiles';
+import {spawn} from '../packages/node/spawn';
 
 const directoryUrl = new URL(`file://${__dirname}/`);
 const cacheDirectoryUrl = new URL('../.next/', directoryUrl);

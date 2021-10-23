@@ -1,4 +1,4 @@
-import {globalThis, Promise} from '../global';
+import {globalThis, Promise} from '../../packages/es/global';
 
 interface TwitterSDK {
     widgets: {

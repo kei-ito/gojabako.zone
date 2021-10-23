@@ -1,9 +1,9 @@
 // https://github.com/syntax-tree/mdast
 import * as console from 'console';
 import type Markdown from 'mdast';
+import {executeRegExp} from '../../packages/es/executeRegExp';
 import {createUnsupportedTypeError} from '../util/createUnsupportedTypeError';
 import {detectEmbedding, supportedEmbeddingType} from '../util/detectEmbedding';
-import {executeRegExp} from '../util/executeRegExp';
 import type {Attributes} from './Attributes';
 import {serializeAttributes} from './Attributes';
 import {serializeCodeToJsx} from './CodeToJsx';

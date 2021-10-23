@@ -1,5 +1,5 @@
-import type {Commit} from './listCommits';
-import {getAllCommits} from './listCommits';
+import type {Commit} from '../../packages/git/listCommits';
+import {getAllCommits} from '../../packages/git/listCommits';
 import {projectRootUrl} from './url';
 
 export interface FileData {

@@ -1,4 +1,4 @@
-import {Boolean} from '../global';
+import {Boolean} from '../es/global';
 
 export const isHTMLElement = (
     node: Element | Node | null,

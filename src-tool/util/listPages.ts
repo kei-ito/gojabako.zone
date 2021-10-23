@@ -1,5 +1,5 @@
 import {findPageData} from './getPageData';
-import {listFiles} from './listFiles';
+import {listFiles} from '../../packages/node/listFiles';
 import {pagesUrl} from './url';
 
 export const listPages = async function* () {

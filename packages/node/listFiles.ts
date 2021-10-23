@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import {URL} from '../es/global';
 
 export const listFiles = async function* (directoryUrl: URL): AsyncGenerator<URL> {
     for await (const name of await fs.promises.readdir(directoryUrl as unknown as string)) {
