@@ -1,10 +1,11 @@
+/* eslint-disable @nlib/no-globals */
 /**
  * @this {import('./util/LoaderContext').LoaderThis}
  * @param {string} source
  * @returns {string}
  */
 module.exports = async function markdownPageLoader(source) {
-    const {loadMarkdownPage} = await import('../.tool/load/MarkdownPage.mjs');
+    const loadMarkdownPage = await import('../.next/loader/MarkdownPage.mjs');
     const code = await loadMarkdownPage(this, source);
     return code;
 };

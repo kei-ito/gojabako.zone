@@ -1,4 +1,4 @@
-import {pageListByPublishedAt} from '../../util/pageList';
+import {pageListByPublishedAt} from '../../pageList';
 import {AuthorLinks} from '../AuthorLinks';
 import {PageLinkPublished} from '../PageLink';
 import {className} from './style.module.css';

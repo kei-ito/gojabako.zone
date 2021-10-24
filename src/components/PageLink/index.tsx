@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import {DateString} from '../DateString';
-import type {PageData} from '../../util/pageList';
+import type {PageData} from '../../pageList';
 import {className} from './style.module.css';
 
 export const PageLinkPublished = ({pathname, title, publishedAt, updatedAt}: PageData) => <li className={className.post}>

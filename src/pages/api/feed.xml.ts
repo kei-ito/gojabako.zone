@@ -2,7 +2,7 @@ import type {NextApiHandler} from 'next';
 import packgeJson from '../../../package.json';
 import {URL} from '../../../packages/es/global';
 import {toJsxSafeString} from '../../../packages/es/toJsxSafeString';
-import {pageListByUpdatedAt} from '../../util/pageList';
+import {pageListByUpdatedAt} from '../../pageList';
 
 const handler: NextApiHandler = async (_req, res) => {
     res.writeHead(200, {
