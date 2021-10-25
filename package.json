@@ -28,7 +28,7 @@
         "lint:eslint": "next lint"
     },
     "devDependencies": {
-        "@nlib/eslint-config": "3.17.25",
+        "@nlib/eslint-config": "3.17.28",
         "@nlib/githooks": "0.1.0",
         "@types/jest": "27.0.2",
         "@types/katex": "0.11.1",
