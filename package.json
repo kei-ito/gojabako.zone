@@ -40,7 +40,7 @@
         "eslint-config-next": "11.1.2",
         "eslint-plugin-jest": "25.2.2",
         "htmlparser2": "7.1.2",
-        "jest": "27.2.5",
+        "jest": "27.3.1",
         "katex": "0.13.18",
         "lint-staged": "11.2.3",
         "lowlight": "2.4.0",
