@@ -1,26 +1,26 @@
 import * as fs from 'fs';
 import {fromMarkdown} from 'mdast-util-from-markdown';
-import {getTextContent} from '../es/TextContent';
-import {walkMarkdownContentNodes} from '../markdown/walkContentNodes';
 import {getExtension} from '../es/getExtension';
 import {Error} from '../es/global';
+import {getTextContent} from '../es/TextContent';
+import {walkMarkdownContentNodes} from '../markdown/walkContentNodes';
+import {getPagePathName} from '../node/getPagePathName';
 
 export const getPageTitle = async (
-    pathname: string,
-    fileUrl: URL,
+    pageFileAbsolutePath: string,
 ): Promise<string> => {
-    if (pathname === '/') {
+    if (getPagePathName(pageFileAbsolutePath) === '/') {
         return 'トップページ';
     }
-    const code = await fs.promises.readFile(fileUrl, 'utf8');
-    const ext = getExtension(fileUrl.pathname);
+    const code = await fs.promises.readFile(pageFileAbsolutePath, 'utf8');
+    const ext = getExtension(pageFileAbsolutePath);
     switch (ext) {
     case '.md':
         return getTitleFromMarkdown(code);
     case '.tsx':
         return getTitleFromJsx(code);
     default:
-        throw new Error(`UnsupportedFile: ${fileUrl.pathname}`);
+        throw new Error(`UnsupportedFile: ${pageFileAbsolutePath}`);
     }
 };
 

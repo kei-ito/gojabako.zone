@@ -1,10 +1,9 @@
+import * as path from 'path';
 import {getRelativePath} from '../es/getRelativePath';
-import {Math, URL} from '../es/global';
-import {componentsDirectoryUrl} from './constants';
+import {rootDirectoryPath} from './constants';
 
-export const getCompoentPath = (pageUrl: URL, componentName: string) => {
-    const componentUrl = new URL(`${componentName}/index.tsx`, componentsDirectoryUrl);
-    let pageDir = pageUrl.pathname;
-    pageDir = pageDir.slice(0, Math.max(0, pageDir.lastIndexOf('/')));
-    return getRelativePath(pageDir, componentUrl.pathname);
+export const getCompoentPath = (pagePath: string, componentName: string) => {
+    const componentPath = path.join(rootDirectoryPath, `src/components/${componentName}`);
+    const pageDir = path.dirname(pagePath);
+    return getRelativePath(pageDir, componentPath);
 };

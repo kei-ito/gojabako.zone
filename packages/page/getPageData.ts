@@ -1,4 +1,4 @@
-import {getPagePathName} from '../es/getPagePathName';
+import {getPagePathName} from '../node/getPagePathName';
 import {Error, Promise} from '../es/global';
 import {getFileData} from '../node/getFileData';
 import {getPageTitle} from './getPageTitle';
@@ -20,8 +20,8 @@ export const getPageData = async (...args: Parameters<typeof findPageData>): Pro
     return pageData;
 };
 
-export const findPageData = async (fileUrl: URL): Promise<PageData | null> => {
-    const pathname = getPagePathName(fileUrl);
+export const findPageData = async (pageFileAbsolutePath: string): Promise<PageData | null> => {
+    const pathname = getPagePathName(pageFileAbsolutePath);
     if (pathname === null || pathname.startsWith('/api/')) {
         return null;
     }
@@ -29,8 +29,8 @@ export const findPageData = async (fileUrl: URL): Promise<PageData | null> => {
         title,
         {filePath, firstCommitAt, lastCommitAt, commitCount},
     ] = await Promise.all([
-        getPageTitle(pathname, fileUrl),
-        getFileData(fileUrl),
+        getPageTitle(pageFileAbsolutePath),
+        getFileData(pageFileAbsolutePath),
     ]);
     const publishedAt = firstCommitAt;
     const updatedAt = lastCommitAt;

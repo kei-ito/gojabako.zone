@@ -1,14 +1,14 @@
 import * as fs from 'fs';
-import {URL} from '../es/global';
+import * as path from 'path';
 
-export const listFiles = async function* (directoryUrl: URL): AsyncGenerator<URL> {
-    for await (const name of await fs.promises.readdir(directoryUrl as unknown as string)) {
-        const fileUrl = new URL(name, directoryUrl);
-        const stats = await fs.promises.stat(fileUrl);
+export const listFiles = async function* (directoryPath: string): AsyncGenerator<string> {
+    for await (const name of await fs.promises.readdir(directoryPath)) {
+        const fileAbsolutePath = path.join(directoryPath, name);
+        const stats = await fs.promises.stat(fileAbsolutePath);
         if (stats.isDirectory()) {
-            yield* listFiles(new URL(`${name}/`, directoryUrl));
+            yield* listFiles(path.join(directoryPath, name));
         } else if (stats.isFile()) {
-            yield fileUrl;
+            yield fileAbsolutePath;
         }
     }
 };

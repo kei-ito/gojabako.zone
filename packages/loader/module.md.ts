@@ -1,23 +1,20 @@
-import {serializeMarkdownRootToJsx} from '../markdown/serializeToJsx';
+import {Promise} from '../es/global';
 import {createSerializeMarkdownContext} from '../markdown/createSerializeContext';
 import {finalizeSerializeMarkdownContext} from '../markdown/finalizeSerializeContext';
-import {Promise, URL} from '../es/global';
+import {serializeMarkdownRootToJsx} from '../markdown/serializeToJsx';
 import type {LoaderThis} from './type';
 
-const loadMarkdownModule = async function (
-    this: LoaderThis,
+export const loadMarkdownModule = async (
+    {resourcePath}: LoaderThis,
     source: string,
-) {
+): Promise<string> => {
     await Promise.resolve();
-    const pageFileUrl = new URL(`file://${this.resourcePath}`);
     const context = createSerializeMarkdownContext();
     const root = context.parseMarkdown(source);
     const jsx = [...serializeMarkdownRootToJsx(context, root)].join('');
-    const {head, foot} = finalizeSerializeMarkdownContext(context, pageFileUrl);
+    const {head, foot} = finalizeSerializeMarkdownContext(context, resourcePath);
     return [
         head,
         `export default function Document() {return <>${jsx}${foot}</>}`,
     ].join('\n');
 };
-
-export default loadMarkdownModule;

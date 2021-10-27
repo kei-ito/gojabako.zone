@@ -1,17 +1,17 @@
-import {serializeMarkdownRootToJsx} from '../markdown/serializeToJsx';
+import {Error, JSON, Promise} from '../es/global';
 import {getTextContent} from '../es/TextContent';
+import {toJsxSafeString} from '../es/toJsxSafeString';
 import {createSerializeMarkdownContext} from '../markdown/createSerializeContext';
 import {finalizeSerializeMarkdownContext} from '../markdown/finalizeSerializeContext';
 import {getMarkdownExcerpt} from '../markdown/getExcerpt';
-import {getPagePathName} from '../es/getPagePathName';
-import {Error, JSON, Promise, URL} from '../es/global';
-import {toJsxSafeString} from '../es/toJsxSafeString';
+import {serializeMarkdownRootToJsx} from '../markdown/serializeToJsx';
+import {getPagePathName} from '../node/getPagePathName';
 import type {LoaderThis} from './type';
 
-const loadMarkdownPage = async function (
-    this: LoaderThis,
+export const loadMarkdownPage = async (
+    {resourcePath}: LoaderThis,
     source: string,
-) {
+): Promise<string> => {
     await Promise.resolve();
     const context = createSerializeMarkdownContext();
     const root = context.parseMarkdown(source);
@@ -26,9 +26,8 @@ const loadMarkdownPage = async function (
     const titleJsx = [...serializeMarkdownRootToJsx(context, root)].join('');
     root.children = bodyNodes;
     const body = [...serializeMarkdownRootToJsx(context, root)].join('');
-    const pageFileUrl = new URL(`file://${this.resourcePath}`);
-    const pathname = getPagePathName(pageFileUrl);
-    const {head, foot} = finalizeSerializeMarkdownContext(context, pageFileUrl);
+    const pathname = getPagePathName(resourcePath);
+    const {head, foot} = finalizeSerializeMarkdownContext(context, resourcePath);
     const excerpt = getMarkdownExcerpt(200, ...bodyNodes);
     return `${head}
 export default function MarkdownPage() {
@@ -51,5 +50,3 @@ export default function MarkdownPage() {
     </>;
 }`;
 };
-
-export default loadMarkdownPage;

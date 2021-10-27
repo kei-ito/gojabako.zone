@@ -1,5 +1,6 @@
+import * as path from 'path';
 import {Date} from '../es/global';
-import {rootDirectoryUrl} from '../fs/constants';
+import {rootDirectoryPath} from '../fs/constants';
 import type {Commit} from '../git/listCommits';
 import {getAllCommits} from '../git/listCommits';
 
@@ -12,9 +13,9 @@ export interface FileData {
 }
 
 export const getFileData = async (
-    fileUrl: URL,
+    fileAbsolutePath: string,
 ): Promise<FileData> => {
-    const filePath = fileUrl.pathname.slice(rootDirectoryUrl.pathname.length);
+    const filePath = path.relative(rootDirectoryPath, fileAbsolutePath);
     const commitList = await getAllCommits(filePath);
     const now = new Date().toISOString();
     const firstCommit = commitList[commitList.length - 1] as Commit | null;

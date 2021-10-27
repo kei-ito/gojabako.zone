@@ -4,16 +4,16 @@ import {getCompoentPath} from '../fs/getComponentPath';
 
 export const finalizeSerializeMarkdownContext = (
     context: SerializeMarkdownContext,
-    fileUrl: URL,
+    fileAbsolutePath: string,
 ) => {
     const foot = [...serializeFootnotes(context)].join('');
-    const head = [...serializeHead(context, fileUrl)].join('\n');
+    const head = [...serializeHead(context, fileAbsolutePath)].join('\n');
     return {head, foot};
 };
 
 const serializeHead = function* (
     {links, images, components, head}: SerializeMarkdownContext,
-    fileUrl: URL,
+    fileAbsolutePath: string,
 ): Generator<string> {
     for (const href of links) {
         if (href.startsWith('/') || href.startsWith('.')) {
@@ -28,7 +28,7 @@ const serializeHead = function* (
         }
     }
     for (const component of components) {
-        yield `import {${component}} from '${getCompoentPath(fileUrl, component)}';`;
+        yield `import {${component}} from '${getCompoentPath(fileAbsolutePath, component)}';`;
     }
     for (const line of head) {
         yield line;

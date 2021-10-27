@@ -42,7 +42,7 @@ describe(serializeLowlightToJsx.name, () => {
             '<li><code>',
             '<span className="hljs-keyword">const</span>',
             ' foo = ',
-            '<span className="hljs-string">"aaa"</span>',
+            '<span className="hljs-string">&#34;aaa&#34;</span>',
             ';',
             '</code></li>',
             '<li><code>',

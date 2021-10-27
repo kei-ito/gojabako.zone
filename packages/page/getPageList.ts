@@ -1,8 +1,9 @@
+import * as path from 'path';
 import {listFiles} from '../node/listFiles';
 import type {PageData} from './getPageData';
 import {findPageData} from './getPageData';
 import {Date, Error, JSON, WeakMap} from '../es/global';
-import {pagesDirectoryUrl} from '../fs/constants';
+import {rootDirectoryPath} from '../fs/constants';
 
 const byDate = (date1: string, date2: string) => {
     const now = Date.now();
@@ -15,7 +16,7 @@ const byUpdatedAt = (page1: PageData, page2: PageData) => byDate(page1.updatedAt
 
 export const getPageList = async () => {
     const pageList: Array<PageData> = [];
-    for await (const fileUrl of listFiles(pagesDirectoryUrl)) {
+    for await (const fileUrl of listFiles(path.join(rootDirectoryPath, 'src/pages'))) {
         const pageData = await findPageData(fileUrl);
         if (pageData) {
             pageList.push(pageData);

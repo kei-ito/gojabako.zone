@@ -28,7 +28,7 @@ export const spawn = async (
     });
     if (!quiet) {
         process.stdout.write(`> ${command}\n`);
-        stdout.pipe(process.stdout);
-        stderr.pipe(process.stderr);
+        subprocess.stdout.pipe(process.stdout);
+        subprocess.stderr.pipe(process.stderr);
     }
 });
