@@ -1,3 +1,4 @@
+import * as console from 'console';
 import * as esbuild from 'esbuild';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -18,6 +19,7 @@ runScript(async () => {
                 target: 'esnext',
                 format: 'esm',
             });
+            console.info(`BuildCLI: ${name}`);
         }
     }
 });

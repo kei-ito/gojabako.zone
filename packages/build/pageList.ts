@@ -1,3 +1,4 @@
+import * as console from 'console';
 import * as fs from 'fs';
 import * as path from 'path';
 import {JSON} from '../es/global';
@@ -26,4 +27,5 @@ export const pageListByUpdatedAt: Array<PageData> = (JSON.parse(${JSON.stringify
 `.trimStart();
     const dest = path.join(rootDirectoryPath, 'src/pageList.ts');
     await fs.promises.writeFile(dest, code);
+    console.info(`BuildPageList: ${dest}`);
 });
