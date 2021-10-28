@@ -1,4 +1,5 @@
-/* eslint-disable @nlib/no-globals, no-undef */
+import {globalThis} from '../es/global';
+
 export const {
     document,
     MutationObserver,
