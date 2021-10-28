@@ -6,43 +6,27 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "setupIfRequired": "ts-node --project tsconfig.setup.json src-tool/setupIfRequired.ts",
-        "setup": "run-s setup:*",
-        "setup:tsc": "tsc --project tsconfig.tool.json",
-        "setup:copy": "ts-node -O {\\\"module\\\":\\\"commonjs\\\"} src-tool/copy.ts",
-        "setup:mjs": "npx @nlib/change-ext --directory .tool --mapping js/mjs",
-        "setup:resolve": "npx @nlib/resolve-imports --include \".tool/**/*.mjs\"",
-        "updatePageList": "node .tool/build/pageList.mjs",
         "test": "run-s test:*",
         "test:type": "tsc --noEmit",
         "test:jest": "npx jest",
-        "dev": "run-s setupIfRequired updatePageList dev:*",
+        "dev": "run-s build:loader build:pageList dev:*",
         "dev:watch": "run-p dev:watch:*",
         "dev:watch:css": "esifycss --css=src/app.css --ext=.ts --watch src",
-        "dev:watch:next": "node server.mjs",
-        "build": "run-s setupIfRequired build:*",
+        "dev:watch:next": "ts-node --project tsconfig.cli.json server.ts",
+        "build": "run-s build:*",
+        "build:cli": "ts-node --project tsconfig.cli.json packages/build/cli.ts",
+        "build:pageList": "node .output/build/pageList.mjs",
+        "build:loader": "node .output/build/loader.mjs",
         "build:css": "esifycss --css=src/app.css --ext=.ts src",
         "build:next": "next build",
-        "start": "NODE_ENV=production node server.mjs",
+        "start": "NODE_ENV=production ts-node server.ts",
         "lint": "run-s lint:*",
         "lint:eslint": "next lint"
     },
-    "devDependencies": {
-        "@nlib/eslint-config": "3.17.28",
-        "@nlib/githooks": "0.1.0",
-        "@types/jest": "27.0.2",
-        "@types/katex": "0.11.1",
-        "@types/react": "17.0.30",
-        "@typescript-eslint/eslint-plugin": "4.33.0",
-        "@typescript-eslint/parser": "4.33.0",
-        "esifycss": "1.4.35",
-        "esifycss-webpack-plugin": "0.1.3",
-        "eslint-config-next": "11.1.2",
-        "eslint-plugin-jest": "25.2.2",
+    "dependencies": {
+        "highlight.js": "11.3.1",
         "htmlparser2": "7.1.2",
-        "jest": "27.3.1",
-        "katex": "0.13.18",
-        "lint-staged": "11.2.3",
+        "katex": "0.13.20",
         "lowlight": "2.4.0",
         "mdast-util-footnote": "1.0.0",
         "mdast-util-from-markdown": "1.0.4",
@@ -50,12 +34,28 @@
         "micromark-extension-footnote": "1.0.2",
         "micromark-extension-gfm": "2.0.0",
         "next": "11.1.2",
-        "npm-run-all": "4.1.5",
         "postcss": "8.3.11",
         "react": "17.0.2",
         "react-dom": "17.0.2",
-        "ts-jest": "27.0.7",
         "ts-node": "10.4.0"
+    },
+    "devDependencies": {
+        "@nlib/eslint-config": "3.17.28",
+        "@nlib/githooks": "0.1.0",
+        "@types/jest": "27.0.2",
+        "@types/katex": "0.11.1",
+        "@types/react": "17.0.33",
+        "@typescript-eslint/eslint-plugin": "4.33.0",
+        "@typescript-eslint/parser": "4.33.0",
+        "esbuild": "0.12.29",
+        "esifycss": "1.4.35",
+        "esifycss-webpack-plugin": "0.1.3",
+        "eslint-config-next": "12.0.1",
+        "eslint-plugin-jest": "25.2.2",
+        "jest": "27.3.1",
+        "lint-staged": "11.2.6",
+        "npm-run-all": "4.1.5",
+        "ts-jest": "27.0.7"
     },
     "browserslist": [
         ">5%",
@@ -64,8 +64,8 @@
     ],
     "jest": {
         "roots": [
-            "<rootDir>/src",
-            "<rootDir>/src-tool"
+            "<rootDir>/packages",
+            "<rootDir>/src"
         ],
         "moduleFileExtensions": [
             "cjs",
@@ -91,16 +91,6 @@
             "./.tool/**/*"
         ],
         "overrides": [
-            {
-                "files": [
-                    "./*",
-                    "./loader/**/*",
-                    "./src-tool/**/*"
-                ],
-                "rules": {
-                    "@nlib/no-globals": "off"
-                }
-            },
             {
                 "files": [
                     "*.test.ts"

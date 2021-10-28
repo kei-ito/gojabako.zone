@@ -1,6 +1,0 @@
-{
-    "extends": "./tsconfig.tool.json",
-    "compilerOptions": {
-        "module": "commonjs"
-    }
-}

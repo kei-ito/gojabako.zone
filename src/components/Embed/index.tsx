@@ -1,8 +1,10 @@
 import type {PropsWithChildren} from 'react';
 import {useEffect, useRef} from 'react';
-import {console, MutationObserver, Number} from '../../global';
+import {MutationObserver} from '../../../packages/dom/global';
+import {isHTMLElement} from '../../../packages/dom/isHTMLElement';
+import {Number} from '../../../packages/es/global';
+import {onError} from '../../../packages/es/onError';
 import {getTwitterSDK} from '../../util/getTwitterSDK';
-import {isHTMLElement} from '../../util/isHTMLElement';
 import {className} from './style.module.css';
 
 interface EmbedProps {
@@ -60,7 +62,7 @@ const processElement = (
                 firstChild.style.margin = '0';
             }
         })
-        .catch((error) => console.error(error));
+        .catch(onError);
         break;
     }
     default:

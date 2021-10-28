@@ -1,3 +1,5 @@
+/* eslint-disable @nlib/no-globals */
+require('ts-node/register');
 const EsifyCSSWebpackPlugin = require('esifycss-webpack-plugin');
 
 module.exports = {

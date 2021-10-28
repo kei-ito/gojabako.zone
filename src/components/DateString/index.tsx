@@ -1,4 +1,4 @@
-import {Date} from '../../global';
+import {Date} from '../../../packages/es/global';
 
 export const DateString = ({date: dateString}: {date: string}) => {
     const date = new Date(dateString);

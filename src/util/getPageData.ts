@@ -1,6 +1,6 @@
-import {Error} from '../global';
-import type {PageData} from './pageList';
-import {pageListByPublishedAt} from './pageList';
+import {Error} from '../../packages/es/global';
+import type {PageData} from '../pageList';
+import {pageListByPublishedAt} from '../pageList';
 
 export const getPageData = (pathname: string): PageData => {
     for (const page of pageListByPublishedAt) {
@@ -8,5 +8,5 @@ export const getPageData = (pathname: string): PageData => {
             return page;
         }
     }
-    throw new Error(`NoPage: ${pathname}`);
+    throw new Error(`NoSuchPage: ${pathname}`);
 };

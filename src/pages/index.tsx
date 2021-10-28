@@ -2,7 +2,7 @@ import packageJson from '../../package.json';
 import {PageDate} from '../components/PageDate';
 import {PageHead} from '../components/PageHead';
 import {PageLinkUpdated} from '../components/PageLink';
-import {pageListByUpdatedAt} from '../util/pageList';
+import {pageListByUpdatedAt} from '../pageList';
 import Introduction from './introduction.module.md';
 
 const {authorName} = packageJson;
