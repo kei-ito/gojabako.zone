@@ -1,6 +1,5 @@
 import type {PropsWithChildren} from 'react';
 import {useEffect, useRef} from 'react';
-import {MutationObserver} from '../../../packages/dom/global';
 import {isHTMLElement} from '../../../packages/dom/isHTMLElement';
 import {Number} from '../../../packages/es/global';
 import {onError} from '../../../packages/es/onError';
@@ -21,16 +20,9 @@ const useEmbed = (type: string) => {
     const ref = useRef<HTMLElement>(null);
     useEffect(() => {
         const {current: element} = ref;
-        const observer = new MutationObserver((_records) => {
-            if (element) {
-                processElement(type, element);
-            }
-        });
         if (element) {
-            observer.observe(element, {childList: true});
             processElement(type, element);
         }
-        return () => observer.disconnect();
     }, [type, ref]);
     return ref;
 };

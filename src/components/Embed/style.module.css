@@ -2,8 +2,9 @@
     align-items: stretch;
 }
 
-.raw-twitter-tweet>* {
-    inline-size: 100%;
+.raw-twitter-tweet {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
 }
 
 .embed[data-type=youtube]>iframe {
