@@ -1,4 +1,4 @@
-import {globalThis, Promise} from '../../packages/es/global';
+import {Promise} from '../../packages/es/global';
 
 interface TwitterSDK {
     widgets: {
@@ -16,16 +16,18 @@ export const getTwitterSDK = async (): Promise<TwitterSDK> => {
 };
 
 const load = async (): Promise<TwitterSDK> => {
-    if (!('document' in globalThis)) {
+    // eslint-disable-next-line @nlib/no-globals, no-undef, @typescript-eslint/no-unnecessary-condition
+    const g = globalThis || {};
+    if (!('document' in g)) {
         return {widgets: {load: () => null}};
     }
-    const {document} = globalThis;
+    const {document} = g;
     return await new Promise((resolve, reject) => {
         const script = document.createElement('script');
         script.addEventListener('error', reject);
         script.addEventListener('load', () => {
-            if ('twttr' in globalThis) {
-                resolve((globalThis as unknown as {twttr: TwitterSDK}).twttr);
+            if ('twttr' in g) {
+                resolve((g as unknown as {twttr: TwitterSDK}).twttr);
             }
         });
         script.async = true;
