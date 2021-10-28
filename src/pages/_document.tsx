@@ -1,8 +1,6 @@
 /* eslint-disable @next/next/no-page-custom-font */
-import {Html, Head, Main, NextScript} from 'next/document';
-import packageJson from '../../package.json';
-
-const {siteName} = packageJson;
+import {Head, Html, Main, NextScript} from 'next/document';
+import {siteName} from '../../packages/site/constants';
 
 const Document = () => <Html lang="ja">
     <Head>

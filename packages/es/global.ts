@@ -17,4 +17,5 @@ export const {
     console,
     WeakMap,
     WeakSet,
+    Response,
 } = g;

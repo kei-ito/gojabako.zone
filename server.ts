@@ -34,17 +34,13 @@ const parseUrl = (requestPath = '/'): url.UrlWithParsedQuery & {pathname: string
 };
 const app = next({dev: process.env.NODE_ENV !== 'production'});
 app.prepare().then(() => {
-    const handleApiRequest = app.getRequestHandler();
+    const handleRequest = app.getRequestHandler();
     const onRequest = (req: http.IncomingMessage, res: http.ServerResponse) => {
         const parsedUrl = parseUrl(req.url);
         if (!parsedUrl.pathname.startsWith('/_')) {
             console.info(`${req.method} ${req.url}`);
         }
-        if (parsedUrl.pathname.startsWith('/api/')) {
-            handleApiRequest(req, res, parsedUrl).catch(onError);
-        } else {
-            app.render(req, res, parsedUrl.pathname, parsedUrl.query).catch(onError);
-        }
+        handleRequest(req, res, parsedUrl).catch(onError);
     };
     server.once('error', onError);
     server.once('listening', () => console.info(`> Ready on ${rootUrl.href}`));

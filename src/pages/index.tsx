@@ -1,11 +1,9 @@
-import packageJson from '../../package.json';
+import {authorName} from '../../packages/site/constants';
 import {PageDate} from '../components/PageDate';
 import {PageHead} from '../components/PageHead';
 import {PageLinkUpdated} from '../components/PageLink';
 import {pageListByUpdatedAt} from '../pageList';
 import Introduction from './introduction.module.md';
-
-const {authorName} = packageJson;
 
 export const Page = () => <>
     <PageHead

@@ -1,9 +1,7 @@
 import Head from 'next/head';
 import type {PropsWithChildren} from 'react';
-import packageJson from '../../../package.json';
 import {URL} from '../../../packages/es/global';
-
-const {homepage, siteName, authorName} = packageJson;
+import {authorName, homepage, siteName} from '../../../packages/site/constants';
 
 export interface PageHeadProps {
     title: string,
