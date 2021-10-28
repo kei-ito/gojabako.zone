@@ -14,4 +14,3 @@ const _Error = Error; export {_Error as Error};
 const _console = console; export {_console as console};
 const _WeakMap = WeakMap; export {_WeakMap as WeakMap};
 const _WeakSet = WeakSet; export {_WeakSet as WeakSet};
-const _Response = Response; export {_Response as Response};

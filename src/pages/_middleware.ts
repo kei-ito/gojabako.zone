@@ -1,5 +1,6 @@
+import {NextResponse} from 'next/server';
 import type {NextRequest} from 'next/server';
-import {Response, URL} from '../../packages/es/global';
+import {URL} from '../../packages/es/global';
 import {toJsxSafeString} from '../../packages/es/toJsxSafeString';
 import {homepage, siteName} from '../../packages/site/constants';
 import {pageListByPublishedAt, pageListByUpdatedAt} from '../pageList';
@@ -8,14 +9,14 @@ export const middleware = (req: NextRequest) => {
     const {pathname} = req.nextUrl;
     switch (pathname) {
     case '/sitemap.xml':
-        return new Response([...serializeSitemap()].join('\n'), {
+        return new NextResponse([...serializeSitemap()].join('\n'), {
             headers: {
                 'content-type': 'application/xml; charset=utf-8',
                 'cache-control': 'public, max-age=3600',
             },
         });
     case '/feed.atom':
-        return new Response([...serializeFeed()].join('\n'), {
+        return new NextResponse([...serializeFeed()].join('\n'), {
             headers: {
                 'content-type': 'application/atom+xml; charset=utf-8',
                 'cache-control': 'public, max-age=3600',
