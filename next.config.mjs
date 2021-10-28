@@ -1,8 +1,7 @@
 /* eslint-disable @nlib/no-globals */
-require('ts-node/register');
-const EsifyCSSWebpackPlugin = require('esifycss-webpack-plugin');
+import EsifyCSSWebpackPlugin from 'esifycss-webpack-plugin';
 
-module.exports = {
+const nextConfig = {
     reactStrictMode: true,
     pageExtensions: ['page.md', 'tsx', 'ts'],
     webpack: (config, {defaultLoaders: {babel}}) => {
@@ -21,3 +20,5 @@ module.exports = {
         ];
     },
 };
+
+export default nextConfig;
