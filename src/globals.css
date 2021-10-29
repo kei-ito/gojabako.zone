@@ -228,15 +228,16 @@ ol[data-lang] {
     row-gap: 0;
     overflow-x: auto;
     font-family: var(--font-monospace);
-    line-height: 1.5;
 }
 ol[data-lang]>li {
     align-items: stretch;
+    line-height: 1.5;
 }
 ol[data-lang]>li::before {
     content: counter(listItemIndex);
     opacity: 0.6;
     font: inherit;
+    font-size: smaller;
 }
 ol[data-lang]>li>code {
     padding-inline-start: 0.5rem;
