@@ -104,6 +104,7 @@ pre {
 code {
     white-space: pre;
     font-family: var(--font-monospace);
+    font-size: smaller;
 }
 rt {
     font-size: 60%;
@@ -227,7 +228,6 @@ ol[data-lang] {
     row-gap: 0;
     overflow-x: auto;
     font-family: var(--font-monospace);
-    font-size: smaller;
     line-height: 1.5;
 }
 ol[data-lang]>li {
