@@ -8,7 +8,7 @@ import type {Attributes} from '../html/Attributes';
 import {serializeAttributes} from '../html/Attributes';
 import {serializeCodeToJsx} from '../highlight/CodeToJsx';
 import {getTextContent} from '../es/TextContent';
-import {serializeTeXToJsx} from '../tex/TeXToJsx';
+import {serializeTeXToJsx} from '../tex/serializeTeXToJsx';
 import {Error} from '../es/global';
 import {toJsxSafeString} from '../es/toJsxSafeString';
 

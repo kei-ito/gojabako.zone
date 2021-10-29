@@ -104,8 +104,8 @@ describe(serializeMarkdownToJsx.name, () => {
         const actual = [...serializeMarkdownToJsx(context, source)].join('');
         const expected = [
             '<>',
-            '<figure>',
-            '<table>',
+            '<figure id="figure-1">',
+            '<table id="table-1">',
             '<thead>',
             '<tr><th>Cell11</th><th>Cell12</th><th>Cell13</th></tr>',
             '</thead>',
@@ -165,13 +165,13 @@ describe(serializeMarkdownToJsx.name, () => {
         const actual = [...serializeMarkdownToJsx(context, source)].join('');
         const expected = [
             '<>',
-            '<figure>',
+            '<figure id="figure-1">',
             '<figcaption>image1</figcaption>',
-            '<Image src={image0} alt="image1" placeholder="blur"/>',
+            '<Image id="image-1" src={image0} alt="image1" placeholder="blur"/>',
             '</figure>',
             '<p>',
             '<a href="./image2">',
-            '<Image src={image1} alt="image2" placeholder="blur"/>',
+            '<Image id="image-2" src={image1} alt="image2" placeholder="blur"/>',
             '</a>',
             '</p>',
             '</>',
@@ -239,7 +239,7 @@ describe(serializeMarkdownToJsx.name, () => {
         const actual = [...serializeMarkdownToJsx(context, source)].join('');
         const expected = [
             '<>',
-            '<figure data-lang="markdown">',
+            '<figure id="figure-1" data-lang="markdown">',
             '<figcaption>',
             '<a href="https://example.com">sample.md</a>',
             '</figcaption>',
@@ -263,7 +263,7 @@ describe(serializeMarkdownToJsx.name, () => {
         const actual = [...serializeMarkdownToJsx(context, source)].join('');
         const expected = [
             '<>',
-            '<figure data-lang="">',
+            '<figure id="figure-1" data-lang="">',
             '<ol data-lang="shell">',
             '<li>',
             '<code>',
