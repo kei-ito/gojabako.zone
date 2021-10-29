@@ -9,7 +9,7 @@ import {serializeAttributes} from '../html/Attributes';
 import {serializeCodeToJsx} from '../highlight/CodeToJsx';
 import {getTextContent} from '../es/TextContent';
 import {serializeTeXToJsx} from '../tex/serializeTeXToJsx';
-import {Error} from '../es/global';
+import {Error, JSON} from '../es/global';
 import {toJsxSafeString} from '../es/toJsxSafeString';
 
 type FilterContent<C extends Markdown.Content, T extends Markdown.Content['type']> = C extends {type: T} ? C : never;
@@ -162,9 +162,9 @@ const serialize = function* (
             case 'math':
                 yield* serializeTeXToJsx(node.value, {displayMode: true});
                 yield '<span className="katex-source">';
-                yield '```math<br/>';
-                yield toJsxSafeString(node.value);
-                yield '<br/>```';
+                yield '```math{';
+                yield JSON.stringify(`\n${node.value}\n`);
+                yield '}```';
                 yield '</span>';
                 break;
             default:
@@ -180,13 +180,13 @@ const serialize = function* (
     case 'text':
         for (const matched of executeRegExp(node.value, /\${2}([^$]+)\${2}/g)) {
             if (typeof matched === 'string') {
-                yield toJsxSafeString(matched);
+                yield `{${JSON.stringify(matched)}}`;
             } else {
                 yield '<span className="katex-inline">';
                 const source = matched[1];
                 yield* serializeTeXToJsx(source, {displayMode: false});
                 yield '<span className="katex-source">$$';
-                yield toJsxSafeString(source);
+                yield `{${JSON.stringify(source)}}`;
                 yield '$$</span>';
                 yield '</span>';
             }
@@ -202,7 +202,7 @@ const serialize = function* (
         yield* serializeElement(context, 's', null, node, nextAncestors);
         break;
     case 'inlineCode':
-        yield `<code>${toJsxSafeString(node.value)}</code>`;
+        yield `<code>{${JSON.stringify(node.value)}}</code>`;
         break;
     case 'break':
         yield '<br/>';

@@ -1,6 +1,5 @@
 import {Error, JSON, Promise} from '../es/global';
 import {getTextContent} from '../es/TextContent';
-import {toJsxSafeString} from '../es/toJsxSafeString';
 import {createSerializeMarkdownContext} from '../markdown/createSerializeContext';
 import {finalizeSerializeMarkdownContext} from '../markdown/finalizeSerializeContext';
 import {getMarkdownExcerpt} from '../markdown/getExcerpt';
@@ -33,8 +32,8 @@ export const loadMarkdownPage = async (
 export default function MarkdownPage() {
     return <>
         <PageHead
-            title="${toJsxSafeString(title)}"
-            description="${toJsxSafeString(excerpt)}"
+            title={${JSON.stringify(title)}}
+            description={${JSON.stringify(excerpt)}}
             pathname="${pathname}"
         />
         <main>

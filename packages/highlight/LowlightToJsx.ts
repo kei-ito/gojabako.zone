@@ -2,6 +2,7 @@ import type {LowlightRoot, LowlightElementSpan, Text} from 'lowlight/lib/core';
 import {readline} from '../node/readline';
 import {createUnsupportedTypeError} from '../es/createUnsupportedTypeError';
 import {serializeAttributes} from '../html/Attributes';
+import {JSON} from '../es/global';
 import {toJsxSafeString} from '../es/toJsxSafeString';
 
 type LowlightNode = LowlightElementSpan | LowlightRoot | Text;
@@ -40,6 +41,7 @@ const serializeLineEnd = function* (
     }
 };
 
+// eslint-disable-next-line max-lines-per-function
 const serialize = function* (
     node: LowlightNode,
     ancestors: Array<Ancestor>,
@@ -52,7 +54,7 @@ const serialize = function* (
                 yield* serializeLineEnd(ancestors);
                 yield* serializeLineStart(ancestors);
             }
-            yield toJsxSafeString(line);
+            yield* serializeLine(line);
         }
         break;
     }
@@ -84,6 +86,19 @@ const serialize = function* (
     }
     default:
         throw createUnsupportedTypeError(node);
+    }
+};
+
+const serializeLine = function* (line: string) {
+    const [leadingSpaces] = (/^\s+/).exec(line) || [''];
+    if (leadingSpaces) {
+        yield `{${JSON.stringify(leadingSpaces)}}`;
+    }
+    const [trailingSpaces] = (/\s+$/).exec(line.slice(leadingSpaces.length)) || [''];
+    yield toJsxSafeString(line.slice(leadingSpaces.length, line.length - trailingSpaces.length));
+    yield trailingSpaces;
+    if (trailingSpaces) {
+        yield `{${JSON.stringify(trailingSpaces)}}`;
     }
 };
 

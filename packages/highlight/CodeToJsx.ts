@@ -2,7 +2,10 @@
 import {lowlight} from 'lowlight/lib/all.js';
 import {serializeLowlightToJsx} from './LowlightToJsx';
 
-export const serializeCodeToJsx = function* (language: string | null | undefined, source: string) {
+export const serializeCodeToJsx = function* (
+    language: string | null | undefined,
+    source: string,
+) {
     if (language) {
         yield* serializeLowlightToJsx(lowlight.highlight(language, source));
     } else {
