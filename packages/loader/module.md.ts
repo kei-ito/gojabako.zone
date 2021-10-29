@@ -1,7 +1,7 @@
 import {Promise} from '../es/global';
 import {createSerializeMarkdownContext} from '../markdown/createSerializeContext';
 import {finalizeSerializeMarkdownContext} from '../markdown/finalizeSerializeContext';
-import {serializeMarkdownRootToJsx} from '../markdown/serializeToJsx';
+import {serializeMarkdownRootToJsx} from '../markdown/serializeMarkdownToJsx';
 import type {LoaderThis} from './type';
 
 export const loadMarkdownModule = async (

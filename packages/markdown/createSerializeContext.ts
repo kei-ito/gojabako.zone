@@ -7,7 +7,7 @@ import {gfm} from 'micromark-extension-gfm';
 import {createCounter} from '../es/createCounter';
 import {Map, Set} from '../es/global';
 import {removeHtmlComments} from '../es/removeHtmlComments';
-import type {MarkdownContent, SerializeMarkdownContext} from './serializeToJsx';
+import type {MarkdownContent, SerializeMarkdownContext} from './serializeMarkdownToJsx';
 import {walkMarkdownContentNodes} from './walkContentNodes';
 
 export const createSerializeMarkdownContext = (): SerializeMarkdownContext => {

@@ -1,5 +1,5 @@
-import type {SerializeMarkdownContext} from './serializeToJsx';
-import {serializeFootnotes} from './serializeToJsx';
+import type {SerializeMarkdownContext} from './serializeMarkdownToJsx';
+import {serializeFootnotes} from './serializeMarkdownToJsx';
 import {getCompoentPath} from '../fs/getComponentPath';
 
 export const finalizeSerializeMarkdownContext = (

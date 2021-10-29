@@ -1,5 +1,5 @@
 import {createSerializeMarkdownContext} from './createSerializeContext';
-import {serializeMarkdownToJsx, serializeMarkdownRootToJsx, serializeFootnotes} from './serializeToJsx';
+import {serializeMarkdownToJsx, serializeMarkdownRootToJsx, serializeFootnotes} from './serializeMarkdownToJsx';
 
 describe(serializeMarkdownToJsx.name, () => {
     it('heading', () => {

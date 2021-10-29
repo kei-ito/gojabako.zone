@@ -4,7 +4,7 @@ import {toJsxSafeString} from '../es/toJsxSafeString';
 import {createSerializeMarkdownContext} from '../markdown/createSerializeContext';
 import {finalizeSerializeMarkdownContext} from '../markdown/finalizeSerializeContext';
 import {getMarkdownExcerpt} from '../markdown/getExcerpt';
-import {serializeMarkdownRootToJsx} from '../markdown/serializeToJsx';
+import {serializeMarkdownRootToJsx} from '../markdown/serializeMarkdownToJsx';
 import {getPagePathName} from '../node/getPagePathName';
 import type {LoaderThis} from './type';
 
