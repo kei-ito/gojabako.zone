@@ -15,6 +15,7 @@ import {toJsxSafeString} from '../es/toJsxSafeString';
 type FilterContent<C extends Markdown.Content, T extends Markdown.Content['type']> = C extends {type: T} ? C : never;
 export type MarkdownContent<T extends Markdown.Content['type']> = FilterContent<Markdown.Content, T>;
 export interface SerializeMarkdownContext {
+    getId: (namespace: string) => number,
     parseMarkdown: (source: string) => Markdown.Root,
     nodeListOf: <T extends Markdown.Content['type']>(type: T) => Array<MarkdownContent<T>>,
     findDefinition: (id: string) => Markdown.Definition | null,
@@ -108,8 +109,8 @@ const serialize = function* (
         yield '</li>';
         break;
     case 'table': {
-        yield '<figure>';
-        yield '<table>';
+        yield `<figure id="figure-${context.getId('figure')}">`;
+        yield `<table id="table-${context.getId('table')}">`;
         const aligns = node.align || [];
         const [first, ...rows] = node.children;
         yield '<thead>';
@@ -150,7 +151,7 @@ const serialize = function* (
             }
             yield code;
         } else {
-            yield `<figure data-lang="${node.lang || ''}">`;
+            yield `<figure id="figure-${context.getId('figure')}" data-lang="${node.lang || ''}">`;
             if (node.meta) {
                 const {children: [caption]} = context.parseMarkdown(node.meta);
                 if ('children' in caption) {
@@ -158,8 +159,13 @@ const serialize = function* (
                 }
             }
             switch (node.lang) {
-            case 'katex':
-                yield* serializeTeXToJsx(node.value);
+            case 'math':
+                yield* serializeTeXToJsx(node.value, {displayMode: true});
+                yield '<span className="katex-source">';
+                yield '```math<br/>';
+                yield toJsxSafeString(node.value);
+                yield '<br/>```';
+                yield '</span>';
                 break;
             default:
                 yield* serializeCodeToJsx(node.lang, node.value);
@@ -172,11 +178,17 @@ const serialize = function* (
     case 'definition':
         break;
     case 'text':
-        for (const matched of executeRegExp(node.value, /\$([^$]+)\$/g)) {
+        for (const matched of executeRegExp(node.value, /\${2}([^$]+)\${2}/g)) {
             if (typeof matched === 'string') {
                 yield toJsxSafeString(matched);
             } else {
-                yield* serializeTeXToJsx(matched[1]);
+                yield '<span className="katex-inline">';
+                const source = matched[1];
+                yield* serializeTeXToJsx(source, {displayMode: false});
+                yield '<span className="katex-source">$$';
+                yield toJsxSafeString(source);
+                yield '$$</span>';
+                yield '</span>';
             }
         }
         break;
@@ -201,13 +213,13 @@ const serialize = function* (
     case 'image': {
         const isNotInLink = ancestors.every(({type}) => type !== 'link' && type !== 'linkReference');
         if (isNotInLink) {
-            yield '<figure>';
+            yield `<figure id="figure-${context.getId('figure')}">`;
             if (node.alt) {
                 yield `<figcaption>${node.alt}</figcaption>`;
             }
         }
         const localName = generateImageLocalName(context, node);
-        yield `<Image src={${localName}} alt="${node.alt}" placeholder="blur"/>`;
+        yield `<Image id="image-${context.getId('image')}" src={${localName}} alt="${node.alt}" placeholder="blur"/>`;
         if (isNotInLink) {
             yield '</figure>';
         }

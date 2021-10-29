@@ -43,7 +43,7 @@ export default function MarkdownPage() {
                     ${titleJsx}
                     <PageDate pathname="${pathname}"/>
                 </header>
-                ${body.replace(/(<\w+)/g, '\n$1')}
+                ${body}
                 ${foot}
             </article>
         </main>

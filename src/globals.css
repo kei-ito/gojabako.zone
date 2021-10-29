@@ -21,7 +21,7 @@
     -webkit-text-size-adjust: none;
 }
 :root {
-    --baseWidth: 630px;
+    --baseWidth: 627px;
     --baseGap: 1rem;
     --mainColor: #c4c07e;
     --textColor: #4f4310;
@@ -324,20 +324,52 @@ blockquote {
 .raw-hljs-addition{color:#22863a;background-color:#f0fff4}
 .raw-hljs-deletion{color:#b31d28;background-color:#ffeef0}
 
-figure[data-lang=katex] {
+figure[data-lang=math] {
+    justify-items: center;
+    inline-size: 100%;
     overflow: visible;
 }
-.raw-katex {
-    justify-self: center;
+figure[data-lang=math]>figcaption {
+    inline-size: var(--baseWidth);
 }
-p>.raw-katex {
+figure[data-lang=math]>.raw-katex {
+    overflow-x: auto;
+    padding-block-start: 0.25em;
+    padding-block-end: 0.25em;
+    padding-inline-start: 0.5em;
+    padding-inline-end: 0.5em;
+}
+.raw-katex {
+    max-inline-size: 100%;
+    justify-self: center;
+    margin: 0;
+    user-select: none;
+    white-space: nowrap;
+}
+.raw-katex-inline {
+    display: inline-flex;
     margin-inline-start: 0.2rem;
     margin-inline-end: 0.2rem;
 }
+.raw-katex-source {
+    position: absolute;
+    inset-block-start: 1rem;
+    block-size: 1px;
+    inline-size: 1px;
+    white-space: pre-wrap;
+    opacity: 0;
+    overflow: hidden;
+}
+.raw-katex-inline>.raw-katex-source {
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    block-size: 100%;
+    inline-size: 100%;
+}
 
-@media (max-width: 700px) {
+@media (max-width: 667px) {
     :root {
-        --baseWidth: 90%;
+        --baseWidth: 94%;
     }
 }
 @media (max-width: 600px) {

@@ -4,17 +4,25 @@ import {fromMarkdown} from 'mdast-util-from-markdown';
 import {gfmFromMarkdown} from 'mdast-util-gfm';
 import {footnote} from 'micromark-extension-footnote';
 import {gfm} from 'micromark-extension-gfm';
-import type {MarkdownContent, SerializeMarkdownContext} from './serializeToJsx';
-import {removeHtmlComments} from '../es/removeHtmlComments';
-import {walkMarkdownContentNodes} from './walkContentNodes';
+import {createCounter} from '../es/createCounter';
 import {Map, Set} from '../es/global';
+import {removeHtmlComments} from '../es/removeHtmlComments';
+import type {MarkdownContent, SerializeMarkdownContext} from './serializeToJsx';
+import {walkMarkdownContentNodes} from './walkContentNodes';
 
 export const createSerializeMarkdownContext = (): SerializeMarkdownContext => {
     const nodes = new Map<Markdown.Content['type'], Array<Markdown.Content> | undefined>();
-    const nodeListOf = <T extends Markdown.Content['type']>(type: T): Array<MarkdownContent<T>> => {
-        return (nodes.get(type) || []).slice() as Array<MarkdownContent<T>>;
-    };
+    const nodeListOf = <T extends Markdown.Content['type']>(type: T) => (nodes.get(type) || []).slice() as Array<MarkdownContent<T>>;
+    const counters = new Map<string, () => number>();
     return {
+        getId: (namespace: string): number => {
+            let counter = counters.get(namespace);
+            if (!counter) {
+                counter = createCounter();
+                counters.set(namespace, counter);
+            }
+            return counter();
+        },
         parseMarkdown: (source: string) => {
             const root = fromMarkdown(removeHtmlComments(source), {
                 extensions: [gfm(), footnote()],

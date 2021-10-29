@@ -11,7 +11,7 @@ export const getPagePathName = (fileAbsolutePath: string): string | null => {
     if (!normalizedFileAbsolutePath.startsWith(pagesDirectoryPath)) {
         throw new Error(`The page file isn't in the pages directory: ${normalizedFileAbsolutePath}`);
     }
-    let pathname = path.relative(pagesDirectoryPath, normalizedFileAbsolutePath);
+    let pathname = ['', ...path.relative(pagesDirectoryPath, normalizedFileAbsolutePath).split(path.sep)].join('/');
     if (pathname.endsWith('.page.md')) {
         pathname = pathname.slice(0, -8);
     } else {

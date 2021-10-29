@@ -1,19 +1,42 @@
 Markdownテストページ
 =================
 
-ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。ここはmarkdownの表示テストのページです。
+ここはmarkdownの表示テストのページです。
+*強調*と**太字**と~~打ち消し線~~と[リンク](https://example.com)。
+~~打ち消しと*強調*~~ **太字と~~打ち消し線~~** [リンクと**太字**](https://example.com)。
 
-Headings
+Autolink literals
 -----------------
 
-これはh2の見出し
+www.example.com, https://example.com, and contact@example.com.
+
+HTML
+----
+
+<ruby>明日<rp>(</rp><rt>あした</rt><rp>)</rp></ruby>の話
+
+include TSX
+-----------
+
+```jsx (include)
+import {Counter} from '../components/Counter';
+/****************/
+<Counter/>
+```
+
+H2 Headings
 -----------------
 
-これはh2の見出しの次の本文です。Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+これはH2の見出し
+-----------------
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
 ### これはh3の見出し
 
-これはh3の見出しの次の本文です。Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
 Footnote
 --------
@@ -48,18 +71,6 @@ const fOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO = 'baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 const foo = 'bar';
 ```
 
-Decoration
-----------
-
-*強調*と**太字**と~~打ち消し線~~と[リンク](https://example.com)。
-
-~~打ち消しと*強調*~~ **太字と~~打ち消し線~~** [リンクと**太字**](https://example.com)。
-
-Autolink literals
------------------
-
-www.example.com, https://example.com, and contact@example.com.
-
 Table
 -----
 
@@ -86,6 +97,45 @@ Checkbox
 
 1. [ ] Item5
 1. [x] Item6
+
+TeX
+---
+
+```math Fourier変換
+F(w) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty}dx f(x) e^{-iwx}
+```
+
+```math
+y=
+\omega^{k}\sqrt[3]{
+    -{\frac{q}{2}}
+    +\sqrt{
+        \left(\frac{q}{2}\right)^{2}
+        +\left(\frac{p}{3}\right)^{3}
+    }
+}
++\omega^{3-k}\sqrt[3]{
+    -\frac{q}{2}
+    -\sqrt{
+        \left(\frac{q}{2}\right)^{2}
+        +\left(\frac{p}{3}\right)^{3}
+    }
+}
+\ \ (k=0,1,2)
+```
+
+```markdown markdownソース
+```math
+F(w) = \dfrac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty}dx f(x) e^{-iwx}
+```
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+文章中にも$$f(x)$$や$$\frac{1}{\sqrt{2\pi}}$$のように出せます。文章中にも$$f(x)$$や$$\frac{1}{\sqrt{2\pi}}$$のように出せます。
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+```markdown markdownソース
+文章中にも$$f(x)$$や$$\frac{1}{\sqrt{2\pi}}$$のように出せます。
+```
 
 Blockquote
 ----------
@@ -116,20 +166,6 @@ List
     1. そんなえらい人が月給四十円で遥々こんな田舎へくるもんか。人間は大概似たもんだ。腹が立てば喧嘩の一つぐらいは誰でもするだろうと思ってたが、この様子じゃめったに口も聞けない、散歩も出来ない。
 1. Item4
 
-HTML
-----
-
-<ruby>明日<rp>(</rp><rt>あした</rt><rp>)</rp></ruby>の話
-
-include TSX
------------
-
-```jsx (include)
-import {Counter} from '../components/Counter';
-/****************/
-<Counter/>
-```
-
 YouTube
 -------
 
@@ -143,20 +179,3 @@ Twitter
 ```twitter
 <blockquote class="twitter-tweet"><p lang="ja" dir="ltr"><a href="https://t.co/l8969kKyb8">https://t.co/l8969kKyb8</a><br>天保十五甲辰新暦には「九時」がある。「くじ」って読んだのかな？<br>橋本万平著「日本の時刻制度 増補版」によるとこの「時」はいまの「時」とは違うけど、「時」一文字を単位に使う例としては今のところ最古 <a href="https://t.co/jGeg003vm8">pic.twitter.com/jGeg003vm8</a></p>&mdash; Kei Ito (@gjbkz) <a href="https://twitter.com/gjbkz/status/1330431107540471808?ref_src=twsrc%5Etfw">November 22, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 ```
-
-TeX
----
-
-```latex
-F(w) = \dfrac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty}dx f(x) e^{-iwx}
-```
-
-```katex Fourier変換
-F(w) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty}dx f(x) e^{-iwx}
-```
-
-```latex
-文章中にも$f(x)$や$x$のように出せます。
-```
-
-文章中にも$f(x)$や$x$のように出せます。
