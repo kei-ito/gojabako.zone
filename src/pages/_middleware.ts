@@ -8,9 +8,12 @@ import {pageListByPublishedAt, pageListByUpdatedAt} from '../pageList';
 export const middleware = (req: NextRequest) => {
     const {pathname} = req.nextUrl;
     switch (pathname) {
-    case '/sitemap.xml': return respondSitemap();
-    case '/feed.atom': return respondFeed();
-    default: return undefined;
+    case '/sitemap.xml':
+        return respondSitemap();
+    case '/feed.atom':
+        return respondFeed();
+    default:
+        return undefined;
     }
 };
 
