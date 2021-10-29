@@ -33,14 +33,19 @@ content-typeのわがままは要件であるとします。`/pages/api`とrewri
 ```typescript [_middleware.ts](https://github.com/kei-ito/gojabako.zone/blob/b6916051706c2cf23b99986b35d98d4654d4114f/src/pages/_middleware.ts)
 import {NextResponse} from 'next/server';
 import type {NextRequest} from 'next/server';
+
 export const middleware = (req: NextRequest) => {
     const {pathname} = req.nextUrl;
     switch (pathname) {
-    case '/sitemap.xml': return respondSitemap();
-    case '/feed.atom': return respondFeed();
-    default: return undefined;
+    case '/sitemap.xml':
+        return respondSitemap();
+    case '/feed.atom':
+        return respondFeed();
+    default:
+        return undefined;
     }
 };
+
 const respondSitemap = () => new NextResponse(
     [...serializeSitemap()].join('\n'),
     {
@@ -50,6 +55,7 @@ const respondSitemap = () => new NextResponse(
         },
     },
 );
+
 const respondFeed = () => new NextResponse(
     [...serializeFeed()].join('\n'),
     {
@@ -62,3 +68,5 @@ const respondFeed = () => new NextResponse(
 ```
 
 これで`/pages/api`とrewriteの設定は不要になりました。
+
+静的レスポンスなのでmiddlewareを活用している感じは薄いですが、例えばJWTの検証を挟むにはちょうどいいですね。
