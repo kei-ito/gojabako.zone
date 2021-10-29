@@ -8,24 +8,21 @@ import {pageListByPublishedAt, pageListByUpdatedAt} from '../pageList';
 export const middleware = (req: NextRequest) => {
     const {pathname} = req.nextUrl;
     switch (pathname) {
-    case '/sitemap.xml':
-        return new NextResponse([...serializeSitemap()].join('\n'), {
-            headers: {
-                'content-type': 'application/xml; charset=utf-8',
-                'cache-control': 'public, max-age=3600',
-            },
-        });
-    case '/feed.atom':
-        return new NextResponse([...serializeFeed()].join('\n'), {
-            headers: {
-                'content-type': 'application/atom+xml; charset=utf-8',
-                'cache-control': 'public, max-age=3600',
-            },
-        });
-    default:
-        return undefined;
+    case '/sitemap.xml': return respondSitemap();
+    case '/feed.atom': return respondFeed();
+    default: return undefined;
     }
 };
+
+const respondSitemap = () => new NextResponse(
+    [...serializeSitemap()].join('\n'),
+    {
+        headers: {
+            'content-type': 'application/xml; charset=utf-8',
+            'cache-control': 'public, max-age=3600',
+        },
+    },
+);
 
 const serializeSitemap = function* () {
     yield '<?xml version="1.0" encoding="UTF-8"?>';
@@ -39,6 +36,16 @@ const serializeSitemap = function* () {
     }
     yield '</urlset>';
 };
+
+const respondFeed = () => new NextResponse(
+    [...serializeFeed()].join('\n'),
+    {
+        headers: {
+            'content-type': 'application/atom+xml; charset=utf-8',
+            'cache-control': 'public, max-age=3600',
+        },
+    },
+);
 
 const serializeFeed = function* () {
     yield '<?xml version="1.0" encoding="utf-8"?>';
