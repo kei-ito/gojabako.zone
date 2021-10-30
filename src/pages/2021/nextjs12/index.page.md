@@ -1,6 +1,6 @@
 # Next.js 12にしました
 
-ファイル構造を修正してたら[Next.js 12]が出たので導入しました。`npm` `i` `next@latest`で更新しました。問題なく動作しました。これだけだとつまらないので以下は追加でやったことの記録です。
+ファイル構造を修正してたら[Next.js 12]が出たので導入しました。更新自体は`npm` `i` `next@latest`だけで問題なく動作しました。以下は追加でやったことの記録です。
 
 [Next.js 12]: https://nextjs.org/blog/next-12
 
@@ -28,7 +28,7 @@ ES Modulesで書けるようになったとのことでnext.config.jsをnext.con
 
 ### middlewareの実装
 
-content-typeのわがままは要件であるとします。`/pages/api`とrewriteを使うのは余計な迂回をしている感じで具合が悪かったのでここをmiddlewareで解消することにしました。
+content-typeのわがままは要件であるとします。`/pages/api`とrewriteを使うのは迂回をしている感じで具合が悪かったのでここをmiddlewareで解消することにしました。
 
 ```typescript [_middleware.ts](https://github.com/kei-ito/gojabako.zone/blob/b6916051706c2cf23b99986b35d98d4654d4114f/src/pages/_middleware.ts)
 import {NextResponse} from 'next/server';
@@ -69,4 +69,4 @@ const respondFeed = () => new NextResponse(
 
 これで`/pages/api`とrewriteの設定は不要になりました。
 
-静的レスポンスなのでmiddlewareを活用している感じは薄いですが、例えばJWTの検証を挟むにはちょうどいいですね。
+コンテンツが静的なのでmiddlewareを活用している感じは薄いですが、例えばJWTの検証を挟むにはちょうどいいですね。
