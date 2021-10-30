@@ -10,7 +10,7 @@ export interface PageData {
     commitCount: number,
 }
 export const pageListByPublishedAt: Array<PageData> = JSON.parse(`[
-{"pathname":"/2021/nextjs12/","title":"Next.js 12にしました","filePath":"src/pages/2021/nextjs12/index.page.md","publishedAt":"2021-10-29T22:24:14+09:00","updatedAt":"2021-10-29T22:24:14+09:00","commitCount":1},
+{"pathname":"/2021/nextjs12/","title":"Next.js 12にしました","filePath":"src/pages/2021/nextjs12/index.page.md","publishedAt":"2021-10-29T22:24:14+09:00","updatedAt":"2021-10-30T17:15:10+09:00","commitCount":3},
 {"pathname":"/2021/nextjs-https/","title":"Next.jsの開発環境をHTTPSにしました","filePath":"src/pages/2021/nextjs-https/index.page.md","publishedAt":"2021-10-11T00:26:45+09:00","updatedAt":"2021-10-11T19:35:39+09:00","commitCount":3},
 {"pathname":"/2021/nextjs/","title":"サイトをNext.js + Vercelに移行しました","filePath":"src/pages/2021/nextjs/index.page.md","publishedAt":"2021-10-05T23:51:46+09:00","updatedAt":"2021-10-11T22:24:21+09:00","commitCount":9},
 {"pathname":"/markdown","title":"Markdownテストページ","filePath":"src/pages/markdown.page.md","publishedAt":"2021-09-30T00:39:26+09:00","updatedAt":"2021-10-29T19:41:47+09:00","commitCount":17},
