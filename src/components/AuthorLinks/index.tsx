@@ -8,9 +8,9 @@ export const AuthorLinks = () => <>
         <HiddenText>Twitter:</HiddenText>
         <span>gjbkz</span>
     </a>
-    <a className={className.link} href="https://github.com/kei-ito">
+    <a className={className.link} href="https://github.com/gjbkz">
         <IconGitHub/>
         <HiddenText>GitHub:</HiddenText>
-        <span>kei-ito</span>
+        <span>gjbkz</span>
     </a>
 </>;

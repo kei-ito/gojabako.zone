@@ -1,7 +1,7 @@
 ## できる
 
 - [React], [Redux], [Redux-Saga], [Next.js]
-- TypeScript, JavaScript, CSS, SVG（[参考](https://github.com/kei-ito/gojabako.zone/)）
+- TypeScript, JavaScript, CSS, SVG（[参考](https://github.com/gjbkz/gojabako.zone/)）
 - AST操作などのツール開発（[acorn], [postcss]）
 - AWS ([aws-cdk])
 

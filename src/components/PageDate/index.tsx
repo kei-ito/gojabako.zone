@@ -9,7 +9,7 @@ export interface PageDateProps {
 
 export const PageDate = ({pathname, onlyUpdate}: PageDateProps) => {
     const {publishedAt, updatedAt, commitCount, filePath} = getPageData(pathname);
-    const historyUrl = `https://github.com/kei-ito/gojabako.zone/commits/main/${filePath}`;
+    const historyUrl = `https://github.com/gjbkz/gojabako.zone/commits/main/${filePath}`;
     if (onlyUpdate) {
         return <section className={className.container}>
             最終更新&ensp;<DateString date={updatedAt}/>

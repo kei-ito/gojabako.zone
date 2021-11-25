@@ -46,7 +46,7 @@ sudo certbot certonly \
 /etc/letsencrypt/live/localhost.gojabako.zone/privkey.pem
 ```
 
-でもここから読むのはsudoが必要で手間なのでプロジェクトの中にコピーします。秘密鍵はそのままだと読めないのでコピー後に権限をつけます。[.gitignore]で*.pemをコミットしないようにしているので[GitHubではREADMEだけがある](https://github.com/kei-ito/gojabako.zone/tree/main/certificates/localhost.gojabako.zone)状態になっています[^1]。
+でもここから読むのはsudoが必要で手間なのでプロジェクトの中にコピーします。秘密鍵はそのままだと読めないのでコピー後に権限をつけます。[.gitignore]で*.pemをコミットしないようにしているので[GitHubではREADMEだけがある](https://github.com/gjbkz/gojabako.zone/tree/main/certificates/localhost.gojabako.zone)状態になっています[^1]。
 
 ```sh コピーと権限付与のコマンド
 sudo cp /etc/letsencrypt/live/localhost.gojabako.zone certificates
@@ -55,7 +55,7 @@ sudo chmod +r certificates/localhost.gojabako.zone/privkey.pem
 
 [^1]: この用途の証明書を公開したら何かまずいかな？GitHubとか[GitGuardian]の警告が飛んできそうではあります。
 
-[.gitignore]: https://github.com/kei-ito/gojabako.zone/blob/main/.gitignore
+[.gitignore]: https://github.com/gjbkz/gojabako.zone/blob/main/.gitignore
 [GitGuardian]: https://www.gitguardian.com/
 
 ## server.mjsをつくる

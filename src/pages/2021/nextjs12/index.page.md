@@ -24,13 +24,13 @@ ES Modulesで書けるようになったとのことでnext.config.jsをnext.con
 1. `/api/sitemap`でサイトマップを返し`/sitemap.xml`のrewriteをここに向ける
 1. `/api/feed`フィードを返し`/feed.atom`のrewriteをここに向ける
 
-当時の実装：[/next.config.js](https://github.com/kei-ito/gojabako.zone/blob/b5627b700c6c4061577a5ad80852f8183c2b764a/next.config.js#L19-L20), [/src/pages/api](https://github.com/kei-ito/gojabako.zone/tree/b5627b700c6c4061577a5ad80852f8183c2b764a/src/pages/api)
+当時の実装：[/next.config.js](https://github.com/gjbkz/gojabako.zone/blob/b5627b700c6c4061577a5ad80852f8183c2b764a/next.config.js#L19-L20), [/src/pages/api](https://github.com/gjbkz/gojabako.zone/tree/b5627b700c6c4061577a5ad80852f8183c2b764a/src/pages/api)
 
 ### middlewareの実装
 
 content-typeのわがままは要件であるとします。`/pages/api`とrewriteを使うのは迂回をしている感じで具合が悪かったのでここをmiddlewareで解消することにしました。
 
-```typescript [_middleware.ts](https://github.com/kei-ito/gojabako.zone/blob/b6916051706c2cf23b99986b35d98d4654d4114f/src/pages/_middleware.ts)
+```typescript [_middleware.ts](https://github.com/gjbkz/gojabako.zone/blob/b6916051706c2cf23b99986b35d98d4654d4114f/src/pages/_middleware.ts)
 import {NextResponse} from 'next/server';
 import type {NextRequest} from 'next/server';
 
