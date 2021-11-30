@@ -43,7 +43,7 @@
         "@nlib/githooks": "0.1.0",
         "@types/jest": "27.0.2",
         "@types/katex": "0.11.1",
-        "@types/react": "17.0.33",
+        "@types/react": "17.0.37",
         "@typescript-eslint/eslint-plugin": "5.2.0",
         "@typescript-eslint/parser": "5.2.0",
         "esbuild": "0.12.29",
