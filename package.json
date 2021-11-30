@@ -28,7 +28,7 @@
         "katex": "0.13.20",
         "lowlight": "2.4.0",
         "mdast-util-footnote": "1.0.0",
-        "mdast-util-from-markdown": "1.0.4",
+        "mdast-util-from-markdown": "1.2.0",
         "mdast-util-gfm": "2.0.0",
         "micromark-extension-footnote": "1.0.2",
         "micromark-extension-gfm": "2.0.0",
