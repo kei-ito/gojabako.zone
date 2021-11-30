@@ -180,13 +180,13 @@ const serialize = function* (
     case 'text':
         for (const matched of executeRegExp(node.value, /\${2}([^$]+)\${2}/g)) {
             if (typeof matched === 'string') {
-                yield `{${JSON.stringify(matched)}}`;
+                yield toJsxSafeString(matched);
             } else {
                 yield '<span className="katex-inline">';
                 const source = matched[1];
                 yield* serializeTeXToJsx(source, {displayMode: false});
                 yield '<span className="katex-source">$$';
-                yield `{${JSON.stringify(source)}}`;
+                yield toJsxSafeString(source);
                 yield '$$</span>';
                 yield '</span>';
             }
@@ -202,7 +202,7 @@ const serialize = function* (
         yield* serializeElement(context, 's', null, node, nextAncestors);
         break;
     case 'inlineCode':
-        yield `<code>{${JSON.stringify(node.value)}}</code>`;
+        yield `<code>${toJsxSafeString(node.value)}</code>`;
         break;
     case 'break':
         yield '<br/>';

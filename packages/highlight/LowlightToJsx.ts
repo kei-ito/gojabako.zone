@@ -1,11 +1,10 @@
-import type {LowlightRoot, LowlightElementSpan, Text} from 'lowlight/lib/core';
+import type {Root, Span, Text} from 'lowlight/lib/core';
 import {readline} from '../node/readline';
 import {createUnsupportedTypeError} from '../es/createUnsupportedTypeError';
 import {serializeAttributes} from '../html/Attributes';
-import {JSON} from '../es/global';
 import {toJsxSafeString} from '../es/toJsxSafeString';
 
-type LowlightNode = LowlightElementSpan | LowlightRoot | Text;
+type LowlightNode = Root | Span | Text;
 interface Ancestor {
     tagName: string,
     attributes?: Record<string, string>,
@@ -92,13 +91,12 @@ const serialize = function* (
 const serializeLine = function* (line: string) {
     const [leadingSpaces] = (/^\s+/).exec(line) || [''];
     if (leadingSpaces) {
-        yield `{${JSON.stringify(leadingSpaces)}}`;
+        yield toJsxSafeString(leadingSpaces);
     }
     const [trailingSpaces] = (/\s+$/).exec(line.slice(leadingSpaces.length)) || [''];
     yield toJsxSafeString(line.slice(leadingSpaces.length, line.length - trailingSpaces.length));
-    yield trailingSpaces;
     if (trailingSpaces) {
-        yield `{${JSON.stringify(trailingSpaces)}}`;
+        yield toJsxSafeString(trailingSpaces);
     }
 };
 

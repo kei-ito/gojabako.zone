@@ -1,9 +1,9 @@
-import type {LowlightRoot} from 'lowlight/lib/core';
+import type {Root} from 'lowlight/lib/core';
 import {serializeLowlightToJsx} from './LowlightToJsx';
 
 describe(serializeLowlightToJsx.name, () => {
     it('serialize ts', () => {
-        const input: LowlightRoot = {
+        const input: Root = {
             type: 'root',
             data: {language: 'typescript', relevance: 3},
             children: [
@@ -56,7 +56,7 @@ describe(serializeLowlightToJsx.name, () => {
         expect([...serializeLowlightToJsx(input)].join('')).toBe(expected);
     });
     it('serialize multiline text', () => {
-        const input: LowlightRoot = {
+        const input: Root = {
             type: 'root',
             data: {language: 'markdown', relevance: 3},
             children: [
@@ -105,7 +105,7 @@ describe(serializeLowlightToJsx.name, () => {
         expect([...serializeLowlightToJsx(input)].join('')).toBe(expected);
     });
     it('throw at unknown node', () => {
-        const input: LowlightRoot = {
+        const input: Root = {
             type: 'root',
             data: {language: 'typescript', relevance: 3},
             children: [

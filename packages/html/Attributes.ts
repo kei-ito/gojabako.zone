@@ -1,4 +1,5 @@
-import {JSON, Map, Object} from '../es/global';
+import {Map, Object} from '../es/global';
+import {toJsxSafeString} from '../es/toJsxSafeString';
 import {serializeStyle} from './Style';
 
 export type Attributes = Record<string, boolean | string | null | undefined>;
@@ -37,9 +38,7 @@ export const serializeAttributes = function* (
                         yield* serializeStyle(value);
                         yield '}';
                     } else {
-                        yield ` ${attributeName}={`;
-                        yield JSON.stringify(value);
-                        yield '}';
+                        yield ` ${attributeName}="${toJsxSafeString(value)}"`;
                     }
                 }
             }
