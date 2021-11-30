@@ -24,7 +24,7 @@
     },
     "dependencies": {
         "highlight.js": "11.3.1",
-        "htmlparser2": "7.1.2",
+        "htmlparser2": "7.2.0",
         "katex": "0.13.20",
         "lowlight": "2.4.0",
         "mdast-util-footnote": "1.0.0",
