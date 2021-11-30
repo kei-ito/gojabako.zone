@@ -43,7 +43,7 @@ WebDriverを試した後に気が付いたのですが[管理画面]でDeveloper
 {
   "list": [
     {
-      "contractId": "略",
+      "contractId": "K000000000",
       "consignmentDate": "20210924",
       "dailyCost": 407,
       "dailyUsage": 13.9,
@@ -55,7 +55,7 @@ WebDriverを試した後に気が付いたのですが[管理画面]でDeveloper
         "以下略",
 ```
 
-エンドポイントは次のような形式でした。`K000000000`（マスク済み）はおそらくユーザーIDでしょう。
+`K000000000`（マスク済み）はユーザーIDでしょう。エンドポイントは次のような形式でした。
 
 ```
 https://mieru.auone.jp/app/api/v1/dailyPowerReports/K000000000
