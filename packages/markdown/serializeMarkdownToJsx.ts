@@ -214,13 +214,13 @@ const serialize = function* (
         const isNotInLink = ancestors.every(({type}) => type !== 'link' && type !== 'linkReference');
         if (isNotInLink) {
             yield `<figure id="figure-${context.getId('figure')}">`;
-            if (node.alt) {
-                yield `<figcaption>${node.alt}</figcaption>`;
-            }
         }
         const localName = generateImageLocalName(context, node);
         yield `<Image id="image-${context.getId('image')}" src={${localName}} alt="${node.alt}" placeholder="blur"/>`;
         if (isNotInLink) {
+            if (node.alt) {
+                yield `<figcaption>${node.alt}</figcaption>`;
+            }
             yield '</figure>';
         }
         break;
