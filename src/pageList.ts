@@ -10,6 +10,7 @@ export interface PageData {
     commitCount: number,
 }
 export const pageListByPublishedAt: Array<PageData> = JSON.parse(`[
+{"pathname":"/2021/aws-errors/","title":"AWSの開発で見たエラーと原因","filePath":"src/pages/2021/aws-errors/index.page.md","publishedAt":"2021-12-16T15:15:31.637Z","updatedAt":"2021-12-16T15:15:31.637Z","commitCount":0},
 {"pathname":"/2021/ipad-case/","title":"iPad Proケースの製作","filePath":"src/pages/2021/ipad-case/index.page.md","publishedAt":"2021-12-13T22:53:16+09:00","updatedAt":"2021-12-14T01:16:34+09:00","commitCount":2},
 {"pathname":"/2021/au-denki/","title":"auでんきの使用量をCSVにする","filePath":"src/pages/2021/au-denki/index.page.md","publishedAt":"2021-12-01T00:59:21+09:00","updatedAt":"2021-12-01T01:30:59+09:00","commitCount":4},
 {"pathname":"/2021/nextjs12/","title":"Next.js 12にしました","filePath":"src/pages/2021/nextjs12/index.page.md","publishedAt":"2021-10-29T22:24:14+09:00","updatedAt":"2021-11-25T12:56:34+09:00","commitCount":4},
@@ -18,4 +19,4 @@ export const pageListByPublishedAt: Array<PageData> = JSON.parse(`[
 {"pathname":"/markdown","title":"Markdownテストページ","filePath":"src/pages/markdown.page.md","publishedAt":"2021-09-30T00:39:26+09:00","updatedAt":"2021-10-29T19:41:47+09:00","commitCount":17},
 {"pathname":"/","title":"トップページ","filePath":"src/pages/index.tsx","publishedAt":"2021-09-29T00:33:31+09:00","updatedAt":"2021-10-28T22:22:49+09:00","commitCount":15}
 ]`);
-export const pageListByUpdatedAt: Array<PageData> = (JSON.parse("[0,1,2,3,5,6,4]") as Array<number>).map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = (JSON.parse("[0,1,2,3,4,6,7,5]") as Array<number>).map((index) => pageListByPublishedAt[index]);

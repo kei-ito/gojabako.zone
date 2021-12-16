@@ -1,2 +1,4 @@
 #!/bin/sh
+npm run prebuild
+git add .
 npx lint-staged
