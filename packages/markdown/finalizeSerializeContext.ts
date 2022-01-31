@@ -2,10 +2,7 @@ import type {SerializeMarkdownContext} from './serializeMarkdownToJsx';
 import {serializeFootnotes} from './serializeMarkdownToJsx';
 import {getCompoentPath} from '../fs/getComponentPath';
 
-export const finalizeSerializeMarkdownContext = (
-    context: SerializeMarkdownContext,
-    fileAbsolutePath: string,
-) => {
+export const finalizeSerializeMarkdownContext = (context: SerializeMarkdownContext, fileAbsolutePath: string) => {
     const foot = [...serializeFootnotes(context)].join('');
     const head = [...serializeHead(context, fileAbsolutePath)].join('\n');
     return {head, foot};
@@ -25,6 +22,7 @@ const serializeHead = function* (
         yield 'import Image from \'next/image\';';
         for (const [localName, from] of images) {
             yield `import ${localName} from '${from}';`;
+            yield `console.info(${localName});`;
         }
     }
     for (const component of components) {
