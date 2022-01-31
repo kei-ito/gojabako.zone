@@ -166,8 +166,8 @@ describe(serializeMarkdownToJsx.name, () => {
         const expected = [
             '<>',
             '<figure id="figure-1">',
-            '<figcaption>image1</figcaption>',
             '<Image id="image-1" src={image0} alt="image1" placeholder="blur"/>',
+            '<figcaption>image1</figcaption>',
             '</figure>',
             '<p>',
             '<a href="./image2">',
