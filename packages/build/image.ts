@@ -118,8 +118,10 @@ const processImage = async (
     await fs.promises.mkdir(outputDirectoryAbsolutePath, {recursive: true});
     const results: Array<sharp.OutputInfo & {name: string}> = [];
     for await (const [resized, name] of listPatterns(image)) {
-        console.info(`${relativePath}: ${name}`);
+        const startedAt = process.hrtime.bigint();
         const info = await resized.toFile(path.join(outputDirectoryAbsolutePath, name));
+        const elapsed = process.hrtime.bigint() - startedAt;
+        console.info(`${relativePath}: ${name} (${elapsed}ns)`);
         results.push({...info, name});
     }
     const processResult: ProcessResult = {
