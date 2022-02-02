@@ -1,5 +1,5 @@
 import type {Root, Span, Text} from 'lowlight/lib/core';
-import {readline} from '../node/readline';
+import {readline} from '../es/readline';
 import {createUnsupportedTypeError} from '../es/createUnsupportedTypeError';
 import {serializeAttributes} from '../html/Attributes';
 import {toJsxSafeString} from '../es/toJsxSafeString';

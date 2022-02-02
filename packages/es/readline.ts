@@ -1,4 +1,4 @@
-import {executeRegExp} from '../es/executeRegExp';
+import {executeRegExp} from './executeRegExp';
 
 export const readline = function* (
     input: string,

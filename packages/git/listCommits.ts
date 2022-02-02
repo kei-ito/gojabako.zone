@@ -1,5 +1,5 @@
 import {Error} from '../es/global';
-import {readline} from '../node/readline';
+import {readline} from '../es/readline';
 import {spawn} from '../node/spawn';
 
 /**
