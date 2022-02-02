@@ -1,8 +1,10 @@
 import * as path from 'path';
-import {console} from '../es/global';
+import {console, Promise} from '../es/global';
 import {rootDirectoryPath} from '../fs/constants';
 import {listFiles} from '../node/listFiles';
 import {runScript} from '../node/runScript';
+import type {SpawnResult} from '../node/spawn';
+import {spawn} from '../node/spawn';
 
 const isImageFile = (filePath: string) => {
     switch (path.extname(filePath)) {
@@ -19,8 +21,15 @@ const isImageFile = (filePath: string) => {
 
 runScript(async () => {
     const srcDirectoryPath = path.join(rootDirectoryPath, 'src');
-    for await (const absolutePath of listFiles(srcDirectoryPath, isImageFile)) {
-        const relativePath = path.relative(srcDirectoryPath, absolutePath);
-        console.info(`Image: ${relativePath}`);
+    const publicImageDirectoryPath = path.join(rootDirectoryPath, 'public', 'images');
+    const workerScriptPath = path.join(rootDirectoryPath, '.output', 'build', 'image.mjs');
+    const workers: Array<Promise<SpawnResult>> = [];
+    for await (const sourceFileAbsolutePath of listFiles(srcDirectoryPath, isImageFile)) {
+        const relativePath = path.relative(srcDirectoryPath, sourceFileAbsolutePath);
+        const outputDirectoryAbsolutePath = path.join(publicImageDirectoryPath, relativePath);
+        const command = ['node', workerScriptPath, sourceFileAbsolutePath, outputDirectoryAbsolutePath].join(' ');
+        workers.push(spawn(command));
     }
+    await Promise.all(workers);
+    console.info(`${workers.length} images are ready`);
 });

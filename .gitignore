@@ -42,3 +42,4 @@ yarn-error.log*
 tsconfig.tsbuildinfo
 
 next-env.d.ts
+/public/images
