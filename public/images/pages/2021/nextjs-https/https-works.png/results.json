@@ -1,0 +1,223 @@
+{
+    "hash": "Gofbw1w34wR9ojSlq5fFbD3A0hSSdINqOz4trZTyk6s",
+    "version": "2022-02-03",
+    "relativePath": "pages/2021/nextjs-https/https-works.png",
+    "results": [
+        {
+            "format": "webp",
+            "width": 300,
+            "height": 207,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 5828,
+            "name": "300w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 300,
+            "height": 207,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 2918,
+            "name": "300w.avif"
+        },
+        {
+            "format": "png",
+            "width": 300,
+            "height": 207,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 35896,
+            "name": "300w.png"
+        },
+        {
+            "format": "webp",
+            "width": 400,
+            "height": 276,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 9402,
+            "name": "400w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 400,
+            "height": 276,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 4226,
+            "name": "400w.avif"
+        },
+        {
+            "format": "png",
+            "width": 400,
+            "height": 276,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 59060,
+            "name": "400w.png"
+        },
+        {
+            "format": "webp",
+            "width": 500,
+            "height": 345,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 13124,
+            "name": "500w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 500,
+            "height": 345,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 5673,
+            "name": "500w.avif"
+        },
+        {
+            "format": "png",
+            "width": 500,
+            "height": 345,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 82718,
+            "name": "500w.png"
+        },
+        {
+            "format": "webp",
+            "width": 600,
+            "height": 414,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 18338,
+            "name": "600w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 600,
+            "height": 414,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 7371,
+            "name": "600w.avif"
+        },
+        {
+            "format": "png",
+            "width": 600,
+            "height": 414,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 117124,
+            "name": "600w.png"
+        },
+        {
+            "format": "webp",
+            "width": 800,
+            "height": 552,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 33116,
+            "name": "800w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 800,
+            "height": 552,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 10098,
+            "name": "800w.avif"
+        },
+        {
+            "format": "png",
+            "width": 800,
+            "height": 552,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 223880,
+            "name": "800w.png"
+        },
+        {
+            "format": "webp",
+            "width": 1000,
+            "height": 690,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 56154,
+            "name": "1000w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 1000,
+            "height": 690,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 13212,
+            "name": "1000w.avif"
+        },
+        {
+            "format": "png",
+            "width": 1000,
+            "height": 690,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 389100,
+            "name": "1000w.png"
+        },
+        {
+            "format": "webp",
+            "width": 1200,
+            "height": 828,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 80368,
+            "name": "1200w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 1200,
+            "height": 828,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 15856,
+            "name": "1200w.avif"
+        },
+        {
+            "format": "png",
+            "width": 1200,
+            "height": 828,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 596621,
+            "name": "1200w.png"
+        },
+        {
+            "format": "webp",
+            "width": 1500,
+            "height": 1035,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 135126,
+            "name": "1500w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 1500,
+            "height": 1035,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 19974,
+            "name": "1500w.avif"
+        },
+        {
+            "format": "png",
+            "width": 1500,
+            "height": 1035,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 1024551,
+            "name": "1500w.png"
+        }
+    ]
+}

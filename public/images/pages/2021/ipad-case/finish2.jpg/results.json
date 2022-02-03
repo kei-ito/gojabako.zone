@@ -1,0 +1,250 @@
+{
+    "hash": "LPqypqUrgPvxLAnMT4YkOPnqIeK10qpnVr_xi9AfRng",
+    "version": "2022-02-03",
+    "relativePath": "pages/2021/ipad-case/finish2.jpg",
+    "results": [
+        {
+            "format": "webp",
+            "width": 300,
+            "height": 169,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 8226,
+            "name": "300w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 300,
+            "height": 169,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 3455,
+            "name": "300w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 300,
+            "height": 169,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 11433,
+            "name": "300w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 400,
+            "height": 225,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 13904,
+            "name": "400w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 400,
+            "height": 225,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 5306,
+            "name": "400w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 400,
+            "height": 225,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 18844,
+            "name": "400w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 500,
+            "height": 281,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 21908,
+            "name": "500w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 500,
+            "height": 281,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 8015,
+            "name": "500w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 500,
+            "height": 281,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 28714,
+            "name": "500w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 600,
+            "height": 337,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 32940,
+            "name": "600w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 600,
+            "height": 337,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 12345,
+            "name": "600w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 600,
+            "height": 337,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 41622,
+            "name": "600w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 800,
+            "height": 450,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 64560,
+            "name": "800w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 800,
+            "height": 450,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 25199,
+            "name": "800w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 800,
+            "height": 450,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 75882,
+            "name": "800w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 1000,
+            "height": 562,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 104586,
+            "name": "1000w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 1000,
+            "height": 562,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 43309,
+            "name": "1000w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 1000,
+            "height": 562,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 119795,
+            "name": "1000w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 1200,
+            "height": 675,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 161580,
+            "name": "1200w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 1200,
+            "height": 675,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 72427,
+            "name": "1200w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 1200,
+            "height": 675,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 179176,
+            "name": "1200w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 1500,
+            "height": 843,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 240250,
+            "name": "1500w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 1500,
+            "height": 843,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 108977,
+            "name": "1500w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 1500,
+            "height": 843,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 270491,
+            "name": "1500w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 1800,
+            "height": 1012,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 317448,
+            "name": "1800w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 1800,
+            "height": 1012,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 144092,
+            "name": "1800w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 1800,
+            "height": 1012,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 373421,
+            "name": "1800w.jpg"
+        }
+    ]
+}

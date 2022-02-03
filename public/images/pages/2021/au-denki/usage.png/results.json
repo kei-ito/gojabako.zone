@@ -1,0 +1,142 @@
+{
+    "hash": "4gea7W7iv1j7joeYZSY8cWICc9SVbEfV6gduJfl14J0",
+    "version": "2022-02-03",
+    "relativePath": "pages/2021/au-denki/usage.png",
+    "results": [
+        {
+            "format": "webp",
+            "width": 300,
+            "height": 375,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 19316,
+            "name": "300w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 300,
+            "height": 375,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 9701,
+            "name": "300w.avif"
+        },
+        {
+            "format": "png",
+            "width": 300,
+            "height": 375,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 171000,
+            "name": "300w.png"
+        },
+        {
+            "format": "webp",
+            "width": 400,
+            "height": 500,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 32266,
+            "name": "400w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 400,
+            "height": 500,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 15904,
+            "name": "400w.avif"
+        },
+        {
+            "format": "png",
+            "width": 400,
+            "height": 500,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 264149,
+            "name": "400w.png"
+        },
+        {
+            "format": "webp",
+            "width": 500,
+            "height": 625,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 46580,
+            "name": "500w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 500,
+            "height": 625,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 23500,
+            "name": "500w.avif"
+        },
+        {
+            "format": "png",
+            "width": 500,
+            "height": 625,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 439564,
+            "name": "500w.png"
+        },
+        {
+            "format": "webp",
+            "width": 600,
+            "height": 750,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 72430,
+            "name": "600w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 600,
+            "height": 750,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 38643,
+            "name": "600w.avif"
+        },
+        {
+            "format": "png",
+            "width": 600,
+            "height": 750,
+            "channels": 4,
+            "premultiplied": true,
+            "size": 604894,
+            "name": "600w.png"
+        },
+        {
+            "format": "webp",
+            "width": 800,
+            "height": 1000,
+            "channels": 4,
+            "premultiplied": false,
+            "size": 167500,
+            "name": "800w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 800,
+            "height": 1000,
+            "channels": 4,
+            "premultiplied": false,
+            "size": 90053,
+            "name": "800w.avif"
+        },
+        {
+            "format": "png",
+            "width": 800,
+            "height": 1000,
+            "channels": 4,
+            "premultiplied": false,
+            "size": 540181,
+            "name": "800w.png"
+        }
+    ]
+}

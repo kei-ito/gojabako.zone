@@ -1,0 +1,169 @@
+{
+    "hash": "G-CBo_eeOKTxxQYiejLqHrPIM4hRKHM_rBoVn0km53M",
+    "version": "2022-02-03",
+    "relativePath": "pages/2021/ipad-case/anti-slip-stripe.jpg",
+    "results": [
+        {
+            "format": "webp",
+            "width": 300,
+            "height": 291,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 7006,
+            "name": "300w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 300,
+            "height": 291,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 4028,
+            "name": "300w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 300,
+            "height": 291,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 11226,
+            "name": "300w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 400,
+            "height": 388,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 10250,
+            "name": "400w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 400,
+            "height": 388,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 5583,
+            "name": "400w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 400,
+            "height": 388,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 17310,
+            "name": "400w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 500,
+            "height": 486,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 13960,
+            "name": "500w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 500,
+            "height": 486,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 7147,
+            "name": "500w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 500,
+            "height": 486,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 23617,
+            "name": "500w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 600,
+            "height": 583,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 18404,
+            "name": "600w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 600,
+            "height": 583,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 8992,
+            "name": "600w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 600,
+            "height": 583,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 31396,
+            "name": "600w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 800,
+            "height": 777,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 26952,
+            "name": "800w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 800,
+            "height": 777,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 12524,
+            "name": "800w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 800,
+            "height": 777,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 47837,
+            "name": "800w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 1000,
+            "height": 971,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 37154,
+            "name": "1000w.webp"
+        },
+        {
+            "format": "heif",
+            "width": 1000,
+            "height": 971,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 16466,
+            "name": "1000w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 1000,
+            "height": 971,
+            "channels": 3,
+            "premultiplied": false,
+            "size": 65578,
+            "name": "1000w.jpg"
+        }
+    ]
+}
