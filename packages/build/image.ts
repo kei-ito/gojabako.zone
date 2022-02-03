@@ -8,12 +8,13 @@ import {isObjectLike} from '../es/isObjectLike';
 import {isString} from '../es/isString';
 import {serializeNs} from '../es/serializeNs';
 import {rootDirectoryPath} from '../fs/constants';
+import {rmrf} from '../fs/rmrf';
 import {getHash} from '../node/getHash';
 import {runScript} from '../node/runScript';
 
 const ProcessorVersion = '2022-02-03';
 const ResultFileName = 'results.json';
-const widthList = [200, 300, 400, 500, 600, 800, 1000, 1200, 1500, 1800];
+const widthList = [300, 400, 500, 600, 800, 1000, 1200, 1500, 1800];
 
 interface OutputResult {
     name: string,
@@ -80,7 +81,7 @@ const isOutputResult = (input: unknown): input is OutputResult => {
 
 const loadSource = async (sourceFileAbsolutePath: string) => {
     const buffer = await fs.promises.readFile(sourceFileAbsolutePath);
-    const hash = getHash(buffer).toString('base64url');
+    const hash = getHash(buffer, widthList.join('-')).toString('base64url');
     return {buffer, hash};
 };
 
@@ -122,16 +123,17 @@ const processImage = async (
         outputDirectoryAbsolutePath: string,
     },
 ) => {
+    const relativePath = path.relative(path.join(rootDirectoryPath, 'src'), sourceFileAbsolutePath);
     if (cached && cached.hash === source.hash && cached.version === ProcessorVersion) {
         return cached;
     }
-    const relativePath = path.relative(rootDirectoryPath, sourceFileAbsolutePath);
     const image = sharp(source.buffer);
     const metadata = await image.metadata();
     if (metadata.exif) {
         console.info(`${relativePath}: deleting EXIF`);
         await image.toFile(sourceFileAbsolutePath);
     }
+    await rmrf(outputDirectoryAbsolutePath);
     await fs.promises.mkdir(outputDirectoryAbsolutePath, {recursive: true});
     const results: Array<sharp.OutputInfo & {name: string}> = [];
     for await (const [resized, name] of listPatterns(image)) {
@@ -155,7 +157,7 @@ const processImage = async (
 };
 
 const serializeSrcSetScript = function* ({results, relativePath}: ProcessResult) {
-    const normalized = relativePath.split(path.sep).join('/');
+    const normalized = `/images/${relativePath.split(path.sep).join('/')}`;
     yield `export const srcset = '${results.map(({name, width}) => `${normalized}/${name} ${width}w`).join(', ')}';`;
     yield '';
 };
