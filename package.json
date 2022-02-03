@@ -4,7 +4,7 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "test": "run-s test:*",
+        "test": "run-s prebuild test:*",
         "test:type": "tsc --noEmit",
         "test:jest": "npx jest",
         "dev": "run-s prebuild dev:*",
@@ -20,7 +20,7 @@
         "build:css": "esifycss --css=src/app.css --ext=.ts src",
         "build:next": "next build",
         "start": "NODE_ENV=production ts-node --project tsconfig.cli.json server.ts",
-        "lint": "run-s lint:*",
+        "lint": "run-s prebuild lint:*",
         "lint:eslint": "next lint"
     },
     "dependencies": {

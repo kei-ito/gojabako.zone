@@ -1,5 +1,5 @@
 import * as path from 'path';
-import {console} from '../es/global';
+import {console, Promise} from '../es/global';
 import {rootDirectoryPath} from '../fs/constants';
 import {listFiles} from '../node/listFiles';
 import {runScript} from '../node/runScript';
@@ -23,13 +23,13 @@ runScript(async () => {
     const srcDirectoryPath = path.join(rootDirectoryPath, 'src');
     const publicImageDirectoryPath = path.join(rootDirectoryPath, 'public', 'images');
     const workerScriptPath = path.join(rootDirectoryPath, '.output', 'build', 'image.mjs');
-    const processedImages: Array<string> = [];
+    const processes: Array<Promise<unknown>> = [];
     for await (const sourceFileAbsolutePath of listFiles(srcDirectoryPath, isImageFile)) {
         const relativePath = path.relative(srcDirectoryPath, sourceFileAbsolutePath);
         const outputDirectoryAbsolutePath = path.join(publicImageDirectoryPath, relativePath);
         const command = ['node', workerScriptPath, sourceFileAbsolutePath, outputDirectoryAbsolutePath].join(' ');
-        await spawn(command);
-        processedImages.push(sourceFileAbsolutePath);
+        processes.push(spawn(command));
     }
-    console.info(`${processedImages.length} images are ready`);
+    await Promise.all(processes);
+    console.info(`${processes.length} images are ready`);
 });

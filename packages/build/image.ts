@@ -6,6 +6,7 @@ import {Array, console, Error, JSON, Promise} from '../es/global';
 import {isPositiveInteger} from '../es/isInteger';
 import {isObjectLike} from '../es/isObjectLike';
 import {isString} from '../es/isString';
+import {serializeNs} from '../es/serializeNs';
 import {rootDirectoryPath} from '../fs/constants';
 import {getHash} from '../node/getHash';
 import {runScript} from '../node/runScript';
@@ -137,7 +138,7 @@ const processImage = async (
         const startedAt = process.hrtime.bigint();
         const info = await resized.toFile(path.join(outputDirectoryAbsolutePath, name));
         const elapsed = process.hrtime.bigint() - startedAt;
-        console.info(`${relativePath}: ${name} (${elapsed}ns)`);
+        console.info(`${relativePath}: ${name} (${serializeNs(elapsed)})`);
         results.push({...info, name});
     }
     const processResult: ProcessResult = {
