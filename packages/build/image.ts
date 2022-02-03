@@ -14,6 +14,37 @@ const ProcessorVersion = '2022-02-03';
 const ResultFileName = 'results.json';
 const widthList = [200, 300, 400, 500, 600, 800, 1000, 1200, 1500, 1800];
 
+interface OutputResult {
+    name: string,
+    format: string,
+    size: number,
+    width: number,
+    height: number,
+}
+
+interface ProcessResult {
+    hash: string,
+    version: string,
+    relativePath: string,
+    results: Array<OutputResult>,
+}
+
+runScript(async () => {
+    if (process.argv.length !== 4) {
+        throw new Error(`InvalidArgs: ${process.argv.slice(2).join(' ')}`);
+    }
+    const [,, sourceFileAbsolutePath, outputDirectoryAbsolutePath] = process.argv;
+    const relativePath = path.relative(rootDirectoryPath, sourceFileAbsolutePath);
+    const [source, cached] = await Promise.all([
+        loadSource(sourceFileAbsolutePath),
+        loadCache(path.join(outputDirectoryAbsolutePath, ResultFileName)),
+    ]);
+    const result = await processImage({sourceFileAbsolutePath, outputDirectoryAbsolutePath, source, cached});
+    const code = [...serializeSrcSetScript(result)].join('\n');
+    await fs.promises.writeFile(`${sourceFileAbsolutePath}.srcset.ts`, code);
+    console.info(`${relativePath}: done`);
+});
+
 const listPatterns = async function* (image: sharp.Sharp): AsyncGenerator<[sharp.Sharp, string]> {
     const {width: originalWidth, format} = await image.metadata();
     if (!originalWidth) {
@@ -38,21 +69,6 @@ const listPatterns = async function* (image: sharp.Sharp): AsyncGenerator<[sharp
     }
 };
 
-interface OutputResult {
-    name: string,
-    format: string,
-    size: number,
-    width: number,
-    height: number,
-}
-
-interface ProcessResult {
-    hash: string,
-    version: string,
-    relativePath: string,
-    results: Array<OutputResult>,
-}
-
 const isOutputResult = (input: unknown): input is OutputResult => {
     if (isObjectLike(input)) {
         const {name, format, size, width, height} = input;
@@ -67,7 +83,7 @@ const loadSource = async (sourceFileAbsolutePath: string) => {
     return {buffer, hash};
 };
 
-const loadCached = async (resultFilePath: string): Promise<ProcessResult | null> => {
+const loadCache = async (resultFilePath: string): Promise<ProcessResult | null> => {
     const json = await fs.promises.readFile(resultFilePath, 'utf8').catch((error) => {
         if (isObjectLike(error) && error.code === 'ENOENT') {
             return null;
@@ -137,24 +153,8 @@ const processImage = async (
     return processResult;
 };
 
-const serializeImageComponent = function* ({results, relativePath}: ProcessResult) {
+const serializeSrcSetScript = function* ({results, relativePath}: ProcessResult) {
     const normalized = relativePath.split(path.sep).join('/');
-    yield `export const srcset = '${results.map(({name, width}) => `${normalized}/${name} ${width}w`).join(',')}';`;
+    yield `export const srcset = '${results.map(({name, width}) => `${normalized}/${name} ${width}w`).join(', ')}';`;
     yield '';
 };
-
-runScript(async () => {
-    if (process.argv.length !== 4) {
-        throw new Error(`InvalidArgs: ${process.argv.slice(2).join(' ')}`);
-    }
-    const [,, sourceFileAbsolutePath, outputDirectoryAbsolutePath] = process.argv;
-    const relativePath = path.relative(rootDirectoryPath, sourceFileAbsolutePath);
-    const [source, cached] = await Promise.all([
-        loadSource(sourceFileAbsolutePath),
-        loadCached(path.join(outputDirectoryAbsolutePath, ResultFileName)),
-    ]);
-    const result = await processImage({sourceFileAbsolutePath, outputDirectoryAbsolutePath, source, cached});
-    const code = [...serializeImageComponent(result)].join('\n');
-    await fs.promises.writeFile(path.join(outputDirectoryAbsolutePath, 'index.tsx'), code);
-    console.info(`${relativePath}: done`);
-});
