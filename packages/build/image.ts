@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as process from 'process';
 import sharp from 'sharp';
-import {Array, console, Error, JSON, Promise} from '../es/global';
+import {Array, console, Error, JSON, Map, Promise} from '../es/global';
 import {isPositiveInteger} from '../es/isInteger';
 import {isObjectLike} from '../es/isObjectLike';
 import {isString} from '../es/isString';
@@ -28,6 +28,7 @@ interface ProcessResult {
     hash: string,
     version: string,
     relativePath: string,
+    format: string,
     results: Array<OutputResult>,
 }
 
@@ -43,7 +44,7 @@ runScript(async () => {
     ]);
     const result = await processImage({sourceFileAbsolutePath, outputDirectoryAbsolutePath, source, cached});
     const code = [...serializeSrcSetScript(result)].join('\n');
-    await fs.promises.writeFile(`${sourceFileAbsolutePath}.srcset.ts`, code);
+    await fs.promises.writeFile(`${sourceFileAbsolutePath}.component.tsx`, code);
     console.info(`${relativePath}: done`);
 });
 
@@ -100,14 +101,14 @@ const loadCache = async (resultFilePath: string): Promise<ProcessResult | null> 
         if (!isObjectLike(parsed)) {
             return null;
         }
-        const {hash, version, relativePath, results} = parsed;
-        if (!(isString(hash) && isString(version) && isString(relativePath) && Array.isArray(results))) {
+        const {hash, version, relativePath, format, results} = parsed;
+        if (!(isString(hash) && isString(version) && isString(relativePath) && isString(format) && Array.isArray(results))) {
             return null;
         }
         if (!results.every((item) => isOutputResult(item))) {
             return null;
         }
-        return {hash, version, relativePath, results};
+        return {hash, version, relativePath, format, results};
 
     } catch {
         // do nothing
@@ -129,6 +130,9 @@ const processImage = async (
     }
     const image = sharp(source.buffer);
     const metadata = await image.metadata();
+    if (metadata.format === 'heif') {
+        await image.clone().jpeg({progressive: true}).toFile(sourceFileAbsolutePath);
+    }
     if (metadata.exif) {
         console.info(`${relativePath}: deleting EXIF`);
         await image.toFile(sourceFileAbsolutePath);
@@ -147,6 +151,7 @@ const processImage = async (
         hash: source.hash,
         version: ProcessorVersion,
         relativePath,
+        format: metadata.format as string,
         results,
     };
     await fs.promises.writeFile(
@@ -156,8 +161,50 @@ const processImage = async (
     return processResult;
 };
 
-const serializeSrcSetScript = function* ({results, relativePath}: ProcessResult) {
-    const normalized = `/images/${relativePath.split(path.sep).join('/')}`;
-    yield `export const srcset = '${results.map(({name, width}) => `${normalized}/${name} ${width}w`).join(', ')}';`;
+const serializeSrcSetScript = function* (processResult: ProcessResult) {
+    const resultMap = new Map<string, Array<OutputResult>>();
+    const getList = (format: string) => {
+        const list = resultMap.get(format) || [];
+        resultMap.set(format, list);
+        return list;
+    };
+    for (const result of processResult.results) {
+        getList(result.format).push(result);
+    }
+    const normalized = `/images/${processResult.relativePath.split(path.sep).join('/')}`;
+    yield '/* eslint-disable @next/next/no-img-element */';
+    yield 'import type {DetailedHTMLProps, ImgHTMLAttributes} from \'react\';';
+    yield 'const Image = (';
+    yield '    props: Omit<DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>, \'src\' | \'srcset\'>,';
+    yield ') => <picture>';
+    for (const [format, results] of resultMap) {
+        const srcset = results.map(({name, width}) => `${normalized}/${name} ${width}w`).join(', ');
+        if (processResult.format === format) {
+            yield `    <img alt="" {...props} srcSet="${srcset}" />`;
+        } else {
+            yield `    <source srcSet="${srcset}" type="${getType(format)}" />`;
+        }
+    }
+    yield '</picture>;';
+    yield 'export default Image;';
     yield '';
+};
+
+const getType = (format: string): string | null => {
+    switch (format) {
+    case 'webp':
+        return 'image/webp';
+    case 'avif':
+        return 'image/avif';
+    case 'heif':
+    case 'jpg':
+    case 'jpeg':
+        return 'image/jpeg';
+    case 'png':
+        return 'image/png';
+    case 'svg':
+        return 'image/svg+xml';
+    default:
+        throw new Error(`UnsupportedFormat: ${format}`);
+    }
 };
