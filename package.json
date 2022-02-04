@@ -45,7 +45,7 @@
         "@squoosh/lib": "0.4.0",
         "@types/jest": "27.4.0",
         "@types/katex": "0.11.1",
-        "@types/react": "17.0.38",
+        "@types/react": "17.0.39",
         "@typescript-eslint/eslint-plugin": "5.10.2",
         "@typescript-eslint/parser": "5.10.2",
         "esbuild": "0.14.14",
