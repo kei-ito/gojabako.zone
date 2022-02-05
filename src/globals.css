@@ -69,7 +69,7 @@ article>header {
     margin-block-start: 2rem;
     margin-block-end: 1rem;
 }
-img, svg, picture {
+img, svg {
     max-inline-size: 100%;
     display: block;
 }
