@@ -4,7 +4,7 @@ import {getExtension} from '../es/getExtension';
 import {Error} from '../es/global';
 import {getTextContent} from '../es/TextContent';
 import {walkMarkdownContentNodes} from '../markdown/walkContentNodes';
-import {getPagePathName} from '../node/getPagePathName';
+import {getPagePathName} from './getPagePathName';
 
 export const getPageTitle = async (
     pageFileAbsolutePath: string,

@@ -5,17 +5,24 @@ import {Error} from '../es/global';
 
 const pagesDirectoryPath = path.join(rootDirectoryPath, 'src/pages');
 
-export const getPagePathName = (fileAbsolutePath: string): string | null => {
+export const getPagePathName = (fileAbsolutePath: string): string => {
     const basename = getBaseName(fileAbsolutePath);
     if (basename.startsWith('_')) {
-        return null;
+        throw new Error(`The page file starts with "_": ${basename}`);
     }
     const normalizedFileAbsolutePath = path.normalize(fileAbsolutePath);
     if (!normalizedFileAbsolutePath.startsWith(pagesDirectoryPath)) {
         throw new Error(`The page file isn't in the pages directory: ${normalizedFileAbsolutePath}`);
     }
-    return ['', ...path.relative(pagesDirectoryPath, normalizedFileAbsolutePath).split(path.sep)].join('/')
-    .replace(/\.\w+$/, '')
-    .replace(/\.page$/, '')
-    .replace(/(\/?)index$/, '/');
+    let result = ['', ...path.relative(pagesDirectoryPath, normalizedFileAbsolutePath).split(path.sep)].join('/').replace(/\.\w+$/, '');
+    if (result.endsWith('.page')) {
+        result = result.slice(0, -5);
+    }
+    if (result.endsWith('/index')) {
+        result = result.slice(0, -6);
+    }
+    if (!result) {
+        result = '/';
+    }
+    return result;
 };

@@ -1,5 +1,4 @@
 // https://github.com/syntax-tree/mdast
-import * as console from 'console';
 import type Markdown from 'mdast';
 import {executeRegExp} from '../es/executeRegExp';
 import {createUnsupportedTypeError} from '../es/createUnsupportedTypeError';
@@ -19,6 +18,7 @@ export interface SerializeMarkdownContext {
     parseMarkdown: (source: string) => Markdown.Root,
     nodeListOf: <T extends Markdown.Content['type']>(type: T) => Array<MarkdownContent<T>>,
     findDefinition: (id: string) => Markdown.Definition | null,
+    transformLink?: (href: string) => string,
     links: Set<string>,
     components: Set<string>,
     images: Map<string, string>,
@@ -286,17 +286,16 @@ const serializeLinkElement = function* (
     if (typeof href !== 'string') {
         throw new Error(`Invalid href: ${href}`);
     }
-    context.links.add(href);
-    if (href.startsWith('/')) {
+    if (href.startsWith('/') || href.startsWith('.')) {
+        href = context.transformLink ? context.transformLink(href) : href;
+        context.links.add(href);
         yield '<Link';
         yield* serializeAttributes({href}, {jsx: true});
         yield '>';
         yield* serializeElement(context, 'a', attrs, node, nextAncestors);
         yield '</Link>';
     } else {
-        if (href.startsWith('.')) {
-            console.warn(`The href is relative but does't start with "/": ${href}`);
-        }
+        context.links.add(href);
         yield* serializeElement(context, 'a', {href, ...attrs}, node, nextAncestors);
     }
 };
