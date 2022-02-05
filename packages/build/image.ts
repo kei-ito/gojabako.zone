@@ -24,13 +24,33 @@ interface OutputResult {
     height: number,
 }
 
+const isOutputResult = (input: unknown): input is OutputResult => {
+    if (isObjectLike(input)) {
+        const {name, format, size, width, height} = input;
+        return isString(name) && isString(format) && isPositiveInteger(size) && isPositiveInteger(width) && isPositiveInteger(height);
+    }
+    return false;
+};
+
 interface ProcessResult {
     hash: string,
     version: string,
     relativePath: string,
     format: string,
+    width: number,
+    height: number,
     results: Array<OutputResult>,
 }
+
+const isProcessResult = (input: unknown): input is ProcessResult => isObjectLike(input)
+&& isString(input.hash)
+&& isString(input.version)
+&& isString(input.relativePath)
+&& isString(input.format)
+&& isPositiveInteger(input.width)
+&& isPositiveInteger(input.height)
+&& Array.isArray(input.results)
+&& input.results.every((item) => isOutputResult(item));
 
 runScript(async () => {
     if (process.argv.length !== 4) {
@@ -48,11 +68,13 @@ runScript(async () => {
     console.info(`${relativePath}: done`);
 });
 
-const listPatterns = async function* (image: sharp.Sharp): AsyncGenerator<[sharp.Sharp, string]> {
-    const {width: originalWidth, format} = await image.metadata();
-    if (!originalWidth) {
-        throw new Error(`Unknown width: ${originalWidth}`);
-    }
+const listPatterns = function* (
+    image: sharp.Sharp,
+    {width: originalWidth, format}: {
+        width: number,
+        format: keyof sharp.FormatEnum,
+    },
+): Generator<[sharp.Sharp, string]> {
     for (const width of widthList) {
         if (width <= originalWidth) {
             const resized = image.clone().resize(width, null);
@@ -70,14 +92,6 @@ const listPatterns = async function* (image: sharp.Sharp): AsyncGenerator<[sharp
             }
         }
     }
-};
-
-const isOutputResult = (input: unknown): input is OutputResult => {
-    if (isObjectLike(input)) {
-        const {name, format, size, width, height} = input;
-        return isString(name) && isString(format) && isPositiveInteger(size) && isPositiveInteger(width) && isPositiveInteger(height);
-    }
-    return false;
 };
 
 const loadSource = async (sourceFileAbsolutePath: string) => {
@@ -98,18 +112,7 @@ const loadCache = async (resultFilePath: string): Promise<ProcessResult | null> 
     }
     try {
         const parsed: unknown = JSON.parse(json);
-        if (!isObjectLike(parsed)) {
-            return null;
-        }
-        const {hash, version, relativePath, format, results} = parsed;
-        if (!(isString(hash) && isString(version) && isString(relativePath) && isString(format) && Array.isArray(results))) {
-            return null;
-        }
-        if (!results.every((item) => isOutputResult(item))) {
-            return null;
-        }
-        return {hash, version, relativePath, format, results};
-
+        return isProcessResult(parsed) ? parsed : null;
     } catch {
         // do nothing
     }
@@ -128,8 +131,7 @@ const processImage = async (
     if (cached && cached.hash === source.hash && cached.version === ProcessorVersion) {
         return cached;
     }
-    const image = sharp(source.buffer);
-    const metadata = await image.metadata();
+    const {image, metadata} = await loadImage(source.buffer);
     if (metadata.format === 'heif') {
         await image.clone().jpeg({progressive: true}).toFile(sourceFileAbsolutePath);
     }
@@ -140,7 +142,7 @@ const processImage = async (
     await rmrf(outputDirectoryAbsolutePath);
     await fs.promises.mkdir(outputDirectoryAbsolutePath, {recursive: true});
     const results: Array<sharp.OutputInfo & {name: string}> = [];
-    for await (const [resized, name] of listPatterns(image)) {
+    for (const [resized, name] of listPatterns(image, metadata)) {
         const startedAt = process.hrtime.bigint();
         const info = await resized.toFile(path.join(outputDirectoryAbsolutePath, name));
         const elapsed = process.hrtime.bigint() - startedAt;
@@ -151,7 +153,9 @@ const processImage = async (
         hash: source.hash,
         version: ProcessorVersion,
         relativePath,
-        format: metadata.format as string,
+        format: metadata.format,
+        width: metadata.width,
+        height: metadata.height,
         results,
     };
     await fs.promises.writeFile(
@@ -159,6 +163,22 @@ const processImage = async (
         JSON.stringify(processResult, null, 4),
     );
     return processResult;
+};
+
+const loadImage = async (buffer: Buffer) => {
+    const image = sharp(buffer);
+    const metadata = await image.metadata();
+    const {format, width, height} = metadata;
+    if (!format || !(format in sharp.format)) {
+        throw new Error(`UnkonwnFormat: ${format}`);
+    }
+    if (!isPositiveInteger(width)) {
+        throw new Error(`InvalidWidth: ${width}`);
+    }
+    if (!isPositiveInteger(height)) {
+        throw new Error(`InvalidHeight: ${height}`);
+    }
+    return {image, metadata: {...metadata, format, width, height}};
 };
 
 const serializeSrcSetScript = function* (processResult: ProcessResult) {
@@ -175,12 +195,12 @@ const serializeSrcSetScript = function* (processResult: ProcessResult) {
     yield '/* eslint-disable @next/next/no-img-element */';
     yield 'import type {DetailedHTMLProps, ImgHTMLAttributes} from \'react\';';
     yield 'const Image = (';
-    yield '    props: Omit<DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>, \'src\' | \'srcset\'>,';
+    yield '    props: Omit<DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>, \'height\' | \'src\' | \'srcset\' | \'width\'>,';
     yield ') => <picture>';
     for (const [format, results] of resultMap) {
         const srcset = results.map(({name, width}) => `${normalized}/${name} ${width}w`).join(', ');
         if (processResult.format === format) {
-            yield `    <img alt="" {...props} srcSet="${srcset}" />`;
+            yield `    <img alt="" {...props} srcSet="${srcset}" style={{aspectRatio: '${processResult.width}/${processResult.height}'}} />`;
         } else {
             yield `    <source srcSet="${srcset}" type="${getType(format)}" />`;
         }
