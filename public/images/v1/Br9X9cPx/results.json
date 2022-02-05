@@ -1,0 +1,85 @@
+{
+    "hash": "Br9X9cPxSL8_vdrrIa_s2354kz-6qQPtyigj8DP_Geo",
+    "version": "v1",
+    "relativePath": "pages/2021/au-denki/usage.png",
+    "format": "png",
+    "width": 800,
+    "height": 1000,
+    "results": [
+        {
+            "format": "webp",
+            "width": 300,
+            "name": "300w.webp"
+        },
+        {
+            "format": "avif",
+            "width": 300,
+            "name": "300w.avif"
+        },
+        {
+            "format": "png",
+            "width": 300,
+            "name": "300w.png"
+        },
+        {
+            "format": "webp",
+            "width": 400,
+            "name": "400w.webp"
+        },
+        {
+            "format": "avif",
+            "width": 400,
+            "name": "400w.avif"
+        },
+        {
+            "format": "png",
+            "width": 400,
+            "name": "400w.png"
+        },
+        {
+            "format": "webp",
+            "width": 500,
+            "name": "500w.webp"
+        },
+        {
+            "format": "avif",
+            "width": 500,
+            "name": "500w.avif"
+        },
+        {
+            "format": "png",
+            "width": 500,
+            "name": "500w.png"
+        },
+        {
+            "format": "webp",
+            "width": 600,
+            "name": "600w.webp"
+        },
+        {
+            "format": "avif",
+            "width": 600,
+            "name": "600w.avif"
+        },
+        {
+            "format": "png",
+            "width": 600,
+            "name": "600w.png"
+        },
+        {
+            "format": "webp",
+            "width": 800,
+            "name": "800w.webp"
+        },
+        {
+            "format": "avif",
+            "width": 800,
+            "name": "800w.avif"
+        },
+        {
+            "format": "png",
+            "width": 800,
+            "name": "800w.png"
+        }
+    ]
+}

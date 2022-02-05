@@ -21,13 +21,10 @@ const isImageFile = (filePath: string) => {
 
 runScript(async () => {
     const srcDirectoryPath = path.join(rootDirectoryPath, 'src');
-    const publicImageDirectoryPath = path.join(rootDirectoryPath, 'public', 'images');
     const workerScriptPath = path.join(rootDirectoryPath, '.output', 'build', 'image.mjs');
     const processes: Array<Promise<unknown>> = [];
     for await (const sourceFileAbsolutePath of listFiles(srcDirectoryPath, isImageFile)) {
-        const relativePath = path.relative(srcDirectoryPath, sourceFileAbsolutePath);
-        const outputDirectoryAbsolutePath = path.join(publicImageDirectoryPath, relativePath);
-        const command = ['node', workerScriptPath, sourceFileAbsolutePath, outputDirectoryAbsolutePath].join(' ');
+        const command = ['node', workerScriptPath, sourceFileAbsolutePath].join(' ');
         processes.push(spawn(command));
     }
     await Promise.all(processes);
