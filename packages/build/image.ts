@@ -248,12 +248,12 @@ const serializeSrcSetScript = function* (processResult: ProcessResult) {
     yield 'import type {DetailedHTMLProps, ImgHTMLAttributes} from \'react\';';
     yield 'const Image = (';
     yield '    props: Omit<DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>, \'height\' | \'src\' | \'srcset\' | \'width\'>,';
-    yield ') => <picture>';
+    const aspectRatioStyle = `style={{aspectRatio: '${processResult.width}/${processResult.height}'}}`;
+    yield `) => <picture ${aspectRatioStyle}>`;
     for (const [format, results] of resultMap) {
         const srcset = results.map(({name, width}) => `${directoryPath}/${name} ${width}w`).join(', ');
         if (processResult.format === format) {
-            const {width, height} = processResult;
-            yield `    <img alt="" {...props} srcSet="${srcset}" width="${width}" height="${height}" />`;
+            yield `    <img alt="" {...props} srcSet="${srcset}" ${aspectRatioStyle} />`;
         } else {
             yield `    <source srcSet="${srcset}" type="${getType(format)}" />`;
         }
