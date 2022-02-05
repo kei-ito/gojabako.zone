@@ -15,6 +15,7 @@ export const getPagePathName = (fileAbsolutePath: string): string | null => {
         throw new Error(`The page file isn't in the pages directory: ${normalizedFileAbsolutePath}`);
     }
     return ['', ...path.relative(pagesDirectoryPath, normalizedFileAbsolutePath).split(path.sep)].join('/')
-    .replace(/(?:\.page)?\.\w+$/, '')
+    .replace(/\.\w+$/, '')
+    .replace(/\.page$/, '')
     .replace(/(\/?)index$/, '/');
 };
