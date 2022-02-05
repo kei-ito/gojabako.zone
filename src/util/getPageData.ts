@@ -5,7 +5,7 @@ import {pageListByPublishedAt} from '../pageList';
 export const getPageData = (pathname: string): PageData => {
     const normalized = pathname.replace(/\/$/, '');
     for (const page of pageListByPublishedAt) {
-        if (page.pathname === normalized) {
+        if (page.pathname === pathname || page.pathname === normalized) {
             return page;
         }
     }
