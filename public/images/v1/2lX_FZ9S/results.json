@@ -1,0 +1,25 @@
+{
+    "hash": "2lX_FZ9SoBAHYIwuiBUsMjiDhP1g49ZG8gRdYsWe5mQ",
+    "version": "v1",
+    "relativePath": "../public/apple-touch-icon.png",
+    "format": "png",
+    "width": 180,
+    "height": 180,
+    "results": [
+        {
+            "format": "webp",
+            "width": 180,
+            "name": "180w.webp"
+        },
+        {
+            "format": "avif",
+            "width": 180,
+            "name": "180w.avif"
+        },
+        {
+            "format": "png",
+            "width": 180,
+            "name": "180w.png"
+        }
+    ]
+}

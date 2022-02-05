@@ -1,0 +1,25 @@
+{
+    "hash": "CbOYkanbdoadhzTWO4bnx9n6OfoExfPmG9AKmQc33TE",
+    "version": "v1",
+    "relativePath": "../public/favicon-16x16.png",
+    "format": "png",
+    "width": 16,
+    "height": 16,
+    "results": [
+        {
+            "format": "webp",
+            "width": 16,
+            "name": "16w.webp"
+        },
+        {
+            "format": "avif",
+            "width": 16,
+            "name": "16w.avif"
+        },
+        {
+            "format": "png",
+            "width": 16,
+            "name": "16w.png"
+        }
+    ]
+}

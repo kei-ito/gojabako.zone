@@ -32,7 +32,11 @@ const parseUrl = (requestPath = '/'): url.UrlWithParsedQuery & {pathname: string
         pathname: parsedUrl.pathname || '/',
     };
 };
-const app = next({dev: process.env.NODE_ENV !== 'production'});
+const app = next({
+    dev: process.env.NODE_ENV !== 'production',
+    hostname: config.hostname,
+    port: config.port,
+});
 app.prepare().then(() => {
     const handleRequest = app.getRequestHandler();
     const onRequest = (req: http.IncomingMessage, res: http.ServerResponse) => {

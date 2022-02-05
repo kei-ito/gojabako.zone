@@ -69,10 +69,16 @@ article>header {
     margin-block-start: 2rem;
     margin-block-end: 1rem;
 }
-img, svg, picture {
+img, svg {
     max-inline-size: 100%;
     display: block;
 }
+/* Style for alt */
+img {
+    font-size: 80%;
+    background-color: var(--white);
+}
+
 @media (prefers-reduced-motion: reduce) {
     html:focus-within {
         scroll-behavior: auto;

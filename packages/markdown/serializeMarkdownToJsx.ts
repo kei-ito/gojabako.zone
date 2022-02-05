@@ -216,7 +216,7 @@ const serialize = function* (
             yield `<figure id="figure-${context.getId('figure')}">`;
         }
         const localName = generateImageLocalName(context, node);
-        yield `<Image id="image-${context.getId('image')}" src={${localName}} alt="${node.alt}" placeholder="blur"/>`;
+        yield `<${localName} id="image-${context.getId('image')}" alt="${node.alt}" placeholder="blur" loading="lazy"/>`;
         if (isNotInLink) {
             if (node.alt) {
                 yield `<figcaption>${node.alt}</figcaption>`;
@@ -328,7 +328,7 @@ const generateImageLocalName = (
     context: SerializeMarkdownContext,
     node: {url: string},
 ): string => {
-    const localName = `image${context.images.size}`;
+    const localName = `Image${context.images.size}`;
     context.images.set(localName, node.url);
     return localName;
 };
