@@ -252,7 +252,8 @@ const serializeSrcSetScript = function* (processResult: ProcessResult) {
     for (const [format, results] of resultMap) {
         const srcset = results.map(({name, width}) => `${directoryPath}/${name} ${width}w`).join(', ');
         if (processResult.format === format) {
-            yield `    <img alt="" {...props} srcSet="${srcset}" style={{aspectRatio: '${processResult.width}/${processResult.height}'}} />`;
+            const {width, height} = processResult;
+            yield `    <img alt="" {...props} srcSet="${srcset}" width="${width}" height="${height}" />`;
         } else {
             yield `    <source srcSet="${srcset}" type="${getType(format)}" />`;
         }
