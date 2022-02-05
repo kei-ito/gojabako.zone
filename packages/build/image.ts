@@ -2,55 +2,18 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as process from 'process';
 import sharp from 'sharp';
-import {Array, console, Error, JSON, Map} from '../es/global';
+import {console, Error, JSON, Map} from '../es/global';
 import {isPositiveInteger} from '../es/isInteger';
-import {isObjectLike} from '../es/isObjectLike';
-import {isString} from '../es/isString';
 import {serializeNs} from '../es/serializeNs';
 import {rootDirectoryPath} from '../fs/constants';
 import {statsOrNull, statsOrNullSync} from '../fs/statsOrNull';
+import type {ImageFormat} from '../image/constants';
+import {ImageProcessorHashEncoding, ImageProcessorResultFileName, ImageProcessorVersion, ImageProcessorWidthList} from '../image/constants';
+import type {ImageOutputResult} from '../image/isImageOutputResult';
+import type {ImageProcessorResult} from '../image/isImageProcessorResult';
+import {loadImageProcessorResult} from '../image/loadImageProcessorResult';
 import {getHash} from '../node/getHash';
 import {runScript} from '../node/runScript';
-
-type ImageFormat = keyof sharp.FormatEnum;
-
-const ProcessorVersion = 'v1';
-const ResultFileName = 'results.json';
-const widthList = [300, 400, 500, 600, 800, 1000, 1200, 1500, 1800];
-
-interface OutputResult {
-    name: string,
-    format: ImageFormat,
-    width: number,
-}
-
-const isOutputResult = (input: unknown): input is OutputResult => {
-    if (isObjectLike(input)) {
-        const {name, format, size, width, height} = input;
-        return isString(name) && isString(format) && isPositiveInteger(size) && isPositiveInteger(width) && isPositiveInteger(height);
-    }
-    return false;
-};
-
-interface ProcessResult {
-    hash: string,
-    version: string,
-    relativePath: string,
-    format: string,
-    width: number,
-    height: number,
-    results: Array<OutputResult>,
-}
-
-const isProcessResult = (input: unknown): input is ProcessResult => isObjectLike(input)
-&& isString(input.hash)
-&& isString(input.version)
-&& isString(input.relativePath)
-&& isString(input.format)
-&& isPositiveInteger(input.width)
-&& isPositiveInteger(input.height)
-&& Array.isArray(input.results)
-&& input.results.every((item) => isOutputResult(item));
 
 runScript(async () => {
     if (process.argv.length !== 3) {
@@ -60,7 +23,7 @@ runScript(async () => {
     const relativePath = path.relative(rootDirectoryPath, sourceFileAbsolutePath);
     const source = await loadSource(sourceFileAbsolutePath);
     const outputDirectoryAbsolutePath = path.join(rootDirectoryPath, 'public', ...listOutputImagePathFragments(source.hash));
-    const cached = await loadCache(path.join(outputDirectoryAbsolutePath, ResultFileName));
+    const cached = await loadImageProcessorResult(path.join(outputDirectoryAbsolutePath, ImageProcessorResultFileName));
     const result = await processImage({sourceFileAbsolutePath, source, cached});
     const code = [...serializeSrcSetScript(result)].join('\n');
     await fs.promises.writeFile(`${sourceFileAbsolutePath}.component.tsx`, code);
@@ -69,13 +32,13 @@ runScript(async () => {
 
 const listOutputImagePathFragments = function* (hash: string) {
     yield 'images';
-    yield ProcessorVersion;
+    yield ImageProcessorVersion;
     yield hash.slice(0, 8);
 };
 
 const listWidthPatterns = function* (originalWidth: number) {
     let widthPatternCount = 0;
-    for (const width of widthList) {
+    for (const width of ImageProcessorWidthList) {
         if (width <= originalWidth) {
             widthPatternCount++;
             yield width;
@@ -112,34 +75,39 @@ const listPatterns = function* (
 };
 
 const loadSource = async (sourceFileAbsolutePath: string) => {
-    const buffer = await fs.promises.readFile(sourceFileAbsolutePath);
-    const hash = getHash(buffer).toString('base64url');
-    return {buffer, hash};
-};
-
-const loadCache = async (resultFilePath: string): Promise<ProcessResult | null> => {
-    const json = await fs.promises.readFile(resultFilePath, 'utf8').catch((error) => {
-        if (isObjectLike(error) && error.code === 'ENOENT') {
-            return null;
-        }
-        throw error;
-    });
-    if (!json) {
-        return null;
+    let buffer = await fs.promises.readFile(sourceFileAbsolutePath);
+    let image = sharp(buffer);
+    const metadata = await loadImageMetadata(image);
+    let requireUpdate = false;
+    if (metadata.format === 'heif') {
+        console.info(`${sourceFileAbsolutePath}: convert heif to jpg`);
+        await image.clone().jpeg({progressive: true}).toFile(sourceFileAbsolutePath);
+        requireUpdate = true;
+    } else if (metadata.exif) {
+        console.info(`${sourceFileAbsolutePath}: deleting EXIF`);
+        await image.toFile(sourceFileAbsolutePath);
+        requireUpdate = true;
     }
-    try {
-        const parsed: unknown = JSON.parse(json);
-        return isProcessResult(parsed) ? parsed : null;
-    } catch {
-        // do nothing
+    if (requireUpdate) {
+        buffer = await fs.promises.readFile(sourceFileAbsolutePath);
+        image = sharp(buffer);
     }
-    return null;
+    const hash = getHash(buffer).toString(ImageProcessorHashEncoding);
+    return {image, hash, metadata};
 };
 
 const processImage = async (
     {source, cached, sourceFileAbsolutePath}: {
-        source: {buffer: Buffer, hash: string},
-        cached: ProcessResult | null,
+        source: {
+            image: sharp.Sharp,
+            hash: string,
+            metadata: {
+                format: ImageFormat,
+                width: number,
+                height: number,
+            },
+        },
+        cached: ImageProcessorResult | null,
         sourceFileAbsolutePath: string,
     },
 ) => {
@@ -148,10 +116,9 @@ const processImage = async (
     if (testCache(source, cached, outputDirectoryAbsolutePath)) {
         return cached;
     }
-    const loaded = await loadImage(source.buffer, sourceFileAbsolutePath);
     await fs.promises.mkdir(outputDirectoryAbsolutePath, {recursive: true});
-    const results: Array<OutputResult> = [];
-    for (const [resized, width, format] of listPatterns(loaded)) {
+    const results: Array<ImageOutputResult> = [];
+    for (const [resized, width, format] of listPatterns(source)) {
         const name = `${width}w${getExtension(format)}`;
         const dest = path.join(outputDirectoryAbsolutePath, name);
         const stats = await statsOrNull(dest);
@@ -163,17 +130,17 @@ const processImage = async (
         }
         results.push({format, width, name});
     }
-    const processResult: ProcessResult = {
+    const processResult: ImageProcessorResult = {
         hash: source.hash,
-        version: ProcessorVersion,
+        version: ImageProcessorVersion,
         relativePath,
-        format: loaded.metadata.format,
-        width: loaded.metadata.width,
-        height: loaded.metadata.height,
+        format: source.metadata.format,
+        width: source.metadata.width,
+        height: source.metadata.height,
         results,
     };
     await fs.promises.writeFile(
-        path.join(outputDirectoryAbsolutePath, ResultFileName),
+        path.join(outputDirectoryAbsolutePath, ImageProcessorResultFileName),
         JSON.stringify(processResult, null, 4),
     );
     return processResult;
@@ -181,16 +148,16 @@ const processImage = async (
 
 const testCache = (
     {hash}: {hash: string},
-    cached: ProcessResult | null,
+    cached: ImageProcessorResult | null,
     outputDirectoryAbsolutePath: string,
-): cached is ProcessResult => {
+): cached is ImageProcessorResult => {
     if (!cached) {
         return false;
     }
     if (cached.hash !== hash) {
         return false;
     }
-    if (cached.version !== ProcessorVersion) {
+    if (cached.version !== ImageProcessorVersion) {
         return false;
     }
     for (const {name} of cached.results) {
@@ -200,23 +167,6 @@ const testCache = (
         }
     }
     return true;
-};
-
-const loadImage = async (
-    buffer: Buffer,
-    sourceFileAbsolutePath: string,
-) => {
-    const image = sharp(buffer);
-    const metadata = await loadImageMetadata(image);
-    if (metadata.format === 'heif') {
-        console.info(`${sourceFileAbsolutePath}: convert heif to jpg`);
-        await image.clone().jpeg({progressive: true}).toFile(sourceFileAbsolutePath);
-    }
-    if (metadata.exif) {
-        console.info(`${sourceFileAbsolutePath}: deleting EXIF`);
-        await image.toFile(sourceFileAbsolutePath);
-    }
-    return {image, metadata};
 };
 
 const loadImageMetadata = async (image: sharp.Sharp) => {
@@ -233,8 +183,8 @@ const loadImageMetadata = async (image: sharp.Sharp) => {
     return {...props, format, width, height};
 };
 
-const serializeSrcSetScript = function* (processResult: ProcessResult) {
-    const resultMap = new Map<ImageFormat, Array<OutputResult>>();
+const serializeSrcSetScript = function* (processResult: ImageProcessorResult) {
+    const resultMap = new Map<ImageFormat, Array<ImageOutputResult>>();
     const getList = (format: ImageFormat) => {
         const list = resultMap.get(format) || [];
         resultMap.set(format, list);

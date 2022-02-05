@@ -10,11 +10,14 @@ import {removeHtmlComments} from '../es/removeHtmlComments';
 import type {MarkdownContent, SerializeMarkdownContext} from './serializeMarkdownToJsx';
 import {walkMarkdownContentNodes} from './walkContentNodes';
 
-export const createSerializeMarkdownContext = (): SerializeMarkdownContext => {
+export const createSerializeMarkdownContext = (
+    options: Pick<SerializeMarkdownContext, 'transformLink'> = {},
+): SerializeMarkdownContext => {
     const nodes = new Map<Markdown.Content['type'], Array<Markdown.Content> | undefined>();
     const nodeListOf = <T extends Markdown.Content['type']>(type: T) => (nodes.get(type) || []).slice() as Array<MarkdownContent<T>>;
     const counters = new Map<string, () => number>();
     return {
+        ...options,
         getId: (namespace: string): number => {
             let counter = counters.get(namespace);
             if (!counter) {

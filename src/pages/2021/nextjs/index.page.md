@@ -17,8 +17,8 @@
 
 1. **Markdownで書く** - TypeScriptで`<p>Hello</p>`とか書いてもいいのですが、このページのような文章を書くには邪魔が多いのでMarkdownで書いた文章をページにできるようにしました。Markdownじゃなくてもいいのですが、GitHubのプレビューがあるのでMarkdownに決めました。Loaderはまた別のページで書きます。
 1. **JSXのコンポーネントを表示する** - 文章中に動くサンプルを差し込めると書く体験も読む体験もよくなると思うのでコードブロックのメタ情報を使ってそういう表現ができるようにしました。
-1. **Atomの配信** - 私自身[feedly]と[Reeder]でRSS/Atomの恩恵を受けてきました。便利なのでこのサイトでも提供できるようにしました（[Atom](/api/feed.xml)）。
-1. **サイトマップの配信** - Atomのついでに作りました。→ [sitemap](/api/sitemap.xml)
+1. **Atomの配信** - 私自身[feedly]と[Reeder]でRSS/Atomの恩恵を受けてきました。便利なのでこのサイトでも提供できるようにしました（[Atom](https://gojabako.zone/feed.atom)）。
+1. **サイトマップの配信** - Atomのついでに作りました。→ [sitemap](https://gojabako.zone/sitemap.xml)
 1. **コンテンツの埋め込み** - YouTube、ツイートをMarkdownで追加できます。
 
 [Feedly]: https://feedly.com/

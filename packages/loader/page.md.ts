@@ -4,7 +4,8 @@ import {createSerializeMarkdownContext} from '../markdown/createSerializeContext
 import {finalizeSerializeMarkdownContext} from '../markdown/finalizeSerializeContext';
 import {getMarkdownExcerpt} from '../markdown/getExcerpt';
 import {serializeMarkdownRootToJsx} from '../markdown/serializeMarkdownToJsx';
-import {getPagePathName} from '../node/getPagePathName';
+import {getPagePathName} from '../page/getPagePathName';
+import {createLinkResolver} from './createLinkResolver';
 import type {LoaderThis} from './type';
 
 export const loadMarkdownPage = async (
@@ -12,7 +13,9 @@ export const loadMarkdownPage = async (
     source: string,
 ): Promise<string> => {
     await Promise.resolve();
-    const context = createSerializeMarkdownContext();
+    const context = createSerializeMarkdownContext({
+        transformLink: createLinkResolver(resourcePath),
+    });
     const root = context.parseMarkdown(source);
     const [titleNode, ...bodyNodes] = root.children;
     if (!(titleNode.type === 'heading' && titleNode.depth === 1)) {

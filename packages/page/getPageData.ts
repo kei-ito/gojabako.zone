@@ -1,4 +1,4 @@
-import {getPagePathName} from '../node/getPagePathName';
+import {getPagePathName} from './getPagePathName';
 import {Error, Promise} from '../es/global';
 import {getFileData} from '../node/getFileData';
 import {getPageTitle} from './getPageTitle';
@@ -22,7 +22,7 @@ export const getPageData = async (...args: Parameters<typeof findPageData>): Pro
 
 export const findPageData = async (pageFileAbsolutePath: string): Promise<PageData | null> => {
     const pathname = getPagePathName(pageFileAbsolutePath);
-    if (pathname === null || pathname.startsWith('/api/')) {
+    if (pathname.startsWith('/api/')) {
         return null;
     }
     const [

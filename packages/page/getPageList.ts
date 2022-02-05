@@ -6,6 +6,7 @@ import {Date, Error, JSON, WeakMap} from '../es/global';
 import {rootDirectoryPath} from '../fs/constants';
 
 const isPageFile = (filePath: string) => !filePath.endsWith('.component.tsx')
+&& !path.basename(filePath).startsWith('_')
 && (
     (/\.tsx?$/).test(filePath)
     || filePath.endsWith('.page.md')
