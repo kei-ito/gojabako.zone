@@ -19,11 +19,24 @@ const isImageFile = (filePath: string) => {
     }
 };
 
+const listImageFiles = async function* () {
+    for await (const sourceFileAbsolutePath of listFiles(path.join(rootDirectoryPath, 'src'))) {
+        if (isImageFile(sourceFileAbsolutePath)) {
+            yield sourceFileAbsolutePath;
+        }
+    }
+    const outputImageDirectoryPath = path.join(rootDirectoryPath, 'public', 'images');
+    for await (const sourceFileAbsolutePath of listFiles(path.join(rootDirectoryPath, 'public'))) {
+        if (isImageFile(sourceFileAbsolutePath) && !sourceFileAbsolutePath.startsWith(outputImageDirectoryPath)) {
+            yield sourceFileAbsolutePath;
+        }
+    }
+};
+
 runScript(async () => {
-    const srcDirectoryPath = path.join(rootDirectoryPath, 'src');
     const workerScriptPath = path.join(rootDirectoryPath, '.output', 'build', 'image.mjs');
     const processes: Array<Promise<unknown>> = [];
-    for await (const sourceFileAbsolutePath of listFiles(srcDirectoryPath, isImageFile)) {
+    for await (const sourceFileAbsolutePath of listImageFiles()) {
         const command = ['node', workerScriptPath, sourceFileAbsolutePath].join(' ');
         processes.push(spawn(command));
     }

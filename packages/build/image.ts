@@ -73,6 +73,19 @@ const listOutputImagePathFragments = function* (hash: string) {
     yield hash.slice(0, 8);
 };
 
+const listWidthPatterns = function* (originalWidth: number) {
+    let widthPatternCount = 0;
+    for (const width of widthList) {
+        if (width <= originalWidth) {
+            widthPatternCount++;
+            yield width;
+        }
+    }
+    if (widthPatternCount === 0) {
+        yield originalWidth;
+    }
+};
+
 const listPatterns = function* (
     {image, metadata: {width: originalWidth, format}}: {
         image: sharp.Sharp,
@@ -82,20 +95,18 @@ const listPatterns = function* (
         },
     },
 ): Generator<[sharp.Sharp, number, ImageFormat]> {
-    for (const width of widthList) {
-        if (width <= originalWidth) {
-            const resized = image.clone().resize(width, null);
-            yield [resized.clone().webp({reductionEffort: 6}), width, 'webp'];
-            yield [resized.clone().avif({speed: 0}), width, 'avif'];
-            switch (format) {
-            case 'png':
-                yield [resized.clone().png({compressionLevel: 9}), width, 'png'];
-                break;
-            case 'jpeg':
-            case 'jpg':
-            default:
-                yield [resized.clone().jpeg({progressive: true}), width, 'jpeg'];
-            }
+    for (const width of listWidthPatterns(originalWidth)) {
+        const resized = image.clone().resize(width, null);
+        yield [resized.clone().webp({reductionEffort: 6}), width, 'webp'];
+        yield [resized.clone().avif({speed: 0}), width, 'avif'];
+        switch (format) {
+        case 'png':
+            yield [resized.clone().png({compressionLevel: 9}), width, 'png'];
+            break;
+        case 'jpeg':
+        case 'jpg':
+        default:
+            yield [resized.clone().jpeg({progressive: true}), width, 'jpeg'];
         }
     }
 };
