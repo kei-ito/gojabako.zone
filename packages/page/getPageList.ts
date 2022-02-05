@@ -5,9 +5,11 @@ import {findPageData} from './getPageData';
 import {Date, Error, JSON, WeakMap} from '../es/global';
 import {rootDirectoryPath} from '../fs/constants';
 
-const isPageFile = (filePath: string) => filePath.endsWith('.page.tsx')
-|| filePath.endsWith('.page.ts')
-|| filePath.endsWith('.page.md');
+const isPageFile = (filePath: string) => !filePath.endsWith('.component.tsx')
+&& (
+    (/\.tsx?$/).test(filePath)
+    || filePath.endsWith('.page.md')
+);
 const byDate = (date1: string, date2: string) => {
     const now = Date.now();
     const t1 = date1 ? new Date(date1).getTime() : now;

@@ -3,7 +3,7 @@ import EsifyCSSWebpackPlugin from 'esifycss-webpack-plugin';
 
 const nextConfig = {
     reactStrictMode: true,
-    pageExtensions: ['page.md', 'page.tsx', 'page.ts'],
+    pageExtensions: ['page.md', 'tsx', 'ts'],
     webpack: (config, {defaultLoaders: {babel}}) => {
         config.module.rules.push(
             {test: /\.module\.md$/, use: [babel, './loader/module.md.cjs']},
