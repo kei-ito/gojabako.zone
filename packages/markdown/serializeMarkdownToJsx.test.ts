@@ -170,9 +170,9 @@ describe(serializeMarkdownToJsx.name, () => {
             '<figcaption>image1</figcaption>',
             '</figure>',
             '<p>',
-            '<a href="./image2">',
+            '<Link href="./image2"><a>',
             '<Image1 id="image-2" alt="image2" placeholder="blur" loading="lazy"/>',
-            '</a>',
+            '</a></Link>',
             '</p>',
             '</>',
         ].join('');
