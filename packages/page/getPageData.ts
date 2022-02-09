@@ -1,7 +1,9 @@
 import {getPagePathName} from './getPagePathName';
 import {Error, Promise} from '../es/global';
 import {getFileData} from '../node/getFileData';
+import {siteDomain} from '../site/constants';
 import {getPageTitle} from './getPageTitle';
+import {generatePageImage} from './generatePageImage';
 
 export interface PageData {
     pathname: string,
@@ -34,5 +36,7 @@ export const findPageData = async (pageFileAbsolutePath: string): Promise<PageDa
     ]);
     const publishedAt = firstCommitAt;
     const updatedAt = lastCommitAt;
+    const url = `https://${siteDomain}${pathname}`;
+    await generatePageImage({url, title});
     return {pathname, title, filePath, publishedAt, updatedAt, commitCount};
 };
