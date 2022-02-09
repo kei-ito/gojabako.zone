@@ -22,8 +22,7 @@ export const generatePageImage = async (
     const ctx = canvas.getContext('2d');
     draw(ctx, props, await getSiteColors());
     const destPath = [
-        'images',
-        'post',
+        'post-images',
         `v${version}`,
         `${getHash(props.url).toString('base64url').slice(0, 8)}.png`,
     ].join('/');

@@ -11,6 +11,7 @@ import {spawn} from '../node/spawn';
 
 const ignoredDirectories = [
     path.join(rootDirectoryPath, 'public', 'images'),
+    path.join(rootDirectoryPath, 'public', 'post-images'),
 ];
 const isTargetImageFile = (filePath: string) => {
     switch (path.extname(filePath).toLowerCase()) {
