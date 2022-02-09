@@ -22,12 +22,13 @@ export const generatePageImage = async (
     const ctx = canvas.getContext('2d');
     draw(ctx, props, await getSiteColors());
     const destPath = [
-        'cover',
-        getHash(props.url).toString('base64url').slice(0, 8),
-        `v${version}.png`,
+        'images',
+        'post',
+        `v${version}`,
+        `${getHash(props.url).toString('base64url').slice(0, 8)}.png`,
     ].join('/');
     const dest = path.join(rootDirectoryPath, 'public', ...destPath.split('/'));
-    await rmrf(path.dirname(dest));
+    await rmrf(dest);
     await fs.promises.mkdir(path.dirname(dest), {recursive: true});
     const writer = fs.createWriteStream(dest);
     for await (const chunk of canvas.createPNGStream({compressionLevel: 9})) {
