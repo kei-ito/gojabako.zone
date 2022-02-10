@@ -1,12 +1,17 @@
-import * as path from 'path';
-import * as fs from 'fs';
 import type {CanvasRenderingContext2D} from 'canvas';
 import nodeCanvas from 'canvas';
+import * as fs from 'fs';
+import * as path from 'path';
 import {rootDirectoryPath} from '../fs/constants';
-import {getHash} from '../node/getHash';
 import {rmrf} from '../fs/rmrf';
+import {listPhrases} from '../kuromoji/listPhrases';
+import {getHash} from '../node/getHash';
 import type {SiteColors} from '../site/css';
 import {getSiteColors} from '../site/css';
+
+nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD明朝 StdN W4.otf', {family: 'HiraginoW4'});
+nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD明朝 StdN W6.otf', {family: 'HiraginoW6'});
+nodeCanvas.registerFont('/Library/Fonts/ヒラギノ明朝 StdN W8.otf', {family: 'HiraginoW8'});
 
 const width = 1200;
 const height = 630;
@@ -20,7 +25,7 @@ export const generatePageImage = async (
 ) => {
     const canvas = nodeCanvas.createCanvas(width, height);
     const ctx = canvas.getContext('2d');
-    draw(ctx, props, await getSiteColors());
+    await draw(ctx, props, await getSiteColors());
     const destPath = [
         'post-images',
         `v${version}`,
@@ -34,9 +39,10 @@ export const generatePageImage = async (
         writer.write(chunk);
     }
     writer.end();
+    return destPath;
 };
 
-const draw = (
+const draw = async (
     ctx: CanvasRenderingContext2D,
     {url, title}: {
         url: string,
@@ -48,8 +54,51 @@ const draw = (
     ctx.rect(0, 0, width, height);
     ctx.fill();
     ctx.fillStyle = colors.text;
-    ctx.font = '40px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(title, width / 2, height / 2);
-    ctx.fillText(url, width / 2, 100);
+    {
+        const fontSize = 40;
+        const lineHeight = fontSize * 1.5;
+        ctx.font = `${fontSize}px HiraginoW8`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const lines: Array<string> = [];
+        for await (const line of listLines(ctx, title, height)) {
+            lines.push(line);
+        }
+        lines.forEach((line, index) => {
+            const x = width / 2;
+            const y = height / 2 + lineHeight * (index - (lines.length - 1) / 2);
+            ctx.fillText(line, x, y);
+        });
+    }
+    {
+        const fontSize = 20;
+        ctx.font = `${fontSize}px HiraginoW6`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const x = width / 2;
+        const y = height - fontSize * 1.5;
+        ctx.fillText(url, x, y);
+    }
+};
+
+const listLines = async function* (
+    ctx: CanvasRenderingContext2D,
+    source: string,
+    maxLineWidth: number,
+) {
+    let buffer = '';
+    for await (const phrase of listPhrases(source)) {
+        const line = `${buffer}${phrase}`.trim();
+        const result = ctx.measureText(line);
+        if (result.width < maxLineWidth) {
+            buffer += phrase;
+        } else {
+            yield buffer.trim();
+            buffer = phrase;
+        }
+    }
+    const lastLine = buffer.trim();
+    if (lastLine) {
+        yield lastLine;
+    }
 };

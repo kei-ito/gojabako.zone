@@ -12,6 +12,7 @@ export interface PageData {
     publishedAt: string,
     updatedAt: string,
     commitCount: number,
+    coverImage: string,
 }
 
 export const getPageData = async (...args: Parameters<typeof findPageData>): Promise<PageData> => {
@@ -37,6 +38,6 @@ export const findPageData = async (pageFileAbsolutePath: string): Promise<PageDa
     const publishedAt = firstCommitAt;
     const updatedAt = lastCommitAt;
     const url = `https://${siteDomain}${pathname}`;
-    await generatePageImage({url, title});
-    return {pathname, title, filePath, publishedAt, updatedAt, commitCount};
+    const coverImage = await generatePageImage({url, title});
+    return {pathname, title, filePath, publishedAt, updatedAt, commitCount, coverImage};
 };
