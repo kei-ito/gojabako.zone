@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {console, Promise} from '../es/global';
 import {rootDirectoryPath} from '../fs/constants';
+import {rmrf} from '../fs/rmrf';
 import {ImageProcessorHashEncoding, ImageProcessorResultFileName, ImageProcessorVersion} from '../image/constants';
 import {loadImageProcessorResult} from '../image/loadImageProcessorResult';
 import {getHash} from '../node/getHash';
@@ -70,6 +71,7 @@ runScript(async () => {
         const directoryPath = path.join(outputImageDirectoryPath, name);
         if (!(await isValidImageProcessorResult(directoryPath))) {
             console.info(`${name} is outdated.`);
+            await rmrf(directoryPath);
         }
     }
 });

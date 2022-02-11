@@ -2,23 +2,23 @@ import type {CanvasRenderingContext2D} from 'canvas';
 import nodeCanvas from 'canvas';
 import * as fs from 'fs';
 import * as path from 'path';
+import {Buffer} from 'buffer';
 import stackBlur from 'stackblur-canvas';
 import {nullaryCache} from '../es/cache';
 import {Date, Math} from '../es/global';
 import {rootDirectoryPath} from '../fs/constants';
-import {statsOrNull} from '../fs/statsOrNull';
 import {listPhrases} from '../kuromoji/listPhrases';
 import {getHash} from '../node/getHash';
 import {siteDomain} from '../site/constants';
 import {getSiteColors} from '../site/css';
 import type {PageData} from './getPageData';
+import {rmrf} from '../fs/rmrf';
 
 const setupFont = nullaryCache(() => {
     nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD明朝 StdN W4.otf', {family: 'HiraginoW4'});
     nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD明朝 StdN W6.otf', {family: 'HiraginoW6'});
     nodeCanvas.registerFont('/Library/Fonts/ヒラギノ明朝 StdN W8.otf', {family: 'HiraginoW8'});
 });
-const version = 1;
 const width = 1200;
 const height = 630;
 const logoUnitSize = 12;
@@ -31,32 +31,36 @@ const border = 40;
 const borderRadius = 30;
 const blurRadius = 16;
 
-type PageProps = Omit<PageData, 'cover'>;
+export interface PageImageData {
+    path: string,
+    width: number,
+    height: number,
+}
 
-export const generatePageImage = async (page: PageProps) => {
+export const generatePageImage = async (page: PageData): Promise<PageImageData> => {
+    const canvas = await draw(page);
+    const buffer = await getPNGBuffer(canvas);
     const destPath = [
         'post-images',
-        `v${version}`,
-        `${getHash(page.pathname).toString('base64url').slice(0, 8)}.png`,
+        `${getHash().toString('base64url').slice(0, 8)}`,
+        `${getHash(buffer).toString('base64url').slice(0, 8)}.png`,
     ].join('/');
     const dest = path.join(rootDirectoryPath, 'public', ...destPath.split('/'));
-    if (await statsOrNull(dest) === null) {
-        const canvas = await draw(page);
-        await writeToFile(dest, canvas);
-    }
+    await rmrf(path.dirname(dest));
+    await fs.promises.mkdir(path.dirname(dest), {recursive: true});
+    await fs.promises.writeFile(dest, buffer);
     return {path: destPath, width, height};
 };
 
-const writeToFile = async (dest: string, canvas: nodeCanvas.Canvas) => {
-    await fs.promises.mkdir(path.dirname(dest), {recursive: true});
-    const writer = fs.createWriteStream(dest);
+const getPNGBuffer = async (canvas: nodeCanvas.Canvas) => {
+    const chunks: Array<Buffer> = [];
     for await (const chunk of canvas.createPNGStream({compressionLevel: 9})) {
-        writer.write(chunk);
+        chunks.push(chunk as Buffer);
     }
-    writer.end();
+    return Buffer.concat(chunks);
 };
 
-const draw = async (page: PageProps) => {
+const draw = async (page: PageData) => {
     setupFont();
     const canvas = nodeCanvas.createCanvas(width, height);
     const ctx = canvas.getContext('2d');
@@ -69,7 +73,7 @@ const draw = async (page: PageProps) => {
     return canvas;
 };
 
-const clearCanvas = async (ctx: CanvasRenderingContext2D, _page: PageProps) => {
+const clearCanvas = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
     const colors = await getSiteColors();
     ctx.fillStyle = colors.main;
     ctx.beginPath();
@@ -124,7 +128,7 @@ const logoStrokes: Array<Array<[number, number]>> = [
     [[6, 0], [8, 0], [8, 4], [7, 4], [7, 3], [6, 3]],
 ];
 
-const drawLogo = async (ctx: CanvasRenderingContext2D, _page: PageProps) => {
+const drawLogo = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
     const colors = await getSiteColors();
     ctx.save();
     ctx.fillStyle = colors.text;
@@ -142,7 +146,7 @@ const drawLogo = async (ctx: CanvasRenderingContext2D, _page: PageProps) => {
     ctx.restore();
 };
 
-const drawDate = async (ctx: CanvasRenderingContext2D, page: PageProps) => {
+const drawDate = async (ctx: CanvasRenderingContext2D, page: PageData) => {
     const colors = await getSiteColors();
     ctx.font = `${baseFontSize}px HiraginoW6`;
     ctx.textAlign = 'left';
@@ -167,7 +171,7 @@ const drawDate = async (ctx: CanvasRenderingContext2D, page: PageProps) => {
     ctx.fillText(text, x, y);
 };
 
-const drawTitle = async (ctx: CanvasRenderingContext2D, page: PageProps) => {
+const drawTitle = async (ctx: CanvasRenderingContext2D, page: PageData) => {
     const colors = await getSiteColors();
     const lineHeight = titleFontSize * 1.5;
     ctx.font = `${titleFontSize}px HiraginoW8`;
@@ -208,7 +212,7 @@ const listLines = async function* (
     }
 };
 
-const drawUrl = async (ctx: CanvasRenderingContext2D, page: PageProps) => {
+const drawUrl = async (ctx: CanvasRenderingContext2D, page: PageData) => {
     const colors = await getSiteColors();
     ctx.font = `${baseFontSize}px HiraginoW6`;
     ctx.textAlign = 'left';
@@ -220,7 +224,7 @@ const drawUrl = async (ctx: CanvasRenderingContext2D, page: PageProps) => {
     ctx.fillText(url, x, y);
 };
 
-const drawQrCode = async (ctx: CanvasRenderingContext2D, _page: PageProps) => {
+const drawQrCode = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
     const colors = await getSiteColors();
     ctx.strokeStyle = colors.main;
     ctx.lineWidth = 1;
