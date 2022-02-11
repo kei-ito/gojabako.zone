@@ -5,6 +5,7 @@ import * as path from 'path';
 import stackBlur from 'stackblur-canvas';
 import {Date, Math} from '../es/global';
 import {rootDirectoryPath} from '../fs/constants';
+import {statsOrNull} from '../fs/statsOrNull';
 import {listPhrases} from '../kuromoji/listPhrases';
 import {getHash} from '../node/getHash';
 import {siteDomain} from '../site/constants';
@@ -31,24 +32,26 @@ const blurRadius = 16;
 type PageProps = Omit<PageData, 'coverImage'>;
 
 export const generatePageImage = async (page: PageProps) => {
-    const canvas = await draw(page);
-    return await writeToFile(page, canvas);
-};
-
-const writeToFile = async (page: PageProps, canvas: nodeCanvas.Canvas) => {
     const destPath = [
         'post-images',
         `v${version}`,
         `${getHash(page.pathname).toString('base64url').slice(0, 8)}.png`,
     ].join('/');
     const dest = path.join(rootDirectoryPath, 'public', ...destPath.split('/'));
+    if (await statsOrNull(dest) === null) {
+        const canvas = await draw(page);
+        await writeToFile(dest, canvas);
+    }
+    return destPath;
+};
+
+const writeToFile = async (dest: string, canvas: nodeCanvas.Canvas) => {
     await fs.promises.mkdir(path.dirname(dest), {recursive: true});
     const writer = fs.createWriteStream(dest);
     for await (const chunk of canvas.createPNGStream({compressionLevel: 9})) {
         writer.write(chunk);
     }
     writer.end();
-    return destPath;
 };
 
 const draw = async (page: PageProps) => {
