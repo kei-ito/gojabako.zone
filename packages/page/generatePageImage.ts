@@ -3,6 +3,7 @@ import nodeCanvas from 'canvas';
 import * as fs from 'fs';
 import * as path from 'path';
 import stackBlur from 'stackblur-canvas';
+import {nullaryCache} from '../es/cache';
 import {Date, Math} from '../es/global';
 import {rootDirectoryPath} from '../fs/constants';
 import {statsOrNull} from '../fs/statsOrNull';
@@ -12,10 +13,11 @@ import {siteDomain} from '../site/constants';
 import {getSiteColors} from '../site/css';
 import type {PageData} from './getPageData';
 
-nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD明朝 StdN W4.otf', {family: 'HiraginoW4'});
-nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD明朝 StdN W6.otf', {family: 'HiraginoW6'});
-nodeCanvas.registerFont('/Library/Fonts/ヒラギノ明朝 StdN W8.otf', {family: 'HiraginoW8'});
-
+const setupFont = nullaryCache(() => {
+    nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD明朝 StdN W4.otf', {family: 'HiraginoW4'});
+    nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD明朝 StdN W6.otf', {family: 'HiraginoW6'});
+    nodeCanvas.registerFont('/Library/Fonts/ヒラギノ明朝 StdN W8.otf', {family: 'HiraginoW8'});
+});
 const version = 1;
 const width = 1200;
 const height = 630;
@@ -55,6 +57,7 @@ const writeToFile = async (dest: string, canvas: nodeCanvas.Canvas) => {
 };
 
 const draw = async (page: PageProps) => {
+    setupFont();
     const canvas = nodeCanvas.createCanvas(width, height);
     const ctx = canvas.getContext('2d');
     await clearCanvas(ctx, page);
