@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {console, Promise} from '../es/global';
 import {rootDirectoryPath} from '../fs/constants';
+import {rmrf} from '../fs/rmrf';
 import {ImageProcessorHashEncoding, ImageProcessorResultFileName, ImageProcessorVersion} from '../image/constants';
 import {loadImageProcessorResult} from '../image/loadImageProcessorResult';
 import {getHash} from '../node/getHash';
@@ -11,6 +12,7 @@ import {spawn} from '../node/spawn';
 
 const ignoredDirectories = [
     path.join(rootDirectoryPath, 'public', 'images'),
+    path.join(rootDirectoryPath, 'public', 'post-images'),
 ];
 const isTargetImageFile = (filePath: string) => {
     switch (path.extname(filePath).toLowerCase()) {
@@ -69,6 +71,7 @@ runScript(async () => {
         const directoryPath = path.join(outputImageDirectoryPath, name);
         if (!(await isValidImageProcessorResult(directoryPath))) {
             console.info(`${name} is outdated.`);
+            await rmrf(directoryPath);
         }
     }
 });

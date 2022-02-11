@@ -2,8 +2,10 @@ import {NextResponse} from 'next/server';
 import type {NextRequest} from 'next/server';
 import {URL} from '../../packages/es/global';
 import {toJsxSafeString} from '../../packages/es/toJsxSafeString';
-import {homepage, siteName} from '../../packages/site/constants';
+import {siteName, siteDomain} from '../../packages/site/constants';
 import {pageListByPublishedAt, pageListByUpdatedAt} from '../pageList';
+
+const homepage = `https://${siteDomain}`;
 
 export const middleware = (req: NextRequest) => {
     const {pathname} = req.nextUrl;
