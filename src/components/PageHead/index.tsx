@@ -20,11 +20,12 @@ export const PageHead = (
     return <Head>
         <title>{title} ・ {siteName}</title>
         <link rel="canonical" href={url}/>
+        <meta.OgTitle content={title}/>
         <meta.Description content={description}/>
-        <meta.TwitterCard content="summary_large_image"/>
         <meta.OgImage content={coverUrl}/>
         <meta.OgImageWidth content={`${pageImage.width}`}/>
         <meta.OgImageHeight content={`${pageImage.height}`}/>
+        <meta.TwitterCard content="summary_large_image"/>
         {children}
     </Head>;
 };

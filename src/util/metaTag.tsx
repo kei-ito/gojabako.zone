@@ -11,6 +11,7 @@ const get = (name: string) => {
 export const meta = {
     Description: get('description'),
     Author: get('author'),
+    OgTitle: get('og:title'),
     OgSiteName: get('og:site_name'),
     OgImage: get('og:image'),
     OgImageWidth: get('og:image:width'),
