@@ -12,7 +12,8 @@ export const getPagePathName = (fileAbsolutePath: string): string => {
     if (path.basename(normalizedFileAbsolutePath).startsWith('_')) {
         throw new Error(`The page file starts with "_": ${normalizedFileAbsolutePath}`);
     }
-    let result = ['', ...path.relative(pagesDirectoryPath, normalizedFileAbsolutePath).split(path.sep)].join('/').replace(/\.\w+$/, '');
+    let result = path.relative(pagesDirectoryPath, normalizedFileAbsolutePath).split(path.sep).join('/').replace(/\.\w+$/, '');
+    result = `/${result}`;
     if (result.endsWith('.page')) {
         result = result.slice(0, -5);
     }

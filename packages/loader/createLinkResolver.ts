@@ -1,8 +1,12 @@
+import * as path from 'path';
 import {getPagePathName} from '../page/getPagePathName';
 
-export const createLinkResolver = (absoluteSourceFilePath: string) => (href: string) => {
-    if (href.startsWith('/')) {
-        return getPagePathName(href);
-    }
-    return getPagePathName(`${absoluteSourceFilePath}/${href}`);
+export const createLinkResolver = (absoluteSourceFilePath: string) => {
+    const baseDirectoryPath = path.dirname(absoluteSourceFilePath);
+    return (href: string) => {
+        if (href.startsWith('/')) {
+            return getPagePathName(href);
+        }
+        return getPagePathName(`${baseDirectoryPath}/${href}`);
+    };
 };
