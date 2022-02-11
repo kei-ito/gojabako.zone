@@ -1,6 +1,6 @@
 import * as path from 'path';
 import {rootDirectoryPath} from '../fs/constants';
-import {Error, console} from '../es/global';
+import {Error} from '../es/global';
 
 const pagesDirectoryPath = path.join(rootDirectoryPath, 'src/pages');
 
@@ -22,6 +22,5 @@ export const getPagePathName = (fileAbsolutePath: string): string => {
     if (!result) {
         result = '/';
     }
-    console.info(`getPagePathName: ${result}`);
     return result;
 };
