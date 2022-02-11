@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import type {PropsWithChildren} from 'react';
-import {URL} from '../../../packages/es/global';
+import {Error, URL} from '../../../packages/es/global';
 import {siteDomain, siteName} from '../../../packages/site/constants';
 import {pageImages} from '../../pageImageList';
 import {meta} from '../../util/metaTag';
@@ -15,6 +15,9 @@ export const PageHead = (
     {title, description, pathname, children}: PropsWithChildren<PageHeadProps>,
 ) => {
     const pageImage = pageImages[pathname || '/'];
+    if (!pageImage) {
+        throw new Error(`NoPageImage for "${pathname}"`);
+    }
     const url = new URL(pathname, `https://${siteDomain}`).href;
     const coverUrl = new URL(pageImage.path, `https://${siteDomain}`).href;
     return <Head>
