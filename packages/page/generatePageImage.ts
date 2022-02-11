@@ -1,7 +1,10 @@
-import type {Canvas, CanvasRenderingContext2D} from 'canvas';
+import type {CanvasRenderingContext2D} from 'canvas';
+import nodeCanvas from 'canvas';
 import * as fs from 'fs';
 import * as path from 'path';
 import {Buffer} from 'buffer';
+import stackBlur from 'stackblur-canvas';
+import {nullaryCache} from '../es/cache';
 import {Date, Math} from '../es/global';
 import {rootDirectoryPath} from '../fs/constants';
 import {listPhrases} from '../kuromoji/listPhrases';
@@ -11,6 +14,11 @@ import {getSiteColors} from '../site/css';
 import type {PageData} from './getPageData';
 import {rmrf} from '../fs/rmrf';
 
+const setupFont = nullaryCache(() => {
+    nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD明朝 StdN W4.otf', {family: 'HiraginoW4'});
+    nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD明朝 StdN W6.otf', {family: 'HiraginoW6'});
+    nodeCanvas.registerFont('/Library/Fonts/ヒラギノ明朝 StdN W8.otf', {family: 'HiraginoW8'});
+});
 const width = 1200;
 const height = 630;
 const logoUnitSize = 12;
@@ -44,7 +52,7 @@ export const generatePageImage = async (page: PageData): Promise<PageImageData> 
     return {path: destPath, width, height};
 };
 
-const getPNGBuffer = async (canvas: Canvas) => {
+const getPNGBuffer = async (canvas: nodeCanvas.Canvas) => {
     const chunks: Array<Buffer> = [];
     for await (const chunk of canvas.createPNGStream({compressionLevel: 9})) {
         chunks.push(chunk as Buffer);
@@ -53,10 +61,7 @@ const getPNGBuffer = async (canvas: Canvas) => {
 };
 
 const draw = async (page: PageData) => {
-    const nodeCanvas = await import('canvas');
-    nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD明朝 StdN W4.otf', {family: 'HiraginoW4'});
-    nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD明朝 StdN W6.otf', {family: 'HiraginoW6'});
-    nodeCanvas.registerFont('/Library/Fonts/ヒラギノ明朝 StdN W8.otf', {family: 'HiraginoW8'});
+    setupFont();
     const canvas = nodeCanvas.createCanvas(width, height);
     const ctx = canvas.getContext('2d');
     await clearCanvas(ctx, page);
@@ -82,7 +87,6 @@ const clearCanvas = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
     ctx.fillStyle = 'rgba(0,0,0,0.2)';
     drawRoundedRect(ctx, x + 2, y + 2, w, h, borderRadius);
     ctx.fill();
-    const stackBlur = await import('stackblur-canvas');
     stackBlur.canvasRGB(ctx.canvas, 0, 0, width, height, blurRadius);
     ctx.fillStyle = colors.background;
     drawRoundedRect(ctx, x - 1, y - 1, w, h, borderRadius);

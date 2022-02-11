@@ -3,7 +3,7 @@ import type {MetaHTMLAttributes} from 'react';
 const get = (name: string) => {
     const component = (
         props: Omit<MetaHTMLAttributes<HTMLMetaElement>, 'name'>,
-    ) => <meta {...props} name={name} key={name}/>;
+    ) => <meta name={name} key={name} {...props}/>;
     component.displayName = `Meta[${name}]`;
     return component;
 };

@@ -14,7 +14,7 @@ export interface PageHeadProps {
 export const PageHead = (
     {title, description, pathname, children}: PropsWithChildren<PageHeadProps>,
 ) => {
-    const pageImage = pageImages[pathname];
+    const pageImage = pageImages[pathname || '/'];
     const url = new URL(pathname, `https://${siteDomain}`).href;
     const coverUrl = new URL(pageImage.path, `https://${siteDomain}`).href;
     return <Head>
