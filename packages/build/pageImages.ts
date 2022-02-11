@@ -2,12 +2,12 @@ import * as console from 'console';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as process from 'process';
-import {pageListByPublishedAt} from '../../src/pageList';
 import {JSON} from '../es/global';
 import {rootDirectoryPath} from '../fs/constants';
 import {runScript} from '../node/runScript';
 import type {PageImageData} from '../page/generatePageImage';
 import {generatePageImage} from '../page/generatePageImage';
+import {listPageData} from '../page/listPageData';
 
 runScript(async () => {
     if (process.env.CI) {
@@ -15,7 +15,7 @@ runScript(async () => {
         return;
     }
     const pageImages: Record<string, PageImageData> = {};
-    for (const page of pageListByPublishedAt) {
+    for await (const page of listPageData()) {
         const result = await generatePageImage(page);
         pageImages[page.pathname] = result;
         console.info(`pageImage: ${page.pathname} → ${result.path}`);
