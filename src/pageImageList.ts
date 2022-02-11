@@ -5,9 +5,9 @@ export interface PageImageData {
     width: number,
     height: number,
 }
-export const pageImages: Record<string, PageImageData> = {
-    "/2022/image-preprocessor": {
-        "path": "images/post/foR4ezoK/GT8r2Jbf.png",
+export const pageImages: Record<string, PageImageData | undefined> = {
+    "/2021/au-denki": {
+        "path": "images/post/9cPn0k2Z/_Tx3JE8o.png",
         "width": 1200,
         "height": 630
     },
@@ -21,13 +21,8 @@ export const pageImages: Record<string, PageImageData> = {
         "width": 1200,
         "height": 630
     },
-    "/2021/au-denki": {
-        "path": "images/post/9cPn0k2Z/_Tx3JE8o.png",
-        "width": 1200,
-        "height": 630
-    },
-    "/2021/nextjs12": {
-        "path": "images/post/FqWvXwk8/Ag-Bqxzw.png",
+    "/2021/nextjs": {
+        "path": "images/post/s373Le5-/LEa9sifE.png",
         "width": 1200,
         "height": 630
     },
@@ -36,18 +31,23 @@ export const pageImages: Record<string, PageImageData> = {
         "width": 1200,
         "height": 630
     },
-    "/2021/nextjs": {
-        "path": "images/post/s373Le5-/LEa9sifE.png",
+    "/2021/nextjs12": {
+        "path": "images/post/FqWvXwk8/Ag-Bqxzw.png",
         "width": 1200,
         "height": 630
     },
-    "/markdown": {
-        "path": "images/post/tiihd--T/8-zIDOhG.png",
+    "/2022/image-preprocessor": {
+        "path": "images/post/foR4ezoK/W6diW8ks.png",
         "width": 1200,
         "height": 630
     },
     "/": {
         "path": "images/post/il7asoJj/Oszat0I-.png",
+        "width": 1200,
+        "height": 630
+    },
+    "/markdown": {
+        "path": "images/post/tiihd--T/8-zIDOhG.png",
         "width": 1200,
         "height": 630
     }
