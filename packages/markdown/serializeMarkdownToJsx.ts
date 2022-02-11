@@ -287,12 +287,10 @@ const serializeLinkElement = function* (
         throw new Error(`Invalid href: ${href}`);
     }
     if (href.startsWith('/') || href.startsWith('.')) {
-        const result = context.transformLink ? context.transformLink(href) : href;
-        context.links.add(result);
+        href = context.transformLink ? context.transformLink(href) : href;
         yield '<Link';
-        yield* serializeAttributes({href: result}, {jsx: true});
+        yield* serializeAttributes({href}, {jsx: true});
         yield '>';
-        attrs.title = `${href}→${result}`;
         yield* serializeElement(context, 'a', attrs, node, nextAncestors);
         yield '</Link>';
     } else {
