@@ -5,7 +5,7 @@ export interface PageImageData {
     width: number,
     height: number,
 }
-export const pageImages: Record<string, PageImageData> = {
+export const pageImages: Record<string, PageImageData | undefined> = {
     "/2022/image-preprocessor": {
         "path": "images/post/foR4ezoK/GT8r2Jbf.png",
         "width": 1200,
