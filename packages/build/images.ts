@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as process from 'process';
 import {console, Promise} from '../es/global';
 import {rootDirectoryPath} from '../fs/constants';
 import {rmrf} from '../fs/rmrf';
@@ -53,10 +52,6 @@ const isValidImageProcessorResult = async (
 };
 
 runScript(async () => {
-    if (process.env.CI) {
-        console.info('BuildImages: skipped');
-        return;
-    }
     const workerScriptPath = path.join(rootDirectoryPath, '.output', 'build', 'image.mjs');
     const processes: Array<Promise<unknown>> = [];
     for await (const sourceFileAbsolutePath of listImageFiles()) {
