@@ -10,7 +10,6 @@ export const Page = () => <>
         title={authorName}
         description={`${authorName}について`}
         pathname=""
-        author={authorName}
     />
     <main>
         <article>
