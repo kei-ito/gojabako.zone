@@ -36,10 +36,10 @@ const isNonBreakingJoint = (joint: string) => {
     if ((/^[\w.]{2}$/).test(joint)) {
         return true;
     }
-    if ((/^[\d'"([{<（「『【［｛〔〈《〝‘“]\S$/).test(joint)) {
+    if ((/^[$¥/\d'"([{<（「『【［｛〔〈《〝‘“]\S$/).test(joint)) {
         return true;
     }
-    if ((/^\S[,'")\]}>）」』】］｝〕〉》〟’”]$/).test(joint)) {
+    if ((/^\S[,、。'")\]}>）」』】］｝〕〉》〟’”]$/).test(joint)) {
         return true;
     }
     return false;
