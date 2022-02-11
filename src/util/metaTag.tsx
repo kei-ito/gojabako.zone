@@ -1,6 +1,6 @@
 import type {MetaHTMLAttributes} from 'react';
 
-const get = (name: string) => {
+const get = <T extends string>(name: T) => {
     const component = (
         props: Omit<MetaHTMLAttributes<HTMLMetaElement>, 'name'>,
     ) => <meta name={name} key={name} {...props}/>;
@@ -19,4 +19,6 @@ export const meta = {
     TwitterCard: get('twitter:card'),
     TwitterSite: get('twitter:site'),
     TwitterCreator: get('twitter:creator'),
+    TwitterDescription: get('twitter:description'),
+    TwitterImage: get('twitter:image'),
 };

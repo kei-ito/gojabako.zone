@@ -22,7 +22,9 @@ export const PageHead = (
         <link rel="canonical" href={url}/>
         <meta.OgTitle content={title}/>
         <meta.Description content={description}/>
+        <meta.TwitterDescription content={description}/>
         <meta.OgImage content={coverUrl}/>
+        <meta.TwitterImage content={coverUrl}/>
         <meta.OgImageWidth content={`${pageImage.width}`}/>
         <meta.OgImageHeight content={`${pageImage.height}`}/>
         <meta.TwitterCard content="summary_large_image"/>
