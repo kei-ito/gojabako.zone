@@ -14,8 +14,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "next/imageが遅いのでやめた",
         "filePath": "src/pages/2022/image-preprocessor/index.page.md",
         "publishedAt": "2022-02-05T18:20:17+09:00",
-        "updatedAt": "2022-02-05T18:20:17+09:00",
-        "commitCount": 1
+        "updatedAt": "2022-02-11T21:14:01+09:00",
+        "commitCount": 2
     },
     {
         "pathname": "/2021/aws-errors",
@@ -82,4 +82,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "commitCount": 16
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [8,6,0,1,2,3,4,5,7].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [0,8,6,1,2,3,4,5,7].map((index) => pageListByPublishedAt[index]);
