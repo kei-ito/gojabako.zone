@@ -1,3 +1,3 @@
 #!/bin/sh
-npm run prebuild
+npm run build:tool
 git diff --exit-code
