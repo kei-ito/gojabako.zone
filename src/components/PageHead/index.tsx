@@ -2,7 +2,7 @@ import Head from 'next/head';
 import type {PropsWithChildren} from 'react';
 import {URL} from '../../../packages/es/global';
 import {siteDomain, siteName} from '../../../packages/site/constants';
-import {getPageData} from '../../util/getPageData';
+import {pageImages} from '../../pageImageList';
 import {meta} from '../../util/metaTag';
 
 export interface PageHeadProps {
@@ -14,17 +14,17 @@ export interface PageHeadProps {
 export const PageHead = (
     {title, description, pathname, children}: PropsWithChildren<PageHeadProps>,
 ) => {
-    const {cover} = getPageData(pathname);
+    const pageImage = pageImages[pathname];
     const url = new URL(pathname, `https://${siteDomain}`).href;
-    const coverUrl = new URL(cover.path, `https://${siteDomain}`).href;
+    const coverUrl = new URL(pageImage.path, `https://${siteDomain}`).href;
     return <Head>
         <title>{title} ・ {siteName}</title>
         <link rel="canonical" href={url}/>
         <meta.Description content={description}/>
         <meta.TwitterCard content="summary_large_image"/>
         <meta.OgImage content={coverUrl}/>
-        <meta.OgImageWidth content={`${cover.width}`}/>
-        <meta.OgImageHeight content={`${cover.height}`}/>
+        <meta.OgImageWidth content={`${pageImage.width}`}/>
+        <meta.OgImageHeight content={`${pageImage.height}`}/>
         {children}
     </Head>;
 };
