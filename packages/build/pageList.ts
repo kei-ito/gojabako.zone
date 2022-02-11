@@ -24,6 +24,11 @@ export interface PageData {
     publishedAt: string,
     updatedAt: string,
     commitCount: number,
+    cover: {
+        path: string,
+        width: number,
+        height: number,
+    },
 }
 export const pageListByPublishedAt: Array<PageData> = JSON.parse(\`[
 ${pageListByPublishedAt.map((page) => JSON.stringify(page).replace(/`/g, '\\`')).join(',\n')}

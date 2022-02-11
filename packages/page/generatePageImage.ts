@@ -29,7 +29,7 @@ const border = 40;
 const borderRadius = 30;
 const blurRadius = 16;
 
-type PageProps = Omit<PageData, 'coverImage'>;
+type PageProps = Omit<PageData, 'cover'>;
 
 export const generatePageImage = async (page: PageProps) => {
     const destPath = [
@@ -42,7 +42,7 @@ export const generatePageImage = async (page: PageProps) => {
         const canvas = await draw(page);
         await writeToFile(dest, canvas);
     }
-    return destPath;
+    return {path: destPath, width, height};
 };
 
 const writeToFile = async (dest: string, canvas: nodeCanvas.Canvas) => {
@@ -111,10 +111,6 @@ const drawRoundedRect = (
     ctx.translate(0, h);
     ctx.rotate(Math.PI / 2);
     arc();
-    // ctx.lineTo(x + w - r, y + h);
-    // ctx.lineTo(x + r, y + h);
-    // ctx.lineTo(x, y + h - r);
-    // ctx.lineTo(x, y + r);
     ctx.closePath();
     ctx.restore();
 };
