@@ -41,8 +41,9 @@ export const generatePageImage = async (page: PageData): Promise<PageImageData> 
     const canvas = await draw(page);
     const buffer = await getPNGBuffer(canvas);
     const destPath = [
-        'post-images',
-        `${getHash().toString('base64url').slice(0, 8)}`,
+        'images',
+        'post',
+        `${getHash(page.pathname).toString('base64url').slice(0, 8)}`,
         `${getHash(buffer).toString('base64url').slice(0, 8)}.png`,
     ].join('/');
     const dest = path.join(rootDirectoryPath, 'public', ...destPath.split('/'));

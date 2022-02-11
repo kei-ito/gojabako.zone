@@ -7,47 +7,47 @@ export interface PageImageData {
 }
 export const pageImages: Record<string, PageImageData> = {
     "/2022/image-preprocessor": {
-        "path": "post-images/47DEQpj8/GT8r2Jbf.png",
+        "path": "images/post/foR4ezoK/GT8r2Jbf.png",
         "width": 1200,
         "height": 630
     },
     "/2021/aws-errors": {
-        "path": "post-images/47DEQpj8/F173Vgfj.png",
+        "path": "images/post/TzRZIKCA/F173Vgfj.png",
         "width": 1200,
         "height": 630
     },
     "/2021/ipad-case": {
-        "path": "post-images/47DEQpj8/HUO_V6Mc.png",
+        "path": "images/post/3pChiagg/HUO_V6Mc.png",
         "width": 1200,
         "height": 630
     },
     "/2021/au-denki": {
-        "path": "post-images/47DEQpj8/_Tx3JE8o.png",
+        "path": "images/post/9cPn0k2Z/_Tx3JE8o.png",
         "width": 1200,
         "height": 630
     },
     "/2021/nextjs12": {
-        "path": "post-images/47DEQpj8/Ag-Bqxzw.png",
+        "path": "images/post/FqWvXwk8/Ag-Bqxzw.png",
         "width": 1200,
         "height": 630
     },
     "/2021/nextjs-https": {
-        "path": "post-images/47DEQpj8/-W2H31ws.png",
+        "path": "images/post/ZX-cXk49/-W2H31ws.png",
         "width": 1200,
         "height": 630
     },
     "/2021/nextjs": {
-        "path": "post-images/47DEQpj8/LEa9sifE.png",
+        "path": "images/post/s373Le5-/LEa9sifE.png",
         "width": 1200,
         "height": 630
     },
     "/markdown": {
-        "path": "post-images/47DEQpj8/8-zIDOhG.png",
+        "path": "images/post/tiihd--T/8-zIDOhG.png",
         "width": 1200,
         "height": 630
     },
     "/": {
-        "path": "post-images/47DEQpj8/Oszat0I-.png",
+        "path": "images/post/il7asoJj/Oszat0I-.png",
         "width": 1200,
         "height": 630
     }
