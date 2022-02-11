@@ -289,7 +289,7 @@ const serializeLinkElement = function* (
     if (href.startsWith('/') || href.startsWith('.')) {
         const result = context.transformLink ? context.transformLink(href) : href;
         context.links.add(result);
-        yield `<code>href:${href} → result:${result}</code`;
+        yield `<code>href:${href} → result:${result}</code>`;
         yield '<Link';
         yield* serializeAttributes({href: result}, {jsx: true});
         yield '>';
