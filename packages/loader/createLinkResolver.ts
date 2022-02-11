@@ -7,6 +7,6 @@ export const createLinkResolver = (absoluteSourceFilePath: string) => {
         if (href.startsWith('/')) {
             return getPagePathName(href);
         }
-        return getPagePathName(`${baseDirectoryPath}/${href}`);
+        return getPagePathName(path.join(baseDirectoryPath, ...href.split('/')));
     };
 };
