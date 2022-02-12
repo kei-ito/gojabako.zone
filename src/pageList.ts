@@ -14,8 +14,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "ブログ記事の画像を生成できるようにした",
         "filePath": "src/pages/2022/page-images/index.page.md",
         "publishedAt": "2022-02-11T23:48:29+09:00",
-        "updatedAt": "2022-02-11T23:48:29+09:00",
-        "commitCount": 1
+        "updatedAt": "2022-02-12T16:20:17+09:00",
+        "commitCount": 2
     },
     {
         "pathname": "/2022/image-preprocessor",
@@ -90,4 +90,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "commitCount": 16
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [8,0,1,9,7,2,3,4,5,6].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [0,8,1,9,7,2,3,4,5,6].map((index) => pageListByPublishedAt[index]);

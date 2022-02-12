@@ -42,7 +42,7 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "height": 630
     },
     "/2022/page-images": {
-        "path": "images/post/yEbsLghZ/AZwdqrwr.png",
+        "path": "images/post/yEbsLghZ/mw2_qK9v.png",
         "width": 1200,
         "height": 630
     },
