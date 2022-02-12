@@ -19,17 +19,29 @@ const setupFont = nullaryCache(() => {
     nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD明朝 StdN W6.otf', {family: 'HiraginoW6'});
     nodeCanvas.registerFont('/Library/Fonts/ヒラギノ明朝 StdN W8.otf', {family: 'HiraginoW8'});
 });
-const width = 1200;
-const height = 630;
+const applyPadding = (
+    baseRect: {left: number, top: number, width: number, height: number},
+    padding: {left: number, right: number, top: number, bottom: number},
+) => {
+    const left = baseRect.left + padding.left;
+    const right = baseRect.left + baseRect.width - padding.right;
+    const top = baseRect.top + padding.top;
+    const bottom = baseRect.top + baseRect.height - padding.bottom;
+    const width = right - left;
+    const height = bottom - top;
+    const cx = (left + right) / 2;
+    const cy = (top + bottom) / 2;
+    return {left, right, top, bottom, width, height, cx, cy};
+};
+const image = {left: 0, top: 0, width: 1200, height: 630};
+const card = applyPadding(image, {left: 40, right: 40, top: 40, bottom: 80});
+const cardBorderRadius = 30;
+const shadowBlurRadius = 16;
+const cardContent = applyPadding(card, {left: 40, right: 40, top: 40, bottom: 40});
 const logoUnitSize = 12;
 const titleFontSize = 60;
 const baseFontSize = 24;
 const qrCodeSize = 140;
-const marginV = 80;
-const marginH = 80;
-const border = 40;
-const borderRadius = 30;
-const blurRadius = 16;
 
 export interface PageImageData {
     path: string,
@@ -50,7 +62,7 @@ export const generatePageImage = async (page: PageData): Promise<PageImageData> 
     await rmrf(path.dirname(dest));
     await fs.promises.mkdir(path.dirname(dest), {recursive: true});
     await fs.promises.writeFile(dest, buffer);
-    return {path: destPath, width, height};
+    return {path: destPath, width: image.width, height: image.height};
 };
 
 const getPNGBuffer = async (canvas: nodeCanvas.Canvas) => {
@@ -63,7 +75,7 @@ const getPNGBuffer = async (canvas: nodeCanvas.Canvas) => {
 
 const draw = async (page: PageData) => {
     setupFont();
-    const canvas = nodeCanvas.createCanvas(width, height);
+    const canvas = nodeCanvas.createCanvas(image.width, image.height);
     const ctx = canvas.getContext('2d');
     await clearCanvas(ctx, page);
     await drawLogo(ctx, page);
@@ -78,19 +90,15 @@ const clearCanvas = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
     const colors = await getSiteColors();
     ctx.fillStyle = colors.main;
     ctx.beginPath();
-    ctx.rect(0, 0, width, height);
+    ctx.rect(image.left, image.top, image.width, image.height);
     ctx.closePath();
     ctx.fill();
-    const x = marginH - border;
-    const y = marginV - border;
-    const w = width - (marginH - border) * 2;
-    const h = height - (marginV - border) * 2;
     ctx.fillStyle = 'rgba(0,0,0,0.2)';
-    drawRoundedRect(ctx, x + 2, y + 2, w, h, borderRadius);
+    drawRoundedRect(ctx, card.left + 2, card.top + 2, card.width, card.height, cardBorderRadius);
     ctx.fill();
-    stackBlur.canvasRGB(ctx.canvas, 0, 0, width, height, blurRadius);
+    stackBlur.canvasRGB(ctx.canvas, image.left, image.top, image.width, image.height, shadowBlurRadius);
     ctx.fillStyle = colors.background;
-    drawRoundedRect(ctx, x - 1, y - 1, w, h, borderRadius);
+    drawRoundedRect(ctx, card.left - 1, card.top - 1, card.width, card.height, cardBorderRadius);
     ctx.fill();
 };
 
@@ -131,9 +139,10 @@ const logoStrokes: Array<Array<[number, number]>> = [
 
 const drawLogo = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
     const colors = await getSiteColors();
+    const logoWidth = logoUnitSize * 8;
     ctx.save();
     ctx.fillStyle = colors.text;
-    ctx.translate(width - marginH - logoUnitSize * 8, marginV);
+    ctx.translate(cardContent.right - logoWidth, cardContent.top);
     ctx.scale(logoUnitSize, logoUnitSize);
     for (const [firstPoint, ...points] of logoStrokes) {
         ctx.beginPath();
@@ -152,8 +161,6 @@ const drawDate = async (ctx: CanvasRenderingContext2D, page: PageData) => {
     ctx.font = `${baseFontSize}px HiraginoW6`;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'top';
-    const x = marginH;
-    const y = marginV;
     ctx.fillStyle = colors.text;
     const parse = (dateString: string) => {
         const date = new Date(dateString);
@@ -169,7 +176,7 @@ const drawDate = async (ctx: CanvasRenderingContext2D, page: PageData) => {
     if (updatedAt !== publishedAt) {
         text += ` (${updatedAt}に更新)`;
     }
-    ctx.fillText(text, x, y);
+    ctx.fillText(text, cardContent.left, cardContent.top);
 };
 
 const drawTitle = async (ctx: CanvasRenderingContext2D, page: PageData) => {
@@ -179,15 +186,14 @@ const drawTitle = async (ctx: CanvasRenderingContext2D, page: PageData) => {
     ctx.textAlign = 'left';
     ctx.textBaseline = 'middle';
     const lines: Array<string> = [];
-    for await (const line of listLines(ctx, page.title, width - marginH * 2)) {
+    for await (const line of listLines(ctx, page.title, cardContent.width)) {
         lines.push(line);
     }
     for (let index = lines.length; index--;) {
         const line = lines[index];
-        const x = marginH;
-        const y = height / 2 + lineHeight * (index - (lines.length - 1) / 2);
+        const y = cardContent.cy + lineHeight * (index - (lines.length - 1) / 2);
         ctx.fillStyle = colors.text;
-        ctx.fillText(line, x, y);
+        ctx.fillText(line, cardContent.left, y);
     }
 };
 
@@ -219,20 +225,16 @@ const drawUrl = async (ctx: CanvasRenderingContext2D, page: PageData) => {
     ctx.textAlign = 'left';
     ctx.textBaseline = 'bottom';
     ctx.fillStyle = colors.text;
-    const x = marginH;
-    const y = height - marginV;
     const url = `https://${siteDomain}${page.pathname}`;
-    ctx.fillText(url, x, y);
+    ctx.fillText(url, cardContent.left, cardContent.bottom);
 };
 
 const drawQrCode = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
     const colors = await getSiteColors();
     ctx.strokeStyle = colors.main;
     ctx.lineWidth = 1;
-    const x = width - marginH - qrCodeSize;
-    const y = height - marginV - qrCodeSize;
     ctx.beginPath();
-    ctx.rect(x, y, qrCodeSize, qrCodeSize);
+    ctx.rect(cardContent.right - qrCodeSize, cardContent.bottom - qrCodeSize, qrCodeSize, qrCodeSize);
     ctx.closePath();
     ctx.stroke();
 };
