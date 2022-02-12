@@ -31,7 +31,7 @@ const applyPadding = (
     const height = bottom - top;
     const cx = (left + right) / 2;
     const cy = (top + bottom) / 2;
-    return {left, right, top, bottom, width, height, cx, cy};
+    return {left, right, top, bottom, width, height, cx, cy, padding};
 };
 const image = {left: 0, top: 0, width: 1200, height: 630};
 const card = applyPadding(image, {left: 40, right: 40, top: 40, bottom: 80});
@@ -39,9 +39,15 @@ const cardBorderRadius = 30;
 const shadowBlurRadius = 16;
 const cardContent = applyPadding(card, {left: 40, right: 40, top: 40, bottom: 40});
 const logoUnitSize = 12;
-const titleFontSize = 60;
-const baseFontSize = 24;
-const qrCodeSize = 140;
+const titleFontSize = 72;
+const titleLineScale = 1.5;
+const baseFontSize = 32;
+const baseLineScale = 1.4;
+const minFontSize = 14;
+/** 29 modules x 7 px/module = 203 */
+/** 33 modules x 6 px/module = 198 */
+const qrCodeMaxSize = 210;
+const qrCodeTop = cardContent.bottom - qrCodeMaxSize;
 
 export interface PageImageData {
     path: string,
@@ -79,9 +85,8 @@ const draw = async (page: PageData) => {
     const ctx = canvas.getContext('2d');
     await clearCanvas(ctx, page);
     await drawLogo(ctx, page);
-    await drawDate(ctx, page);
-    await drawTitle(ctx, page);
-    await drawUrl(ctx, page);
+    const metadata = await drawMetaData(ctx, page);
+    await drawTitle(ctx, page, cardContent.height - metadata.height);
     await drawQrCode(ctx, page);
     return canvas;
 };
@@ -140,9 +145,9 @@ const logoStrokes: Array<Array<[number, number]>> = [
 const drawLogo = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
     const colors = await getSiteColors();
     const logoWidth = logoUnitSize * 8;
-    ctx.save();
+    const logoHeight = logoUnitSize * 4;
     ctx.fillStyle = colors.text;
-    ctx.translate(cardContent.right - logoWidth, cardContent.top);
+    ctx.translate(cardContent.cx - logoWidth / 2, card.bottom + card.padding.bottom / 2 - logoHeight / 2);
     ctx.scale(logoUnitSize, logoUnitSize);
     for (const [firstPoint, ...points] of logoStrokes) {
         ctx.beginPath();
@@ -153,15 +158,10 @@ const drawLogo = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
         ctx.closePath();
         ctx.fill();
     }
-    ctx.restore();
+    ctx.resetTransform();
 };
 
-const drawDate = async (ctx: CanvasRenderingContext2D, page: PageData) => {
-    const colors = await getSiteColors();
-    ctx.font = `${baseFontSize}px HiraginoW6`;
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-    ctx.fillStyle = colors.text;
+const getDateText = (page: PageData) => {
     const parse = (dateString: string) => {
         const date = new Date(dateString);
         return [
@@ -176,40 +176,64 @@ const drawDate = async (ctx: CanvasRenderingContext2D, page: PageData) => {
     if (updatedAt !== publishedAt) {
         text += ` (${updatedAt}に更新)`;
     }
-    ctx.fillText(text, cardContent.left, cardContent.top);
+    return text;
 };
 
-const drawTitle = async (ctx: CanvasRenderingContext2D, page: PageData) => {
+const drawTitle = async (
+    ctx: CanvasRenderingContext2D,
+    page: PageData,
+    availableHeight: number,
+) => {
     const colors = await getSiteColors();
-    const lineHeight = titleFontSize * 1.5;
-    ctx.font = `${titleFontSize}px HiraginoW8`;
     ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
-    const lines: Array<string> = [];
-    for await (const line of listLines(ctx, page.title, cardContent.width)) {
-        lines.push(line);
+    ctx.textBaseline = 'top';
+    let fontSize = titleFontSize;
+    let lineHeight = fontSize * titleLineScale;
+    let lines: Array<string> = [];
+    while (true) {
+        ctx.font = `${fontSize}px HiraginoW8`;
+        const maxLineCount = Math.floor(availableHeight / lineHeight);
+        for await (const line of listTitleLines(ctx, page.title, lineHeight)) {
+            if (maxLineCount < lines.push(line)) {
+                break;
+            }
+        }
+        if (maxLineCount < lines.length && minFontSize < fontSize) {
+            lines = [];
+            fontSize -= 2;
+            lineHeight = fontSize * titleLineScale;
+        } else {
+            break;
+        }
     }
     for (let index = lines.length; index--;) {
         const line = lines[index];
-        const y = cardContent.cy + lineHeight * (index - (lines.length - 1) / 2);
+        const y = cardContent.top + lineHeight * index;
         ctx.fillStyle = colors.text;
         ctx.fillText(line, cardContent.left, y);
     }
 };
 
-const listLines = async function* (
+const listTitleLines = async function* (
     ctx: CanvasRenderingContext2D,
     source: string,
-    maxLineWidth: number,
+    lineHeight: number,
 ) {
     let buffer = '';
+    let lineCount = 0;
     for await (const phrase of listPhrases(source)) {
         const line = `${buffer}${phrase}`.trim();
         const result = ctx.measureText(line);
+        let maxLineWidth = cardContent.width;
+        const lineBottom = cardContent.top + lineHeight * (lineCount + 1);
+        if (qrCodeTop < lineBottom) {
+            maxLineWidth = maxLineWidth - qrCodeMaxSize;
+        }
         if (result.width < maxLineWidth) {
             buffer += phrase;
         } else {
             yield buffer.trim();
+            lineCount += 1;
             buffer = phrase;
         }
     }
@@ -219,22 +243,39 @@ const listLines = async function* (
     }
 };
 
-const drawUrl = async (ctx: CanvasRenderingContext2D, page: PageData) => {
+const drawMetaData = async (ctx: CanvasRenderingContext2D, page: PageData) => {
     const colors = await getSiteColors();
-    ctx.font = `${baseFontSize}px HiraginoW6`;
     ctx.textAlign = 'left';
-    ctx.textBaseline = 'bottom';
+    ctx.textBaseline = 'alphabetic';
     ctx.fillStyle = colors.text;
+    ctx.translate(cardContent.left, cardContent.bottom);
     const url = `https://${siteDomain}${page.pathname}`;
-    ctx.fillText(url, cardContent.left, cardContent.bottom);
+    let urlFontSize = baseFontSize;
+    const availableWidth = cardContent.width - qrCodeMaxSize;
+    while (minFontSize < urlFontSize) {
+        ctx.font = `${urlFontSize}px HiraginoW6`;
+        const urlRect = ctx.measureText(url);
+        if (urlRect.width < availableWidth) {
+            break;
+        } else if (minFontSize < urlFontSize) {
+            urlFontSize -= 1;
+        }
+    }
+    ctx.fillText(url, 0, 0);
+    ctx.translate(0, -(urlFontSize + baseFontSize * (baseLineScale - 1)));
+    ctx.font = `${baseFontSize}px HiraginoW6`;
+    ctx.fillText(getDateText(page), 0, 0);
+    ctx.resetTransform();
+    const height = (urlFontSize + baseFontSize) * baseLineScale;
+    return {height};
 };
 
 const drawQrCode = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
     const colors = await getSiteColors();
     ctx.strokeStyle = colors.main;
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.rect(cardContent.right - qrCodeSize, cardContent.bottom - qrCodeSize, qrCodeSize, qrCodeSize);
+    ctx.rect(cardContent.right - qrCodeMaxSize, cardContent.bottom - qrCodeMaxSize, qrCodeMaxSize, qrCodeMaxSize);
     ctx.closePath();
     ctx.stroke();
 };
