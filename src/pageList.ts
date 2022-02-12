@@ -75,11 +75,11 @@ export const pageListByPublishedAt: Array<PageData> = [
     },
     {
         "pathname": "/markdown",
-        "title": "Markdownテストページ",
+        "title": "Markdown動作確認およびタイトルが長い場合の画像生成等の検証用記事",
         "filePath": "src/pages/markdown.page.md",
         "publishedAt": "2021-09-30T00:39:26+09:00",
-        "updatedAt": "2021-10-29T19:41:47+09:00",
-        "commitCount": 17
+        "updatedAt": "2022-02-12T16:08:39+09:00",
+        "commitCount": 18
     },
     {
         "pathname": "/",
@@ -90,4 +90,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "commitCount": 16
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [0,1,9,7,2,3,4,5,6,8].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [8,0,1,9,7,2,3,4,5,6].map((index) => pageListByPublishedAt[index]);
