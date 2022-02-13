@@ -11,6 +11,15 @@ import {serializeTeXToJsx} from '../tex/serializeTeXToJsx';
 import {Error, JSON} from '../es/global';
 import {toJsxSafeString} from '../es/toJsxSafeString';
 
+const generateImageLocalName = (
+    context: SerializeMarkdownContext,
+    node: {url: string},
+): string => {
+    const localName = `Image${context.images.size}`;
+    context.images.set(localName, node.url);
+    return localName;
+};
+
 type FilterContent<C extends Markdown.Content, T extends Markdown.Content['type']> = C extends {type: T} ? C : never;
 export type MarkdownContent<T extends Markdown.Content['type']> = FilterContent<Markdown.Content, T>;
 export interface SerializeMarkdownContext {
@@ -132,46 +141,7 @@ const serialize = function* (
         yield node.value;
         break;
     case 'code':
-        if (supportedEmbeddingType.has(`${node.lang}`)) {
-            const embedding = detectEmbedding(node.value);
-            if (!embedding) {
-                throw new Error(`NoServicesDetected: ${node.value}`);
-            }
-            if (embedding.type !== node.lang) {
-                throw new Error(`UnmatchedService: You requested ${node.lang} but ${embedding.type} was detected.`);
-            }
-            context.components.add('Embed');
-            yield `<Embed type="${embedding.type}">${embedding.jsx}</Embed>`;
-        } else if (node.lang === 'jsx' && node.meta === '(include)') {
-            let code = node.value;
-            const comment = (/\/\*{16}\/\s*?/).exec(code);
-            if (comment) {
-                context.head.add(code.slice(0, comment.index).trim());
-                code = code.slice(comment.index + comment[0].length).trim();
-            }
-            yield code;
-        } else {
-            yield `<figure id="figure-${context.getId('figure')}" data-lang="${node.lang || ''}">`;
-            if (node.meta) {
-                const {children: [caption]} = context.parseMarkdown(node.meta);
-                if ('children' in caption) {
-                    yield* serializeElement(context, 'figcaption', null, caption, nextAncestors);
-                }
-            }
-            switch (node.lang) {
-            case 'math':
-                yield* serializeTeXToJsx(node.value, {displayMode: true});
-                yield '<span className="katex-source">';
-                yield '```math{';
-                yield JSON.stringify(`\n${node.value}\n`);
-                yield '}```';
-                yield '</span>';
-                break;
-            default:
-                yield* serializeCodeToJsx(node.lang, node.value);
-            }
-            yield '</figure>';
-        }
+        yield* serializeCodeBlock(context, node, nextAncestors);
         break;
     case 'yaml':
         throw createUnsupportedTypeError(node);
@@ -323,11 +293,63 @@ const serializeTableRow = function* (
     yield '</tr>';
 };
 
-const generateImageLocalName = (
+const serializeCodeBlock = function* (
     context: SerializeMarkdownContext,
-    node: {url: string},
-): string => {
-    const localName = `Image${context.images.size}`;
-    context.images.set(localName, node.url);
-    return localName;
+    node: Markdown.Code,
+    nextAncestors: Array<Markdown.Content | Markdown.Root>,
+) {
+    if (supportedEmbeddingType.has(`${node.lang}`)) {
+        yield* serializeEmbedding(context, node);
+    } else if (node.lang === 'jsx' && node.meta === '(include)') {
+        yield* serializeEmbeddedJsx(context, node);
+    } else {
+        yield `<figure id="figure-${context.getId('figure')}" data-lang="${node.lang || ''}">`;
+        if (node.meta) {
+            const {children: [caption]} = context.parseMarkdown(node.meta);
+            if ('children' in caption) {
+                yield* serializeElement(context, 'figcaption', null, caption, nextAncestors);
+            }
+        }
+        switch (node.lang) {
+        case 'math':
+            yield* serializeTeXToJsx(node.value, {displayMode: true});
+            yield '<span className="katex-source">';
+            yield '```math{';
+            yield JSON.stringify(`\n${node.value}\n`);
+            yield '}```';
+            yield '</span>';
+            break;
+        default:
+            yield* serializeCodeToJsx(node.lang, node.value);
+        }
+        yield '</figure>';
+    }
+};
+
+const serializeEmbedding = function* (
+    context: SerializeMarkdownContext,
+    node: Markdown.Code,
+) {
+    const embedding = detectEmbedding(node.value);
+    if (!embedding) {
+        throw new Error(`NoServicesDetected: ${node.value}`);
+    }
+    if (embedding.type !== node.lang) {
+        throw new Error(`UnmatchedService: You requested ${node.lang} but ${embedding.type} was detected.`);
+    }
+    context.components.add('Embed');
+    yield `<Embed type="${embedding.type}">${embedding.jsx}</Embed>`;
+};
+
+const serializeEmbeddedJsx = function* (
+    context: SerializeMarkdownContext,
+    node: Markdown.Code,
+) {
+    let code = node.value;
+    const comment = (/\/\*{16}\/\s*?/).exec(code);
+    if (comment) {
+        context.head.add(code.slice(0, comment.index).trim());
+        code = code.slice(comment.index + comment[0].length).trim();
+    }
+    yield code;
 };
