@@ -41,6 +41,11 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "width": 1200,
         "height": 630
     },
+    "/2022/iphone12": {
+        "path": "images/post/C4al8FNS/2pNsw7kt.png",
+        "width": 1200,
+        "height": 630
+    },
     "/2022/page-images": {
         "path": "images/post/yEbsLghZ/mw2_qK9v.png",
         "width": 1200,
