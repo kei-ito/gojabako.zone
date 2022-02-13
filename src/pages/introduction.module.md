@@ -2,7 +2,8 @@
 
 - [React], [Redux], [Redux-Saga], [Next.js]
 - TypeScript, JavaScript, CSS, SVG（[参考](https://github.com/gjbkz/gojabako.zone/)）
-- AST操作などのツール開発（[acorn], [postcss]）
+- WYSIWYGエディタ開発（[ProseMirror], [Slate]）
+- AST操作のツール開発（[acorn], [postcss]）
 - AWS ([aws-cdk])
 
 [React]: https://reactjs.org/
@@ -12,6 +13,8 @@
 [acorn]: https://github.com/acornjs/acorn/tree/master/acorn#interface
 [postcss]: https://postcss.org/api/
 [aws-cdk]: https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html
+[ProseMirror]: https://prosemirror.net/
+[Slate]: http://docs.slatejs.org/
 
 ## ちょっとできる
 
@@ -24,3 +27,7 @@
 [Archipack2]: https://github.com/s-leger/archipack/wiki
 [TWELITE]: https://mono-wireless.com/jp/products/TWE-LITE/index.html
 [ESP-WROOM-02]: https://www.switch-science.com/catalog/2346/
+
+## 連絡先
+
+kei.itof@gmail.com

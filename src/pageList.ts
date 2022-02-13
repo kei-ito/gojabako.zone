@@ -94,8 +94,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "トップページ",
         "filePath": "src/pages/index.tsx",
         "publishedAt": "2021-09-29T00:33:31+09:00",
-        "updatedAt": "2022-02-11T13:07:42+09:00",
-        "commitCount": 16
+        "updatedAt": "2022-02-13T21:51:14+09:00",
+        "commitCount": 17
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [0,1,9,2,10,8,3,4,5,6,7].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [10,0,1,9,2,8,3,4,5,6,7].map((index) => pageListByPublishedAt[index]);
