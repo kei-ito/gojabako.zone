@@ -108,6 +108,15 @@ export const pageListByPublishedAt: Array<PageData> = [
         "archiveOf": "https://kei-itof.goat.me/s3xAnADIzK"
     },
     {
+        "pathname": "/2019/gitlab-runner",
+        "title": "GitLab Runner環境をCloudFormationでつくる",
+        "filePath": "src/pages/2019/gitlab-runner/index.page.md",
+        "publishedAt": "2019-05-12T16:30:37Z",
+        "updatedAt": "2022-02-16T01:01:22+09:00",
+        "commitCount": 1,
+        "archiveOf": "https://kei-itof.goat.me/hFPAYi8W52"
+    },
+    {
         "pathname": "/2018/monitor-stand",
         "title": "モニタースタンドに棚をつけるDIY記録",
         "filePath": "src/pages/2018/monitor-stand/index.page.md",
@@ -117,4 +126,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [11,12,10,0,1,9,2,8,3,4,5,6,7].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [12,11,13,10,0,1,9,2,8,3,4,5,6,7].map((index) => pageListByPublishedAt[index]);
