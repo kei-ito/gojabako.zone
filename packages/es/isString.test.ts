@@ -52,7 +52,7 @@ describe(isUrlString.name, () => {
         expect(isUrlString([])).toBe(false);
     });
     for (const protocol of ['http://', 'https://']) {
-        for (const domain of ['example.com', 'e.x.a.m.example.com']) {
+        for (const domain of ['example.com', 'example-example.example.com']) {
             for (const pathname of ['', '/', '/foo']) {
                 const url = `${protocol}${domain}${pathname}`;
                 it(`${url} → true`, () => {

@@ -12,12 +12,12 @@ export const loadPageDataPatch = async (pageFileAbsolutePath: string): Promise<P
     if (jsonString) {
         const parsed: unknown = JSON.parse(jsonString);
         if (isObjectLike(parsed)) {
-            const {publishedAt, originalUrl} = parsed;
+            const {publishedAt, archiveOf} = parsed;
             if (isDateString(publishedAt)) {
                 result.publishedAt = publishedAt;
             }
-            if (isUrlString(originalUrl)) {
-                result.originalUrl = originalUrl;
+            if (isUrlString(archiveOf)) {
+                result.archiveOf = archiveOf;
             }
         }
     }

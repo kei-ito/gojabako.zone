@@ -6,7 +6,7 @@ import {loadPageDataPatch} from './loadPageDataPatch';
 
 export interface PageDataPatch {
     publishedAt: string,
-    originalUrl?: string,
+    archiveOf?: string,
 }
 export interface PageData extends PageDataPatch {
     pathname: string,
