@@ -6,7 +6,7 @@ import {console, Error, JSON, Map} from '../es/global';
 import {isPositiveInteger} from '../es/isInteger';
 import {serializeNs} from '../es/serializeNs';
 import {rootDirectoryPath} from '../fs/constants';
-import {statsOrNull, statsOrNullSync} from '../fs/statsOrNull';
+import {statOrNull, statOrNullSync} from '../fs/statOrNull';
 import type {ImageFormat} from '../image/constants';
 import {ImageProcessorHashEncoding, ImageProcessorResultFileName, ImageProcessorVersion, ImageProcessorWidthList} from '../image/constants';
 import type {ImageOutputResult} from '../image/isImageOutputResult';
@@ -121,7 +121,7 @@ const processImage = async (
     for (const [resized, width, format] of listPatterns(source)) {
         const name = `${width}w${getExtension(format)}`;
         const dest = path.join(outputDirectoryAbsolutePath, name);
-        const stats = await statsOrNull(dest);
+        const stats = await statOrNull(dest);
         if (!stats || !stats.isFile()) {
             const startedAtNs = process.hrtime.bigint();
             await resized.toFile(dest);
@@ -161,7 +161,7 @@ const testCache = (
         return false;
     }
     for (const {name} of cached.results) {
-        const stats = statsOrNullSync(path.join(outputDirectoryAbsolutePath, name));
+        const stats = statOrNullSync(path.join(outputDirectoryAbsolutePath, name));
         if (!stats) {
             return false;
         }
