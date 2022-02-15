@@ -1,8 +1,8 @@
+import {useMemo} from 'react';
 import {Error} from '../../packages/es/global';
-import type {PageData} from '../pageList';
 import {pageListByPublishedAt} from '../pageList';
 
-export const getPageData = (pathname: string): PageData => {
+export const usePageData = (pathname: string) => useMemo(() => {
     const normalized = pathname.replace(/\/$/, '');
     for (const page of pageListByPublishedAt) {
         if (page.pathname === pathname || page.pathname === normalized) {
@@ -10,4 +10,4 @@ export const getPageData = (pathname: string): PageData => {
         }
     }
     throw new Error(`NoSuchPage: ${pathname} (${normalized})`);
-};
+}, [pathname]);

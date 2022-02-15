@@ -1,5 +1,5 @@
 import {authorName} from '../../packages/site/constants';
-import {PageDate} from '../components/PageDate';
+import {PageData} from '../components/PageData';
 import {PageHead} from '../components/PageHead';
 import Introduction from './introduction.module.md';
 
@@ -13,7 +13,7 @@ export const Page = () => <>
         <article>
             <header>
                 <h1>{authorName}</h1>
-                <PageDate pathname="/" onlyUpdate={true}/>
+                <PageData pathname="/" onlyUpdate={true}/>
             </header>
             <Introduction/>
         </article>
