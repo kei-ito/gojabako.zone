@@ -1,0 +1,100 @@
+{
+    "hash": "Ar_LMOglRB04thpSHBzvdht1haC9O8fCkoojpRfz0ok",
+    "version": "v1",
+    "relativePath": "pages/2018/monitor-stand/hole-center.jpg",
+    "format": "jpeg",
+    "width": 1000,
+    "height": 750,
+    "results": [
+        {
+            "format": "webp",
+            "width": 300,
+            "name": "300w.webp"
+        },
+        {
+            "format": "avif",
+            "width": 300,
+            "name": "300w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 300,
+            "name": "300w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 400,
+            "name": "400w.webp"
+        },
+        {
+            "format": "avif",
+            "width": 400,
+            "name": "400w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 400,
+            "name": "400w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 500,
+            "name": "500w.webp"
+        },
+        {
+            "format": "avif",
+            "width": 500,
+            "name": "500w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 500,
+            "name": "500w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 600,
+            "name": "600w.webp"
+        },
+        {
+            "format": "avif",
+            "width": 600,
+            "name": "600w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 600,
+            "name": "600w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 800,
+            "name": "800w.webp"
+        },
+        {
+            "format": "avif",
+            "width": 800,
+            "name": "800w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 800,
+            "name": "800w.jpg"
+        },
+        {
+            "format": "webp",
+            "width": 1000,
+            "name": "1000w.webp"
+        },
+        {
+            "format": "avif",
+            "width": 1000,
+            "name": "1000w.avif"
+        },
+        {
+            "format": "jpeg",
+            "width": 1000,
+            "name": "1000w.jpg"
+        }
+    ]
+}

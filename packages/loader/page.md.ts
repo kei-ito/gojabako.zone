@@ -22,7 +22,7 @@ export const loadMarkdownPage = async (
         throw new Error(`The 1st node is not <h1>: ${JSON.stringify(titleNode, null, 4)}`);
     }
     context.components.add('PageHead');
-    context.components.add('PageDate');
+    context.components.add('PageData');
     const title = getTextContent(titleNode);
     root.children = [titleNode];
     const titleJsx = [...serializeMarkdownRootToJsx(context, root)].join('');
@@ -43,7 +43,7 @@ export default function MarkdownPage() {
             <article>
                 <header>
                     ${titleJsx}
-                    <PageDate pathname="${pathname}"/>
+                    <PageData pathname="${pathname}"/>
                 </header>
                 ${body}
                 ${foot}

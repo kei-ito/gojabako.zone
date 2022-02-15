@@ -1,7 +1,7 @@
 import * as path from 'path';
 import {rootDirectoryPath} from '../fs/constants';
 import {listFiles} from '../node/listFiles';
-import {findPageData} from './getPageData';
+import {findPageData} from './findPageData';
 
 const isPageFile = (filePath: string) => !filePath.endsWith('.component.tsx')
 && !path.basename(filePath).startsWith('_')

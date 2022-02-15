@@ -6,6 +6,11 @@ export interface PageImageData {
     height: number,
 }
 export const pageImages: Record<string, PageImageData | undefined> = {
+    "/2018/monitor-stand": {
+        "path": "images/post/M6w8jGfI/_24CR62B.png",
+        "width": 1200,
+        "height": 630
+    },
     "/2021/au-denki": {
         "path": "images/post/9cPn0k2Z/bBx1gzB3.png",
         "width": 1200,
@@ -52,7 +57,7 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "height": 630
     },
     "/": {
-        "path": "images/post/il7asoJj/zg_Y7kB4.png",
+        "path": "images/post/il7asoJj/ZwlXeCgy.png",
         "width": 1200,
         "height": 630
     },
