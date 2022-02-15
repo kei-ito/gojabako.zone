@@ -11,7 +11,7 @@ import {listPhrases} from '../kuromoji/listPhrases';
 import {getHash} from '../node/getHash';
 import {siteDomain} from '../site/constants';
 import {getSiteColors} from '../site/css';
-import type {PageData} from './getPageData';
+import type {PageData} from './findPageData';
 import {rmrf} from '../fs/rmrf';
 
 const setupFont = nullaryCache(() => {

@@ -1,5 +1,5 @@
 import {Date, Error, JSON, WeakMap} from '../es/global';
-import type {PageData} from './getPageData';
+import type {PageData} from './findPageData';
 import {listPageData} from './listPageData';
 
 const byDate = (date1: string, date2: string) => {
