@@ -7,6 +7,7 @@ export interface PageData {
     publishedAt: string,
     updatedAt: string,
     commitCount: number,
+    archiveOf?: string,
 }
 export const pageListByPublishedAt: Array<PageData> = [
     {
@@ -94,8 +95,17 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "トップページ",
         "filePath": "src/pages/index.tsx",
         "publishedAt": "2021-09-29T00:33:31+09:00",
-        "updatedAt": "2022-02-13T21:51:14+09:00",
-        "commitCount": 17
+        "updatedAt": "2022-02-15T18:35:26+09:00",
+        "commitCount": 18
+    },
+    {
+        "pathname": "/2018/monitor-stand",
+        "title": "モニタースタンドに棚をつけるDIY記録",
+        "filePath": "src/pages/2018/monitor-stand/index.page.md",
+        "publishedAt": "2018-11-29T17:01:41Z",
+        "updatedAt": "2022-02-15T18:36:03+09:00",
+        "commitCount": 1,
+        "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [10,0,1,9,2,8,3,4,5,6,7].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [11,10,0,1,9,2,8,3,4,5,6,7].map((index) => pageListByPublishedAt[index]);
