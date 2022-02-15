@@ -99,6 +99,15 @@ export const pageListByPublishedAt: Array<PageData> = [
         "commitCount": 18
     },
     {
+        "pathname": "/2020/new-computer",
+        "title": "ラックマウントPC",
+        "filePath": "src/pages/2020/new-computer/index.page.md",
+        "publishedAt": "2020-06-08T14:23:25Z",
+        "updatedAt": "2022-02-15T23:38:24+09:00",
+        "commitCount": 1,
+        "archiveOf": "https://kei-itof.goat.me/s3xAnADIzK"
+    },
+    {
         "pathname": "/2018/monitor-stand",
         "title": "モニタースタンドに棚をつけるDIY記録",
         "filePath": "src/pages/2018/monitor-stand/index.page.md",
@@ -108,4 +117,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [11,10,0,1,9,2,8,3,4,5,6,7].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [11,12,10,0,1,9,2,8,3,4,5,6,7].map((index) => pageListByPublishedAt[index]);

@@ -1,0 +1,58 @@
+# ラックマウントPC
+
+[モニタースタンドに19インチラックをつけた](../../2018/monitor-stand/index.page.md)もののスライドしたりしなかったりする棚板を何枚か足しただけで物置きと化していた棚に、ようやくラックマウントPCが入りました。
+
+ケースは[X445]というやつです。安かったですが輸入費がケース以上にかかりました。承知で注文したものの損な感じは否めません。勉強料ですね。いま思うと[SilverStoneのRM41-506]の方が良かったかな……。
+
+[X445]: https://www.xcase.co.uk/products/x-case-extra-value-x445-server-chassis-4u-450mm-usb-3?variant=22235554053
+[SilverStoneのRM41-506]: https://www.silverstonetek.com/product.php?pid=887
+
+中はこれです。全部で26万円くらいの出費でした。
+
+- [Corsair RM850x](https://www.corsair.com/ja/ja/%E3%82%AB%E3%83%86%E3%82%B4%E3%83%AA%E3%83%BC/%E8%A3%BD%E5%93%81/%E9%9B%BB%E6%BA%90%E3%83%A6%E3%83%8B%E3%83%83%E3%83%88/%E4%B8%8A%E7%B4%9A%E9%9B%BB%E6%BA%90%E3%83%A6%E3%83%8B%E3%83%83%E3%83%88/RMx-Series/p/CP-9020180-JP)
+- [MSI MEG X570 UNIFY](https://jp.msi.com/Motherboard/MEG-X570-UNIFY)
+- [AMD Ryzen™ 9 3900X](https://www.amd.com/ja/products/cpu/amd-ryzen-9-3900x)
+- [HyperX Fury DDR4 32GB (16GBx2)](https://www.hyperxgaming.com/jp/memory/fury-ddr4)
+- [Seagate FireCuda 520 1TB](https://www.seagate.com/jp/ja/internal-hard-drives/ssd/firecuda-ssd/)
+- [玄人志向 GG-RTX2080SP-E8GB/DF](https://www.kuroutoshikou.com/gaming/product/graphics_bord/nvidia/gg-rtx2080sp-e8gb_df/)
+- [Corsair ML120 PRO 120mm](https://www.corsair.com/ja/ja/%E3%82%AB%E3%83%86%E3%82%B4%E3%83%AA%E3%83%BC/%E8%A3%BD%E5%93%81/%E3%83%95%E3%82%A1%E3%83%B3/%E7%A3%81%E6%B0%97%E6%B5%AE%E4%B8%8A%E5%BC%8F%E3%83%95%E3%82%A1%E3%83%B3/ml-pro-config/p/CO-9050040-WW) (2-Pack)
+- [長尾製作所 N-FR５CL03](http://www.nagao-ss.co.jp/original43.html)
+- [Ainex CFZ-6010LA](https://www.ainex.jp/products/cfz-6010la/) x2
+
+![全部積んだところ](./parts.jpg)
+
+前面左側の吸気口が細いので右側の5.25インチベイ3段はファンにしました。透明パネルは外しました。
+
+![前側](./front-fan.jpg)
+
+![棚側のスライドレール](./sliding-rail-1.jpg)
+
+![ケース側のスライドレール](./sliding-rail-2.jpg)
+
+ラックの最上段だとすぐ上が天板のため熱が逃げなさそうですが今のところ大丈夫です。（夏でだめでした → 追記へ）
+
+![後側](./rear-fan.jpg)
+
+[UPS1000PSII](https://www.soundhouse.co.jp/products/detail/item/211222/)を隣の列に置いています。PCが低負荷のときはファンの音が目立ちます。無負荷でも電源が入っていればファンが回るので寝たり出かけたりするときは切ります。
+
+![UPS1000PSII](./ups.jpg)
+
+```twitter
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">坊や 知ってるかい？ UPSを 使うときは モニターの電源も UPSに 繋がないと ダメなんだぜ。ちゃんと 装備して はじめて 有事に役立つってわけさ。</p>&mdash; Kei Ito (@gjbkz) <a href="https://twitter.com/gjbkz/status/1269432935624531968?ref_src=twsrc%5Etfw">June 7, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+```
+
+After Effectsが軽快に動くようになりました。
+
+## 2020.8.10追記
+
+夏のせいなのか急にシャットダウンする事象が3回発生したため熱事情を改善しました。まず下向き排気のCPU同梱クーラーをやめて[サイズの無限五リビジョンB (SCYTHE Mugen 5 Rev.B, SCMG-5100)](https://www.scythe.co.jp/product/cpu-cooler/scmg-5100/)にしました。これで排気が背面方向に流れます。天板まで3mmで高さはギリギリでした。これより背の高いクーラーはこのケースには入らないでしょう。
+
+次はケースの加工です。CPUクーラーの排気方向を変えても外に排出しにくいケース構造だったため背面パネルをカットしました。60mmの代わりに120mmのファンを取り付けて、前面パネルのグリルもカットして口を大きくしました。
+
+```twitter
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">なんかアツアツで落ちるので下向きだったCPUファンをリア向きのやつに交換。後ろのグリルをグリッとして120mmファンに交換。前の息苦しそうだった吸気部もグリッとしたので気持ちよく吸い込めるようになったはず。 <a href="https://t.co/1nQgPq44kO">pic.twitter.com/1nQgPq44kO</a></p>&mdash; Kei Ito (@gjbkz) <a href="https://twitter.com/gjbkz/status/1292817540377243651?ref_src=twsrc%5Etfw">August 10, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+```
+
+![上パネルは閉じないけど棚の天板で塞げてるのでヨシ！](./bigger-rear-fan.jpg)
+
+この改修以降シャットダウンの事象は発生していないので排熱は改善できているはず。ファンの音も静かになりました。
