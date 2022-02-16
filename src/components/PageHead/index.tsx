@@ -16,7 +16,7 @@ export const PageHead = (
     {title, description, pathname, children}: PropsWithChildren<PageHeadProps>,
 ) => {
     const {publishedAt, updatedAt} = usePageData(pathname);
-    const pageImage = pageImages[pathname || '/'];
+    const pageImage = pageImages[pathname];
     if (!pageImage) {
         throw new Error(`NoPageImage: "${pathname}"`);
     }
@@ -24,7 +24,7 @@ export const PageHead = (
     const url = new URL(pathname, baseUrl).href;
     const coverUrl = new URL(pageImage.path, baseUrl).href;
     return <Head>
-        <title>{title} ・ {siteName}</title>
+        <title>{title === siteName ? title : `${title} ・ ${siteName}`}</title>
         <link rel="canonical" href={url}/>
         <meta.OgTitle content={title}/>
         <meta.Description content={description}/>

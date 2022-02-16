@@ -17,7 +17,6 @@ export const PageData = ({pathname, onlyUpdate}: PageDataProps) => {
     </section>;
 };
 
-
 const Date = ({pathname, onlyUpdate}: PageDataProps) => {
     const {publishedAt, updatedAt, commitCount, archiveOf} = usePageData(pathname);
     if (archiveOf) {
@@ -26,10 +25,10 @@ const Date = ({pathname, onlyUpdate}: PageDataProps) => {
         </>;
     }
     if (onlyUpdate) {
-        return <>最終更新&ensp;<DateString date={updatedAt}/></>;
+        return <><DateString date={updatedAt}/> 最終更新</>;
     }
     return <>
         <DateString date={publishedAt}/> 公開
-        {1 < commitCount && <>&ensp;(<DateString date={updatedAt}/> 更新)</>}
+        {1 < commitCount && <> (<DateString date={updatedAt}/> 更新)</>}
     </>;
 };

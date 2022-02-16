@@ -29,7 +29,7 @@ const parseUrl = (requestPath = '/'): url.UrlWithParsedQuery & {pathname: string
         ...parsedUrl,
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         query: parsedUrl.query || {},
-        pathname: parsedUrl.pathname || '/',
+        pathname: parsedUrl.pathname || '',
     };
 };
 const app = next({

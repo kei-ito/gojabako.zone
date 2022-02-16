@@ -4,14 +4,10 @@ import {getExtension} from '../es/getExtension';
 import {Error} from '../es/global';
 import {getTextContent} from '../es/TextContent';
 import {walkMarkdownContentNodes} from '../markdown/walkContentNodes';
-import {getPagePathName} from './getPagePathName';
 
 export const getPageTitle = async (
     pageFileAbsolutePath: string,
 ): Promise<string> => {
-    if (getPagePathName(pageFileAbsolutePath) === '/') {
-        return 'トップページ';
-    }
     const code = await fs.promises.readFile(pageFileAbsolutePath, 'utf8');
     const ext = getExtension(pageFileAbsolutePath);
     switch (ext) {

@@ -5,14 +5,16 @@ import {getPageTitle} from './getPageTitle';
 import {loadPageDataPatch} from './loadPageDataPatch';
 
 export interface PageDataPatch {
-    publishedAt: string,
+    title?: string,
     archiveOf?: string,
+    publishedAt?: string,
 }
-export interface PageData extends PageDataPatch {
+export interface PageData {
     pathname: string,
     title: string,
     filePath: string,
     updatedAt: string,
+    publishedAt: string,
     commitCount: number,
 }
 

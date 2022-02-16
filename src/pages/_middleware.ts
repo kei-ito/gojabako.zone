@@ -33,7 +33,7 @@ const serializeSitemap = function* () {
     yield '<?xml version="1.0" encoding="UTF-8"?>';
     yield '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
     for (const page of pageListByPublishedAt) {
-        const url = new URL(page.pathname, homepage);
+        const url = new URL(page.pathname, homepage).href.replace(/\/$/, '');
         yield '  <url>';
         yield `    <loc>${url}</loc>`;
         yield `    <lastmod>${page.updatedAt}</lastmod>`;

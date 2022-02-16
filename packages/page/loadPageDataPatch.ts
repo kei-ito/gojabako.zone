@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import {JSON} from '../es/global';
 import {isObjectLike} from '../es/isObjectLike';
-import {isDateString, isUrlString} from '../es/isString';
+import {isDateString, isString, isUrlString} from '../es/isString';
 import {ignoreENOENT} from '../fs/ignoreENOENT';
 import type {PageDataPatch} from './findPageData';
 
@@ -12,7 +12,10 @@ export const loadPageDataPatch = async (pageFileAbsolutePath: string): Promise<P
     if (jsonString) {
         const parsed: unknown = JSON.parse(jsonString);
         if (isObjectLike(parsed)) {
-            const {publishedAt, archiveOf} = parsed;
+            const {publishedAt, archiveOf, title} = parsed;
+            if (isString(title) && title) {
+                result.title = title;
+            }
             if (isDateString(publishedAt)) {
                 result.publishedAt = publishedAt;
             }

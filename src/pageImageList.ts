@@ -37,7 +37,7 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "height": 630
     },
     "/2021/nextjs": {
-        "path": "images/post/s373Le5-/e2dkONor.png",
+        "path": "images/post/s373Le5-/iR0axFxV.png",
         "width": 1200,
         "height": 630
     },
@@ -66,8 +66,13 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "width": 1200,
         "height": 630
     },
-    "/": {
-        "path": "images/post/il7asoJj/ZwlXeCgy.png",
+    "/author": {
+        "path": "images/post/2NbUOuVG/lwyJ1xkX.png",
+        "width": 1200,
+        "height": 630
+    },
+    "": {
+        "path": "images/post/47DEQpj8/MrIyyBSJ.png",
         "width": 1200,
         "height": 630
     },
