@@ -7,7 +7,7 @@ export const PageLinkPublished = ({pathname, title, publishedAt, updatedAt}: Pag
     <a className={className.link}>
         <span className={className.time}>
             <DateString date={publishedAt}/> 公開
-            {publishedAt < updatedAt && <>（<DateString date={updatedAt}/> 更新）</>}
+            {publishedAt < updatedAt && <> (<DateString date={updatedAt}/> 更新)</>}
         </span>
         {title}
     </a>
@@ -17,7 +17,7 @@ export const PageLinkUpdated = ({pathname, title, publishedAt, updatedAt}: PageD
     <a className={className.link}>
         <span className={className.time}>
             <DateString date={updatedAt}/> 更新
-            {publishedAt < updatedAt && <>（<DateString date={publishedAt}/> 公開）</>}
+            {publishedAt < updatedAt && <> (<DateString date={publishedAt}/> 公開)</>}
         </span>
         {title}
     </a>

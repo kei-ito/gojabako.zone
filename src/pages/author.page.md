@@ -1,3 +1,10 @@
+# 伊藤 慶 - Kei Ito
+
+- [GitHub: gjbkz](https://github.com/gjbkz)
+- [Twitter: gjbkz](https://twitter.com/gjbkz)
+- [Buy me a coffee: gjbkz](https://www.buymeacoffee.com/gjbkz)
+- Email: kei.itof@gmail.com
+
 ## できる
 
 - [React], [Redux], [Redux-Saga], [Next.js]
@@ -27,7 +34,3 @@
 [Archipack2]: https://github.com/s-leger/archipack/wiki
 [TWELITE]: https://mono-wireless.com/jp/products/TWE-LITE/index.html
 [ESP-WROOM-02]: https://www.switch-science.com/catalog/2346/
-
-## 連絡先
-
-kei.itof@gmail.com

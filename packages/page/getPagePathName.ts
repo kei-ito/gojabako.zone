@@ -21,5 +21,5 @@ export const getPagePathName = (fileAbsolutePath: string): string => {
     if (result.endsWith('/index')) {
         result = result.slice(0, -6);
     }
-    return result || '/';
+    return result;
 };
