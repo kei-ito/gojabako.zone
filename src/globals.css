@@ -220,6 +220,7 @@ li>ol, li>ul {
 li::before {
     grid-column: 1 / 2;
     text-align: end;
+    line-height: 1;
 }
 ol>li::before {
     content: counter(listItemIndex) '.';

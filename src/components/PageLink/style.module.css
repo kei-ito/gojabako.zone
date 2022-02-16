@@ -1,7 +1,3 @@
-.post::before {
-    line-height: 1;
-}
-
 .link {
     justify-self: start;
     display: grid;

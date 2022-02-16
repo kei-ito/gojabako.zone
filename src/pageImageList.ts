@@ -7,7 +7,7 @@ export interface PageImageData {
 }
 export const pageImages: Record<string, PageImageData | undefined> = {
     "/2018/monitor-stand": {
-        "path": "images/post/M6w8jGfI/_24CR62B.png",
+        "path": "images/post/M6w8jGfI/PqRs3qWf.png",
         "width": 1200,
         "height": 630
     },
