@@ -80,3 +80,7 @@
 ![](./paint.jpg)
 
 ![](./overview.jpg)
+
+## 追記
+
+[ラックマウントPCが入居しました。](../../2020/new-computer/index.page.md)
