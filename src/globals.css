@@ -31,7 +31,7 @@
     --zHeader: 1;
     --listIndexSize: 1.5rem;
     --font-default: Georgia, 'BIZ UDMincho', serif;
-    --font-monospace: 'Roboto Mono', monospace;
+    --font-monospace: Menlo, Consolas, monospace;
     font-size: 17px;
     font-family: var(--font-default);
     line-height: 1.5;
