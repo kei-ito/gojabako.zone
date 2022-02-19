@@ -129,9 +129,9 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "モニタースタンドに棚をつけるDIY記録",
         "filePath": "src/pages/2018/monitor-stand/index.page.md",
         "publishedAt": "2018-11-29T17:01:41Z",
-        "updatedAt": "2022-02-16T12:18:51+09:00",
-        "commitCount": 2,
+        "updatedAt": "2022-02-19T21:45:37+09:00",
+        "commitCount": 3,
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [11,7,9,14,12,13,0,1,10,2,3,4,5,6,8].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [14,11,7,9,12,13,0,1,10,2,3,4,5,6,8].map((index) => pageListByPublishedAt[index]);

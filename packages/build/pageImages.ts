@@ -11,7 +11,6 @@ import {listPageData} from '../page/listPageData';
 
 runScript(async () => {
     if (process.env.CI) {
-        console.info('BuildPageImages: skipped');
         return;
     }
     const pageImages: Record<string, PageImageData> = {};
@@ -32,5 +31,4 @@ export const pageImages: Record<string, PageImageData | undefined> = ${JSON.stri
 `.trimStart();
     const dest = path.join(rootDirectoryPath, 'src/pageImageList.ts');
     await fs.promises.writeFile(dest, code);
-    console.info(`BuildPageImages: ${dest}`);
 });
