@@ -1,0 +1,33 @@
+{
+    "version": 1,
+    "source": {
+        "path": "/public/favicon-32x32.png",
+        "hash": "1-qMpabqBkA7UwTtTytobU83SjeHAXv2OX9KAVBX0AA",
+        "width": 32,
+        "height": 32,
+        "size": 619
+    },
+    "results": [
+        {
+            "path": "/images/2ZecL9sn/w32.rhBncf05.png",
+            "hash": "rhBncf051C0SqlwZ83DQqD1DhGtZCsN97CRfUziBnOg",
+            "width": 32,
+            "height": 32,
+            "size": 270
+        },
+        {
+            "path": "/images/2ZecL9sn/w32.t-en6ISt.webp",
+            "hash": "t-en6IStcD4Loz6vXo26xVydCl1DYL8MKfE2zqAkfKU",
+            "width": 32,
+            "height": 32,
+            "size": 244
+        },
+        {
+            "path": "/images/2ZecL9sn/w32.T20Olqwd.avif",
+            "hash": "T20Olqwdx3Lnk9za2tBJZHiW-Yag0ZknP3LKXhLqzBE",
+            "width": 32,
+            "height": 32,
+            "size": 434
+        }
+    ]
+}

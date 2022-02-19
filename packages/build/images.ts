@@ -76,7 +76,10 @@ const processImage = async (
             await fs.promises.writeFile(dest, encoded.binary);
             console.info(`written: ${dest} (${serializeSize(encoded.size)})`);
             result.results.push({
-                path: path.relative(publicDirectory, dest).split(path.sep).join('/'),
+                path: [
+                    '',
+                    ...path.relative(publicDirectory, dest).split(path.sep),
+                ].join('/'),
                 hash: getHash(encoded.binary).toString('base64url'),
                 width,
                 height,
