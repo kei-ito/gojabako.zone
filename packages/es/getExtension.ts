@@ -3,7 +3,7 @@ export const getExtension = (filePath: string): string => {
     if (0 < extIndex) {
         const extension = filePath.slice(extIndex);
         if (extension !== '.') {
-            return extension;
+            return extension.toLowerCase();
         }
     }
     return '';
