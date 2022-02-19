@@ -1,6 +1,7 @@
 /* eslint-disable @nlib/no-globals, max-statements-per-line */
 const _Boolean = Boolean; export {_Boolean as Boolean};
 const _Number = Number; export {_Number as Number};
+const _BigInt = BigInt; export {_BigInt as BigInt};
 const _Object = Object; export {_Object as Object};
 const _Array = Array; export {_Array as Array};
 const _Date = Date; export {_Date as Date};
