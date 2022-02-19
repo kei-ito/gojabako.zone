@@ -6,7 +6,7 @@ import {Buffer} from 'buffer';
 import stackBlur from 'stackblur-canvas';
 import {nullaryCache} from '../es/cache';
 import {Date, Math} from '../es/global';
-import {rootDirectoryPath} from '../fs/constants';
+import {coverImagesDirectory, publicDirectory} from '../fs/constants';
 import {listPhrases} from '../kuromoji/listPhrases';
 import {getHash} from '../node/getHash';
 import {siteDomain} from '../site/constants';
@@ -58,17 +58,22 @@ export interface PageImageData {
 export const generatePageImage = async (page: PageData): Promise<PageImageData> => {
     const canvas = await draw(page);
     const buffer = await getPNGBuffer(canvas);
-    const destPath = [
-        'images',
-        'post',
+    const dest = path.join(
+        coverImagesDirectory,
         `${getHash(page.pathname).toString('base64url').slice(0, 8)}`,
         `${getHash(buffer).toString('base64url').slice(0, 8)}.png`,
-    ].join('/');
-    const dest = path.join(rootDirectoryPath, 'public', ...destPath.split('/'));
+    );
     await rmrf(path.dirname(dest));
     await fs.promises.mkdir(path.dirname(dest), {recursive: true});
     await fs.promises.writeFile(dest, buffer);
-    return {path: destPath, width: image.width, height: image.height};
+    return {
+        path: [
+            '',
+            ...path.relative(publicDirectory, dest).split(path.sep),
+        ].join('/'),
+        width: image.width,
+        height: image.height,
+    };
 };
 
 const getPNGBuffer = async (canvas: nodeCanvas.Canvas) => {

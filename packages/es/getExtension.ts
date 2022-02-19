@@ -1,7 +1,10 @@
-export const getExtension = (filePath: string): string | null => {
+export const getExtension = (filePath: string): string => {
     const extIndex = filePath.lastIndexOf('.');
-    if (extIndex < 0) {
-        return null;
+    if (0 < extIndex) {
+        const extension = filePath.slice(extIndex);
+        if (extension !== '.') {
+            return extension.toLowerCase();
+        }
     }
-    return filePath.slice(extIndex);
+    return '';
 };
