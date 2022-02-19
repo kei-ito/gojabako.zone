@@ -45,7 +45,7 @@
     "devDependencies": {
         "@nlib/eslint-config": "3.17.30",
         "@nlib/githooks": "0.1.0",
-        "@squoosh/lib": "0.4.0",
+        "@squoosh/lib": "0.4.1",
         "@types/jest": "27.4.0",
         "@types/katex": "0.11.1",
         "@types/kuromoji": "0.1.1",
