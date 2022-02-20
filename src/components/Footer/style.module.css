@@ -6,6 +6,7 @@
     justify-content: stretch;
     row-gap: 1rem;
     padding-block-start: 1rem;
+    background-color: var(--gray2);
 }
 
 .sign {

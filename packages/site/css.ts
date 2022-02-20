@@ -37,11 +37,16 @@ export const getSiteColors = nullaryCache(async () => {
         return value;
     };
     return {
-        main: getVariable('mainColor'),
-        text: getVariable('textColor'),
-        accent: getVariable('accentColor'),
-        background: getVariable('backgroundColor'),
-        white: getVariable('white'),
+        gray0: getVariable('gray0'),
+        gray1: getVariable('gray1'),
+        gray2: getVariable('gray2'),
+        gray3: getVariable('gray3'),
+        gray4: getVariable('gray4'),
+        gray5: getVariable('gray5'),
+        gray6: getVariable('gray6'),
+        gray7: getVariable('gray7'),
+        gray8: getVariable('gray8'),
+        gray9: getVariable('gray9'),
     };
 });
 

@@ -98,7 +98,7 @@ const draw = async (page: PageData) => {
 
 const clearCanvas = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
     const colors = await getSiteColors();
-    ctx.fillStyle = colors.main;
+    ctx.fillStyle = colors.gray2;
     ctx.beginPath();
     ctx.rect(image.left, image.top, image.width, image.height);
     ctx.closePath();
@@ -107,7 +107,7 @@ const clearCanvas = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
     drawRoundedRect(ctx, card.left + 2, card.top + 2, card.width, card.height, cardBorderRadius);
     ctx.fill();
     stackBlur.canvasRGB(ctx.canvas, image.left, image.top, image.width, image.height, shadowBlurRadius);
-    ctx.fillStyle = colors.background;
+    ctx.fillStyle = colors.gray0;
     drawRoundedRect(ctx, card.left - 1, card.top - 1, card.width, card.height, cardBorderRadius);
     ctx.fill();
 };
@@ -151,7 +151,7 @@ const drawLogo = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
     const colors = await getSiteColors();
     const logoWidth = logoUnitSize * 8;
     const logoHeight = logoUnitSize * 4;
-    ctx.fillStyle = colors.text;
+    ctx.fillStyle = colors.gray9;
     ctx.translate(cardContent.cx - logoWidth / 2, card.bottom + card.padding.bottom / 2 - logoHeight / 2);
     ctx.scale(logoUnitSize, logoUnitSize);
     for (const [firstPoint, ...points] of logoStrokes) {
@@ -214,7 +214,7 @@ const drawTitle = async (
     for (let index = lines.length; index--;) {
         const line = lines[index];
         const y = cardContent.top + lineHeight * index;
-        ctx.fillStyle = colors.text;
+        ctx.fillStyle = colors.gray9;
         ctx.fillText(line, cardContent.left, y);
     }
 };
@@ -252,7 +252,7 @@ const drawMetaData = async (ctx: CanvasRenderingContext2D, page: PageData) => {
     const colors = await getSiteColors();
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
-    ctx.fillStyle = colors.text;
+    ctx.fillStyle = colors.gray9;
     ctx.translate(cardContent.left, cardContent.bottom);
     const url = `https://${siteDomain}${page.pathname}`;
     let urlFontSize = baseFontSize;
@@ -277,7 +277,7 @@ const drawMetaData = async (ctx: CanvasRenderingContext2D, page: PageData) => {
 
 const drawQrCode = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
     const colors = await getSiteColors();
-    ctx.strokeStyle = colors.main;
+    ctx.strokeStyle = colors.gray6;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.rect(cardContent.right - qrCodeMaxSize, cardContent.bottom - qrCodeMaxSize, qrCodeMaxSize, qrCodeMaxSize);

@@ -21,14 +21,14 @@ const Date = ({pathname, onlyUpdate}: PageDataProps) => {
     const {publishedAt, updatedAt, commitCount, archiveOf} = usePageData(pathname);
     if (archiveOf) {
         return <>
-            <DateString date={publishedAt || updatedAt}/> に <a href={archiveOf} target="_blank" rel="noreferrer">{archiveOf}</a> で公開
+            <DateString dateTime={publishedAt || updatedAt}/> に <a href={archiveOf} target="_blank" rel="noreferrer">{archiveOf}</a> で公開
         </>;
     }
     if (onlyUpdate) {
-        return <><DateString date={updatedAt}/> 最終更新</>;
+        return <><DateString dateTime={updatedAt}/> 更新</>;
     }
     return <>
-        <DateString date={publishedAt}/> 公開
-        {1 < commitCount && <> (<DateString date={updatedAt}/> 更新)</>}
+        <DateString dateTime={publishedAt}/> 公開
+        {1 < commitCount && <> (<DateString dateTime={updatedAt}/> 更新)</>}
     </>;
 };

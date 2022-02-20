@@ -22,17 +22,22 @@
     color: inherit;
     text-decoration: inherit;
     background-size: cover;
-    background-color: transparent;
+    background-color: unset;
     -webkit-text-size-adjust: none;
 }
 :root {
     --baseWidth: 627px;
     --baseGap: 1rem;
-    --mainColor: #c4c07e;
-    --textColor: #222222;
-    --accentColor: #c13a1e;
-    --backgroundColor: #ffffff;
-    --white: #ffffff;
+    --gray0: #ffffff;
+    --gray1: #f8fafc;
+    --gray2: #f1f5f9;
+    --gray3: #e2e8f0;
+    --gray4: #cbd5e1;
+    --gray5: #94a3b8;
+    --gray6: #64748b;
+    --gray7: #475569;
+    --gray8: #334155;
+    --gray9: #1e293b;
     --zHeader: 1;
     --listIndexSize: 1.5rem;
     --font-default: Numeric, Georgia, 'BIZ UDMincho', serif;
@@ -41,17 +46,13 @@
     font-family: var(--font-default);
     line-height: 1.5;
     text-rendering: optimizeSpeed;
-    color: var(--textColor);
+    color: var(--gray9);
     block-size: 100%;
-    background-color: var(--mainColor);
 }
 @media (max-width: 600px) {
     :root {
         font-size: 16px;
     }
-}
-:root:focus-within {
-    scroll-behavior: smooth;
 }
 body, #raw-__next {
     min-height: 100vh;
@@ -61,7 +62,7 @@ main {
     grid-auto-flow: row;
     row-gap: 1rem;
     padding-block-end: 3rem;
-    background-color: var(--backgroundColor);
+    background-color: var(--gray0);
 }
 article, section {
     display: grid;
@@ -76,15 +77,6 @@ article>header {
     margin-block-start: 2rem;
     margin-block-end: 1rem;
 }
-article>header::before {
-    content: '';
-    position: absolute;
-    inset-inline-start: -1.4rem;
-    inset-block: 0;
-    inline-size: 0.4rem;
-    background-color: var(--accentColor);
-    border-radius: 0.1rem;
-}
 img, svg {
     max-inline-size: 100%;
     display: block;
@@ -95,14 +87,10 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    html:focus-within {
-        scroll-behavior: auto;
-    }
     *, ::before, ::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
     }
 }
 
@@ -129,14 +117,6 @@ code {
 }
 rt {
     font-size: 60%;
-}
-input, textarea {
-    transition-property: box-shadow;
-    transition-duration: 0.2s;
-}
-input:focus, textarea:focus {
-    background-color: var(--white);
-    box-shadow: 0 0.2rem 1rem #0003;
 }
 input {
     padding-inline-start: 0.5rem;
@@ -397,9 +377,6 @@ figure[data-lang=math]>.raw-katex {
 @media (max-width: 667px) {
     :root {
         --baseWidth: 94%;
-    }
-    article>header::before {
-        content: none;
     }
 }
 @media (max-width: 600px) {

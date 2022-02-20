@@ -103,8 +103,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "Gojabako Zone",
         "filePath": "src/pages/index.tsx",
         "publishedAt": "2021-09-29T00:33:31+09:00",
-        "updatedAt": "2022-02-16T23:55:35+09:00",
-        "commitCount": 19
+        "updatedAt": "2022-02-20T14:26:39+09:00",
+        "commitCount": 20
     },
     {
         "pathname": "/2020/new-computer",
@@ -134,4 +134,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [14,11,7,9,12,13,0,1,10,2,3,4,5,6,8].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [11,14,7,9,12,13,0,1,10,2,3,4,5,6,8].map((index) => pageListByPublishedAt[index]);
