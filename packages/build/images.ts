@@ -49,7 +49,8 @@ const isInIgnoredInputDirectories = (filePath: string) => {
 const listImageFiles = async function* () {
     for await (const sourceFileAbsolutePath of listFiles(path.join(rootDirectoryPath, 'src'), path.join(rootDirectoryPath, 'public'))) {
         if (imageExtensions.has(getExtension(sourceFileAbsolutePath)) && !isInIgnoredInputDirectories(sourceFileAbsolutePath)) {
-            const hash = getHash(sourceFileAbsolutePath).toString('base64url').slice(0, 8);
+            const relativePath = path.relative(rootDirectoryPath, sourceFileAbsolutePath).split(path.sep).join('/');
+            const hash = getHash(relativePath).toString('base64url').slice(0, 8);
             const outputDirectory = path.join(processedImagesDirectory, hash);
             const previous = await loadPreviousResult(outputDirectory);
             yield {previous, sourceFileAbsolutePath, outputDirectory};
@@ -97,7 +98,7 @@ const loadPreviousResult = async (outputDirectory: string) => {
     const resultPath = path.join(outputDirectory, resultFileName);
     const json = await fs.promises.readFile(resultPath, 'utf8').catch(ignoreENOENT);
     if (!json) {
-        console.info(`NoResult: ${outputDirectory}`);
+        console.info(`NoResult: ${resultPath}`);
         return null;
     }
     const parsed: unknown = JSON.parse(json);
