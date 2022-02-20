@@ -95,8 +95,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "Markdown動作確認およびタイトルが長い場合の画像生成等の検証用記事",
         "filePath": "src/pages/markdown.page.md",
         "publishedAt": "2021-09-30T00:39:26+09:00",
-        "updatedAt": "2022-02-12T16:08:39+09:00",
-        "commitCount": 18
+        "updatedAt": "2022-02-20T23:13:01+09:00",
+        "commitCount": 19
     },
     {
         "pathname": "",
@@ -125,6 +125,15 @@ export const pageListByPublishedAt: Array<PageData> = [
         "archiveOf": "https://kei-itof.goat.me/hFPAYi8W52"
     },
     {
+        "pathname": "/2019/error-propagation",
+        "title": "加重平均の誤差伝播",
+        "filePath": "src/pages/2019/error-propagation/index.page.md",
+        "publishedAt": "2019-04-26T18:46:08Z",
+        "updatedAt": "2022-02-20T23:12:14+09:00",
+        "commitCount": 1,
+        "archiveOf": "https://kei-itof.goat.me/heZeNIQCCQ"
+    },
+    {
         "pathname": "/2018/monitor-stand",
         "title": "モニタースタンドに棚をつけるDIY記録",
         "filePath": "src/pages/2018/monitor-stand/index.page.md",
@@ -134,4 +143,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [3,11,14,7,9,12,13,0,1,10,2,4,5,6,8].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [10,14,3,11,15,7,9,12,13,0,1,2,4,5,6,8].map((index) => pageListByPublishedAt[index]);

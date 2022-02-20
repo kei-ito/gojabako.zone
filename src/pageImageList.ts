@@ -11,6 +11,11 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "width": 1200,
         "height": 630
     },
+    "/2019/error-propagation": {
+        "path": "/covers/SWD-1E4N/uBTG8XBC.png",
+        "width": 1200,
+        "height": 630
+    },
     "/2019/gitlab-runner": {
         "path": "/covers/TmSvdGod/PdjT4Rko.png",
         "width": 1200,
@@ -77,7 +82,7 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "height": 630
     },
     "/markdown": {
-        "path": "/covers/tiihd--T/o08jUeEX.png",
+        "path": "/covers/tiihd--T/WpmP6XvZ.png",
         "width": 1200,
         "height": 630
     }
