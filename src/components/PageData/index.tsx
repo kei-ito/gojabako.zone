@@ -21,7 +21,7 @@ const Date = ({pathname, onlyUpdate}: PageDataProps) => {
     const {publishedAt, updatedAt, commitCount, archiveOf} = usePageData(pathname);
     if (archiveOf) {
         return <>
-            <DateString dateTime={publishedAt || updatedAt}/> に <a href={archiveOf} target="_blank" rel="noreferrer">{archiveOf}</a> で公開
+            <DateString dateTime={publishedAt || updatedAt}/> に <a href={archiveOf} target="_blank" rel="noreferrer">{archiveOf.replace(/^https?:\/\//, '')}</a> で公開
         </>;
     }
     if (onlyUpdate) {

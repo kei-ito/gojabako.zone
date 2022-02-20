@@ -129,8 +129,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "加重平均の誤差伝播",
         "filePath": "src/pages/2019/error-propagation/index.page.md",
         "publishedAt": "2019-04-26T18:46:08Z",
-        "updatedAt": "2022-02-20T23:12:14+09:00",
-        "commitCount": 1,
+        "updatedAt": "2022-02-21T01:21:05+09:00",
+        "commitCount": 2,
         "archiveOf": "https://kei-itof.goat.me/heZeNIQCCQ"
     },
     {
@@ -138,9 +138,9 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "モニタースタンドに棚をつけるDIY記録",
         "filePath": "src/pages/2018/monitor-stand/index.page.md",
         "publishedAt": "2018-11-29T17:01:41Z",
-        "updatedAt": "2022-02-19T21:45:37+09:00",
-        "commitCount": 3,
+        "updatedAt": "2022-02-21T01:21:05+09:00",
+        "commitCount": 4,
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [10,14,3,11,15,7,9,12,13,0,1,2,4,5,6,8].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [14,15,10,3,11,7,9,12,13,0,1,2,4,5,6,8].map((index) => pageListByPublishedAt[index]);

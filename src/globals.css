@@ -49,11 +49,6 @@
     color: var(--gray9);
     block-size: 100%;
 }
-@media (max-width: 600px) {
-    :root {
-        font-size: 16px;
-    }
-}
 body, #raw-__next {
     min-height: 100vh;
 }
@@ -111,7 +106,7 @@ pre {
     white-space: pre-wrap;
 }
 code {
-    white-space: pre;
+    white-space: pre-wrap;
     font-family: var(--font-monospace);
     font-size: smaller;
 }
@@ -270,6 +265,7 @@ td, th {
     padding-inline-start: 0.5rem;
     padding-inline-end: 0.5rem;
     border-style: solid;
+    font-size: 90%;
 }
 blockquote {
     display: grid;
@@ -344,6 +340,7 @@ figure[data-lang=math]>figcaption {
     margin: 0;
     user-select: none;
     white-space: nowrap;
+    font-size: 110%;
 }
 .raw-katex-inline {
     display: inline-flex;
@@ -377,6 +374,9 @@ figure>.raw-katex>.raw-katex-html>.raw-base {
     padding-inline-end: 0.5em;
     justify-content: center;
 }
+.raw-katex .raw-base>* {
+    display: inline-flex;
+}
 figure>.raw-katex>.raw-katex-html>.raw-tag {
     flex-shrink: 0;
     overflow: hidden;
@@ -388,6 +388,12 @@ figure>.raw-katex>.raw-katex-html>.raw-tag {
     }
 }
 @media (max-width: 600px) {
+    :root {
+        font-size: 16px;
+    }
+    .raw-katex {
+        font-size: 100%;
+    }
     p {
         text-align: unset;
     }

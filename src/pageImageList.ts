@@ -7,12 +7,12 @@ export interface PageImageData {
 }
 export const pageImages: Record<string, PageImageData | undefined> = {
     "/2018/monitor-stand": {
-        "path": "/covers/M6w8jGfI/FvQB8_Kx.png",
+        "path": "/covers/M6w8jGfI/qaRI2HUu.png",
         "width": 1200,
         "height": 630
     },
     "/2019/error-propagation": {
-        "path": "/covers/SWD-1E4N/uBTG8XBC.png",
+        "path": "/covers/SWD-1E4N/rquE3LP6.png",
         "width": 1200,
         "height": 630
     },
