@@ -6,8 +6,8 @@
     align-items: center;
     justify-content: stretch;
     justify-items: center;
-    padding-block-start: 0.2rem;
-    padding-block-end: 0.2rem;
+    padding-block-start: 0.4rem;
+    padding-block-end: 0.4rem;
     background-color: var(--gray0);
     border-block-end: solid 1px var(--gray3);
     line-height: 1;
