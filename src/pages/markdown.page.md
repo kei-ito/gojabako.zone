@@ -101,12 +101,12 @@ Checkbox
 TeX
 ---
 
-```math Fourier変換
-F(w) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty}dx f(x) e^{-iwx}
-```
+\begin{align} Fourier変換
+F(w)=\frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty}dx f(x) e^{-iwx}
+\end{align}
 
-```math
-y=
+\begin{align}
+y&=
 \omega^{k}\sqrt[3]{
     -{\frac{q}{2}}
     +\sqrt{
@@ -122,12 +122,7 @@ y=
     }
 }
 \ \ (k=0,1,2)
-```
-
-```markdown markdownソース
-```math
-F(w) = \dfrac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty}dx f(x) e^{-iwx}
-```
+\end{align}
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 文章中にも$$f(x)$$や$$\frac{1}{\sqrt{2\pi}}$$のように出せます。文章中にも$$f(x)$$や$$\frac{1}{\sqrt{2\pi}}$$のように出せます。
