@@ -5,15 +5,7 @@
     grid-auto-flow: row;
     justify-content: stretch;
     row-gap: 1rem;
-    margin-block-start: 3rem;
-}
-
-.footer::before {
-    content: '';
-    justify-self: center;
-    width: var(--baseWidth);
-    block-size: 1px;
-    background-color: currentColor;
+    padding-block-start: 1rem;
 }
 
 .sign {

@@ -1,3 +1,8 @@
+@font-face {
+    font-family: Numeric;
+    src: local('Times New Roman');
+    unicode-range: U+2F-39;
+}
 *, ::before, ::after, ::marker {
     position: relative;
     box-sizing: border-box;
@@ -24,13 +29,13 @@
     --baseWidth: 627px;
     --baseGap: 1rem;
     --mainColor: #c4c07e;
-    --textColor: #4f4310;
+    --textColor: #222222;
     --accentColor: #c13a1e;
-    --backgroundColor: #f8f7e6;
-    --white: #fffff8;
+    --backgroundColor: #ffffff;
+    --white: #ffffff;
     --zHeader: 1;
     --listIndexSize: 1.5rem;
-    --font-default: Georgia, 'BIZ UDMincho', serif;
+    --font-default: Numeric, Georgia, 'BIZ UDMincho', serif;
     --font-monospace: Menlo, Consolas, monospace;
     font-size: 17px;
     font-family: var(--font-default);
@@ -38,7 +43,7 @@
     text-rendering: optimizeSpeed;
     color: var(--textColor);
     block-size: 100%;
-    background-color: var(--backgroundColor);
+    background-color: var(--mainColor);
 }
 @media (max-width: 600px) {
     :root {
@@ -55,6 +60,8 @@ main {
     display: grid;
     grid-auto-flow: row;
     row-gap: 1rem;
+    padding-block-end: 3rem;
+    background-color: var(--backgroundColor);
 }
 article, section {
     display: grid;
@@ -68,6 +75,15 @@ article>*, section>* {
 article>header {
     margin-block-start: 2rem;
     margin-block-end: 1rem;
+}
+article>header::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: -1.4rem;
+    inset-block: 0;
+    inline-size: 0.4rem;
+    background-color: var(--accentColor);
+    border-radius: 0.1rem;
 }
 img, svg {
     max-inline-size: 100%;
@@ -90,7 +106,7 @@ img {
     }
 }
 
-a {
+article a {
     color: rgb(0, 0, 207);
     text-decoration: underline;
 }
@@ -296,7 +312,6 @@ blockquote {
     grid-template-rows: 0.5rem;
     row-gap: 0.5rem;
     margin-block-start: 2rem;
-    margin-block-end: 1rem;
     font-size: 90%;
     line-height: 1.6;
 }
@@ -382,6 +397,9 @@ figure[data-lang=math]>.raw-katex {
 @media (max-width: 667px) {
     :root {
         --baseWidth: 94%;
+    }
+    article>header::before {
+        content: none;
     }
 }
 @media (max-width: 600px) {
