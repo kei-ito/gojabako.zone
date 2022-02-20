@@ -21,7 +21,7 @@ export const Page = () => <>
             <ul>{pageListByUpdatedAt.slice(0, 4).map((page) => <li key={page.pathname}><PageLinkUpdated {...page}/></li>)}</ul>
             <h2>管理者</h2>
             <ul>
-                <li><Link href="./author"><a>伊藤 慶 - Kei Ito</a></Link></li>
+                <li><Link href="/author"><a>伊藤 慶 - Kei Ito</a></Link></li>
             </ul>
         </article>
     </main>

@@ -1,7 +1,16 @@
 @font-face {
-    font-family: Numeric;
-    src: local('Times New Roman');
-    unicode-range: U+2F-39;
+    src: url(/fonts/besley/Besley-VariableFont_wght.ttf) format('truetype');
+    font-family: 'Besley';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
+}
+@font-face {
+    src: url(/fonts/besley/Besley-Italic-VariableFont_wght.ttf) format('truetype');
+    font-family: 'Besley';
+    font-style: italic;
+    font-display: swap;
+    font-weight: 100 900;
 }
 *, ::before, ::after, ::marker {
     position: relative;
@@ -40,7 +49,7 @@
     --gray9: #1e293b;
     --zHeader: 1;
     --listIndexSize: 1.5rem;
-    --font-default: Numeric, Georgia, 'BIZ UDMincho', serif;
+    --font-default: Besley, Georgia, 'BIZ UDMincho', serif;
     --font-monospace: Menlo, Consolas, monospace;
     font-size: 17px;
     font-family: var(--font-default);
