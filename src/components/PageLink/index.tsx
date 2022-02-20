@@ -5,7 +5,7 @@ import {className} from './style.module.css';
 
 export const PageLinkPublished = ({pathname, title, publishedAt}: PageData) => <Link href={pathname}>
     <a className={className.link}>
-        {title} <span className={className.meta}>
+        {title}&nbsp;<span className={className.meta}>
             <DateString dateTime={publishedAt}/> 公開
         </span>
     </a>
@@ -13,7 +13,7 @@ export const PageLinkPublished = ({pathname, title, publishedAt}: PageData) => <
 
 export const PageLinkUpdated = ({pathname, title, updatedAt}: PageData) => <Link href={pathname}>
     <a className={className.link}>
-        {title} <span className={className.meta}>
+        {title}&nbsp;<span className={className.meta}>
             <DateString dateTime={updatedAt}/> 更新
         </span>
     </a>

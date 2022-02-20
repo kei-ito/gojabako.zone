@@ -5,7 +5,7 @@
     grid-auto-flow: row;
     justify-content: stretch;
     row-gap: 1rem;
-    padding-block-start: 1rem;
+    padding-block-start: 2rem;
     background-color: var(--gray2);
 }
 
