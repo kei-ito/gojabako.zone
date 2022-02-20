@@ -9,6 +9,7 @@ import {Map, Set} from '../es/global';
 import {removeHtmlComments} from '../es/removeHtmlComments';
 import type {MarkdownContent, SerializeMarkdownContext} from './serializeMarkdownToJsx';
 import {walkMarkdownContentNodes} from './walkContentNodes';
+import {wrapKatexBlocks} from './wrapKatexBlocks';
 
 export const createSerializeMarkdownContext = (
     options: Pick<SerializeMarkdownContext, 'transformLink'> = {},
@@ -27,7 +28,10 @@ export const createSerializeMarkdownContext = (
             return counter();
         },
         parseMarkdown: (source: string) => {
-            const root = fromMarkdown(removeHtmlComments(source), {
+            let filtered = source;
+            filtered = removeHtmlComments(filtered);
+            filtered = wrapKatexBlocks(filtered);
+            const root = fromMarkdown(filtered, {
                 extensions: [gfm(), footnote()],
                 mdastExtensions: [gfmFromMarkdown(), footnoteFromMarkdown],
             });

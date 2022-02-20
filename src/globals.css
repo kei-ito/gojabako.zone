@@ -339,15 +339,7 @@ figure[data-lang=math] {
 figure[data-lang=math]>figcaption {
     inline-size: var(--baseWidth);
 }
-figure[data-lang=math]>.raw-katex {
-    overflow-x: auto;
-    padding-block-start: 0.25em;
-    padding-block-end: 0.25em;
-    padding-inline-start: 0.5em;
-    padding-inline-end: 0.5em;
-}
 .raw-katex {
-    max-inline-size: 100%;
     justify-self: center;
     margin: 0;
     user-select: none;
@@ -363,15 +355,31 @@ figure[data-lang=math]>.raw-katex {
     inset-block-start: 1rem;
     block-size: 1px;
     inline-size: 1px;
-    white-space: pre-wrap;
     opacity: 0;
     overflow: hidden;
 }
-.raw-katex-inline>.raw-katex-source {
-    inset-block-start: 0;
-    inset-inline-start: 0;
-    block-size: 100%;
-    inline-size: 100%;
+figure>.raw-katex {
+    overflow-x: auto;
+    display: block;
+    min-inline-size: var(--baseWidth);
+    max-inline-size: 100%;
+    padding-block-start: 0.25em;
+    padding-block-end: 0.25em;
+}
+figure>.raw-katex>.raw-katex-html {
+    display: flex;
+}
+figure>.raw-katex>.raw-katex-html>.raw-base {
+    flex-shrink: 0;
+    flex-grow: 1;
+    display: flex;
+    padding-inline-start: 0.5em;
+    padding-inline-end: 0.5em;
+    justify-content: center;
+}
+figure>.raw-katex>.raw-katex-html>.raw-tag {
+    flex-shrink: 0;
+    overflow: hidden;
 }
 
 @media (max-width: 667px) {

@@ -313,11 +313,9 @@ const serializeCodeBlock = function* (
         switch (node.lang) {
         case 'math':
             yield* serializeTeXToJsx(node.value, {displayMode: true});
-            yield '<span className="katex-source">';
-            yield '```math{';
+            yield '<span className="katex-source">{';
             yield JSON.stringify(`\n${node.value}\n`);
-            yield '}```';
-            yield '</span>';
+            yield '}</span>';
             break;
         default:
             yield* serializeCodeToJsx(node.lang, node.value);
