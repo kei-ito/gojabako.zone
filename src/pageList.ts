@@ -36,11 +36,11 @@ export const pageListByPublishedAt: Array<PageData> = [
     },
     {
         "pathname": "/2021/aws-errors",
-        "title": "AWSの開発で見たエラーと原因",
+        "title": "AWSの開発でたまに遭うエラーと原因",
         "filePath": "src/pages/2021/aws-errors/index.page.md",
         "publishedAt": "2021-12-17T00:15:30+09:00",
-        "updatedAt": "2021-12-23T09:42:07+09:00",
-        "commitCount": 2
+        "updatedAt": "2022-02-20T14:43:12+09:00",
+        "commitCount": 3
     },
     {
         "pathname": "/2021/ipad-case",
@@ -134,4 +134,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [11,14,7,9,12,13,0,1,10,2,3,4,5,6,8].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [3,11,14,7,9,12,13,0,1,10,2,4,5,6,8].map((index) => pageListByPublishedAt[index]);

@@ -27,7 +27,7 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "height": 630
     },
     "/2021/aws-errors": {
-        "path": "/covers/TzRZIKCA/X0L1kbok.png",
+        "path": "/covers/TzRZIKCA/VBfMxI2o.png",
         "width": 1200,
         "height": 630
     },
