@@ -3,7 +3,7 @@ import {DateString} from '../DateString';
 import type {PageData} from '../../pageList';
 import {className} from './style.module.css';
 
-export const PageLinkPublished = ({pathname, title, publishedAt}: PageData) => <Link href={pathname}>
+export const PageLinkPublished = ({pathname, title, publishedAt}: PageData) => <Link href={pathname || '/'}>
     <a className={className.link}>
         {title}&nbsp;<span className={className.meta}>
             <DateString dateTime={publishedAt}/> 公開
@@ -11,7 +11,7 @@ export const PageLinkPublished = ({pathname, title, publishedAt}: PageData) => <
     </a>
 </Link>;
 
-export const PageLinkUpdated = ({pathname, title, updatedAt}: PageData) => <Link href={pathname}>
+export const PageLinkUpdated = ({pathname, title, updatedAt}: PageData) => <Link href={pathname || '/'}>
     <a className={className.link}>
         {title}&nbsp;<span className={className.meta}>
             <DateString dateTime={updatedAt}/> 更新

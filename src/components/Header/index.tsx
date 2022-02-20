@@ -6,7 +6,7 @@ import {className} from './style.module.css';
 
 export const Header = () => <header className={className.header}>
     <div className={className.container}>
-        <Link href="">
+        <Link href="/">
             <a className={className.titleLink}>
                 <Logo className={className.logo}/>
                 <h1 className={className.title}>{siteName}</h1>
