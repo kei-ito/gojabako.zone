@@ -1,0 +1,75 @@
+{
+    "version": 1,
+    "source": {
+        "path": "/src/pages/2021/ipad-case/anti-slip-stripe.jpg",
+        "hash": "UfjmXQyif_DisFtBar0y_L9qrepTSaMnRCT4Fc9IDsY",
+        "width": 1039,
+        "height": 1009,
+        "size": 58431
+    },
+    "results": [
+        {
+            "path": "/images/GCdQ8EQG/w600._sQZyFFL.webp",
+            "hash": "_sQZyFFL8eEx-varI9u6O9GPkrZ63SGXGgKCz7hQUe8",
+            "width": 600,
+            "height": 583,
+            "size": 17152
+        },
+        {
+            "path": "/images/GCdQ8EQG/w600.ns0PayaB.jpg",
+            "hash": "ns0PayaBERi8LWGZY9duJh6uWNxyM-xc8iIomyKbf9Q",
+            "width": 600,
+            "height": 583,
+            "size": 22992
+        },
+        {
+            "path": "/images/GCdQ8EQG/w600.Kq7-urDQ.avif",
+            "hash": "Kq7-urDQ3DLAh7qMvH-3g1xBWn5lGpNllprLmKbvm3U",
+            "width": 600,
+            "height": 583,
+            "size": 13779
+        },
+        {
+            "path": "/images/GCdQ8EQG/w800.2vxHxlXv.jpg",
+            "hash": "2vxHxlXv_sU4mf0ieHYNwB7RnMgzGf-hoamcDDTY52M",
+            "width": 800,
+            "height": 777,
+            "size": 34654
+        },
+        {
+            "path": "/images/GCdQ8EQG/w800.ZXArzdDQ.webp",
+            "hash": "ZXArzdDQHPwbnLDNeP7bFkl4JOXgNtRMWv8kjuig9Fk",
+            "width": 800,
+            "height": 777,
+            "size": 24648
+        },
+        {
+            "path": "/images/GCdQ8EQG/w800.8DZlvQe5.avif",
+            "hash": "8DZlvQe57vOOibLpEnloBoAv3zaMQCLfFFcDOsxIlTY",
+            "width": 800,
+            "height": 777,
+            "size": 18949
+        },
+        {
+            "path": "/images/GCdQ8EQG/w1000.b-En9T6q.jpg",
+            "hash": "b-En9T6qO46Veav7RKVW8iCw4RsoqU4-UHqHShM4xW0",
+            "width": 1000,
+            "height": 971,
+            "size": 46887
+        },
+        {
+            "path": "/images/GCdQ8EQG/w1000.VEVnH8ab.webp",
+            "hash": "VEVnH8abk0zYXBGT9Tk_4FGCg9CAxtJOiIeITFF0a9E",
+            "width": 1000,
+            "height": 971,
+            "size": 33448
+        },
+        {
+            "path": "/images/GCdQ8EQG/w1000.N7t2Yl1-.avif",
+            "hash": "N7t2Yl1-MgVoYgP36E0i3tfBRi1M7o146zb4DJcT684",
+            "width": 1000,
+            "height": 971,
+            "size": 23942
+        }
+    ]
+}

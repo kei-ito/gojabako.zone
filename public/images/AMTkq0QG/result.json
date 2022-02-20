@@ -1,0 +1,75 @@
+{
+    "version": 1,
+    "source": {
+        "path": "/src/pages/2018/monitor-stand/paint.jpg",
+        "hash": "a0uBr1SreYoWuKDT3O_tKRYgVCBqcRDnXHWFUgEZkbs",
+        "width": 1000,
+        "height": 450,
+        "size": 148145
+    },
+    "results": [
+        {
+            "path": "/images/AMTkq0QG/w600.ZV-bLx9b.webp",
+            "hash": "ZV-bLx9bRMgNiMlycMucxxADA6-h-46bVJ6zJIiyoPw",
+            "width": 600,
+            "height": 270,
+            "size": 18988
+        },
+        {
+            "path": "/images/AMTkq0QG/w600.OQLreYsq.jpg",
+            "hash": "OQLreYsq6MiU4fb6eVNA9fW9k76NryOL8ucnPBIGsKI",
+            "width": 600,
+            "height": 270,
+            "size": 21142
+        },
+        {
+            "path": "/images/AMTkq0QG/w600.K8UOFwmO.avif",
+            "hash": "K8UOFwmOtrMgrY8-0iZLJCOP25qcNFrlse1seTTFYjs",
+            "width": 600,
+            "height": 270,
+            "size": 8624
+        },
+        {
+            "path": "/images/AMTkq0QG/w800.xUWoAhux.jpg",
+            "hash": "xUWoAhuxBdmz-6lW8jxYkXjT6eZYMRoYw1a8q4blCSg",
+            "width": 800,
+            "height": 360,
+            "size": 35976
+        },
+        {
+            "path": "/images/AMTkq0QG/w800.9TMdURjT.webp",
+            "hash": "9TMdURjTDX4lMu6kzK8mcY1Gau5tC1Iz3ZdYQWD5STU",
+            "width": 800,
+            "height": 360,
+            "size": 34430
+        },
+        {
+            "path": "/images/AMTkq0QG/w800._5YLyj3g.avif",
+            "hash": "_5YLyj3gyJSRDtVASmOvgLXXi2BWeHYMLwLdSgshsQA",
+            "width": 800,
+            "height": 360,
+            "size": 14884
+        },
+        {
+            "path": "/images/AMTkq0QG/w1000.xKohX69D.jpg",
+            "hash": "xKohX69D9BhYOQIGBuvCl1u3A4LcBXEeko1Z4svDk24",
+            "width": 1000,
+            "height": 450,
+            "size": 56646
+        },
+        {
+            "path": "/images/AMTkq0QG/w1000.Rj8RaghB.webp",
+            "hash": "Rj8RaghB7notRR4uELbP8Mc5LeyhlqTNKWZoLsOnJQ0",
+            "width": 1000,
+            "height": 450,
+            "size": 59070
+        },
+        {
+            "path": "/images/AMTkq0QG/w1000.KIRSYbgp.avif",
+            "hash": "KIRSYbgpuGNpxHy4m58uKJXW72VcFldUF10Ivwe0agM",
+            "width": 1000,
+            "height": 450,
+            "size": 25509
+        }
+    ]
+}

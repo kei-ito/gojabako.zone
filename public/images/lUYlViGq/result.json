@@ -1,0 +1,138 @@
+{
+    "version": 1,
+    "source": {
+        "path": "/src/pages/2021/ipad-case/fit.jpg",
+        "hash": "OC7rvBwwCwmZimejtQwMDUu_sFK_YAqhAFwqPIlVzak",
+        "width": 4032,
+        "height": 3024,
+        "size": 2911012
+    },
+    "results": [
+        {
+            "path": "/images/lUYlViGq/w600.4POSNAgg.webp",
+            "hash": "4POSNAgg9bEClKGYiu0rPFz0dKvQpuXHMpKhz0_7I3s",
+            "width": 600,
+            "height": 450,
+            "size": 37574
+        },
+        {
+            "path": "/images/lUYlViGq/w600.os0111q_.jpg",
+            "hash": "os0111q_wOz0QlCD8IpEGV5ryyEk0DC_rp26Qr2K-QU",
+            "width": 600,
+            "height": 450,
+            "size": 38794
+        },
+        {
+            "path": "/images/lUYlViGq/w600.02N848bH.avif",
+            "hash": "02N848bHKX7Qo7EXb59bM-_HPwoGkw2RHfwybaLwonA",
+            "width": 600,
+            "height": 450,
+            "size": 24734
+        },
+        {
+            "path": "/images/lUYlViGq/w800.1UUzjI-Q.jpg",
+            "hash": "1UUzjI-Q0eU2QItk-p74CXN_VUk9atYP8p4Pn5nqk1c",
+            "width": 800,
+            "height": 600,
+            "size": 64518
+        },
+        {
+            "path": "/images/lUYlViGq/w800.-tcTduF3.webp",
+            "hash": "-tcTduF3-taRFAkCS6csM-BMlYZ9C3lDhgkxGh5O3h4",
+            "width": 800,
+            "height": 600,
+            "size": 63098
+        },
+        {
+            "path": "/images/lUYlViGq/w800.D0WfXxo_.avif",
+            "hash": "D0WfXxo_A6bhvpbeC6a9yyd8g7pQoKDXiGMl4qNxc0I",
+            "width": 800,
+            "height": 600,
+            "size": 41716
+        },
+        {
+            "path": "/images/lUYlViGq/w1000.EYYfqm2-.jpg",
+            "hash": "EYYfqm2-7IE5DY9M3gIiGamsZPwRDcAcbjrc2BtYoKs",
+            "width": 1000,
+            "height": 750,
+            "size": 96817
+        },
+        {
+            "path": "/images/lUYlViGq/w1000.G1TS42Dx.webp",
+            "hash": "G1TS42Dxo9PPoaJoW8-eMQq9aq7tc-WEtpQmGO6rEAM",
+            "width": 1000,
+            "height": 750,
+            "size": 94782
+        },
+        {
+            "path": "/images/lUYlViGq/w1000.fzuPqdwN.avif",
+            "hash": "fzuPqdwNLwy6c3miAGILF7mHsoxsj0siMHaTLMH6lIA",
+            "width": 1000,
+            "height": 750,
+            "size": 63383
+        },
+        {
+            "path": "/images/lUYlViGq/w1200.vX2I3Gn4.jpg",
+            "hash": "vX2I3Gn4qthW3pGDiEU_xTIZhOK7DenKVWAeUCY6ZbA",
+            "width": 1200,
+            "height": 900,
+            "size": 135135
+        },
+        {
+            "path": "/images/lUYlViGq/w1200.vanlZequ.webp",
+            "hash": "vanlZequtj9Y7jeaTSlzf7QR9I8LAzOeS9KNV024q4c",
+            "width": 1200,
+            "height": 900,
+            "size": 132342
+        },
+        {
+            "path": "/images/lUYlViGq/w1200.eSfevaic.avif",
+            "hash": "eSfevaiciA8tIKLhUaCX7cpRBTs41b5CYC0JpC4BYQc",
+            "width": 1200,
+            "height": 900,
+            "size": 86886
+        },
+        {
+            "path": "/images/lUYlViGq/w1500.FIzQtKEH.jpg",
+            "hash": "FIzQtKEHirDg2_Ig_xx-gnTFjJkkhoxKSsnZj9L1J-4",
+            "width": 1500,
+            "height": 1125,
+            "size": 200396
+        },
+        {
+            "path": "/images/lUYlViGq/w1500.-yoDrXEO.webp",
+            "hash": "-yoDrXEOzjp261UsLx008T05WhzfImTS2mcYjbnOZPU",
+            "width": 1500,
+            "height": 1125,
+            "size": 190150
+        },
+        {
+            "path": "/images/lUYlViGq/w1500.Ma3NwLz5.avif",
+            "hash": "Ma3NwLz5VyE81BF-DsZFh2t1gLmCF8Vo_un3WIpCg48",
+            "width": 1500,
+            "height": 1125,
+            "size": 121662
+        },
+        {
+            "path": "/images/lUYlViGq/w1800.eetPnaz9.jpg",
+            "hash": "eetPnaz9h9NWVLbvm2oscDUYyobMmojIrX_KbUKdJz8",
+            "width": 1800,
+            "height": 1350,
+            "size": 272692
+        },
+        {
+            "path": "/images/lUYlViGq/w1800.Mi8nOSbA.webp",
+            "hash": "Mi8nOSbAi96bYDaFKY2p8TKTK_UC_iBNDYpQC36tmr0",
+            "width": 1800,
+            "height": 1350,
+            "size": 254300
+        },
+        {
+            "path": "/images/lUYlViGq/w1800.2Rbkedn2.avif",
+            "hash": "2Rbkedn2lbuqSYcM8SCfdN95j3ADuBWIa9YWecDgH8Q",
+            "width": 1800,
+            "height": 1350,
+            "size": 155360
+        }
+    ]
+}
