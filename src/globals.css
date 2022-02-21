@@ -89,6 +89,9 @@ img, svg {
 img {
     font-size: 80%;
 }
+picture {
+    overflow: hidden;
+}
 
 @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after {
@@ -356,6 +359,7 @@ figure[data-lang=math]>figcaption {
     display: inline-flex;
     margin-inline-start: 0.2rem;
     margin-inline-end: 0.2rem;
+    vertical-align: middle;
 }
 .raw-katex-source {
     position: absolute;
@@ -370,19 +374,19 @@ figure>.raw-katex {
     display: block;
     min-inline-size: var(--baseWidth);
     max-inline-size: 100%;
-    padding-block-start: 0.25em;
-    padding-block-end: 0.25em;
 }
-figure>.raw-katex>.raw-katex-html {
+.raw-katex-html {
     display: flex;
 }
-figure>.raw-katex>.raw-katex-html>.raw-base {
+.raw-katex-html>.raw-base {
     flex-shrink: 0;
     flex-grow: 1;
     display: flex;
+    justify-content: center;
+}
+figure>.raw-katex>.raw-katex-html>.raw-base {
     padding-inline-start: 0.5em;
     padding-inline-end: 0.5em;
-    justify-content: center;
 }
 .raw-katex .raw-base>* {
     display: inline-flex;
