@@ -259,7 +259,7 @@ ol[data-lang]>li>code {
     border-inline-start-width: 1px;
     border-inline-start-style: solid;
     border-inline-start-color: currentColor;
-    white-space: nowrap;
+    white-space: pre;
 }
 hr {
     block-size: 1px;

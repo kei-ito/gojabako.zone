@@ -233,7 +233,7 @@ describe(serializeMarkdownToJsx.name, () => {
         const context = createSerializeMarkdownContext();
         const source = [
             '```markdown [sample.md](https://example.com)',
-            'hello.',
+            '    hello.',
             '```',
         ].join('\n');
         const actual = [...serializeMarkdownToJsx(context, source)].join('');
@@ -245,7 +245,7 @@ describe(serializeMarkdownToJsx.name, () => {
             '</figcaption>',
             '<ol data-lang="markdown">',
             '<li>',
-            '<code>hello.</code>',
+            '<code><span className="hljs-code">    hello.</span></code>',
             '</li>',
             '</ol>',
             '</figure>',
