@@ -349,36 +349,34 @@ figure[data-lang=math]>figcaption {
     inline-size: var(--baseWidth);
 }
 .raw-katex {
-    justify-self: center;
-    margin: 0;
     user-select: none;
-    white-space: nowrap;
     font-size: 110%;
 }
 .raw-katex-inline {
-    display: inline-flex;
-    margin-inline-start: 0.2rem;
-    margin-inline-end: 0.2rem;
-    vertical-align: middle;
+    margin-inline-start: 0.1rem;
+    margin-inline-end: 0.1rem;
 }
 .raw-katex-source {
     position: absolute;
     inset-block-start: 1rem;
     block-size: 1px;
     inline-size: 1px;
+    justify-self: center;
     opacity: 0;
     overflow: hidden;
 }
 figure>.raw-katex {
     overflow-x: auto;
     display: block;
+    padding-block-start: 0.2rem;
+    padding-block-end: 0.2rem;
     min-inline-size: var(--baseWidth);
     max-inline-size: 100%;
 }
-.raw-katex-html {
+figure>.raw-katex>.raw-katex-html {
     display: flex;
 }
-.raw-katex-html>.raw-base {
+figure>.raw-katex>.raw-katex-html>.raw-base {
     flex-shrink: 0;
     flex-grow: 1;
     display: flex;
