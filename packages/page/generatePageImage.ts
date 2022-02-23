@@ -15,11 +15,9 @@ import type {PageData} from './findPageData';
 import {rmrf} from '../fs/rmrf';
 
 const setupFont = nullaryCache(() => {
-    nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD明朝 StdN W4.otf', {family: 'HiraginoW4'});
-    nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD明朝 StdN W6.otf', {family: 'HiraginoW6'});
-    nodeCanvas.registerFont('/Library/Fonts/ヒラギノ明朝 StdN W8.otf', {family: 'HiraginoW8'});
-    nodeCanvas.registerFont(path.join(publicDirectory, 'fonts', 'besley', 'Besley-VariableFont_wght.ttf'), {family: 'Besley'});
-    nodeCanvas.registerFont(path.join(publicDirectory, 'fonts', 'besley', 'Besley-Italic-VariableFont_wght.ttf'), {family: 'BesleyItalic'});
+    nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD角ゴ StdN W4.otf', {family: 'HiraginoW4'});
+    nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD角ゴ StdN W6.otf', {family: 'HiraginoW6'});
+    nodeCanvas.registerFont('/Library/Fonts/ヒラギノ角ゴ StdN W8.otf', {family: 'HiraginoW8'});
 });
 const applyPadding = (
     baseRect: {left: number, top: number, width: number, height: number},
@@ -198,7 +196,7 @@ const drawTitle = async (
     let lineHeight = fontSize * titleLineScale;
     let lines: Array<string> = [];
     while (true) {
-        ctx.font = `${fontSize}px HiraginoW8`;
+        ctx.font = `bold ${fontSize}px HiraginoW8`;
         const maxLineCount = Math.floor(availableHeight / lineHeight);
         for await (const line of listTitleLines(ctx, page.title, lineHeight)) {
             if (maxLineCount < lines.push(line)) {
@@ -260,7 +258,7 @@ const drawMetaData = async (ctx: CanvasRenderingContext2D, page: PageData) => {
     let urlFontSize = baseFontSize;
     const availableWidth = cardContent.width - qrCodeMaxSize;
     while (minFontSize < urlFontSize) {
-        ctx.font = `${urlFontSize}px Besley, HiraginoW6`;
+        ctx.font = `${urlFontSize}px HiraginoW6`;
         const urlRect = ctx.measureText(url);
         if (urlRect.width < availableWidth) {
             break;
@@ -270,7 +268,7 @@ const drawMetaData = async (ctx: CanvasRenderingContext2D, page: PageData) => {
     }
     ctx.fillText(url, 0, 0);
     ctx.translate(0, -(urlFontSize + baseFontSize * (baseLineScale - 1)));
-    ctx.font = `${baseFontSize}px Besley, HiraginoW6`;
+    ctx.font = `${baseFontSize}px HiraginoW6`;
     ctx.fillText(getDateText(page), 0, 0);
     ctx.resetTransform();
     const height = (urlFontSize + baseFontSize) * baseLineScale;
