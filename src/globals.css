@@ -59,7 +59,7 @@
     block-size: 100%;
 }
 body, #raw-__next {
-    min-height: 100vh;
+    min-block-size: 100vh;
 }
 main {
     display: grid;
