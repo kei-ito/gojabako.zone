@@ -1,21 +1,26 @@
+import {Map} from '../../packages/es/global';
 import type {PageData} from '../pageList';
 import {pageListByPublishedAt} from '../pageList';
 
-interface CategorizedPageList {
-    blogPost: Array<PageData>,
-    others: Array<PageData>,
+const blogPost = new Map<string, Array<PageData>>();
+const others: Array<PageData> = [];
+
+for (const page of pageListByPublishedAt) {
+    const matched = (/^\/(\d+)\//).exec(page.pathname);
+    if (matched) {
+        const year = matched[1];
+        let list = blogPost.get(year);
+        if (!list) {
+            list = [];
+            blogPost.set(year, list);
+        }
+        list.push(page);
+    } else {
+        others.push(page);
+    }
 }
 
-const reducer = (result: CategorizedPageList, page: PageData) => {
-    if ((/^\/\d+\//).test(page.pathname)) {
-        result.blogPost.push(page);
-    } else {
-        result.others.push(page);
-    }
-    return result;
+export const categorizedPageListByPublishedAt = {
+    blogPost: [...blogPost].sort((a, b) => a[0] < b[0] ? 1 : -1),
+    others,
 };
-
-const init = (): CategorizedPageList => ({blogPost: [], others: []});
-
-export const categorizedPageListByPublishedAt = pageListByPublishedAt.reduce(reducer, init());
-// export const categorizedPageListByUpdatedAt = pageListByUpdatedAt.reduce(reducer, init());

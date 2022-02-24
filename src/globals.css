@@ -274,6 +274,21 @@ blockquote {
     border-inline-start-width: 0.2rem;
     opacity: 0.85;
 }
+summary {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    column-gap: 0.2rem;
+    width: min-content;
+    cursor: pointer;
+}
+summary::before {
+    content: '▶︎';
+    font-size: 80%;
+}
+details[open]>summary::before {
+    content: '▼';
+}
 [data-footnote] {
     font-size: 80%;
 }
