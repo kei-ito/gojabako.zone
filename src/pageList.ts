@@ -15,9 +15,9 @@ export const pageListByPublishedAt: Array<PageData> = [
         "pathname": "/app/device",
         "title": "デバイス情報の確認",
         "filePath": "src/pages/app/device/index.tsx",
-        "publishedAt": "2022-02-24T14:40:50.734Z",
-        "updatedAt": "2022-02-24T14:40:50.734Z",
-        "commitCount": 0,
+        "publishedAt": "2022-02-24T23:55:58+09:00",
+        "updatedAt": "2022-02-24T23:55:58+09:00",
+        "commitCount": 1,
         "description": "使用中のデバイスの情報を表示します。"
     },
     {
@@ -113,8 +113,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "Gojabako Zone",
         "filePath": "src/pages/index.tsx",
         "publishedAt": "2021-09-29T00:33:31+09:00",
-        "updatedAt": "2022-02-24T17:20:49+09:00",
-        "commitCount": 22
+        "updatedAt": "2022-02-24T23:55:36+09:00",
+        "commitCount": 23
     },
     {
         "pathname": "/2020/new-computer",
@@ -153,4 +153,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [0,2,9,10,12,15,16,11,4,8,13,14,1,3,5,6,7].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [0,12,2,9,10,15,16,11,4,8,13,14,1,3,5,6,7].map((index) => pageListByPublishedAt[index]);

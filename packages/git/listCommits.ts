@@ -82,8 +82,13 @@ export const getAllCommits = async (
     startCommitish = 'HEAD',
 ): Promise<Array<Commit>> => {
     const commitList: Array<Commit> = [];
+    let previous: string | null = null;
     for await (const commit of listCommits(relativePath, startCommitish)) {
+        if (previous === commit.commitHash) {
+            break;
+        }
         commitList.push(commit);
+        previous = commit.commitHash;
     }
     return commitList;
 };

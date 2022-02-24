@@ -4,6 +4,7 @@ import {listFiles} from '../node/listFiles';
 import {findPageMetaData} from './findPageMetaData';
 
 const isPageFile = (filePath: string) => !filePath.endsWith('.component.tsx')
+&& !filePath.endsWith('.css.ts')
 && !path.basename(filePath).startsWith('_')
 && (
     (/\.tsx?$/).test(filePath)
