@@ -2,7 +2,6 @@
 import {useEffect, useState} from 'react';
 import {clearInterval, globalThis, setInterval} from '../../../../packages/es/global';
 import {PageTitle} from '../../../components/site/PageTitle';
-import {className} from './style.module.css';
 
 const DeviceInspector = () => {
     const [, setCount] = useState(0);
@@ -17,7 +16,7 @@ const DeviceInspector = () => {
     return <main>
         <article>
             <PageTitle pathname="/app/device"/>
-            <table className={className.table}>
+            <table>
                 <tbody>
                     <tr><th>screen.width</th><td>{globalThis.screen.width}</td></tr>
                     <tr><th>screen.height</th><td>{globalThis.screen.height}</td></tr>
