@@ -16,8 +16,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "デバイス情報の確認",
         "filePath": "src/pages/app/device/index.tsx",
         "publishedAt": "2022-02-24T23:55:58+09:00",
-        "updatedAt": "2022-02-25T00:24:40+09:00",
-        "commitCount": 2,
+        "updatedAt": "2022-02-25T00:31:22+09:00",
+        "commitCount": 3,
         "description": "使用中のデバイスの情報を表示します。"
     },
     {

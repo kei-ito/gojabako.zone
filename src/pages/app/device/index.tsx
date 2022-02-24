@@ -13,6 +13,9 @@ const DeviceInspector = () => {
             }
         };
     }, []);
+    if (!('screen' in globalThis)) {
+        return null;
+    }
     return <main>
         <article>
             <PageTitle pathname="/app/device"/>
