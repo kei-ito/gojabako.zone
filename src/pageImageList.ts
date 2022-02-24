@@ -42,12 +42,12 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "height": 630
     },
     "/2021/nextjs": {
-        "path": "/covers/s373Le5-/f5C1CLpb.png",
+        "path": "/covers/s373Le5-/vWHER8Dk.png",
         "width": 1200,
         "height": 630
     },
     "/2021/nextjs-https": {
-        "path": "/covers/ZX-cXk49/UUYC66Kj.png",
+        "path": "/covers/ZX-cXk49/agnbSFFQ.png",
         "width": 1200,
         "height": 630
     },
@@ -67,7 +67,7 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "height": 630
     },
     "/2022/page-images": {
-        "path": "/covers/yEbsLghZ/jThS4d0F.png",
+        "path": "/covers/yEbsLghZ/gQv04uqG.png",
         "width": 1200,
         "height": 630
     },

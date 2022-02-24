@@ -21,11 +21,11 @@ export const pageListByPublishedAt: Array<PageData> = [
     },
     {
         "pathname": "/2022/page-images",
-        "title": "ブログ記事の画像を生成できるようにした",
+        "title": "ブログ記事の画像を生成する",
         "filePath": "src/pages/2022/page-images/index.page.md",
         "publishedAt": "2022-02-11T23:48:29+09:00",
-        "updatedAt": "2022-02-12T16:20:17+09:00",
-        "commitCount": 2
+        "updatedAt": "2022-02-24T18:11:09+09:00",
+        "commitCount": 3
     },
     {
         "pathname": "/2022/image-preprocessor",
@@ -77,19 +77,19 @@ export const pageListByPublishedAt: Array<PageData> = [
     },
     {
         "pathname": "/2021/nextjs-https",
-        "title": "Next.jsの開発環境をHTTPSにしました",
+        "title": "Next.jsの開発環境をHTTPSにする",
         "filePath": "src/pages/2021/nextjs-https/index.page.md",
         "publishedAt": "2021-10-11T00:26:45+09:00",
-        "updatedAt": "2021-11-25T12:56:34+09:00",
-        "commitCount": 4
+        "updatedAt": "2022-02-24T18:11:09+09:00",
+        "commitCount": 5
     },
     {
         "pathname": "/2021/nextjs",
-        "title": "サイトをNext.js + Vercelに移行しました",
+        "title": "サイトをNext.js + Vercelに移行した",
         "filePath": "src/pages/2021/nextjs/index.page.md",
         "publishedAt": "2021-10-05T23:51:46+09:00",
-        "updatedAt": "2022-02-16T23:55:35+09:00",
-        "commitCount": 11
+        "updatedAt": "2022-02-24T18:11:09+09:00",
+        "commitCount": 12
     },
     {
         "pathname": "/markdown",
@@ -144,4 +144,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [11,14,15,10,3,7,9,12,13,0,1,2,4,5,6,8].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [1,8,9,11,14,15,10,3,7,12,13,0,2,4,5,6].map((index) => pageListByPublishedAt[index]);
