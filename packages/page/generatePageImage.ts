@@ -11,7 +11,7 @@ import {listPhrases} from '../kuromoji/listPhrases';
 import {getHash} from '../node/getHash';
 import {siteDomain} from '../site/constants';
 import {getSiteColors} from '../site/css';
-import type {PageData} from './findPageData';
+import type {PageMetaData} from './findPageMetaData';
 import {rmrf} from '../fs/rmrf';
 
 const setupFont = nullaryCache(() => {
@@ -55,7 +55,7 @@ export interface PageImageData {
     height: number,
 }
 
-export const generatePageImage = async (page: PageData): Promise<PageImageData> => {
+export const generatePageImage = async (page: PageMetaData): Promise<PageImageData> => {
     const canvas = await draw(page);
     const buffer = await getPNGBuffer(canvas);
     const dest = path.join(
@@ -84,7 +84,7 @@ const getPNGBuffer = async (canvas: nodeCanvas.Canvas) => {
     return Buffer.concat(chunks);
 };
 
-const draw = async (page: PageData) => {
+const draw = async (page: PageMetaData) => {
     setupFont();
     const canvas = nodeCanvas.createCanvas(image.width, image.height);
     const ctx = canvas.getContext('2d');
@@ -96,7 +96,7 @@ const draw = async (page: PageData) => {
     return canvas;
 };
 
-const clearCanvas = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
+const clearCanvas = async (ctx: CanvasRenderingContext2D, _page: PageMetaData) => {
     const colors = await getSiteColors();
     ctx.fillStyle = colors.gray2;
     ctx.beginPath();
@@ -147,7 +147,7 @@ const logoStrokes: Array<Array<[number, number]>> = [
     [[6, 0], [8, 0], [8, 4], [7, 4], [7, 3], [6, 3]],
 ];
 
-const drawLogo = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
+const drawLogo = async (ctx: CanvasRenderingContext2D, _page: PageMetaData) => {
     const colors = await getSiteColors();
     const logoWidth = logoUnitSize * 8;
     const logoHeight = logoUnitSize * 4;
@@ -166,7 +166,7 @@ const drawLogo = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
     ctx.resetTransform();
 };
 
-const getDateText = (page: PageData) => {
+const getDateText = (page: PageMetaData) => {
     const parse = (dateString: string) => {
         const date = new Date(dateString);
         return [
@@ -186,7 +186,7 @@ const getDateText = (page: PageData) => {
 
 const drawTitle = async (
     ctx: CanvasRenderingContext2D,
-    page: PageData,
+    page: PageMetaData,
     availableHeight: number,
 ) => {
     const colors = await getSiteColors();
@@ -248,7 +248,7 @@ const listTitleLines = async function* (
     }
 };
 
-const drawMetaData = async (ctx: CanvasRenderingContext2D, page: PageData) => {
+const drawMetaData = async (ctx: CanvasRenderingContext2D, page: PageMetaData) => {
     const colors = await getSiteColors();
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
@@ -275,7 +275,7 @@ const drawMetaData = async (ctx: CanvasRenderingContext2D, page: PageData) => {
     return {height};
 };
 
-const drawQrCode = async (ctx: CanvasRenderingContext2D, _page: PageData) => {
+const drawQrCode = async (ctx: CanvasRenderingContext2D, _page: PageMetaData) => {
     const colors = await getSiteColors();
     ctx.strokeStyle = colors.gray6;
     ctx.lineWidth = 2;

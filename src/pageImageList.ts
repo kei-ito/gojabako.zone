@@ -77,7 +77,7 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "height": 630
     },
     "": {
-        "path": "/covers/47DEQpj8/9lI8pT2M.png",
+        "path": "/covers/47DEQpj8/duEz2g_1.png",
         "width": 1200,
         "height": 630
     },

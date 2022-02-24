@@ -1,7 +1,7 @@
 import * as path from 'path';
 import {rootDirectoryPath} from '../fs/constants';
 import {listFiles} from '../node/listFiles';
-import {findPageData} from './findPageData';
+import {findPageMetaData} from './findPageMetaData';
 
 const isPageFile = (filePath: string) => !filePath.endsWith('.component.tsx')
 && !path.basename(filePath).startsWith('_')
@@ -10,12 +10,12 @@ const isPageFile = (filePath: string) => !filePath.endsWith('.component.tsx')
     || filePath.endsWith('.page.md')
 );
 
-export const listPageData = async function* () {
+export const listPageMetaData = async function* () {
     for await (const fileUrl of listFiles(path.join(rootDirectoryPath, 'src/pages'))) {
         if (isPageFile(fileUrl)) {
-            const pageData = await findPageData(fileUrl);
-            if (pageData) {
-                yield pageData;
+            const pageMetaData = await findPageMetaData(fileUrl);
+            if (pageMetaData) {
+                yield pageMetaData;
             }
         }
     }

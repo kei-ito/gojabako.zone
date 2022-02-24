@@ -8,6 +8,7 @@ export interface PageData {
     updatedAt: string,
     commitCount: number,
     archiveOf?: string,
+    description?: string,
 }
 export const pageListByPublishedAt: Array<PageData> = [
     {
@@ -103,8 +104,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "Gojabako Zone",
         "filePath": "src/pages/index.tsx",
         "publishedAt": "2021-09-29T00:33:31+09:00",
-        "updatedAt": "2022-02-21T01:43:01+09:00",
-        "commitCount": 21
+        "updatedAt": "2022-02-24T17:20:49+09:00",
+        "commitCount": 22
     },
     {
         "pathname": "/2020/new-computer",

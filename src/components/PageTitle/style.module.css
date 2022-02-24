@@ -1,0 +1,10 @@
+.container {
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: 0.2rem;
+}
+
+.data {
+    display: block;
+    font-size: 80%;
+}

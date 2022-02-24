@@ -6,16 +6,15 @@ import {pageImages} from '../../pageImageList';
 import {usePageData} from '../../use/PageData';
 import {meta} from '../../util/metaTag';
 
-export interface PageHeadProps {
-    title: string,
-    description: string,
+export interface HtmlHeadProps {
     pathname: string,
+    description?: string,
 }
 
-export const PageHead = (
-    {title, description, pathname, children}: PropsWithChildren<PageHeadProps>,
+export const HtmlHead = (
+    {pathname, description: givenDescription, children}: PropsWithChildren<HtmlHeadProps>,
 ) => {
-    const {publishedAt, updatedAt} = usePageData(pathname);
+    const {title, publishedAt, updatedAt, description = givenDescription} = usePageData(pathname);
     const pageImage = pageImages[pathname];
     if (!pageImage) {
         throw new Error(`NoPageImage: "${pathname}"`);
@@ -27,8 +26,8 @@ export const PageHead = (
         <title>{title === siteName ? title : `${title} ・ ${siteName}`}</title>
         <link rel="canonical" href={url}/>
         <meta.OgTitle content={title}/>
-        <meta.Description content={description}/>
-        <meta.TwitterDescription content={description}/>
+        {description && <meta.Description content={description}/>}
+        {description && <meta.TwitterDescription content={description}/>}
         <meta.OgImage content={coverUrl}/>
         <meta.TwitterImage content={coverUrl}/>
         <meta.OgImageWidth content={`${pageImage.width}`}/>

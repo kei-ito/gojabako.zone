@@ -1,22 +1,15 @@
 import Link from 'next/link';
-import {authorName, siteName} from '../../packages/site/constants';
-import {PageData} from '../components/PageData';
-import {PageHead} from '../components/PageHead';
+import {authorName} from '../../packages/site/constants';
+import {HtmlHead} from '../components/HtmlHead';
 import {PageLinkUpdated} from '../components/PageLink';
+import {PageTitle} from '../components/PageTitle';
 import {pageListByUpdatedAt} from '../pageList';
 
 export const Page = () => <>
-    <PageHead
-        title={siteName}
-        description={`${authorName}のWebサイトです。`}
-        pathname=""
-    />
+    <HtmlHead pathname="" description={`${authorName}のWebサイトです。`}/>
     <main>
         <article>
-            <header>
-                <h1>{siteName}</h1>
-                <PageData pathname="" onlyUpdate={true}/>
-            </header>
+            <PageTitle pathname="" onlyUpdate={true}/>
             <h2>最近の更新</h2>
             <ul>{pageListByUpdatedAt.slice(0, 4).map((page) => <li key={page.pathname}><PageLinkUpdated {...page}/></li>)}</ul>
             <h2>管理者</h2>

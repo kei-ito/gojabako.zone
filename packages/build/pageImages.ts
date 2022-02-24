@@ -7,14 +7,14 @@ import {rootDirectoryPath} from '../fs/constants';
 import {runScript} from '../node/runScript';
 import type {PageImageData} from '../page/generatePageImage';
 import {generatePageImage} from '../page/generatePageImage';
-import {listPageData} from '../page/listPageData';
+import {listPageMetaData} from '../page/listPageMetaData';
 
 runScript(async () => {
     if (process.env.CI) {
         return;
     }
     const pageImages: Record<string, PageImageData> = {};
-    for await (const page of listPageData()) {
+    for await (const page of listPageMetaData()) {
         const result = await generatePageImage(page);
         pageImages[page.pathname] = result;
         console.info(`pageImage: ${page.pathname} → ${result.path}`);

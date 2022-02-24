@@ -10,7 +10,6 @@
     padding-block-end: 0.4rem;
     background-color: var(--gray0);
     border-block-end: solid 1px var(--gray3);
-    line-height: 1;
 }
 .container {
     inline-size: var(--baseWidth);
@@ -29,8 +28,8 @@
     text-decoration: none;
 }
 .title {
-    line-height: 1;
     font-size: 115%;
+    line-height: 1;
 }
 .logo {
     block-size: 1rem;

@@ -1,6 +1,6 @@
 import {Date, Error, JSON, WeakMap} from '../es/global';
-import type {PageData} from './findPageData';
-import {listPageData} from './listPageData';
+import type {PageMetaData} from './findPageMetaData';
+import {listPageMetaData} from './listPageMetaData';
 
 const byDate = (date1: string, date2: string) => {
     const now = Date.now();
@@ -8,12 +8,12 @@ const byDate = (date1: string, date2: string) => {
     const t2 = date2 ? new Date(date2).getTime() : now;
     return t1 < t2 ? 1 : -1;
 };
-const byPublishedAt = (page1: PageData, page2: PageData) => byDate(page1.publishedAt, page2.publishedAt);
-const byUpdatedAt = (page1: PageData, page2: PageData) => byDate(page1.updatedAt, page2.updatedAt);
+const byPublishedAt = (page1: PageMetaData, page2: PageMetaData) => byDate(page1.publishedAt, page2.publishedAt);
+const byUpdatedAt = (page1: PageMetaData, page2: PageMetaData) => byDate(page1.updatedAt, page2.updatedAt);
 
 export const getPageList = async () => {
-    const pageList: Array<PageData> = [];
-    for await (const pageData of listPageData()) {
+    const pageList: Array<PageMetaData> = [];
+    for await (const pageData of listPageMetaData()) {
         pageList.push(pageData);
     }
     const pageListByPublishedAt = pageList.slice().sort(byPublishedAt);

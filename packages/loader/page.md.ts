@@ -1,5 +1,4 @@
 import {Error, JSON, Promise} from '../es/global';
-import {getTextContent} from '../es/TextContent';
 import {createSerializeMarkdownContext} from '../markdown/createSerializeContext';
 import {finalizeSerializeMarkdownContext} from '../markdown/finalizeSerializeContext';
 import {getMarkdownExcerpt} from '../markdown/getExcerpt';
@@ -21,12 +20,9 @@ export const loadMarkdownPage = async (
     if (!(titleNode.type === 'heading' && titleNode.depth === 1)) {
         throw new Error(`The 1st node is not <h1>: ${JSON.stringify(titleNode, null, 4)}`);
     }
-    context.components.add('PageHead');
-    context.components.add('PageData');
-    const title = getTextContent(titleNode);
-    root.children = [titleNode];
-    const titleJsx = [...serializeMarkdownRootToJsx(context, root)].join('');
     root.children = bodyNodes;
+    context.components.add('HtmlHead');
+    context.components.add('PageTitle');
     const body = [...serializeMarkdownRootToJsx(context, root)].join('');
     const pathname = getPagePathName(resourcePath);
     const {head, foot} = finalizeSerializeMarkdownContext(context, resourcePath);
@@ -34,17 +30,10 @@ export const loadMarkdownPage = async (
     return `${head}
 export default function MarkdownPage() {
     return <>
-        <PageHead
-            title={${JSON.stringify(title)}}
-            description={${JSON.stringify(excerpt)}}
-            pathname="${pathname}"
-        />
+        <HtmlHead description=${JSON.stringify(excerpt)} pathname="${pathname}"/>
         <main>
             <article>
-                <header>
-                    ${titleJsx}
-                    <PageData pathname="${pathname}"/>
-                </header>
+                <PageTitle pathname="${pathname}"/>
                 ${body}
                 ${foot}
             </article>

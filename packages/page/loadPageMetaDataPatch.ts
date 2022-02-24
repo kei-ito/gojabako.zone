@@ -3,16 +3,16 @@ import {JSON} from '../es/global';
 import {isObjectLike} from '../es/isObjectLike';
 import {isDateString, isString, isUrlString} from '../es/isString';
 import {ignoreENOENT} from '../fs/ignoreENOENT';
-import type {PageDataPatch} from './findPageData';
+import type {PageMetaDataPatch} from './findPageMetaData';
 
-export const loadPageDataPatch = async (pageFileAbsolutePath: string): Promise<Partial<PageDataPatch>> => {
-    const result: Partial<PageDataPatch> = {};
+export const loadPageMetaDataPatch = async (pageFileAbsolutePath: string): Promise<Partial<PageMetaDataPatch>> => {
+    const result: Partial<PageMetaDataPatch> = {};
     const patchFilePath = `${pageFileAbsolutePath}.json`;
     const jsonString = await fs.promises.readFile(patchFilePath, 'utf-8').catch(ignoreENOENT);
     if (jsonString) {
         const parsed: unknown = JSON.parse(jsonString);
         if (isObjectLike(parsed)) {
-            const {publishedAt, archiveOf, title} = parsed;
+            const {publishedAt, archiveOf, title, description} = parsed;
             if (isString(title) && title) {
                 result.title = title;
             }
@@ -21,6 +21,9 @@ export const loadPageDataPatch = async (pageFileAbsolutePath: string): Promise<P
             }
             if (isUrlString(archiveOf)) {
                 result.archiveOf = archiveOf;
+            }
+            if (isString(description) && description) {
+                result.description = description;
             }
         }
     }

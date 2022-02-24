@@ -2,23 +2,25 @@ import {getPagePathName} from './getPagePathName';
 import {Promise} from '../es/global';
 import {getFileData} from '../node/getFileData';
 import {getPageTitle} from './getPageTitle';
-import {loadPageDataPatch} from './loadPageDataPatch';
+import {loadPageMetaDataPatch} from './loadPageMetaDataPatch';
 
-export interface PageDataPatch {
+export interface PageMetaDataPatch {
     title?: string,
     archiveOf?: string,
     publishedAt?: string,
+    description?: string,
 }
-export interface PageData {
+export interface PageMetaData {
     pathname: string,
     title: string,
     filePath: string,
     updatedAt: string,
     publishedAt: string,
     commitCount: number,
+    description?: string,
 }
 
-export const findPageData = async (pageFileAbsolutePath: string): Promise<PageData | null> => {
+export const findPageMetaData = async (pageFileAbsolutePath: string): Promise<PageMetaData | null> => {
     const pathname = getPagePathName(pageFileAbsolutePath);
     if (pathname.startsWith('/api/')) {
         return null;
@@ -30,7 +32,7 @@ export const findPageData = async (pageFileAbsolutePath: string): Promise<PageDa
     ] = await Promise.all([
         getPageTitle(pageFileAbsolutePath),
         getFileData(pageFileAbsolutePath),
-        loadPageDataPatch(pageFileAbsolutePath),
+        loadPageMetaDataPatch(pageFileAbsolutePath),
     ]);
     const publishedAt = firstCommitAt;
     const updatedAt = lastCommitAt;
