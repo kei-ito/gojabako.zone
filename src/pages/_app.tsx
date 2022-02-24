@@ -1,12 +1,12 @@
 import type {AppProps} from 'next/app';
-import {Header} from '../components/Header';
-import {Footer} from '../components/Footer';
+import {SiteFooter} from '../components/site/SiteFooter';
+import {SiteHeader} from '../components/site/SiteHeader';
 import '../app.css';
 
 const Root = ({Component, pageProps}: AppProps) => <>
-    <Header/>
+    <SiteHeader/>
     <Component {...pageProps}/>
-    <Footer/>
+    <SiteFooter/>
 </>;
 
 export default Root;

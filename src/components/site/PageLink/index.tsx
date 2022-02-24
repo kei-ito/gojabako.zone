@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import {DateString} from '../DateString';
-import type {PageData} from '../../pageList';
+import type {PageData} from '../../../pageList';
+import {DateString} from '../../ui/DateString';
 import {className} from './style.module.css';
 
 export const PageLinkPublished = ({pathname, title, publishedAt}: PageData) => <Link href={pathname || '/'}>

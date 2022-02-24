@@ -1,5 +1,5 @@
 import type {DetailedHTMLProps, TimeHTMLAttributes} from 'react';
-import {Date} from '../../../packages/es/global';
+import {Date} from '../../../../packages/es/global';
 
 export interface DateStringProps extends DetailedHTMLProps<TimeHTMLAttributes<HTMLElement>, HTMLElement> {
     dateTime: string,

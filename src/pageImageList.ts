@@ -71,6 +71,11 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "width": 1200,
         "height": 630
     },
+    "/app/device": {
+        "path": "/covers/6bAdtvDW/1Fwgcusz.png",
+        "width": 1200,
+        "height": 630
+    },
     "/author": {
         "path": "/covers/2NbUOuVG/j3Zz3iXi.png",
         "width": 1200,

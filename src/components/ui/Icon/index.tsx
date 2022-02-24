@@ -1,5 +1,5 @@
 import type {SVGProps} from 'react';
-import {classnames} from '../../../packages/es/classnames';
+import {classnames} from '../../../../packages/es/classnames';
 import {className} from './style.module.css';
 
 const Icon = (

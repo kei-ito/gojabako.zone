@@ -1,5 +1,5 @@
-import {usePageData} from '../../use/PageData';
-import {DateString} from '../DateString';
+import {usePageData} from '../../../use/PageData';
+import {DateString} from '../../ui/DateString';
 import {className} from './style.module.css';
 
 export interface PageDataProps {

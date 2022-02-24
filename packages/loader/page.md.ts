@@ -21,8 +21,8 @@ export const loadMarkdownPage = async (
         throw new Error(`The 1st node is not <h1>: ${JSON.stringify(titleNode, null, 4)}`);
     }
     root.children = bodyNodes;
-    context.components.add('HtmlHead');
-    context.components.add('PageTitle');
+    context.components.add('site/HtmlHead');
+    context.components.add('site/PageTitle');
     const body = [...serializeMarkdownRootToJsx(context, root)].join('');
     const pathname = getPagePathName(resourcePath);
     const {head, foot} = finalizeSerializeMarkdownContext(context, resourcePath);

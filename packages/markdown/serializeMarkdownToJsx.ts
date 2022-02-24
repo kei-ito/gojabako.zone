@@ -335,7 +335,7 @@ const serializeEmbedding = function* (
     if (embedding.type !== node.lang) {
         throw new Error(`UnmatchedService: You requested ${node.lang} but ${embedding.type} was detected.`);
     }
-    context.components.add('Embed');
+    context.components.add('ui/Embed');
     yield `<Embed type="${embedding.type}">${embedding.jsx}</Embed>`;
 };
 

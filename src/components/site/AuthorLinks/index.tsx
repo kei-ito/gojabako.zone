@@ -1,7 +1,7 @@
-import {IconGitHub, IconTwitter} from '../Icon';
-import {HiddenText} from '../HiddenText';
+import {authorGitHub, authorTwitter} from '../../../../packages/site/constants';
+import {HiddenText} from '../../ui/HiddenText';
+import {IconGitHub, IconTwitter} from '../../ui/Icon';
 import {className} from './style.module.css';
-import {authorGitHub, authorTwitter} from '../../../packages/site/constants';
 
 export const AuthorLinks = () => <>
     <a className={className.link} href={`https://twitter.com/${authorTwitter}`}>

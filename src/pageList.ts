@@ -12,6 +12,15 @@ export interface PageData {
 }
 export const pageListByPublishedAt: Array<PageData> = [
     {
+        "pathname": "/app/device",
+        "title": "デバイス情報の確認",
+        "filePath": "src/pages/app/device/index.tsx",
+        "publishedAt": "2022-02-24T14:40:50.734Z",
+        "updatedAt": "2022-02-24T14:40:50.734Z",
+        "commitCount": 0,
+        "description": "使用中のデバイスの情報を表示します。"
+    },
+    {
         "pathname": "/2022/iphone12",
         "title": "Appleでオンライン購入したiPhone 12がau回線で使えるようになるまで",
         "filePath": "src/pages/2022/iphone12/index.page.md",
@@ -144,4 +153,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [1,8,9,11,14,15,10,3,7,12,13,0,2,4,5,6].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [0,2,9,10,12,15,16,11,4,8,13,14,1,3,5,6,7].map((index) => pageListByPublishedAt[index]);

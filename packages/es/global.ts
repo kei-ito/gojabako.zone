@@ -1,4 +1,6 @@
 /* eslint-disable @nlib/no-globals, max-statements-per-line */
+// eslint-disable-next-line no-undef
+const _globalThis = globalThis; export {_globalThis as globalThis};
 const _Boolean = Boolean; export {_Boolean as Boolean};
 const _Number = Number; export {_Number as Number};
 const _BigInt = BigInt; export {_BigInt as BigInt};
@@ -15,3 +17,7 @@ const _Error = Error; export {_Error as Error};
 const _console = console; export {_console as console};
 const _WeakMap = WeakMap; export {_WeakMap as WeakMap};
 const _WeakSet = WeakSet; export {_WeakSet as WeakSet};
+const _setTimeout = setTimeout; export {_setTimeout as setTimeout};
+const _clearTimeout = clearTimeout; export {_clearTimeout as clearTimeout};
+const _setInterval = setInterval; export {_setInterval as setInterval};
+const _clearInterval = clearInterval; export {_clearInterval as clearInterval};

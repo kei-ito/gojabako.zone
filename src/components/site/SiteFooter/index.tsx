@@ -1,9 +1,9 @@
-import {categorizedPageListByPublishedAt} from '../../util/categorizedPageList';
+import {categorizedPageListByPublishedAt} from '../../../util/categorizedPageList';
 import {AuthorLinks} from '../AuthorLinks';
 import {PageLinkPublished} from '../PageLink';
 import {className} from './style.module.css';
 
-export const Footer = () => <footer className={className.footer}>
+export const SiteFooter = () => <footer className={className.footer}>
     <section>
         <h2>書いたもの</h2>
         {categorizedPageListByPublishedAt.blogPost.map(([year, pages]) => <div key={year}>
