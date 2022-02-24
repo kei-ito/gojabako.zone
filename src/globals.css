@@ -44,6 +44,7 @@
     text-rendering: optimizeSpeed;
     color: var(--gray9);
     block-size: 100%;
+    background-color: var(--gray2);
 }
 body, #raw-__next {
     min-block-size: 100vh;
