@@ -16,8 +16,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "デバイス情報の確認",
         "filePath": "src/pages/app/device/index.tsx",
         "publishedAt": "2022-02-24T23:55:58+09:00",
-        "updatedAt": "2022-02-24T23:55:58+09:00",
-        "commitCount": 1,
+        "updatedAt": "2022-02-25T00:24:40+09:00",
+        "commitCount": 2,
         "description": "使用中のデバイスの情報を表示します。"
     },
     {
@@ -153,4 +153,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [11,0,12,2,9,10,15,16,4,8,13,14,1,3,5,6,7].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [0,11,12,2,9,10,15,16,4,8,13,14,1,3,5,6,7].map((index) => pageListByPublishedAt[index]);

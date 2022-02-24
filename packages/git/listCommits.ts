@@ -1,4 +1,4 @@
-import {Error} from '../es/global';
+import {Error, Set} from '../es/global';
 import {readline} from '../es/readline';
 import {spawn} from '../node/spawn';
 
@@ -82,13 +82,13 @@ export const getAllCommits = async (
     startCommitish = 'HEAD',
 ): Promise<Array<Commit>> => {
     const commitList: Array<Commit> = [];
-    let previous: string | null = null;
+    const history = new Set<string>();
     for await (const commit of listCommits(relativePath, startCommitish)) {
-        if (previous === commit.commitHash) {
+        if (history.has(commit.commitHash)) {
             break;
         }
         commitList.push(commit);
-        previous = commit.commitHash;
+        history.add(commit.commitHash);
     }
     return commitList;
 };
