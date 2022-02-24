@@ -33,6 +33,7 @@ export const HtmlHead = (
         <meta.OgImageWidth content={`${pageImage.width}`}/>
         <meta.OgImageHeight content={`${pageImage.height}`}/>
         <meta.TwitterCard content="summary_large_image"/>
+        <meta.ThemeColor content="#cbd5e1"/>
         <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Article',

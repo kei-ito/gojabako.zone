@@ -11,6 +11,7 @@ const get = <T extends string>(name: T) => {
 export const meta = {
     Description: get('description'),
     Author: get('author'),
+    ThemeColor: get('theme-color'),
     OgTitle: get('og:title'),
     OgSiteName: get('og:site_name'),
     OgImage: get('og:image'),
