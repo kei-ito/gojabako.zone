@@ -22,7 +22,7 @@ const serializeHead = function* (
         yield `import ${localName} from '${from}.component';`;
     }
     for (const component of components) {
-        yield `import {${component}} from '${getCompoentPath(fileAbsolutePath, component)}';`;
+        yield `import {${component.split('/').pop()}} from '${getCompoentPath(fileAbsolutePath, component)}';`;
     }
     for (const line of head) {
         yield line;
