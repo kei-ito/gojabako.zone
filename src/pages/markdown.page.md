@@ -19,7 +19,7 @@ include TSX
 -----------
 
 ```jsx (include)
-import {Counter} from '../components/Counter';
+import {Counter} from '../components/site/Counter';
 /****************/
 <Counter/>
 ```

@@ -105,8 +105,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "Markdown動作確認およびタイトルが長い場合の画像生成等の検証用記事",
         "filePath": "src/pages/markdown.page.md",
         "publishedAt": "2021-09-30T00:39:26+09:00",
-        "updatedAt": "2022-02-20T23:13:01+09:00",
-        "commitCount": 19
+        "updatedAt": "2022-02-25T00:18:06+09:00",
+        "commitCount": 20
     },
     {
         "pathname": "",
@@ -153,4 +153,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [0,12,2,9,10,15,16,11,4,8,13,14,1,3,5,6,7].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [11,0,12,2,9,10,15,16,4,8,13,14,1,3,5,6,7].map((index) => pageListByPublishedAt[index]);

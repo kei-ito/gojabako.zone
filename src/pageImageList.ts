@@ -87,7 +87,7 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "height": 630
     },
     "/markdown": {
-        "path": "/covers/tiihd--T/ddbr1hkJ.png",
+        "path": "/covers/tiihd--T/wkoJINX2.png",
         "width": 1200,
         "height": 630
     }
