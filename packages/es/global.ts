@@ -1,6 +1,6 @@
 /* eslint-disable @nlib/no-globals, max-statements-per-line */
 // eslint-disable-next-line no-undef
-const _globalThis = globalThis; export {_globalThis as globalThis};
+const g = globalThis; export {g as globalThis};
 const _Boolean = Boolean; export {_Boolean as Boolean};
 const _Number = Number; export {_Number as Number};
 const _BigInt = BigInt; export {_BigInt as BigInt};

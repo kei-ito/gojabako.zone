@@ -14,11 +14,10 @@ export const pageListByPublishedAt: Array<PageData> = [
     {
         "pathname": "/app/device",
         "title": "デバイス情報の確認",
-        "filePath": "src/pages/app/device/index.tsx",
-        "publishedAt": "2022-02-24T23:55:58+09:00",
-        "updatedAt": "2022-02-25T00:31:22+09:00",
-        "commitCount": 3,
-        "description": "使用中のデバイスの情報を表示します。"
+        "filePath": "src/pages/app/device/index.page.md",
+        "publishedAt": "2022-02-26T00:47:20+09:00",
+        "updatedAt": "2022-02-26T00:47:20+09:00",
+        "commitCount": 1
     },
     {
         "pathname": "/2022/iphone12",
