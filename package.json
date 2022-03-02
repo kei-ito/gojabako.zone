@@ -29,7 +29,7 @@
         "lint:eslint": "next lint"
     },
     "dependencies": {
-        "@nlib/typing": "0.2.3",
+        "@nlib/typing": "0.3.4",
         "highlight.js": "11.4.0",
         "htmlparser2": "7.2.0",
         "katex": "0.15.2",
@@ -40,10 +40,10 @@
         "micromark-extension-footnote": "1.0.2",
         "micromark-extension-gfm": "2.0.1",
         "next": "12.1.0",
-        "postcss": "8.4.6",
+        "postcss": "8.4.7",
         "react": "17.0.2",
         "react-dom": "17.0.2",
-        "ts-node": "10.5.0"
+        "ts-node": "10.6.0"
     },
     "devDependencies": {
         "@nlib/eslint-config": "3.17.30",
@@ -54,8 +54,8 @@
         "@types/kuromoji": "0.1.1",
         "@types/react": "17.0.39",
         "@types/sharp": "0.29.5",
-        "@typescript-eslint/eslint-plugin": "5.12.1",
-        "@typescript-eslint/parser": "5.12.1",
+        "@typescript-eslint/eslint-plugin": "5.13.0",
+        "@typescript-eslint/parser": "5.13.0",
         "canvas": "2.9.0",
         "esbuild": "0.14.23",
         "esifycss": "1.4.37",
