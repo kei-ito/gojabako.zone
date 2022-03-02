@@ -20,10 +20,14 @@ export const ScreenInspector = () => {
             if (!ctx) {
                 return;
             }
-            canvas.width = size.width * devicePixelRatio;
-            canvas.height = size.height * devicePixelRatio;
+            const dpr = devicePixelRatio;
+            canvas.width = size.width * dpr;
+            canvas.height = size.height * dpr;
             const render = () => {
-                draw(ctx, viewportOffset);
+                ctx.save();
+                ctx.scale(dpr, dpr);
+                draw(ctx, size, viewportOffset);
+                ctx.restore();
                 frameId = requestAnimationFrame(render);
             };
             render();
@@ -41,22 +45,28 @@ const getHtmlElement = () => {
     }
     return null;
 };
-const padding = 16 * devicePixelRatio * 2;
+const padding = 32 * 2;
 const getScreenArea = () => ({
     width: (screen.availLeft || 0) + screen.width,
     height: (screen.availTop || 0) + screen.height,
 });
 const draw = (
     ctx: CanvasRenderingContext2D,
+    {width: canvasWidth, height: canvasHeight}: {width: number, height: number},
     viewportOffset: {left: number, top: number},
 ) => {
-    const {width: canvasWidth, height: canvasHeight} = ctx.canvas;
     ctx.lineCap = ctx.lineJoin = 'round';
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     ctx.fillStyle = '#ffffff';
-    ctx.textBaseline = 'bottom';
+    ctx.textBaseline = 'alphabetic';
+    ctx.textAlign = 'center';
     ctx.font = '12px Arial';
-    ctx.fillText(`DPR: ${devicePixelRatio}  orientation.type: ${screen.orientation.type}  orientation.angle: ${screen.orientation.angle}  pixelDepth: ${screen.pixelDepth}  colorDepth: ${screen.colorDepth}`, 2 * devicePixelRatio, canvasHeight - 2 * devicePixelRatio);
+    ctx.save();
+    ctx.translate(canvasWidth / 2, canvasHeight - 24);
+    ctx.fillText(`DPR: ${devicePixelRatio}  orientation.type: ${screen.orientation.type}`, 0, 0);
+    ctx.translate(0, 14);
+    ctx.fillText(`orientation.angle: ${screen.orientation.angle}  pixelDepth: ${screen.pixelDepth}  colorDepth: ${screen.colorDepth}`, 0, 0);
+    ctx.restore();
     ctx.save();
     const canvasAvailWidth = canvasWidth - padding;
     const canvasAvailHeight = canvasHeight - padding;
@@ -65,7 +75,7 @@ const draw = (
     const screenAspectRatio = screenArea.width / screenArea.height;
     const screenWidth = screenAspectRatio < canvasAspectRatio ? canvasAvailHeight * screenAspectRatio : canvasAvailWidth;
     const screenHeight = screenWidth / screenAspectRatio;
-    ctx.translate((canvasWidth - screenWidth) / 2, (canvasHeight - screenHeight) / 2);
+    ctx.translate((canvasWidth - screenWidth) / 2, (canvasHeight - screenHeight) / 2 - 4);
     const scale = screenWidth / screenArea.width;
     ctx.lineWidth = 4 / scale;
     ctx.scale(scale, scale);

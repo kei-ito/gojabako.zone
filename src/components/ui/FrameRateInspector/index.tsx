@@ -20,8 +20,9 @@ export const FrameRateInspector = () => {
             if (!ctx) {
                 return;
             }
-            canvas.width = size.width * devicePixelRatio;
-            canvas.height = size.height * devicePixelRatio;
+            const dpr = devicePixelRatio;
+            canvas.width = size.width * dpr;
+            canvas.height = size.height * dpr;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             let previousTimeStamp = startTimeStamp;
             let count = 0;
@@ -38,7 +39,10 @@ export const FrameRateInspector = () => {
                 while (0 < keyframes.length && 1000 < timeStamp - keyframes[0][1]) {
                     keyframes.shift();
                 }
-                draw(ctx, count, timeStamp, previousTimeStamp, keyframes);
+                ctx.save();
+                ctx.scale(dpr, dpr);
+                draw(ctx, size, count, timeStamp, previousTimeStamp, keyframes);
+                ctx.restore();
                 previousSecond = second;
                 previousTimeStamp = timeStamp;
                 count = (count + 1) % 360;
@@ -55,17 +59,17 @@ export const FrameRateInspector = () => {
 
 const draw = (
     ctx: CanvasRenderingContext2D,
+    {width, height}: {width: number, height: number},
     count: number,
     timeStamp: number,
     previousTimeStamp: number,
     keyframes: Iterable<[number, number]>,
 ) => {
     const elapsed = timeStamp - previousTimeStamp;
-    const {width, height} = ctx.canvas;
     /** Overwrite the canvas with the transcluent previous image */
     ctx.globalAlpha = 1 - elapsed * 0.001;
     ctx.globalCompositeOperation = 'copy';
-    ctx.drawImage(ctx.canvas, 0, 0);
+    ctx.drawImage(ctx.canvas, 0, 0, width, height);
     ctx.globalAlpha = 1;
     ctx.save();
     ctx.translate(width / 2, height / 2);
