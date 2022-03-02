@@ -21,7 +21,7 @@ export const screen = globalThis.screen as Screen & {
     availLeft?: number,
     availTop?: number,
 };
-if (!screen.orientation) {
+if (isBrowser && !screen.orientation) {
     Object.defineProperty(screen, 'orientation', {
         value: {
             type: 'N/A',

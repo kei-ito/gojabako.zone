@@ -13,10 +13,7 @@ export const FrameRateInspector = () => {
     const size = useElementSize(canvas);
     useEffect(() => {
         let frameId = requestAnimationFrame((startTimeStamp) => {
-            if (!canvas || !(0 < size.width)) {
-                return;
-            }
-            const ctx = canvas.getContext('2d');
+            const ctx = 0 < size.width && canvas && canvas.getContext('2d');
             if (!ctx) {
                 return;
             }
@@ -28,6 +25,7 @@ export const FrameRateInspector = () => {
             let count = 0;
             let previousSecond = 0;
             const keyframes: Array<[number, number]> = [];
+            let elapsedTimeBuffer: Array<number> = [];
             const render = (timeStamp: number) => {
                 const second = Math.floor(timeStamp / 1000);
                 if (second !== previousSecond) {
@@ -41,7 +39,10 @@ export const FrameRateInspector = () => {
                 }
                 ctx.save();
                 ctx.scale(dpr, dpr);
-                draw(ctx, size, count, timeStamp, previousTimeStamp, keyframes);
+                const elapsed = timeStamp - previousTimeStamp;
+                elapsedTimeBuffer = elapsedTimeBuffer.concat(elapsed).slice(-16);
+                const fps = 1000 / (elapsedTimeBuffer.reduce((s, e) => s + e, 0) / elapsedTimeBuffer.length);
+                draw(ctx, size, count, timeStamp, previousTimeStamp, fps, keyframes);
                 ctx.restore();
                 previousSecond = second;
                 previousTimeStamp = timeStamp;
@@ -50,9 +51,7 @@ export const FrameRateInspector = () => {
             };
             render(startTimeStamp);
         });
-        return () => {
-            cancelAnimationFrame(frameId);
-        };
+        return () => cancelAnimationFrame(frameId);
     }, [size, canvas]);
     return <canvas className={className.canvas} ref={setCanvas}/>;
 };
@@ -63,6 +62,7 @@ const draw = (
     count: number,
     timeStamp: number,
     previousTimeStamp: number,
+    fps: number,
     keyframes: Iterable<[number, number]>,
 ) => {
     const elapsed = timeStamp - previousTimeStamp;
@@ -88,12 +88,11 @@ const draw = (
     ctx.arc(0, 0, radius, t0, t1);
     ctx.lineWidth = lineWidth;
     ctx.stroke();
-    const fps = (1000 / elapsed).toFixed(2);
     ctx.fillStyle = 'currentColor';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.font = '40px Arial';
-    ctx.fillText(fps, 0, 0);
+    ctx.fillText(fps.toFixed(1), 0, 0);
     ctx.font = `${lineWidth}px Arial`;
     const textRadius = radius - lineWidth;
     for (const [keyframeCount, keyframeTimeStamp] of keyframes) {
