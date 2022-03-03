@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import type {PropsWithChildren} from 'react';
+import type {FC} from 'react';
 import {Error, JSON, URL} from '../../../../packages/es/global';
 import {authorName, siteDomain, siteName} from '../../../../packages/site/constants';
 import {pageImages} from '../../../pageImageList';
@@ -11,9 +11,7 @@ export interface HtmlHeadProps {
     description?: string,
 }
 
-export const HtmlHead = (
-    {pathname, description: givenDescription, children}: PropsWithChildren<HtmlHeadProps>,
-) => {
+export const HtmlHead: FC<HtmlHeadProps> = ({pathname, description: givenDescription, children}) => {
     const {title, publishedAt, updatedAt, description = givenDescription} = usePageData(pathname);
     const pageImage = pageImages[pathname];
     if (!pageImage) {

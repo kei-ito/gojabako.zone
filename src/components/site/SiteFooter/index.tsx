@@ -1,9 +1,10 @@
+import type {FC} from 'react';
+import styled from 'styled-components';
 import {categorizedPageListByPublishedAt} from '../../../util/categorizedPageList';
 import {AuthorLinks} from '../AuthorLinks';
 import {PageLinkPublished} from '../PageLink';
-import {className} from './style.module.css';
 
-export const SiteFooter = () => <footer className={className.footer}>
+export const SiteFooter: FC = () => <Footer>
     <section>
         <h2>書いたもの</h2>
         {categorizedPageListByPublishedAt.blogPost.map(([year, pages]) => <div key={year}>
@@ -16,9 +17,31 @@ export const SiteFooter = () => <footer className={className.footer}>
         <ul>{categorizedPageListByPublishedAt.others.map((page) => <li key={page.pathname}><PageLinkPublished {...page}/></li>)}</ul>
     </section>
     <section>
-        <div className={className.sign}>
+        <Sign>
             <span>&copy; 2013- Kei Ito</span>
             <AuthorLinks/>
-        </div>
+        </Sign>
     </section>
-</footer>;
+</Footer>;
+
+const Footer = styled.footer`
+    position: sticky;
+    inset-block-start: 100%;
+    display: grid;
+    grid-auto-flow: row;
+    justify-content: stretch;
+    padding-block-start: 1rem;
+    background-color: var(--gray2);
+    border-block-start: solid 1px var(--gray3);
+`;
+
+const Sign = styled.div`
+    display: grid;
+    grid-template-columns: 1fr repeat(2, auto);
+    grid-auto-flow: column;
+    column-gap: 0.5rem;
+    justify-items: end;
+    align-items: center;
+    padding-block-start: 1rem;
+    padding-block-end: 1rem;
+`;
