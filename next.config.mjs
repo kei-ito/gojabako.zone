@@ -2,6 +2,9 @@
 import EsifyCSSWebpackPlugin from 'esifycss-webpack-plugin';
 
 const nextConfig = {
+    compiler: {
+        styledComponents: true,
+    },
     reactStrictMode: true,
     pageExtensions: ['page.md', 'tsx', 'ts'],
     webpack: (config, {defaultLoaders: {babel}}) => {
