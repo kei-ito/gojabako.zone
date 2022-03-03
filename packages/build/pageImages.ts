@@ -27,6 +27,6 @@ export interface PageImageData {
 }
 export const pageImages: Record<string, PageImageData | undefined> = ${JSON.stringify(pageImages, null, 4)};
 `.trimStart();
-    const dest = path.join(rootDirectoryPath, 'src/pageImageList.ts');
+    const dest = path.join(rootDirectoryPath, 'packages/site/pageImageList.ts');
     await fs.promises.writeFile(dest, code);
 });

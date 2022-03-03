@@ -33,10 +33,6 @@ yarn-error.log*
 # vercel
 .vercel
 
-# css
-*.css.ts
-/src/app.css
-
 # build output
 .output
 tsconfig.tsbuildinfo

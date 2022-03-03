@@ -2,7 +2,7 @@ import * as path from 'path';
 import {rootDirectoryPath} from '../fs/constants';
 import {Error} from '../es/global';
 
-const pagesDirectoryPath = path.join(rootDirectoryPath, 'src/pages');
+const pagesDirectoryPath = path.join(rootDirectoryPath, 'pages');
 
 export const getPagePathName = (fileAbsolutePath: string): string => {
     const normalizedFileAbsolutePath = path.normalize(fileAbsolutePath.split('/').join(path.sep));

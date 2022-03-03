@@ -29,7 +29,7 @@ export interface PageData {
 export const pageListByPublishedAt: Array<PageData> = ${JSON.stringify(pageListByPublishedAt, null, 4)};
 export const pageListByUpdatedAt: Array<PageData> = ${JSON.stringify(toListByUpdatedAt)}.map((index) => pageListByPublishedAt[index]);
 `.trimStart();
-    const dest = path.join(rootDirectoryPath, 'src/pageList.ts');
+    const dest = path.join(rootDirectoryPath, 'packages/site/pageList.ts');
     await fs.promises.writeFile(dest, code);
     console.info(`BuildPageList: ${dest}`);
 });

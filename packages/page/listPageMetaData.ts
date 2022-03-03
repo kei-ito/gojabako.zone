@@ -12,7 +12,7 @@ const isPageFile = (filePath: string) => !filePath.endsWith('.component.tsx')
 );
 
 export const listPageMetaData = async function* () {
-    for await (const fileUrl of listFiles(path.join(rootDirectoryPath, 'src/pages'))) {
+    for await (const fileUrl of listFiles(path.join(rootDirectoryPath, 'pages'))) {
         if (isPageFile(fileUrl)) {
             const pageMetaData = await findPageMetaData(fileUrl);
             if (pageMetaData) {

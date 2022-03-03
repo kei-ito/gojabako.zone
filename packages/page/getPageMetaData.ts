@@ -1,4 +1,4 @@
-import type {PageData} from '../../src/pageList';
+import type {PageData} from '../site/pageList';
 import {Error} from '../es/global';
 import {findPageMetaData} from './findPageMetaData';
 
