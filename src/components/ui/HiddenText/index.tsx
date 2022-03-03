@@ -1,8 +1,12 @@
-import type {PropsWithChildren} from 'react';
-import {className} from './style.module.css';
+import type {FC} from 'react';
+import styled from 'styled-components';
 
-interface HiddenTextProps {}
+export const HiddenText: FC = ({children}) => <Span>{children}</Span>;
 
-export const HiddenText = ({children}: PropsWithChildren<HiddenTextProps>) => <span className={className.text}>
-    {children}
-</span>;
+const Span = styled.span`
+    position: absolute;
+    block-size: 1em;
+    inline-size: 1em;
+    overflow: hidden;
+    opacity: 0;
+`;

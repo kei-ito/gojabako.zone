@@ -1,7 +1,0 @@
-.canvas {
-    display: block;
-    inline-size: 100%;
-    block-size: 500px;
-    max-block-size: 50vh;
-    background-color: var(--gray8);
-}
