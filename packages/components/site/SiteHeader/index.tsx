@@ -8,7 +8,7 @@ export const SiteHeader: FC = () => <Header>
     <Container>
         <Link href="/" passHref>
             <TitleLink>
-                <Logo viewBox="0 0 8 4" aria-hidden="true">
+                <Logo width="2em" height="1em" viewBox="0 0 8 4" aria-hidden="true">
                     <path d="M0 0h2v1h-1v1h1v2h-2zM3 0h2v4h-2v-2h1v-1h-1zM6 0h2v4h-1v-1h-1z" stroke="none"/>
                 </Logo>
                 <Title>{siteName}</Title>
@@ -52,7 +52,6 @@ const TitleLink = styled.a`
 `;
 
 const Logo = styled.svg`
-    block-size: 1rem;
     fill: currentColor;
     @media (max-width: 280px) {
         display: none;

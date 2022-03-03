@@ -5,12 +5,12 @@ import {IconGitHub, IconTwitter} from '../../ui/Icon';
 
 export const AuthorLinks = () => <>
     <A href={`https://twitter.com/${authorTwitter}`}>
-        <IconTwitter/>
+        <IconTwitter width="1.3em" height="1.3em"/>
         <HiddenText>Twitter:</HiddenText>
         <Span>{authorTwitter}</Span>
     </A>
     <A href={`https://github.com/${authorGitHub}`}>
-        <IconGitHub/>
+        <IconGitHub width="1.3em" height="1.3em"/>
         <HiddenText>GitHub:</HiddenText>
         <Span>{authorGitHub}</Span>
     </A>
@@ -23,10 +23,6 @@ const A = styled.a`
     align-items: center;
     color: inherit;
     text-decoration: none;
-    &>svg {
-        block-size: 1.3em;
-        inline-size: 1.3em;
-    }
 `;
 
 const Span = styled.span`
