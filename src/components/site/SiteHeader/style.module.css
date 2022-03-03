@@ -33,7 +33,6 @@
 }
 .logo {
     block-size: 1rem;
-    border-radius: 0.1rem;
     fill: currentColor;
 }
 @media (max-width: 280px) {
