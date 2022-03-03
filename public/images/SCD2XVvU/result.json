@@ -1,0 +1,33 @@
+{
+    "version": 1,
+    "source": {
+        "path": "/pages/app/device/144fps.png",
+        "hash": "ni-9WmMBu-JmHZNXuNJWVQM4kHPGGbqwclWHkqVXnsk",
+        "width": 328,
+        "height": 240,
+        "size": 32002
+    },
+    "results": [
+        {
+            "path": "/images/SCD2XVvU/w328.JavR-Dcd.webp",
+            "hash": "JavR-DcdrxBsWHVtAlnJe7mfbYpqjhTQNe16qS9o_PE",
+            "width": 328,
+            "height": 240,
+            "size": 5830
+        },
+        {
+            "path": "/images/SCD2XVvU/w328.lh5AdZ5h.png",
+            "hash": "lh5AdZ5h0xcMmXVF9_yaDL1Z6lAiFl22sTHPlLjSnV8",
+            "width": 328,
+            "height": 240,
+            "size": 17860
+        },
+        {
+            "path": "/images/SCD2XVvU/w328.6cODH53Z.avif",
+            "hash": "6cODH53Z-4pYkkOZq_X8dYtNY_iWguVRc6pj2lFCzG4",
+            "width": 328,
+            "height": 240,
+            "size": 4769
+        }
+    ]
+}

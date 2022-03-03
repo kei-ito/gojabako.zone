@@ -2,32 +2,32 @@
     "version": 1,
     "source": {
         "path": "/public/favicon-32x32.png",
-        "hash": "1-qMpabqBkA7UwTtTytobU83SjeHAXv2OX9KAVBX0AA",
+        "hash": "YozNZvMUglFATG09pwsoBihqo6qGMgIhY2sNvJKD5AY",
         "width": 32,
         "height": 32,
-        "size": 619
+        "size": 147
     },
     "results": [
         {
-            "path": "/images/JEIpAgoZ/w32.t-en6ISt.webp",
-            "hash": "t-en6IStcD4Loz6vXo26xVydCl1DYL8MKfE2zqAkfKU",
+            "path": "/images/JEIpAgoZ/w32.NhY4KScv.webp",
+            "hash": "NhY4KScvhAJYK1i2vBCsfcmoQ4KlAoP5kRQCIA3bPOU",
             "width": 32,
             "height": 32,
-            "size": 244
+            "size": 116
         },
         {
-            "path": "/images/JEIpAgoZ/w32.rhBncf05.png",
-            "hash": "rhBncf051C0SqlwZ83DQqD1DhGtZCsN97CRfUziBnOg",
+            "path": "/images/JEIpAgoZ/w32.1PdtD49W.png",
+            "hash": "1PdtD49WYYpScf5NXMA-S39JCI1L6n5WiYxT5MSSTWM",
             "width": 32,
             "height": 32,
-            "size": 270
+            "size": 98
         },
         {
-            "path": "/images/JEIpAgoZ/w32.T20Olqwd.avif",
-            "hash": "T20Olqwdx3Lnk9za2tBJZHiW-Yag0ZknP3LKXhLqzBE",
+            "path": "/images/JEIpAgoZ/w32.XC6D1I1x.avif",
+            "hash": "XC6D1I1xPlk4x2pu2yCJtZNvJxAVHDGYYnmj38O9GXQ",
             "width": 32,
             "height": 32,
-            "size": 434
+            "size": 520
         }
     ]
 }

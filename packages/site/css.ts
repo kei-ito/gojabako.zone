@@ -7,7 +7,7 @@ import type {Resolved} from '../es/type';
 import {rootDirectoryPath} from '../fs/constants';
 
 export const getSiteCSS = nullaryCache(async () => {
-    const cssFilePath = path.join(rootDirectoryPath, 'globals.css');
+    const cssFilePath = path.join(rootDirectoryPath, 'pages/globals.css');
     const css = await fs.promises.readFile(cssFilePath, 'utf8');
     return postcss.parse(css);
 });

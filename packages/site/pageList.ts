@@ -12,116 +12,116 @@ export interface PageData {
 }
 export const pageListByPublishedAt: Array<PageData> = [
     {
-        "pathname": "/markdown",
-        "title": "Markdown動作確認およびタイトルが長い場合の画像生成等の検証用記事",
-        "filePath": "pages/markdown.page.md",
-        "publishedAt": "2022-03-03T14:48:20.126Z",
-        "updatedAt": "2022-03-03T14:48:20.126Z",
-        "commitCount": 0
-    },
-    {
-        "pathname": "",
-        "title": "Gojabako Zone",
-        "filePath": "pages/index.tsx",
-        "publishedAt": "2022-03-03T14:48:20.109Z",
-        "updatedAt": "2022-03-03T14:48:20.109Z",
-        "commitCount": 0
-    },
-    {
-        "pathname": "/author",
-        "title": "伊藤 慶 - Kei Ito",
-        "filePath": "pages/author.page.md",
-        "publishedAt": "2022-03-03T14:48:20.093Z",
-        "updatedAt": "2022-03-03T14:48:20.093Z",
-        "commitCount": 0
-    },
-    {
         "pathname": "/app/device",
         "title": "デバイス情報の確認",
         "filePath": "pages/app/device/index.page.md",
-        "publishedAt": "2022-03-03T14:48:20.077Z",
-        "updatedAt": "2022-03-03T14:48:20.077Z",
-        "commitCount": 0
-    },
-    {
-        "pathname": "/2022/page-images",
-        "title": "ブログ記事の画像を生成する",
-        "filePath": "pages/2022/page-images/index.page.md",
-        "publishedAt": "2022-03-03T14:48:20.060Z",
-        "updatedAt": "2022-03-03T14:48:20.060Z",
-        "commitCount": 0
+        "publishedAt": "2022-02-26T00:47:20+09:00",
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 2
     },
     {
         "pathname": "/2022/iphone12",
         "title": "Appleでオンライン購入したiPhone 12がau回線で使えるようになるまで",
         "filePath": "pages/2022/iphone12/index.page.md",
-        "publishedAt": "2022-03-03T14:48:20.044Z",
-        "updatedAt": "2022-03-03T14:48:20.044Z",
-        "commitCount": 0
+        "publishedAt": "2022-02-13T18:21:58+09:00",
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 2
+    },
+    {
+        "pathname": "/2022/page-images",
+        "title": "ブログ記事の画像を生成する",
+        "filePath": "pages/2022/page-images/index.page.md",
+        "publishedAt": "2022-02-11T23:48:29+09:00",
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 4
     },
     {
         "pathname": "/2022/image-preprocessor",
         "title": "next/imageが遅いのでやめた",
         "filePath": "pages/2022/image-preprocessor/index.page.md",
-        "publishedAt": "2022-03-03T14:48:20.027Z",
-        "updatedAt": "2022-03-03T14:48:20.027Z",
-        "commitCount": 0
-    },
-    {
-        "pathname": "/2021/nextjs12",
-        "title": "Next.js 12にしました",
-        "filePath": "pages/2021/nextjs12/index.page.md",
-        "publishedAt": "2022-03-03T14:48:20.011Z",
-        "updatedAt": "2022-03-03T14:48:20.011Z",
-        "commitCount": 0
-    },
-    {
-        "pathname": "/2021/nextjs-https",
-        "title": "Next.jsの開発環境をHTTPSにする",
-        "filePath": "pages/2021/nextjs-https/index.page.md",
-        "publishedAt": "2022-03-03T14:48:19.994Z",
-        "updatedAt": "2022-03-03T14:48:19.994Z",
-        "commitCount": 0
-    },
-    {
-        "pathname": "/2021/nextjs",
-        "title": "サイトをNext.js + Vercelに移行した",
-        "filePath": "pages/2021/nextjs/index.page.md",
-        "publishedAt": "2022-03-03T14:48:19.976Z",
-        "updatedAt": "2022-03-03T14:48:19.976Z",
-        "commitCount": 0
-    },
-    {
-        "pathname": "/2021/ipad-case",
-        "title": "iPad Proケースの製作",
-        "filePath": "pages/2021/ipad-case/index.page.md",
-        "publishedAt": "2022-03-03T14:48:19.959Z",
-        "updatedAt": "2022-03-03T14:48:19.959Z",
-        "commitCount": 0
+        "publishedAt": "2022-02-05T18:20:17+09:00",
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 3
     },
     {
         "pathname": "/2021/aws-errors",
         "title": "AWSの開発でたまに遭うエラーと原因",
         "filePath": "pages/2021/aws-errors/index.page.md",
-        "publishedAt": "2022-03-03T14:48:19.941Z",
-        "updatedAt": "2022-03-03T14:48:19.941Z",
-        "commitCount": 0
+        "publishedAt": "2021-12-17T00:15:30+09:00",
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 4
+    },
+    {
+        "pathname": "/2021/ipad-case",
+        "title": "iPad Proケースの製作",
+        "filePath": "pages/2021/ipad-case/index.page.md",
+        "publishedAt": "2021-12-13T22:53:16+09:00",
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 3
     },
     {
         "pathname": "/2021/au-denki",
         "title": "auでんきの使用量をCSVにする",
         "filePath": "pages/2021/au-denki/index.page.md",
-        "publishedAt": "2022-03-03T14:48:19.924Z",
-        "updatedAt": "2022-03-03T14:48:19.924Z",
-        "commitCount": 0
+        "publishedAt": "2021-12-01T00:59:21+09:00",
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 5
+    },
+    {
+        "pathname": "/2021/nextjs12",
+        "title": "Next.js 12にしました",
+        "filePath": "pages/2021/nextjs12/index.page.md",
+        "publishedAt": "2021-10-29T22:24:14+09:00",
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 5
+    },
+    {
+        "pathname": "/author",
+        "title": "伊藤 慶 - Kei Ito",
+        "filePath": "pages/author.page.md",
+        "publishedAt": "2021-10-13T20:35:53+09:00",
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 5
+    },
+    {
+        "pathname": "/2021/nextjs-https",
+        "title": "Next.jsの開発環境をHTTPSにする",
+        "filePath": "pages/2021/nextjs-https/index.page.md",
+        "publishedAt": "2021-10-11T00:26:45+09:00",
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 6
+    },
+    {
+        "pathname": "/2021/nextjs",
+        "title": "サイトをNext.js + Vercelに移行した",
+        "filePath": "pages/2021/nextjs/index.page.md",
+        "publishedAt": "2021-10-05T23:51:46+09:00",
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 13
+    },
+    {
+        "pathname": "/markdown",
+        "title": "Markdown動作確認およびタイトルが長い場合の画像生成等の検証用記事",
+        "filePath": "pages/markdown.page.md",
+        "publishedAt": "2021-09-30T00:39:26+09:00",
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 21
+    },
+    {
+        "pathname": "",
+        "title": "Gojabako Zone",
+        "filePath": "pages/index.tsx",
+        "publishedAt": "2021-09-29T00:33:31+09:00",
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 24
     },
     {
         "pathname": "/2020/new-computer",
         "title": "ラックマウントPC",
         "filePath": "pages/2020/new-computer/index.page.md",
         "publishedAt": "2020-06-08T14:23:25Z",
-        "updatedAt": "2022-03-03T14:48:19.907Z",
-        "commitCount": 0,
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 3,
         "archiveOf": "https://kei-itof.goat.me/s3xAnADIzK"
     },
     {
@@ -129,8 +129,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "GitLab Runner環境をCloudFormationでつくる",
         "filePath": "pages/2019/gitlab-runner/index.page.md",
         "publishedAt": "2019-05-12T16:30:37Z",
-        "updatedAt": "2022-03-03T14:48:19.889Z",
-        "commitCount": 0,
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 2,
         "archiveOf": "https://kei-itof.goat.me/hFPAYi8W52"
     },
     {
@@ -138,8 +138,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "加重平均の誤差伝播",
         "filePath": "pages/2019/error-propagation/index.page.md",
         "publishedAt": "2019-04-26T18:46:08Z",
-        "updatedAt": "2022-03-03T14:48:19.872Z",
-        "commitCount": 0,
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 3,
         "archiveOf": "https://kei-itof.goat.me/heZeNIQCCQ"
     },
     {
@@ -147,9 +147,9 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "モニタースタンドに棚をつけるDIY記録",
         "filePath": "pages/2018/monitor-stand/index.page.md",
         "publishedAt": "2018-11-29T17:01:41Z",
-        "updatedAt": "2022-03-03T14:48:19.854Z",
-        "commitCount": 0,
+        "updatedAt": "2022-03-03T23:51:55+09:00",
+        "commitCount": 5,
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [11,12,8,0,2,1,3,7,9,10,5,4,6,13,14,15,16].map((index) => pageListByPublishedAt[index]);

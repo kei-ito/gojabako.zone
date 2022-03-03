@@ -9,18 +9,18 @@
     },
     "results": [
         {
-            "path": "/images/QnyjwhW-/w180.0vk0XSHh.webp",
-            "hash": "0vk0XSHhDAlnhGygS8l6aodzE007YbWBRra7dDKg1FY",
-            "width": 180,
-            "height": 180,
-            "size": 418
-        },
-        {
             "path": "/images/QnyjwhW-/w180.xvYastfh.png",
             "hash": "xvYastfhr3VcWtwOWXz-IsbHudzwK2gcAWJ55F_ESXM",
             "width": 180,
             "height": 180,
             "size": 800
+        },
+        {
+            "path": "/images/QnyjwhW-/w180.0vk0XSHh.webp",
+            "hash": "0vk0XSHhDAlnhGygS8l6aodzE007YbWBRra7dDKg1FY",
+            "width": 180,
+            "height": 180,
+            "size": 418
         },
         {
             "path": "/images/QnyjwhW-/w180._gLEN-CW.avif",

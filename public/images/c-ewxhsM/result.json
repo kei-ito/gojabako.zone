@@ -1,0 +1,75 @@
+{
+    "version": 1,
+    "source": {
+        "path": "/pages/2018/monitor-stand/frames1.jpg",
+        "hash": "ml4lTXqaZVvKOHPoNak_O-1uisgGy1YNLn3SpvwxlRw",
+        "width": 1000,
+        "height": 335,
+        "size": 96678
+    },
+    "results": [
+        {
+            "path": "/images/c-ewxhsM/w600.GhjrXQW7.webp",
+            "hash": "GhjrXQW79udArLvItAJMfHd91SaiPOpXQmRPApb6EKE",
+            "width": 600,
+            "height": 201,
+            "size": 15060
+        },
+        {
+            "path": "/images/c-ewxhsM/w600.HetH6af-.jpg",
+            "hash": "HetH6af-9rgeT19W2VmKOQDRlD3Y3z5645xWyna9omU",
+            "width": 600,
+            "height": 201,
+            "size": 17194
+        },
+        {
+            "path": "/images/c-ewxhsM/w600.pIzKF9pH.avif",
+            "hash": "pIzKF9pHQN3V4Q30EovAa0pWNpBFhEl8gnbZ-2cA_yo",
+            "width": 600,
+            "height": 201,
+            "size": 8455
+        },
+        {
+            "path": "/images/c-ewxhsM/w800.d2k8AgXQ.webp",
+            "hash": "d2k8AgXQDOdb4G6XrOhxqdYOrqGGD2dHyJ69V0hjfIU",
+            "width": 800,
+            "height": 268,
+            "size": 23592
+        },
+        {
+            "path": "/images/c-ewxhsM/w800.2AdIVXPZ.jpg",
+            "hash": "2AdIVXPZfXR8wnH0xSLXxVhCfMEyfxkS0IQiTPq7i-Y",
+            "width": 800,
+            "height": 268,
+            "size": 27554
+        },
+        {
+            "path": "/images/c-ewxhsM/w800.SArQcOEX.avif",
+            "hash": "SArQcOEXrg4R4xxCWXBp-IWhIvy2SsSgDaHgnpqtsOY",
+            "width": 800,
+            "height": 268,
+            "size": 13043
+        },
+        {
+            "path": "/images/c-ewxhsM/w1000.EdyVRnrI.jpg",
+            "hash": "EdyVRnrIlo9ogMDXnMibMfB-tfrU-8PPVvqS9EKpwIo",
+            "width": 1000,
+            "height": 335,
+            "size": 39930
+        },
+        {
+            "path": "/images/c-ewxhsM/w1000.U-5nHhZI.webp",
+            "hash": "U-5nHhZIb8mk9DEatH3G0stqUC3F0vQ7tAV7-6vEfro",
+            "width": 1000,
+            "height": 335,
+            "size": 34320
+        },
+        {
+            "path": "/images/c-ewxhsM/w1000.Ov8ihXBu.avif",
+            "hash": "Ov8ihXBuR38M6BiEFMDP68EtYyTpa4DLMpLOCTzhbHI",
+            "width": 1000,
+            "height": 335,
+            "size": 18418
+        }
+    ]
+}
