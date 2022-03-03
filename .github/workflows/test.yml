@@ -11,6 +11,7 @@ jobs:
           node-version: 16.x
           cache: npm
       - run: npm ci
+      - run: npm run build:css
       - run: npm run lint
       - run: npm test
       - uses: codecov/codecov-action@v2

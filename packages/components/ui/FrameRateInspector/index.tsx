@@ -1,9 +1,9 @@
 import type {FC} from 'react';
 import {useEffect, useState} from 'react';
-import styled from 'styled-components';
 import {cancelAnimationFrame, devicePixelRatio, requestAnimationFrame} from '../../../../packages/dom/global';
 import {Math} from '../../../../packages/es/global';
 import {useElementSize} from '../../../hooks/useElementSize';
+import {className} from './style.module.css';
 
 const msToRad = Math.PI / 500;
 const lineWidth = 16;
@@ -54,15 +54,8 @@ export const FrameRateInspector: FC = () => {
         });
         return () => cancelAnimationFrame(frameId);
     }, [size, canvas]);
-    return <Canvas ref={setCanvas}/>;
+    return <canvas ref={setCanvas} className={className.canvas}/>;
 };
-
-const Canvas = styled.canvas`
-    display: block;
-    inline-size: 100%;
-    block-size: 240px;
-    background-color: var(--gray1);
-`;
 
 const draw = (
     ctx: CanvasRenderingContext2D,
