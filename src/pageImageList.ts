@@ -7,87 +7,87 @@ export interface PageImageData {
 }
 export const pageImages: Record<string, PageImageData | undefined> = {
     "/2018/monitor-stand": {
-        "path": "/covers/M6w8jGfI/C2-Y8cjd.png",
+        "path": "/covers/M6w8jGfI/ngPJS85a/C2-Y8cjd.png",
         "width": 1200,
         "height": 630
     },
     "/2019/error-propagation": {
-        "path": "/covers/SWD-1E4N/ZlUDNA7P.png",
+        "path": "/covers/SWD-1E4N/CGYmZl1s/ZlUDNA7P.png",
         "width": 1200,
         "height": 630
     },
     "/2019/gitlab-runner": {
-        "path": "/covers/TmSvdGod/4dQrixIl.png",
+        "path": "/covers/TmSvdGod/qotgZ5ZV/4dQrixIl.png",
         "width": 1200,
         "height": 630
     },
     "/2020/new-computer": {
-        "path": "/covers/-AL1gWae/trCiKMhT.png",
+        "path": "/covers/-AL1gWae/r_33eYyu/trCiKMhT.png",
         "width": 1200,
         "height": 630
     },
     "/2021/au-denki": {
-        "path": "/covers/9cPn0k2Z/eF0jBzyy.png",
+        "path": "/covers/9cPn0k2Z/Q1EM7k_E/eF0jBzyy.png",
         "width": 1200,
         "height": 630
     },
     "/2021/aws-errors": {
-        "path": "/covers/TzRZIKCA/itd5oMYi.png",
+        "path": "/covers/TzRZIKCA/15X6ej-7/itd5oMYi.png",
         "width": 1200,
         "height": 630
     },
     "/2021/ipad-case": {
-        "path": "/covers/3pChiagg/SAnCUVLF.png",
+        "path": "/covers/3pChiagg/0dNVGyoO/SAnCUVLF.png",
         "width": 1200,
         "height": 630
     },
     "/2021/nextjs": {
-        "path": "/covers/s373Le5-/vWHER8Dk.png",
+        "path": "/covers/s373Le5-/Fkeqasei/vWHER8Dk.png",
         "width": 1200,
         "height": 630
     },
     "/2021/nextjs-https": {
-        "path": "/covers/ZX-cXk49/agnbSFFQ.png",
+        "path": "/covers/ZX-cXk49/DNY6qxbt/agnbSFFQ.png",
         "width": 1200,
         "height": 630
     },
     "/2021/nextjs12": {
-        "path": "/covers/FqWvXwk8/CF44ti-s.png",
+        "path": "/covers/FqWvXwk8/UCsSIBJq/CF44ti-s.png",
         "width": 1200,
         "height": 630
     },
     "/2022/image-preprocessor": {
-        "path": "/covers/foR4ezoK/dZLfIiR5.png",
+        "path": "/covers/foR4ezoK/_OkD8YUp/dZLfIiR5.png",
         "width": 1200,
         "height": 630
     },
     "/2022/iphone12": {
-        "path": "/covers/C4al8FNS/aWTDW8Id.png",
+        "path": "/covers/C4al8FNS/XSdGkhCU/aWTDW8Id.png",
         "width": 1200,
         "height": 630
     },
     "/2022/page-images": {
-        "path": "/covers/yEbsLghZ/gQv04uqG.png",
+        "path": "/covers/yEbsLghZ/-xcc18Nj/gQv04uqG.png",
         "width": 1200,
         "height": 630
     },
     "/app/device": {
-        "path": "/covers/6bAdtvDW/Xvntzrsz.png",
+        "path": "/covers/6bAdtvDW/4lToDBS7/Xvntzrsz.png",
         "width": 1200,
         "height": 630
     },
     "/author": {
-        "path": "/covers/2NbUOuVG/j3Zz3iXi.png",
+        "path": "/covers/2NbUOuVG/hNJO30y3/j3Zz3iXi.png",
         "width": 1200,
         "height": 630
     },
     "": {
-        "path": "/covers/47DEQpj8/duEz2g_1.png",
+        "path": "/covers/47DEQpj8/11lyUTZt/duEz2g_1.png",
         "width": 1200,
         "height": 630
     },
     "/markdown": {
-        "path": "/covers/tiihd--T/wkoJINX2.png",
+        "path": "/covers/tiihd--T/jxVmDlz7/wkoJINX2.png",
         "width": 1200,
         "height": 630
     }

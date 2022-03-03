@@ -2,10 +2,11 @@ import type {CanvasRenderingContext2D} from 'canvas';
 import nodeCanvas from 'canvas';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as console from 'console';
 import {Buffer} from 'buffer';
 import stackBlur from 'stackblur-canvas';
 import {nullaryCache} from '../es/cache';
-import {Date, Math} from '../es/global';
+import {Date, JSON, Math} from '../es/global';
 import {coverImagesDirectory, publicDirectory} from '../fs/constants';
 import {listPhrases} from '../kuromoji/listPhrases';
 import {getHash} from '../node/getHash';
@@ -13,6 +14,7 @@ import {siteDomain} from '../site/constants';
 import {getSiteColors} from '../site/css';
 import type {PageMetaData} from './findPageMetaData';
 import {rmrf} from '../fs/rmrf';
+import {statOrNull} from '../fs/statOrNull';
 
 const setupFont = nullaryCache(() => {
     nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD角ゴ StdN W4.otf', {family: 'HiraginoW4'});
@@ -33,6 +35,7 @@ const applyPadding = (
     const cy = (top + bottom) / 2;
     return {left, right, top, bottom, width, height, cx, cy, padding};
 };
+const version = '1.0.0';
 const image = {left: 0, top: 0, width: 1200, height: 630};
 const card = applyPadding(image, {left: 40, right: 40, top: 40, bottom: 80});
 const cardBorderRadius = 30;
@@ -56,24 +59,32 @@ export interface PageImageData {
 }
 
 export const generatePageImage = async (page: PageMetaData): Promise<PageImageData> => {
-    const canvas = await draw(page);
-    const buffer = await getPNGBuffer(canvas);
-    const dest = path.join(
-        coverImagesDirectory,
-        `${getHash(page.pathname).toString('base64url').slice(0, 8)}`,
-        `${getHash(buffer).toString('base64url').slice(0, 8)}.png`,
-    );
-    await rmrf(path.dirname(dest));
-    await fs.promises.mkdir(path.dirname(dest), {recursive: true});
-    await fs.promises.writeFile(dest, buffer);
+    const dest = await generate(page);
     return {
-        path: [
-            '',
-            ...path.relative(publicDirectory, dest).split(path.sep),
-        ].join('/'),
+        path: ['', ...path.relative(publicDirectory, dest).split(path.sep)].join('/'),
         width: image.width,
         height: image.height,
     };
+};
+
+const generate = async (page: PageMetaData) => {
+    const pathDirectory = path.join(coverImagesDirectory, getHash(page.pathname).toString('base64url').slice(0, 8));
+    const versionDirectory = path.join(pathDirectory, getHash(JSON.stringify({page, version})).toString('base64url').slice(0, 8));
+    const stats = await statOrNull(versionDirectory);
+    if (stats && stats.isDirectory()) {
+        const names = await fs.promises.readdir(versionDirectory);
+        if (names.length === 1) {
+            return path.join(versionDirectory, names[0]);
+        }
+    }
+    await rmrf(pathDirectory);
+    const canvas = await draw(page);
+    const buffer = await getPNGBuffer(canvas);
+    const dest = path.join(versionDirectory, `${getHash(buffer).toString('base64url').slice(0, 8)}.png`);
+    await fs.promises.mkdir(path.dirname(dest), {recursive: true});
+    await fs.promises.writeFile(dest, buffer);
+    console.info(`generated: ${path.relative(publicDirectory, dest)} (${page.pathname})`);
+    return dest;
 };
 
 const getPNGBuffer = async (canvas: nodeCanvas.Canvas) => {

@@ -38,7 +38,7 @@ runScript(async () => {
             writer.write(`${line}\n`);
         }
         writer.end();
-        console.info(`${path.relative(rootDirectoryPath, image.sourceFileAbsolutePath)} → ${image.outputDirectory}`);
+        // console.info(`${path.relative(rootDirectoryPath, image.sourceFileAbsolutePath)} → ${image.outputDirectory}`);
     }
 });
 
