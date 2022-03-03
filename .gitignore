@@ -39,6 +39,7 @@ tsconfig.tsbuildinfo
 
 # CSS
 *.css.ts
+pages/app.css
 
 next-env.d.ts
 *.component.tsx
