@@ -1,6 +1,3 @@
-/* eslint-disable @nlib/no-globals */
-import EsifyCSSWebpackPlugin from 'esifycss-webpack-plugin';
-
 const nextConfig = {
     compiler: {
         styledComponents: true,
@@ -12,7 +9,6 @@ const nextConfig = {
             {test: /\.module\.md$/, use: [babel, './loader/module.md.cjs']},
             {test: /\.page\.md$/, use: [babel, './loader/page.md.cjs']},
         );
-        config.resolve.plugins.push(new EsifyCSSWebpackPlugin());
         return config;
     },
 };
