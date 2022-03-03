@@ -1,10 +1,10 @@
 import {useEffect, useState} from 'react';
-import styled from 'styled-components';
 import {cancelAnimationFrame, devicePixelRatio, requestAnimationFrame, screen} from '../../../../packages/dom/global';
 import {globalThis, Math} from '../../../../packages/es/global';
 import {useElementRect} from '../../../hooks/useElementRect';
 import {useElementSize} from '../../../hooks/useElementSize';
 import {useViewPortOffset} from '../../../hooks/useViewPortOffset';
+import {className} from './style.module.css';
 
 export const ScreenInspector = () => {
     const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
@@ -36,16 +36,8 @@ export const ScreenInspector = () => {
             cancelAnimationFrame(frameId);
         };
     }, [size, canvas, viewportOffset, rootRect]);
-    return <Canvas ref={setCanvas}/>;
+    return <canvas ref={setCanvas} className={className.canvas}/>;
 };
-
-const Canvas = styled.canvas`
-    display: block;
-    inline-size: 100%;
-    block-size: 500px;
-    max-block-size: 50vh;
-    background-color: var(--gray8);
-`;
 
 const getHtmlElement = () => {
     if ('document' in globalThis) {

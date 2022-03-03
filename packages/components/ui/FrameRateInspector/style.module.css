@@ -1,0 +1,6 @@
+.canvas {
+    display: block;
+    inline-size: 100%;
+    block-size: 240px;
+    background-color: var(--gray1);
+}
