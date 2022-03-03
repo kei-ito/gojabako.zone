@@ -7,7 +7,7 @@
 スクリーンとブラウザアプリ、ビューポートの位置関係を表示します。画面上でブラウザを動かしたり大きさを変えたりするとそれに合わせて動きます。
 
 ```jsx (include)
-import {ScreenInspector} from '../../../components/ui/ScreenInspector';
+import {ScreenInspector} from '../../../packages/components/ui/ScreenInspector';
 /****************/
 <ScreenInspector/>
 ```
@@ -31,7 +31,7 @@ const viewportAppX = viewportScreenX - appScreenX;
 ## フレームレート
 
 ```jsx (include)
-import {FrameRateInspector} from '../../../components/ui/FrameRateInspector';
+import {FrameRateInspector} from '../../../packages/components/ui/FrameRateInspector';
 /****************/
 <FrameRateInspector/>
 ```
