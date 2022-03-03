@@ -47,7 +47,7 @@ const isInIgnoredInputDirectories = (filePath: string) => {
 };
 
 const listImageFiles = async function* () {
-    for await (const sourceFileAbsolutePath of listFiles(path.join(rootDirectoryPath, 'src'), path.join(rootDirectoryPath, 'public'))) {
+    for await (const sourceFileAbsolutePath of listFiles(path.join(rootDirectoryPath, 'pages'), path.join(rootDirectoryPath, 'public'))) {
         if (imageExtensions.has(getExtension(sourceFileAbsolutePath)) && !isInIgnoredInputDirectories(sourceFileAbsolutePath)) {
             const relativePath = path.relative(rootDirectoryPath, sourceFileAbsolutePath).split(path.sep).join('/');
             const hash = getHash(relativePath).toString('base64url').slice(0, 8);
