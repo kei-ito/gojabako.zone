@@ -38,7 +38,7 @@
         "mdast-util-gfm": "2.0.1",
         "micromark-extension-footnote": "1.0.2",
         "micromark-extension-gfm": "2.0.1",
-        "next": "12.1.0",
+        "next": "12.1.4",
         "postcss": "8.4.12",
         "react": "17.0.2",
         "react-dom": "17.0.2",
