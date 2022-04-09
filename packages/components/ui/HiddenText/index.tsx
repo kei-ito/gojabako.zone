@@ -1,6 +1,8 @@
-import type {FC} from 'react';
+import type {PropsWithChildren} from 'react';
 import {className} from './style.module.css';
 
-export const HiddenText: FC = ({children}) => <span className={className.text}>
+interface Props {}
+
+export const HiddenText = ({children}: PropsWithChildren<Props>) => <span className={className.text}>
     {children}
 </span>;

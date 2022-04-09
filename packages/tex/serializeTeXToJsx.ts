@@ -1,10 +1,11 @@
+import type {KatexOptions} from 'katex';
 import katex from 'katex';
 import {Parser as HTMLParser} from 'htmlparser2';
 import {ParseHTMLContext} from '../html/ParseHTMLContext';
 
 export const serializeTeXToJsx = function* (
     source: string,
-    options?: katex.KatexOptions,
+    options?: KatexOptions,
 ): Generator<string> {
     if (!source) {
         return;
