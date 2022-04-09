@@ -1,4 +1,4 @@
-import type {FC} from 'react';
+import type {PropsWithChildren} from 'react';
 import {usePageData} from '../../../hooks/usePageData';
 import {DateString} from '../../ui/DateString';
 import {className} from './style.module.css';
@@ -8,7 +8,9 @@ export interface PageDataProps {
     onlyUpdate?: boolean,
 }
 
-export const PageTitle: FC<PageDataProps> = ({pathname, onlyUpdate}) => {
+export const PageTitle = (
+    {pathname, onlyUpdate}: PropsWithChildren<PageDataProps>,
+) => {
     const {title, commitCount, filePath} = usePageData(pathname);
     const historyUrl = `https://github.com/gjbkz/gojabako.zone/commits/main/${filePath}`;
     return <header className={className.container}>

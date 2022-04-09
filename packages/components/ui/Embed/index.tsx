@@ -1,4 +1,4 @@
-import type {FC} from 'react';
+import type {PropsWithChildren} from 'react';
 import {useEffect, useRef} from 'react';
 import {isHTMLElement} from '../../../../packages/dom/isHTMLElement';
 import {Number} from '../../../../packages/es/global';
@@ -10,7 +10,7 @@ interface EmbedProps {
     type: string,
 }
 
-export const Embed: FC<EmbedProps> = ({type, children}) => {
+export const Embed = ({type, children}: PropsWithChildren<EmbedProps>) => {
     return <figure ref={useEmbed(type)} data-type={type} className={className.figure}>
         {children}
     </figure>;

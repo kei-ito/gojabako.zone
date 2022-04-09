@@ -1,4 +1,4 @@
-import type {DetailedHTMLProps, FC, TimeHTMLAttributes} from 'react';
+import type {DetailedHTMLProps, PropsWithChildren, TimeHTMLAttributes} from 'react';
 import {useMemo} from 'react';
 import {Date} from '../../../../packages/es/global';
 
@@ -6,7 +6,7 @@ export interface DateStringProps extends DetailedHTMLProps<TimeHTMLAttributes<HT
     dateTime: string,
 }
 
-export const DateString: FC<DateStringProps> = (props) => {
+export const DateString = (props: PropsWithChildren<Omit<DateStringProps, 'ref'>>) => {
     const {dateTime} = props;
     const text = useMemo(() => {
         const date = new Date(dateTime);

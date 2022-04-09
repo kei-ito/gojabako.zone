@@ -1,10 +1,12 @@
 import Link from 'next/link';
-import type {FC} from 'react';
+import type {PropsWithChildren} from 'react';
 import type {PageData} from '../../../site/pageList';
 import {DateString} from '../../ui/DateString';
 import {className} from './style.module.css';
 
-export const PageLinkPublished: FC<PageData> = ({pathname, title, publishedAt}) => <Link href={pathname || '/'}>
+export const PageLinkPublished = (
+    {pathname, title, publishedAt}: PropsWithChildren<PageData>,
+) => <Link href={pathname || '/'}>
     <a className={className.link}>
         {title}
         &ensp;
@@ -14,7 +16,9 @@ export const PageLinkPublished: FC<PageData> = ({pathname, title, publishedAt}) 
     </a>
 </Link>;
 
-export const PageLinkUpdated: FC<PageData> = ({pathname, title, updatedAt}) => <Link href={pathname || '/'}>
+export const PageLinkUpdated = (
+    {pathname, title, updatedAt}: PropsWithChildren<PageData>,
+) => <Link href={pathname || '/'}>
     <a className={className.link}>
         {title}
         &ensp;
