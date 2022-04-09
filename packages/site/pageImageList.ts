@@ -56,6 +56,11 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "width": 1200,
         "height": 630
     },
+    "/2022/ag06modification": {
+        "path": "/covers/K5RZHYom/Eav215Jt/Axy5H5eE.png",
+        "width": 1200,
+        "height": 630
+    },
     "/2022/image-preprocessor": {
         "path": "/covers/foR4ezoK/TfEzqYW1/UH23krEg.png",
         "width": 1200,

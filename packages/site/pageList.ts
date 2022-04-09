@@ -12,6 +12,14 @@ export interface PageData {
 }
 export const pageListByPublishedAt: Array<PageData> = [
     {
+        "pathname": "/2022/ag06modification",
+        "title": "AG06にマイクをGoProマウントする",
+        "filePath": "pages/2022/ag06modification/index.page.md",
+        "publishedAt": "2022-04-09T13:59:15+09:00",
+        "updatedAt": "2022-04-09T13:59:15+09:00",
+        "commitCount": 1
+    },
+    {
         "pathname": "/app/device",
         "title": "デバイス情報の確認",
         "filePath": "pages/app/device/index.page.md",
@@ -152,4 +160,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [0,11,12,8,2,1,3,7,9,10,5,4,6,13,14,15,16].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [0,1,12,13,9,3,2,4,8,10,11,6,5,7,14,15,16,17].map((index) => pageListByPublishedAt[index]);
