@@ -267,7 +267,7 @@ describe(serializeMarkdownToJsx.name, () => {
             '<ol data-lang="shell">',
             '<li>',
             '<code>',
-            '<span className="hljs-meta">$ </span><span className="bash"><span className="hljs-built_in">echo</span> 123</span>',
+            '<span className="hljs-meta prompt_">$ </span><span className="bash"><span className="hljs-built_in">echo</span> 123</span>',
             '</code>',
             '</li>',
             '</ol>',
