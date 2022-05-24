@@ -33,7 +33,7 @@
         "htmlparser2": "7.2.0",
         "katex": "0.15.6",
         "lowlight": "2.6.1",
-        "mdast-util-footnote": "1.0.0",
+        "mdast-util-footnote": "1.1.0",
         "mdast-util-from-markdown": "1.2.0",
         "mdast-util-gfm": "2.0.1",
         "micromark-extension-footnote": "1.0.2",
