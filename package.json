@@ -52,7 +52,7 @@
         "@types/katex": "0.14.0",
         "@types/kuromoji": "0.1.1",
         "@types/react": "18.0.12",
-        "@types/sharp": "0.30.2",
+        "@types/sharp": "0.30.4",
         "@typescript-eslint/eslint-plugin": "5.27.1",
         "@typescript-eslint/parser": "5.27.1",
         "canvas": "2.9.1",
