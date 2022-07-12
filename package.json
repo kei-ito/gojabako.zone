@@ -59,7 +59,7 @@
         "esbuild": "0.14.48",
         "esifycss": "1.4.37",
         "esifycss-webpack-plugin": "0.1.3",
-        "eslint-config-next": "12.2.0",
+        "eslint-config-next": "12.2.2",
         "eslint-plugin-jest": "26.5.3",
         "jest": "27.5.1",
         "kuromoji": "0.1.2",
