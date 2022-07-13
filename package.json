@@ -56,7 +56,7 @@
         "@typescript-eslint/eslint-plugin": "5.30.5",
         "@typescript-eslint/parser": "5.30.5",
         "canvas": "2.9.3",
-        "esbuild": "0.14.48",
+        "esbuild": "0.14.49",
         "esifycss": "1.4.37",
         "esifycss-webpack-plugin": "0.1.3",
         "eslint-config-next": "12.2.2",
