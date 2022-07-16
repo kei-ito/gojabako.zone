@@ -32,7 +32,7 @@
         "highlight.js": "11.6.0",
         "htmlparser2": "7.2.0",
         "katex": "0.16.0",
-        "lowlight": "2.6.1",
+        "lowlight": "2.7.0",
         "mdast-util-footnote": "1.1.0",
         "mdast-util-from-markdown": "1.2.0",
         "mdast-util-gfm": "2.0.1",
