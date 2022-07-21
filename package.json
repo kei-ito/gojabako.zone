@@ -54,7 +54,7 @@
         "@types/react": "18.0.15",
         "@types/sharp": "0.30.4",
         "@typescript-eslint/eslint-plugin": "5.30.7",
-        "@typescript-eslint/parser": "5.30.6",
+        "@typescript-eslint/parser": "5.30.7",
         "canvas": "2.9.3",
         "esbuild": "0.14.49",
         "esifycss": "1.4.37",
