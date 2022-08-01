@@ -28,7 +28,7 @@
         "lint:eslint": "next lint"
     },
     "dependencies": {
-        "@nlib/typing": "0.3.4",
+        "@nlib/typing": "0.4.8",
         "highlight.js": "11.6.0",
         "htmlparser2": "7.2.0",
         "katex": "0.16.0",
