@@ -1,4 +1,3 @@
-/* eslint-disable @nlib/no-globals */
 /**
  * @this {import('./util/LoaderContext').LoaderThis}
  * @param {string} source

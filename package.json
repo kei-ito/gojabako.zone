@@ -124,6 +124,17 @@
             },
             {
                 "files": [
+                    "loader/**"
+                ],
+                "rules": {
+                    "@nlib/no-globals": "off",
+                    "import/dynamic-import-chunkname": "off",
+                    "import/unambiguous": "off",
+                    "import/no-commonjs": "off"
+                }
+            },
+            {
+                "files": [
                     "pages/**/*.tsx"
                 ],
                 "rules": {
