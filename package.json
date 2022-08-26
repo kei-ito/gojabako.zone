@@ -23,6 +23,8 @@
         "build-meta": "run-s build:tool build-meta:*",
         "build-meta:pageList": "node .output/build/pageList.mjs",
         "build-meta:pageImages": "node .output/build/pageImages.mjs",
+        "build-meta:sitemap": "node .output/build/sitemap.mjs",
+        "build-meta:feed": "node .output/build/feed.mjs",
         "start": "NODE_ENV=production ts-node --project tsconfig.cli.json server.ts",
         "lint": "run-s build-meta lint:*",
         "lint:eslint": "next lint"

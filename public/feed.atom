@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Gojabako Zone</title>
+  <link href="https://gojabako.zone"/>
+  <updated>2022-04-09T13:59:15+09:00</updated>
+  <id>https://gojabako.zone</id>
+  <entry>
+    <id>/2022/ag06modification</id>
+    <title>AG06にマイクをGoProマウントする</title>
+    <link href="https://gojabako.zone/2022/ag06modification"/>
+    <updated>2022-04-09T13:59:15+09:00</updated>
+    <published>2022-04-09T13:59:15+09:00</published>
+  </entry>
+  <entry>
+    <id>/app/device</id>
+    <title>デバイス情報の確認</title>
+    <link href="https://gojabako.zone/app/device"/>
+    <updated>2022-03-04T00:17:32+09:00</updated>
+    <published>2022-02-26T00:47:20+09:00</published>
+  </entry>
+  <entry>
+    <id>/markdown</id>
+    <title>Markdown動作確認およびタイトルが長い場合の画像生成等の検証用記事</title>
+    <link href="https://gojabako.zone/markdown"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2021-09-30T00:39:26+09:00</published>
+  </entry>
+  <entry>
+    <id></id>
+    <title>Gojabako Zone</title>
+    <link href="https://gojabako.zone/"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2021-09-29T00:33:31+09:00</published>
+  </entry>
+  <entry>
+    <id>/author</id>
+    <title>伊藤 慶 - Kei Ito</title>
+    <link href="https://gojabako.zone/author"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2021-10-13T20:35:53+09:00</published>
+  </entry>
+  <entry>
+    <id>/2022/page-images</id>
+    <title>ブログ記事の画像を生成する</title>
+    <link href="https://gojabako.zone/2022/page-images"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2022-02-11T23:48:29+09:00</published>
+  </entry>
+  <entry>
+    <id>/2022/iphone12</id>
+    <title>Appleでオンライン購入したiPhone 12がau回線で使えるようになるまで</title>
+    <link href="https://gojabako.zone/2022/iphone12"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2022-02-13T18:21:58+09:00</published>
+  </entry>
+  <entry>
+    <id>/2022/image-preprocessor</id>
+    <title>next/imageが遅いのでやめた</title>
+    <link href="https://gojabako.zone/2022/image-preprocessor"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2022-02-05T18:20:17+09:00</published>
+  </entry>
+  <entry>
+    <id>/2021/nextjs12</id>
+    <title>Next.js 12にしました</title>
+    <link href="https://gojabako.zone/2021/nextjs12"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2021-10-29T22:24:14+09:00</published>
+  </entry>
+  <entry>
+    <id>/2021/nextjs-https</id>
+    <title>Next.jsの開発環境をHTTPSにする</title>
+    <link href="https://gojabako.zone/2021/nextjs-https"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2021-10-11T00:26:45+09:00</published>
+  </entry>
+  <entry>
+    <id>/2021/nextjs</id>
+    <title>サイトをNext.js + Vercelに移行した</title>
+    <link href="https://gojabako.zone/2021/nextjs"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2021-10-05T23:51:46+09:00</published>
+  </entry>
+  <entry>
+    <id>/2021/ipad-case</id>
+    <title>iPad Proケースの製作</title>
+    <link href="https://gojabako.zone/2021/ipad-case"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2021-12-13T22:53:16+09:00</published>
+  </entry>
+  <entry>
+    <id>/2021/aws-errors</id>
+    <title>AWSの開発でたまに遭うエラーと原因</title>
+    <link href="https://gojabako.zone/2021/aws-errors"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2021-12-17T00:15:30+09:00</published>
+  </entry>
+  <entry>
+    <id>/2021/au-denki</id>
+    <title>auでんきの使用量をCSVにする</title>
+    <link href="https://gojabako.zone/2021/au-denki"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2021-12-01T00:59:21+09:00</published>
+  </entry>
+  <entry>
+    <id>/2020/new-computer</id>
+    <title>ラックマウントPC</title>
+    <link href="https://gojabako.zone/2020/new-computer"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2020-06-08T14:23:25Z</published>
+  </entry>
+  <entry>
+    <id>/2019/gitlab-runner</id>
+    <title>GitLab Runner環境をCloudFormationでつくる</title>
+    <link href="https://gojabako.zone/2019/gitlab-runner"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2019-05-12T16:30:37Z</published>
+  </entry>
+  <entry>
+    <id>/2019/error-propagation</id>
+    <title>加重平均の誤差伝播</title>
+    <link href="https://gojabako.zone/2019/error-propagation"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2019-04-26T18:46:08Z</published>
+  </entry>
+  <entry>
+    <id>/2018/monitor-stand</id>
+    <title>モニタースタンドに棚をつけるDIY記録</title>
+    <link href="https://gojabako.zone/2018/monitor-stand"/>
+    <updated>2022-03-03T23:51:55+09:00</updated>
+    <published>2018-11-29T17:01:41Z</published>
+  </entry>
+</feed>

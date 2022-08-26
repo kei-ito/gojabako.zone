@@ -1,20 +1,11 @@
-import {HttpStatusCode} from '@nlib/typing';
-import type {NextApiHandler} from 'next';
-import {URL} from '../../../packages/es/global';
-import {toJsxSafeString} from '../../../packages/es/toJsxSafeString';
-import {siteDomain, siteName} from '../../../packages/site/constants';
-import {pageListByUpdatedAt} from '../../../packages/site/pageList';
-
-export const handler: NextApiHandler = (_req, res) => {
-    res.writeHead(HttpStatusCode.OK, {
-        'content-type': 'application/atom+xml; charset=utf-8',
-        'cache-control': 'public, max-age=3600',
-    });
-    for (const line of serializeFeed()) {
-        res.write(`${line}\n`);
-    }
-    res.end();
-};
+import * as fs from 'fs';
+import * as path from 'path';
+import {URL} from '../es/global';
+import {toJsxSafeString} from '../es/toJsxSafeString';
+import {publicDirectory} from '../fs/constants';
+import {runScript} from '../node/runScript';
+import {siteDomain, siteName} from '../site/constants';
+import {pageListByUpdatedAt} from '../site/pageList';
 
 const serializeFeed = function* () {
     yield '<?xml version="1.0" encoding="utf-8"?>';
@@ -36,3 +27,12 @@ const serializeFeed = function* () {
     }
     yield '</feed>';
 };
+
+runScript(() => {
+    const dest = path.join(publicDirectory, 'feed.atom');
+    const writer = fs.createWriteStream(dest);
+    for (const line of serializeFeed()) {
+        writer.write(`${line}\n`);
+    }
+    writer.end();
+});
