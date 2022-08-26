@@ -6,5 +6,5 @@ sudo certbot certonly \
     --preferred-chain "ISRG Root X1" \
     --preferred-challenges dns
 
-sudo cp /etc/letsencrypt/live/localhost.gojabako.zone certificates
+sudo cp -r /etc/letsencrypt/live/localhost.gojabako.zone certificates
 sudo chmod +r certificates/localhost.gojabako.zone/*
