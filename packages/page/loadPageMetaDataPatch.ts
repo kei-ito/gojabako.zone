@@ -1,7 +1,8 @@
 import * as fs from 'fs';
+import {isHttpsUrlString, isString} from '@nlib/typing';
 import {JSON} from '../es/global';
 import {isObjectLike} from '../es/isObjectLike';
-import {isDateString, isString, isUrlString} from '../es/isString';
+import {isDateString} from '../es/isDateString';
 import {ignoreENOENT} from '../fs/ignoreENOENT';
 import type {PageMetaDataPatch} from './findPageMetaData';
 
@@ -19,7 +20,7 @@ export const loadPageMetaDataPatch = async (pageFileAbsolutePath: string): Promi
             if (isDateString(publishedAt)) {
                 result.publishedAt = publishedAt;
             }
-            if (isUrlString(archiveOf)) {
+            if (isHttpsUrlString(archiveOf)) {
                 result.archiveOf = archiveOf;
             }
             if (isString(description) && description) {
