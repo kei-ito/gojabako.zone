@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import {isObject} from '@nlib/typing';
 import {Error} from '../es/global';
-import {isObjectLike} from '../es/isObjectLike';
 
 export const rmrf = async (filePath: string) => {
     const stats = await fs.promises.stat(filePath).catch((error) => {
-        if (isObjectLike(error) && error.code === 'ENOENT') {
+        if (isObject(error) && error.code === 'ENOENT') {
             return null;
         }
         throw error;
