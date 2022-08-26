@@ -1,6 +1,6 @@
+import {getCompoentPath} from '../fs/getComponentPath';
 import type {SerializeMarkdownContext} from './serializeMarkdownToJsx';
 import {serializeFootnotes} from './serializeMarkdownToJsx';
-import {getCompoentPath} from '../fs/getComponentPath';
 
 export const finalizeSerializeMarkdownContext = (context: SerializeMarkdownContext, fileAbsolutePath: string) => {
     const foot = [...serializeFootnotes(context)].join('');

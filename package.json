@@ -17,7 +17,7 @@
         "build:tool": "run-s build:tool:*",
         "build:tool:cli": "ts-node --project tsconfig.cli.json packages/build/cli.ts",
         "build:tool:loaders": "node .output/build/loaders.mjs",
-        "build:tool:images": "node .output/build/images.mjs",
+        "build:tool:images": "node --no-experimental-fetch .output/build/images.mjs",
         "build:css": "esifycss --css=pages/app.css --ext=.ts packages/components",
         "build:next": "next build",
         "build-meta": "run-s build:tool build-meta:*",
@@ -47,7 +47,7 @@
     "devDependencies": {
         "@nlib/eslint-config": "3.19.4",
         "@nlib/githooks": "0.1.0",
-        "@squoosh/lib": "0.4.0",
+        "@squoosh/lib": "0.4.1",
         "@types/jest": "28.1.8",
         "@types/katex": "0.14.0",
         "@types/kuromoji": "0.1.1",
@@ -101,7 +101,8 @@
             "./.tool/**/*"
         ],
         "rules": {
-            "no-unused-private-class-members": "off"
+            "no-unused-private-class-members": "off",
+            "import/no-relative-parent-imports": "off"
         },
         "overrides": [
             {
@@ -117,6 +118,15 @@
                 "rules": {
                     "max-lines-per-function": "off",
                     "@nlib/no-globals": "off"
+                }
+            },
+            {
+                "files": [
+                    "pages/**/*.tsx"
+                ],
+                "rules": {
+                    "import/no-default-export": "off",
+                    "import/no-unassigned-import": "off"
                 }
             }
         ]
