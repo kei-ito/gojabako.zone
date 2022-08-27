@@ -91,7 +91,7 @@ class ParseContext extends ParseHTMLContext {
 
 }
 
-export const detectEmbedding = (source: string): Embedding | null => {
+export const detectEmbedding = (source: string) => {
     const ctx = new ParseContext();
     const parser = new HTMLParser(ctx);
     parser.write(source.trim());

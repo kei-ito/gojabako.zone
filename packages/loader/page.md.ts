@@ -1,4 +1,4 @@
-import {Error, JSON, Promise} from '../es/global';
+import {Error, JSON} from '../es/global';
 import {createSerializeMarkdownContext} from '../markdown/createSerializeContext';
 import {finalizeSerializeMarkdownContext} from '../markdown/finalizeSerializeContext';
 import {getMarkdownExcerpt} from '../markdown/getExcerpt';
@@ -7,11 +7,11 @@ import {getPagePathName} from '../page/getPagePathName';
 import {createLinkResolver} from './createLinkResolver';
 import type {LoaderThis} from './type';
 
-export const loadMarkdownPage = async (
-    {resourcePath}: LoaderThis,
+export const loadMarkdownPage = function (
+    this: LoaderThis,
     source: string,
-): Promise<string> => {
-    await Promise.resolve();
+) {
+    const {resourcePath} = this;
     const context = createSerializeMarkdownContext({
         transformLink: createLinkResolver(resourcePath),
     });
@@ -41,3 +41,6 @@ export default function MarkdownPage() {
     </>;
 }`;
 };
+
+// eslint-disable-next-line import/no-default-export
+export default loadMarkdownPage;

@@ -7,6 +7,7 @@ import {rootDirectoryPath} from '../fs/constants';
 const dicPath = path.join(rootDirectoryPath, 'node_modules', 'kuromoji', 'dict');
 const getTokenizer = nullaryCache(async () => {
     return await new Promise<kuromoji.Tokenizer<kuromoji.IpadicFeatures>>((resolve, reject) => {
+        // eslint-disable-next-line import/no-named-as-default-member
         kuromoji.builder({dicPath}).build((error: unknown, result) => {
             if (error) {
                 reject(error);

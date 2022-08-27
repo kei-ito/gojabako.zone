@@ -1,9 +1,9 @@
 import type Markdown from 'mdast';
-import {footnoteFromMarkdown} from 'mdast-util-footnote';
 import {fromMarkdown} from 'mdast-util-from-markdown';
-import {gfmFromMarkdown} from 'mdast-util-gfm';
-import {footnote} from 'micromark-extension-footnote';
 import {gfm} from 'micromark-extension-gfm';
+import {footnote} from 'micromark-extension-footnote';
+import {gfmFromMarkdown} from 'mdast-util-gfm';
+import {footnoteFromMarkdown} from 'mdast-util-footnote';
 import {createCounter} from '../es/createCounter';
 import {Map, Set} from '../es/global';
 import {removeHtmlComments} from '../es/removeHtmlComments';

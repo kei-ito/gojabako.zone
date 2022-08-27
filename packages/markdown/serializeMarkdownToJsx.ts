@@ -34,10 +34,13 @@ export interface SerializeMarkdownContext {
     head: Set<string>,
 }
 
-export const serializeMarkdownToJsx = (
+export const serializeMarkdownToJsx = function* (
     context: SerializeMarkdownContext,
     source: string,
-) => serialize(context, context.parseMarkdown(source), []);
+) {
+    const node = context.parseMarkdown(source);
+    yield* serialize(context, node, []);
+};
 
 export const serializeMarkdownRootToJsx = (
     context: SerializeMarkdownContext,
@@ -239,7 +242,7 @@ const serializeElement = function* (
     attrs: Attributes | null,
     node: {children: Array<Markdown.Content>},
     nextAncestors: Array<Markdown.Content | Markdown.Root>,
-): Generator<string> {
+) {
     yield `<${tag}`;
     yield* serializeAttributes(attrs, {jsx: true});
     yield '>';
@@ -252,7 +255,7 @@ const serializeLinkElement = function* (
     {href, ...attrs}: Attributes,
     node: {children: Array<Markdown.Content>},
     nextAncestors: Array<Markdown.Content | Markdown.Root>,
-): Generator<string> {
+) {
     if (typeof href !== 'string') {
         throw new Error(`Invalid href: ${href}`);
     }

@@ -20,7 +20,7 @@ export const getPageTitle = async (
     }
 };
 
-const getTitleFromMarkdown = (code: string): string => {
+const getTitleFromMarkdown = (code: string) => {
     for (const node of walkMarkdownContentNodes(...fromMarkdown(code).children)) {
         if (node.type === 'heading' && node.depth === 1) {
             return getTextContent(node);

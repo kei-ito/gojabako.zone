@@ -1,5 +1,5 @@
-import type {SerializeAttributeOptions} from './Attributes';
 import {Error, JSON} from '../es/global';
+import type {SerializeAttributeOptions} from './Attributes';
 import type {HTMLASTNode} from './HTMLASTNode';
 import {serializeHTMLASTNode} from './HTMLASTNode';
 

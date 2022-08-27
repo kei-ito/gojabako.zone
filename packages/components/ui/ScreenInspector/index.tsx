@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
-import {cancelAnimationFrame, devicePixelRatio, requestAnimationFrame, screen} from '../../../../packages/dom/global';
-import {globalThis, Math} from '../../../../packages/es/global';
+import {cancelAnimationFrame, devicePixelRatio, requestAnimationFrame, screen} from '../../../dom/global';
+import {globalThis, Math} from '../../../es/global';
 import {useElementRect} from '../../../hooks/useElementRect';
 import {useElementSize} from '../../../hooks/useElementSize';
 import {useViewPortOffset} from '../../../hooks/useViewPortOffset';

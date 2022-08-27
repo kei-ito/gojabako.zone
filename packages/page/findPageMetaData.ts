@@ -1,6 +1,6 @@
-import {getPagePathName} from './getPagePathName';
 import {Promise} from '../es/global';
 import {getFileData} from '../node/getFileData';
+import {getPagePathName} from './getPagePathName';
 import {getPageTitle} from './getPageTitle';
 import {loadPageMetaDataPatch} from './loadPageMetaDataPatch';
 

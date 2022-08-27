@@ -3,6 +3,7 @@
     "homepage": "https://gojabako.zone/",
     "version": "0.0.0",
     "private": true,
+    "type": "commonjs",
     "scripts": {
         "test": "run-s build-meta test:*",
         "test:type": "tsc --noEmit",
@@ -27,7 +28,8 @@
         "build-meta:feed": "node .output/build/feed.mjs",
         "start": "NODE_ENV=production ts-node --project tsconfig.cli.json server.ts",
         "lint": "run-s build-meta lint:*",
-        "lint:eslint": "next lint"
+        "lint:next": "next lint",
+        "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs pages packages loader server.ts"
     },
     "dependencies": {
         "@nlib/typing": "0.5.7",
@@ -65,15 +67,12 @@
         "eslint-plugin-jest": "26.8.7",
         "jest": "28.1.3",
         "kuromoji": "0.1.2",
-        "lint-staged": "13.0.3",
         "npm-run-all": "4.1.5",
         "stackblur-canvas": "2.5.0",
         "ts-jest": "28.0.8"
     },
     "browserslist": [
-        ">5%",
-        "not ie 11",
-        "not dead"
+        ">10%"
     ],
     "jest": {
         "roots": [
@@ -104,6 +103,7 @@
         ],
         "rules": {
             "no-unused-private-class-members": "off",
+            "import/dynamic-import-chunkname": "off",
             "import/no-relative-parent-imports": "off"
         },
         "overrides": [
@@ -128,7 +128,6 @@
                 ],
                 "rules": {
                     "@nlib/no-globals": "off",
-                    "import/dynamic-import-chunkname": "off",
                     "import/unambiguous": "off",
                     "import/no-commonjs": "off"
                 }
@@ -143,9 +142,6 @@
                 }
             }
         ]
-    },
-    "lint-staged": {
-        "*!(.d).{ts,tsx,js,mjs,cjs,jsx}": "eslint"
     },
     "renovate": {
         "extends": [

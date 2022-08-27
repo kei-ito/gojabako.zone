@@ -2,9 +2,9 @@ import * as console from 'console';
 import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
-import next from 'next';
 import * as process from 'process';
 import * as url from 'url';
+import next from 'next';
 import {URL} from './packages/es/global';
 import {onError} from './packages/es/onError';
 

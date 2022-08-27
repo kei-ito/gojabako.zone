@@ -1,7 +1,7 @@
 import * as console from 'console';
-import * as esbuild from 'esbuild';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as esbuild from 'esbuild';
 import {removeExtension} from '../es/removeExtension';
 import {markDependenciesAsExternal} from '../esbuild/markDependenciesAsExternal';
 import {rootDirectoryPath} from '../fs/constants';

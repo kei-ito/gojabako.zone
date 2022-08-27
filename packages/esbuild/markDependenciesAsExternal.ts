@@ -1,5 +1,5 @@
-import type * as esbuild from 'esbuild';
 import {builtinModules} from 'module';
+import type * as esbuild from 'esbuild';
 import {Error, JSON, Object, Set} from '../es/global';
 import {packageJson} from '../fs/constants';
 

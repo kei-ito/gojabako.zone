@@ -1,15 +1,14 @@
-import {Promise} from '../es/global';
 import {createSerializeMarkdownContext} from '../markdown/createSerializeContext';
 import {finalizeSerializeMarkdownContext} from '../markdown/finalizeSerializeContext';
 import {serializeMarkdownRootToJsx} from '../markdown/serializeMarkdownToJsx';
 import {createLinkResolver} from './createLinkResolver';
 import type {LoaderThis} from './type';
 
-export const loadMarkdownModule = async (
-    {resourcePath}: LoaderThis,
+export const loadMarkdownModule = function (
+    this: LoaderThis,
     source: string,
-): Promise<string> => {
-    await Promise.resolve();
+) {
+    const {resourcePath} = this;
     const context = createSerializeMarkdownContext({
         transformLink: createLinkResolver(resourcePath),
     });
@@ -21,3 +20,6 @@ export const loadMarkdownModule = async (
         `export default function Document() {return <>${jsx}${foot}</>}`,
     ].join('\n');
 };
+
+// eslint-disable-next-line import/no-default-export
+export default loadMarkdownModule;

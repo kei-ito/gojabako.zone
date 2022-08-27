@@ -1,4 +1,4 @@
-import {getCompoentPath} from '../fs/getComponentPath';
+import {getComponentPath} from '../fs/getComponentPath';
 import type {SerializeMarkdownContext} from './serializeMarkdownToJsx';
 import {serializeFootnotes} from './serializeMarkdownToJsx';
 
@@ -22,7 +22,7 @@ const serializeHead = function* (
         yield `import ${localName} from '${from}.component';`;
     }
     for (const component of components) {
-        yield `import {${component.split('/').pop()}} from '${getCompoentPath(fileAbsolutePath, component)}';`;
+        yield `import {${component.split('/').pop()}} from '${getComponentPath(fileAbsolutePath, component)}';`;
     }
     for (const line of head) {
         yield line;

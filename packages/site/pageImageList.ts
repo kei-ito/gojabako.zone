@@ -61,6 +61,11 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "width": 1200,
         "height": 630
     },
+    "/2022/disabled-form-element": {
+        "path": "/covers/e0AM0qUs/Ds2uKqX0/UIEIGC6W.png",
+        "width": 1200,
+        "height": 630
+    },
     "/2022/image-preprocessor": {
         "path": "/covers/foR4ezoK/TfEzqYW1/UH23krEg.png",
         "width": 1200,

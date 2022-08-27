@@ -1,5 +1,4 @@
-// https://github.com/syntax-tree/mdast
-import {lowlight} from 'lowlight/lib/all.js';
+import {lowlight} from 'lowlight';
 import {serializeLowlightToJsx} from './LowlightToJsx';
 
 export const serializeCodeToJsx = function* (
