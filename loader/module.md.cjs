@@ -5,6 +5,6 @@
  */
 module.exports = async function markdownModuleLoader(source) {
     const {loadMarkdownModule} = await import('../.output/loader/module.md.mjs');
-    const code = await loadMarkdownModule(this, source);
+    const code = loadMarkdownModule.call(this, source);
     return code;
 };
