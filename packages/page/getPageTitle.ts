@@ -1,9 +1,9 @@
 import * as fs from 'fs';
 import {fromMarkdown} from 'mdast-util-from-markdown';
+import {walkMarkdownContentNodes} from '@gjbkz/gojabako.zone-markdown-parser';
 import {getExtension} from '../es/getExtension';
 import {Error} from '../es/global';
 import {getTextContent} from '../es/TextContent';
-import {walkMarkdownContentNodes} from '../markdown/walkContentNodes';
 
 export const getPageTitle = async (
     pageFileAbsolutePath: string,

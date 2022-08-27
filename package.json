@@ -1,9 +1,8 @@
 {
-    "name": "gojabako.zone",
+    "name": "@gjbkz/gojabako.zone",
     "homepage": "https://gojabako.zone/",
     "version": "0.0.0",
     "private": true,
-    "type": "commonjs",
     "scripts": {
         "test": "run-s build-meta test:*",
         "test:type": "tsc --noEmit",
@@ -17,7 +16,6 @@
         "build": "run-s build:*",
         "build:tool": "run-s build:tool:*",
         "build:tool:cli": "ts-node --project tsconfig.cli.json packages/build/cli.ts",
-        "build:tool:loaders": "node .output/build/loaders.mjs",
         "build:tool:images": "node --no-experimental-fetch .output/build/images.mjs",
         "build:css": "esifycss --css=pages/app.css --ext=.ts packages/components",
         "build:next": "next build",
@@ -32,16 +30,9 @@
         "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs pages packages loader server.ts"
     },
     "dependencies": {
+        "@gjbkz/gojabako.zone-markdown-component-loader": "0.0.5",
+        "@gjbkz/gojabako.zone-markdown-page-loader": "0.0.5",
         "@nlib/typing": "0.5.7",
-        "highlight.js": "11.6.0",
-        "htmlparser2": "8.0.1",
-        "katex": "0.16.0",
-        "lowlight": "2.7.0",
-        "mdast-util-footnote": "1.1.0",
-        "mdast-util-from-markdown": "1.2.0",
-        "mdast-util-gfm": "2.0.1",
-        "micromark-extension-footnote": "1.0.2",
-        "micromark-extension-gfm": "2.0.1",
         "next": "12.2.5",
         "postcss": "8.4.16",
         "react": "18.2.0",
@@ -49,6 +40,7 @@
         "ts-node": "10.9.1"
     },
     "devDependencies": {
+        "@gjbkz/gojabako.zone-markdown-parser": "0.0.5",
         "@nlib/eslint-config": "3.19.4",
         "@nlib/githooks": "0.1.0",
         "@nlib/lint-commit": "0.2.0",
@@ -100,8 +92,7 @@
             "@nlib/eslint-config"
         ],
         "ignorePatterns": [
-            "next-env.d.ts",
-            "./.tool/**/*"
+            "next-env.d.ts"
         ],
         "rules": {
             "no-unused-private-class-members": "off",
@@ -126,12 +117,10 @@
             },
             {
                 "files": [
-                    "loader/**"
+                    "next.config.mjs"
                 ],
                 "rules": {
-                    "@nlib/no-globals": "off",
-                    "import/unambiguous": "off",
-                    "import/no-commonjs": "off"
+                    "@nlib/no-globals": "off"
                 }
             },
             {
