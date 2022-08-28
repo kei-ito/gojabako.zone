@@ -12,12 +12,12 @@ Reactだとたいていの`<form>`でsubmitをpreventDefaultするので意識�
 <form id="form1" action="#form1" method="GET">
     <h1>disabledなinputのあるフォーム</h1>
     <p>このページにGETするので送信するとアドレスバーのクエリ文字列で値を確認できます。おそらく<code>{'?input1=value1&input2=value2'}</code>になるはずです。</p>
-    <label for="input1-1"><code>{'<input name="v1-1" type="text"/>'}</code></label>
-    <input id="input1-1" name="v1-1" type="text" value="value1"/>
-    <label for="input1-2"><code>{'<input name="v1-2" type="text" readonly/>'}</code></label>
-    <input id="input1-2" name="v1-2" type="text" value="value2" readOnly/>
-    <label for="input1-3"><code>{'<input name="v1-3" type="text" disabled/>'}</code></label>
-    <input id="input1-3" name="v1-3" type="text" value="value3" disabled/>
+    <label htmlFor="input1-1"><code>{'<input name="v1-1" type="text"/>'}</code></label>
+    <input id="input1-1" name="v1-1" type="text" defaultValue="value1"/>
+    <label htmlFor="input1-2"><code>{'<input name="v1-2" type="text" readonly/>'}</code></label>
+    <input id="input1-2" name="v1-2" type="text" defaultValue="value2" readOnly/>
+    <label htmlFor="input1-3"><code>{'<input name="v1-3" type="text" disabled/>'}</code></label>
+    <input id="input1-3" name="v1-3" type="text" defaultValue="value3" disabled/>
     <button type="submit">送信</button>
 </form>
 ```
@@ -34,24 +34,24 @@ Reactだとたいていの`<form>`でsubmitをpreventDefaultするので意識�
     <p>このページにGETするので送信するとアドレスバーのクエリ文字列で値を確認できます。</p>
     <fieldset>
         <legend><code>{'<fieldset>'}</code></legend>
-        <label for="input2-1"><code>{'<input name="v2-1" type="text"/>'}</code></label>
-        <input id="input2-1" name="v2-1" type="text" value="value1"/>
-        <label for="input2-2"><code>{'<input name="v2-2" type="text"/>'}</code></label>
-        <input id="input2-2" name="v2-2" type="text" value="value2"/>
+        <label htmlFor="input2-1"><code>{'<input name="v2-1" type="text"/>'}</code></label>
+        <input id="input2-1" name="v2-1" type="text" defaultValue="value1"/>
+        <label htmlFor="input2-2"><code>{'<input name="v2-2" type="text"/>'}</code></label>
+        <input id="input2-2" name="v2-2" type="text" defaultValue="value2"/>
     </fieldset>
     <fieldset readOnly>
         <legend><code>{'<fieldset readonly>'}</code></legend>
-        <label for="input2-3"><code>{'<input name="v2-3" type="text"/>'}</code></label>
-        <input id="input2-3" name="v2-3" type="text" value="value3"/>
-        <label for="input2-4"><code>{'<input name="v2-4" type="text"/>'}</code></label>
-        <input id="input2-4" name="v2-4" type="text" value="value4"/>
+        <label htmlFor="input2-3"><code>{'<input name="v2-3" type="text"/>'}</code></label>
+        <input id="input2-3" name="v2-3" type="text" defaultValue="value3"/>
+        <label htmlFor="input2-4"><code>{'<input name="v2-4" type="text"/>'}</code></label>
+        <input id="input2-4" name="v2-4" type="text" defaultValue="value4"/>
     </fieldset>
     <fieldset disabled>
         <legend><code>{'<fieldset disabled>'}</code></legend>
-        <label for="input2-5"><code>{'<input name="v2-5" type="text"/>'}</code></label>
-        <input id="input2-5" name="v2-5" type="text" value="value5"/>
-        <label for="input2-6"><code>{'<input name="v2-6" type="text"/>'}</code></label>
-        <input id="input2-6" name="v2-6" type="text" value="value6"/>
+        <label htmlFor="input2-5"><code>{'<input name="v2-5" type="text"/>'}</code></label>
+        <input id="input2-5" name="v2-5" type="text" defaultValue="value5"/>
+        <label htmlFor="input2-6"><code>{'<input name="v2-6" type="text"/>'}</code></label>
+        <input id="input2-6" name="v2-6" type="text" defaultValue="value6"/>
     </fieldset>
     <button type="submit">送信</button>
 </form>
