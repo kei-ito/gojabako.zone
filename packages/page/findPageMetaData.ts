@@ -1,10 +1,8 @@
+import {getPageTitle} from '@gjbkz/gojabako.zone-markdown-util';
 import {Promise} from '../es/global';
 import {getFileData} from '../node/getFileData';
 import {getPagePathName} from './getPagePathName';
 import {loadPageMetaDataPatch} from './loadPageMetaDataPatch';
-
-/** TODO */
-const getPageTitle = (s?: string) => `page-${s}`;
 
 export interface PageMetaDataPatch {
     title?: string,

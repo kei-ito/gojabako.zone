@@ -30,8 +30,9 @@
         "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs pages packages loader server.ts"
     },
     "dependencies": {
-        "@gjbkz/gojabako.zone-markdown-component-loader": "0.0.5",
-        "@gjbkz/gojabako.zone-markdown-page-loader": "0.0.5",
+        "@gjbkz/gojabako.zone-markdown-component-loader-cjs": "0.0.10",
+        "@gjbkz/gojabako.zone-markdown-page-loader-cjs": "0.0.10",
+        "@gjbkz/gojabako.zone-markdown-util": "0.0.10",
         "@nlib/typing": "0.5.7",
         "next": "12.2.5",
         "postcss": "8.4.16",
@@ -57,6 +58,7 @@
         "esifycss": "1.4.39",
         "esifycss-webpack-plugin": "0.1.3",
         "eslint-config-next": "12.2.5",
+        "eslint-import-resolver-typescript": "3.5.0",
         "eslint-plugin-jest": "26.8.7",
         "jest": "28.1.3",
         "kuromoji": "0.1.2",
@@ -98,6 +100,13 @@
             "no-unused-private-class-members": "off",
             "import/dynamic-import-chunkname": "off",
             "import/no-relative-parent-imports": "off"
+        },
+        "settings": {
+            "import/resolver": {
+                "typescript": {
+                    "project": "packages/*/tsconfig.json"
+                }
+            }
         },
         "overrides": [
             {

@@ -2,7 +2,6 @@ import * as console from 'console';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as esbuild from 'esbuild';
-import {removeExtension} from '../es/removeExtension';
 import {markDependenciesAsExternal} from '../esbuild/markDependenciesAsExternal';
 import {rootDirectoryPath} from '../fs/constants';
 import {runScript} from '../node/runScript';
@@ -13,7 +12,7 @@ runScript(async () => {
         if (name !== 'cli.ts' && name.endsWith('.ts')) {
             await esbuild.build({
                 entryPoints: [path.join(buildDirectoryPath, name)],
-                outfile: path.join(rootDirectoryPath, `.output/build/${removeExtension(name)}.mjs`),
+                outfile: path.join(rootDirectoryPath, `.output/build/${name.slice(name.lastIndexOf('.'))}.mjs`),
                 plugins: [markDependenciesAsExternal({includeDev: true})],
                 bundle: true,
                 target: 'esnext',

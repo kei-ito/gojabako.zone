@@ -18,7 +18,7 @@ const nextConfig = {
                 use: [
                     babel,
                     {
-                        loader: '@gjbkz/gojabako.zone-markdown-component-loader',
+                        loader: '@gjbkz/gojabako.zone-markdown-component-loader-cjs',
                         options: {pagesDirectory, getComponentPath},
                     },
                 ],
@@ -28,7 +28,7 @@ const nextConfig = {
                 use: [
                     babel,
                     {
-                        loader: '@gjbkz/gojabako.zone-markdown-page-loader',
+                        loader: '@gjbkz/gojabako.zone-markdown-page-loader-cjs',
                         options: {pagesDirectory, getComponentPath},
                     },
                 ],

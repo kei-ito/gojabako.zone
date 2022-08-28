@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import {URL} from '../es/global';
-import {toJsxSafeString} from '../es/toJsxSafeString';
+import {toXmlSafeString} from '../es/toXmlSafeString';
 import {publicDirectory} from '../fs/constants';
 import {runScript} from '../node/runScript';
 import {siteDomain, siteName} from '../site/constants';
@@ -19,7 +19,7 @@ const serializeFeed = function* () {
         const url = new URL(page.pathname, homepage);
         yield '  <entry>';
         yield `    <id>${page.pathname}</id>`;
-        yield `    <title>${toJsxSafeString(page.title)}</title>`;
+        yield `    <title>${toXmlSafeString(page.title)}</title>`;
         yield `    <link href="${url}"/>`;
         yield `    <updated>${page.updatedAt}</updated>`;
         yield `    <published>${page.publishedAt}</published>`;
