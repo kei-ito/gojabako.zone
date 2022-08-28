@@ -36,10 +36,7 @@
 
 ### アクセストークンの持ち主の鍵ペアを盗めるか
 
-以下がブラウザで鍵ペアを作るコードの例です[^1]。
-
-[^1]: [SubtleCrypto.generateKey() - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/generateKey)
-
+以下がブラウザで鍵ペアを作るコードの例です。
 
 ```typescript
 const algorithm: EcKeyGenParams = {name: 'ECDSA', namedCurve: 'P-256'};
@@ -52,9 +49,7 @@ const keyPair = await crypto.subtle.generateKey(
 );
 ```
 
-以下で実際に鍵ペアを作れます。それぞれExportKeyも試してみてください[^2]。
-
-[^2]: [SubtleCrypto.exportKey() - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/exportKey)
+以下で実際に鍵ペアを作れます。それぞれExportKeyもクリックして試してみてください。
 
 ```jsx (include)
 import {useState, useEffect, useCallback} from 'react';
@@ -267,3 +262,11 @@ const loadKeyPair = async (keyId: string) => {
 1. DPoPヘッダーをブラウザ外で作れないとブラウザ外からのなりすましを防げる
 
 ページそのもののリクエストにDPoPヘッダーはつけられないのでSSRを考えるならcookieにアクセストークンを乗せてSSRはそっちで認証しつつ、Web APIエンドポイントはDPoP必須にするなどが考えられます。
+
+## 参考資料
+
+- [OAuth 2.0 Demonstrating Proof-of-Possession at the Application Layer (DPoP)](https://datatracker.ietf.org/doc/draft-ietf-oauth-dpop/)
+- [図解 DPoP (OAuth アクセストークンのセキュリティ向上策の一つ)](https://qiita.com/TakahikoKawasaki/items/34c82fb5c0595b6fc289)
+- [SubtleCrypto.generateKey() - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/generateKey)
+- [SubtleCrypto.exportKey() - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/exportKey)
+- [IndexedDB API - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)
