@@ -27,7 +27,7 @@
         "start": "NODE_ENV=production ts-node --project tsconfig.cli.json server.ts",
         "lint": "run-s lint:*",
         "lint:next": "next lint",
-        "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs pages packages loader server.ts"
+        "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs pages packages server.ts"
     },
     "dependencies": {
         "@gjbkz/gojabako.zone-markdown-component-loader-cjs": "0.0.10",
