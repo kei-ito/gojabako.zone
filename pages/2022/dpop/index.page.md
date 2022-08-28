@@ -107,7 +107,7 @@ const KeyView = ({name, keyObject: key, extract, noExtract}) => {
             <tbody>
                 <tr>
                     <td><code>algorithm</code></td>
-                    <td><code>{JSON.stringify(key.algorithm)}</code></td>
+                    <td><code>{JSON.stringify(key.algorithm, null, 2)}</code></td>
                 </tr>
                 <tr>
                     <td><code>extractable</code></td>
