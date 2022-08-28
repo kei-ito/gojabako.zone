@@ -16,7 +16,7 @@
         "build": "run-s build:*",
         "build:tool": "run-s build:tool:*",
         "build:tool:cli": "ts-node --project tsconfig.cli.json packages/build/cli.ts",
-        "build:tool:images": "node --no-experimental-fetch .output/build/images.mjs",
+        "build:tool:images": "if [[ $(node -v) =~ \"v18\" ]]; then node --no-experimental-fetch .output/build/images.mjs; else node .output/build/images.mjs; fi",
         "build:css": "esifycss --css=pages/app.css --ext=.ts packages/components",
         "build:next": "next build",
         "build-meta": "run-s build:tool build-meta:*",
@@ -25,7 +25,7 @@
         "build-meta:sitemap": "node .output/build/sitemap.mjs",
         "build-meta:feed": "node .output/build/feed.mjs",
         "start": "NODE_ENV=production ts-node --project tsconfig.cli.json server.ts",
-        "lint": "run-s build-meta lint:*",
+        "lint": "run-s lint:*",
         "lint:next": "next lint",
         "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs pages packages loader server.ts"
     },
