@@ -48,7 +48,7 @@
         "@nlib/eslint-config": "3.17.30",
         "@nlib/githooks": "0.1.0",
         "@squoosh/lib": "0.4.1",
-        "@types/jest": "27.5.2",
+        "@types/jest": "28.1.8",
         "@types/katex": "0.14.0",
         "@types/kuromoji": "0.1.1",
         "@types/react": "18.0.17",
