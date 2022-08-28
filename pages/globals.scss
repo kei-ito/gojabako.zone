@@ -114,6 +114,11 @@ code {
     font-family: var(--font-monospace);
     font-size: smaller;
 }
+p, label {
+    code {
+        font-size: inherit;
+    }
+}
 rt {
     font-size: 60%;
 }
