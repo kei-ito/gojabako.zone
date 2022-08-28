@@ -12,7 +12,7 @@ runScript(async () => {
         if (name !== 'cli.ts' && name.endsWith('.ts')) {
             await esbuild.build({
                 entryPoints: [path.join(buildDirectoryPath, name)],
-                outfile: path.join(rootDirectoryPath, `.output/build/${name.slice(name.lastIndexOf('.'))}.mjs`),
+                outfile: path.join(rootDirectoryPath, `.output/build/${name.slice(0, -3)}.mjs`),
                 plugins: [markDependenciesAsExternal({includeDev: true})],
                 bundle: true,
                 target: 'esnext',

@@ -20,6 +20,11 @@
     background-size: cover;
     background-color: unset;
     -webkit-text-size-adjust: none;
+    @media (prefers-reduced-motion: reduce) {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
 :root {
     --baseWidth: 627px;
@@ -45,14 +50,10 @@
     color: var(--gray9);
     block-size: 100%;
     background-color: var(--gray2);
-}
-@media (max-width: 667px) {
-    :root {
+    @media (max-width: 667px) {
         --baseWidth: 94%;
     }
-}
-@media (max-width: 600px) {
-    :root {
+    @media (max-width: 600px) {
         font-size: 15px;
     }
 }
@@ -71,13 +72,19 @@ article, section {
     grid-auto-flow: row;
     justify-items: center;
     row-gap: var(--baseGap);
+    &>* {
+        inline-size: var(--baseWidth);
+    }
 }
-article>*, section>* {
-    inline-size: var(--baseWidth);
-}
-article>header {
-    margin-block-start: 2rem;
-    margin-block-end: 1rem;
+article {
+    &>header {
+        margin-block-start: 2rem;
+        margin-block-end: 1rem;
+    }
+    a {
+        color: rgb(0, 0, 207);
+        text-decoration: underline;
+    }
 }
 img, svg {
     max-inline-size: 100%;
@@ -89,19 +96,6 @@ img {
 }
 picture {
     overflow: hidden;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *, ::before, ::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-article a {
-    color: rgb(0, 0, 207);
-    text-decoration: underline;
 }
 s {
     text-decoration-line: line-through;
@@ -123,10 +117,50 @@ code {
 rt {
     font-size: 60%;
 }
-input {
-    padding-inline-start: 0.5rem;
-    padding-inline-end: 0.5rem;
-    border-block-end-style: solid;
+form, fieldset {
+    display: grid;
+    grid-auto-flow: row;
+    padding-block: 0.5rem;
+    padding-inline: 1rem;
+    border-radius: 0.3rem;
+    border-style: solid;
+    border-color: var(--gray5);
+    background-color: var(--gray0);
+    &>* {
+        margin-block: 0.5rem;
+    }
+    &>h1 {
+        margin-block-end: 0.3rem;
+        font-size: 100%;
+    }
+    &>p {
+        margin-block-start: 0.3rem;
+        font-size: 90%;
+    }
+    &>label {
+        margin-block-end: 0;
+    }
+    input {
+        padding-block: 0.3rem;
+        padding-inline: 0.5rem;
+        border-block-end-style: solid;
+        border-color: var(--gray5);
+        background-color: var(--gray2);
+    }
+    button {
+        padding-block: 0.3rem;
+        padding-inline: 0.8rem;
+        border-style: solid;
+        border-radius: 1rem;
+        border-color: var(--gray5);
+        background-color: var(--gray0);
+        justify-self: end;
+        background-color: var(--gray0);
+        font-size: 90%;
+    }
+    legend {
+        margin-block-end: 0;
+    }
 }
 textarea {
     display: block;
