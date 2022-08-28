@@ -1,7 +1,7 @@
-import {isObjectLike} from '../es/isObjectLike';
+import {isObject} from '@nlib/typing';
 
 export const ignoreENOENT = (error: unknown) => {
-    if (isObjectLike(error) && error.code === 'ENOENT') {
+    if (isObject(error) && error.code === 'ENOENT') {
         return null;
     }
     throw error;

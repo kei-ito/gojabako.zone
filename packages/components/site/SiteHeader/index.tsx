@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type {FC} from 'react';
-import {siteName} from '../../../../packages/site/constants';
+import {siteName} from '../../../site/constants';
 import {AuthorLinks} from '../AuthorLinks';
 import {Logo} from '../Logo';
 import {className} from './style.module.css';

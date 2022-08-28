@@ -1,7 +1,7 @@
-import {getPagePathName} from './getPagePathName';
+import {getPageTitle} from '@gjbkz/gojabako.zone-markdown-util';
 import {Promise} from '../es/global';
 import {getFileData} from '../node/getFileData';
-import {getPageTitle} from './getPageTitle';
+import {getPagePathName} from './getPagePathName';
 import {loadPageMetaDataPatch} from './loadPageMetaDataPatch';
 
 export interface PageMetaDataPatch {

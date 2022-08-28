@@ -1,5 +1,5 @@
 {
-    "name": "gojabako.zone",
+    "name": "@gjbkz/gojabako.zone",
     "homepage": "https://gojabako.zone/",
     "version": "0.0.0",
     "private": true,
@@ -16,39 +16,38 @@
         "build": "run-s build:*",
         "build:tool": "run-s build:tool:*",
         "build:tool:cli": "ts-node --project tsconfig.cli.json packages/build/cli.ts",
-        "build:tool:loaders": "node .output/build/loaders.mjs",
-        "build:tool:images": "node .output/build/images.mjs",
+        "build:tool:images": "if [[ $(node -v) =~ \"v18\" ]]; then node --no-experimental-fetch .output/build/images.mjs; else node .output/build/images.mjs; fi",
         "build:css": "esifycss --css=pages/app.css --ext=.ts packages/components",
         "build:next": "next build",
         "build-meta": "run-s build:tool build-meta:*",
         "build-meta:pageList": "node .output/build/pageList.mjs",
         "build-meta:pageImages": "node .output/build/pageImages.mjs",
+        "build-meta:sitemap": "node .output/build/sitemap.mjs",
+        "build-meta:feed": "node .output/build/feed.mjs",
         "start": "NODE_ENV=production ts-node --project tsconfig.cli.json server.ts",
-        "lint": "run-s build-meta lint:*",
-        "lint:eslint": "next lint"
+        "lint": "run-s lint:*",
+        "lint:next": "next lint",
+        "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs pages packages server.ts"
     },
     "dependencies": {
+        "@gjbkz/gojabako.zone-markdown-component-loader-cjs": "0.0.10",
+        "@gjbkz/gojabako.zone-markdown-page-loader-cjs": "0.0.10",
+        "@gjbkz/gojabako.zone-markdown-util": "0.0.10",
         "@nlib/typing": "0.5.7",
-        "highlight.js": "11.6.0",
-        "htmlparser2": "7.2.0",
-        "katex": "0.16.0",
-        "lowlight": "2.7.0",
-        "mdast-util-footnote": "1.1.0",
-        "mdast-util-from-markdown": "1.2.0",
-        "mdast-util-gfm": "2.0.1",
-        "micromark-extension-footnote": "1.0.2",
-        "micromark-extension-gfm": "2.0.1",
-        "next": "12.1.6",
+        "next": "12.2.5",
         "postcss": "8.4.16",
         "react": "18.2.0",
         "react-dom": "18.2.0",
+        "sass": "1.54.5",
         "ts-node": "10.9.1"
     },
     "devDependencies": {
-        "@nlib/eslint-config": "3.17.30",
+        "@gjbkz/gojabako.zone-markdown-parser": "0.0.5",
+        "@nlib/eslint-config": "3.19.4",
         "@nlib/githooks": "0.1.0",
+        "@nlib/lint-commit": "0.2.0",
         "@squoosh/lib": "0.4.1",
-        "@types/jest": "27.5.2",
+        "@types/jest": "28.1.8",
         "@types/katex": "0.14.0",
         "@types/kuromoji": "0.1.1",
         "@types/react": "18.0.17",
@@ -60,18 +59,17 @@
         "esifycss": "1.4.39",
         "esifycss-webpack-plugin": "0.1.3",
         "eslint-config-next": "12.2.5",
+        "eslint-import-resolver-typescript": "3.5.0",
         "eslint-plugin-jest": "26.8.7",
-        "jest": "27.5.1",
+        "jest": "28.1.3",
         "kuromoji": "0.1.2",
-        "lint-staged": "12.5.0",
+        "lint-staged": "13.0.3",
         "npm-run-all": "4.1.5",
         "stackblur-canvas": "2.5.0",
-        "ts-jest": "27.1.5"
+        "ts-jest": "28.0.8"
     },
     "browserslist": [
-        ">5%",
-        "not ie 11",
-        "not dead"
+        ">10%"
     ],
     "jest": {
         "roots": [
@@ -97,11 +95,19 @@
             "@nlib/eslint-config"
         ],
         "ignorePatterns": [
-            "next-env.d.ts",
-            "./.tool/**/*"
+            "next-env.d.ts"
         ],
         "rules": {
-            "no-unused-private-class-members": "off"
+            "no-unused-private-class-members": "off",
+            "import/dynamic-import-chunkname": "off",
+            "import/no-relative-parent-imports": "off"
+        },
+        "settings": {
+            "import/resolver": {
+                "typescript": {
+                    "project": "packages/*/tsconfig.json"
+                }
+            }
         },
         "overrides": [
             {
@@ -117,6 +123,23 @@
                 "rules": {
                     "max-lines-per-function": "off",
                     "@nlib/no-globals": "off"
+                }
+            },
+            {
+                "files": [
+                    "next.config.mjs"
+                ],
+                "rules": {
+                    "@nlib/no-globals": "off"
+                }
+            },
+            {
+                "files": [
+                    "pages/**/*.tsx"
+                ],
+                "rules": {
+                    "import/no-default-export": "off",
+                    "import/no-unassigned-import": "off"
                 }
             }
         ]

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
+import {isHttpsUrlString, isObject, isString} from '@nlib/typing';
 import {JSON} from '../es/global';
-import {isObjectLike} from '../es/isObjectLike';
-import {isDateString, isString, isUrlString} from '../es/isString';
+import {isDateString} from '../es/isDateString';
 import {ignoreENOENT} from '../fs/ignoreENOENT';
 import type {PageMetaDataPatch} from './findPageMetaData';
 
@@ -11,7 +11,7 @@ export const loadPageMetaDataPatch = async (pageFileAbsolutePath: string): Promi
     const jsonString = await fs.promises.readFile(patchFilePath, 'utf-8').catch(ignoreENOENT);
     if (jsonString) {
         const parsed: unknown = JSON.parse(jsonString);
-        if (isObjectLike(parsed)) {
+        if (isObject(parsed)) {
             const {publishedAt, archiveOf, title, description} = parsed;
             if (isString(title) && title) {
                 result.title = title;
@@ -19,7 +19,7 @@ export const loadPageMetaDataPatch = async (pageFileAbsolutePath: string): Promi
             if (isDateString(publishedAt)) {
                 result.publishedAt = publishedAt;
             }
-            if (isUrlString(archiveOf)) {
+            if (isHttpsUrlString(archiveOf)) {
                 result.archiveOf = archiveOf;
             }
             if (isString(description) && description) {

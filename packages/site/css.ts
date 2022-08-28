@@ -1,15 +1,17 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as postcss from 'postcss';
+import sass from 'sass';
 import {nullaryCache} from '../es/cache';
 import {Error, Map} from '../es/global';
 import type {Resolved} from '../es/type';
 import {rootDirectoryPath} from '../fs/constants';
 
 export const getSiteCSS = nullaryCache(async () => {
-    const cssFilePath = path.join(rootDirectoryPath, 'pages/globals.css');
+    const cssFilePath = path.join(rootDirectoryPath, 'pages/globals.scss');
     const css = await fs.promises.readFile(cssFilePath, 'utf8');
-    return postcss.parse(css);
+    const compiled = await sass.compileStringAsync(css);
+    return postcss.parse(compiled.css);
 });
 
 export const getSiteCSSVariables = nullaryCache(async () => {

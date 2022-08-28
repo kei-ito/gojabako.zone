@@ -1,10 +1,10 @@
-import type {CanvasRenderingContext2D} from 'canvas';
-import nodeCanvas from 'canvas';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as console from 'console';
 import {Buffer} from 'buffer';
-import stackBlur from 'stackblur-canvas';
+import * as nodeCanvas from 'canvas';
+import type {CanvasRenderingContext2D} from 'canvas';
+import * as stackBlur from 'stackblur-canvas';
 import {nullaryCache} from '../es/cache';
 import {Date, JSON, Math} from '../es/global';
 import {coverImagesDirectory, publicDirectory} from '../fs/constants';
@@ -12,9 +12,9 @@ import {listPhrases} from '../kuromoji/listPhrases';
 import {getHash} from '../node/getHash';
 import {siteDomain} from '../site/constants';
 import {getSiteColors} from '../site/css';
-import type {PageMetaData} from './findPageMetaData';
 import {rmrf} from '../fs/rmrf';
 import {statOrNull} from '../fs/statOrNull';
+import type {PageMetaData} from './findPageMetaData';
 
 const setupFont = nullaryCache(() => {
     nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD角ゴ StdN W4.otf', {family: 'HiraginoW4'});

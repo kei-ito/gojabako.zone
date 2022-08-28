@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import type {PropsWithChildren} from 'react';
-import {Error, JSON, URL} from '../../../../packages/es/global';
-import {authorName, siteDomain, siteName} from '../../../../packages/site/constants';
-import {meta} from '../../../components/meta';
+import {Error, JSON, URL} from '../../../es/global';
+import {authorName, siteDomain, siteName} from '../../../site/constants';
+import {meta} from '../../meta';
 import {usePageData} from '../../../hooks/usePageData';
 import {pageImages} from '../../../site/pageImageList';
 

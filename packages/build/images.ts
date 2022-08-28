@@ -1,7 +1,7 @@
-import * as squoosh from '@squoosh/lib';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
+import * as squoosh from '@squoosh/lib';
 import {getExtension} from '../es/getExtension';
 import {console, Error, JSON, Map, Math, Object, Promise, Set} from '../es/global';
 import {serializeSize} from '../es/serializeSize';
@@ -180,6 +180,7 @@ const serializeImageComponentScript = function* (encodeResult: EncodeResult) {
     }
     yield '/* eslint-disable @next/next/no-img-element */';
     yield 'import type {DetailedHTMLProps, ImgHTMLAttributes} from \'react\';';
+    yield '';
     yield 'const Image = (';
     yield '    props: Omit<DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>, \'height\' | \'src\' | \'srcset\' | \'width\'>,';
     const {source} = encodeResult;
@@ -194,6 +195,7 @@ const serializeImageComponentScript = function* (encodeResult: EncodeResult) {
         }
     }
     yield '</picture>;';
+    yield '// eslint-disable-next-line import/no-default-export';
     yield 'export default Image;';
     yield '';
 };
