@@ -9,9 +9,21 @@ Reactだとたいていの`<form>`でsubmitをpreventDefaultするので意識�
 あるフォームで二重にボタンが押せないようにする際に`<input>`の値も保護しようとして適当にdisabledを設定すると、値が足らずサーバーがBadRequestを返すようになりました。足りていない値を確認するとdisabledを設定した要素のvalueでした。
 
 ```jsx (include)
+import {useState, useEffect} from 'react';
+const Query = () => {
+    const [query, setQuery] = useState('なし');
+    useEffect(() => {
+        if (typeof location !== 'undefined') {
+            setQuery(location.search);
+        }
+    }, []);
+    return <code>{query}</code>;
+};
+/****************/
 <form id="form1" action="#form1" method="GET">
     <h1>disabledなinputのあるフォーム</h1>
     <p>このページにGETするので送信するとアドレスバーのクエリ文字列で値を確認できます。おそらく<code>{'?input1=value1&input2=value2'}</code>になるはずです。</p>
+    <p>現在のクエリ文字列: <Query/></p>
     <label htmlFor="input1-1"><code>{'<input name="v1-1" type="text"/>'}</code></label>
     <input id="input1-1" name="v1-1" type="text" defaultValue="value1"/>
     <label htmlFor="input1-2"><code>{'<input name="v1-2" type="text" readonly/>'}</code></label>
@@ -32,6 +44,7 @@ Reactだとたいていの`<form>`でsubmitをpreventDefaultするので意識�
 <form id="form2" action="#form2" method="GET">
     <h1>disabledなfieldsetのあるフォーム</h1>
     <p>このページにGETするので送信するとアドレスバーのクエリ文字列で値を確認できます。</p>
+    <p>現在のクエリ文字列: <Query/></p>
     <fieldset>
         <legend><code>{'<fieldset>'}</code></legend>
         <label htmlFor="input2-1"><code>{'<input name="v2-1" type="text"/>'}</code></label>
