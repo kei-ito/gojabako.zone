@@ -30,7 +30,7 @@
     "dependencies": {
         "@nlib/typing": "0.5.7",
         "highlight.js": "11.6.0",
-        "htmlparser2": "7.2.0",
+        "htmlparser2": "8.0.1",
         "katex": "0.16.0",
         "lowlight": "2.7.0",
         "mdast-util-footnote": "1.1.0",
