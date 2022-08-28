@@ -16,7 +16,7 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "DPoPのブラウザ実装",
         "filePath": "pages/2022/dpop/index.page.md",
         "publishedAt": "2022-08-29T02:37:13+09:00",
-        "updatedAt": "2022-08-29T08:52:07+09:00",
+        "updatedAt": "2022-08-29T08:52:28+09:00",
         "commitCount": 3
     },
     {
