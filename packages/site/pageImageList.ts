@@ -62,12 +62,12 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "height": 630
     },
     "/2022/disabled-form-element": {
-        "path": "/covers/e0AM0qUs/G7V-etb6/7ChAZe0z.png",
+        "path": "/covers/e0AM0qUs/6NtVUbBy/0cZIGsmo.png",
         "width": 1200,
         "height": 630
     },
     "/2022/dpop": {
-        "path": "/covers/_Pg6tsq3/Ne0bWnRW/VTCC_2nz.png",
+        "path": "/covers/_Pg6tsq3/ExNiBdtL/VTCC_2nz.png",
         "width": 1200,
         "height": 630
     },
@@ -87,7 +87,7 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "height": 630
     },
     "/app/device": {
-        "path": "/covers/6bAdtvDW/xJ26-PEx/APU7k__R.png",
+        "path": "/covers/6bAdtvDW/hHlquzWP/ZS5LXg7i.png",
         "width": 1200,
         "height": 630
     },
@@ -102,7 +102,7 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "height": 630
     },
     "/markdown": {
-        "path": "/covers/tiihd--T/PDa2Dbgm/0tZrzOk9.png",
+        "path": "/covers/tiihd--T/77c8jd7p/eI0t1rWh.png",
         "width": 1200,
         "height": 630
     }

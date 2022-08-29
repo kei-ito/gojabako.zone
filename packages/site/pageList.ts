@@ -16,16 +16,16 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "DPoPのブラウザ実装",
         "filePath": "pages/2022/dpop/index.page.md",
         "publishedAt": "2022-08-29T02:37:13+09:00",
-        "updatedAt": "2022-08-29T08:52:28+09:00",
-        "commitCount": 3
+        "updatedAt": "2022-08-29T23:27:52+09:00",
+        "commitCount": 4
     },
     {
         "pathname": "/2022/disabled-form-element",
         "title": "disabledなフォーム要素はsubmitされない",
         "filePath": "pages/2022/disabled-form-element/index.page.md",
         "publishedAt": "2022-08-28T18:13:17+09:00",
-        "updatedAt": "2022-08-28T23:24:58+09:00",
-        "commitCount": 3
+        "updatedAt": "2022-08-29T23:27:52+09:00",
+        "commitCount": 4
     },
     {
         "pathname": "/2022/ag06modification",
@@ -40,8 +40,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "デバイス情報の確認",
         "filePath": "pages/app/device/index.page.md",
         "publishedAt": "2022-02-26T00:47:20+09:00",
-        "updatedAt": "2022-03-04T00:17:32+09:00",
-        "commitCount": 3
+        "updatedAt": "2022-08-29T23:27:52+09:00",
+        "commitCount": 4
     },
     {
         "pathname": "/2022/iphone12",
@@ -128,8 +128,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "Markdown動作確認およびタイトルが長い場合の画像生成等の検証用記事",
         "filePath": "pages/markdown.page.md",
         "publishedAt": "2021-09-30T00:39:26+09:00",
-        "updatedAt": "2022-03-03T23:51:55+09:00",
-        "commitCount": 21
+        "updatedAt": "2022-08-29T23:27:52+09:00",
+        "commitCount": 22
     },
     {
         "pathname": "",
@@ -176,4 +176,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [0,1,2,3,14,15,11,5,4,6,10,12,13,8,7,9,16,17,18,19].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [14,3,0,1,2,15,11,5,4,6,10,12,13,8,7,9,16,17,18,19].map((index) => pageListByPublishedAt[index]);
