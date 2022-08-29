@@ -16,8 +16,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "DPoPのブラウザ実装",
         "filePath": "pages/2022/dpop/index.page.md",
         "publishedAt": "2022-08-29T02:37:13+09:00",
-        "updatedAt": "2022-08-29T23:27:52+09:00",
-        "commitCount": 4
+        "updatedAt": "2022-08-29T23:44:59+09:00",
+        "commitCount": 5
     },
     {
         "pathname": "/2022/disabled-form-element",
@@ -176,4 +176,4 @@ export const pageListByPublishedAt: Array<PageData> = [
         "archiveOf": "https://kei-itof.goat.me/di7WvuuNG0"
     }
 ];
-export const pageListByUpdatedAt: Array<PageData> = [14,3,0,1,2,15,11,5,4,6,10,12,13,8,7,9,16,17,18,19].map((index) => pageListByPublishedAt[index]);
+export const pageListByUpdatedAt: Array<PageData> = [0,14,3,1,2,15,11,5,4,6,10,12,13,8,7,9,16,17,18,19].map((index) => pageListByPublishedAt[index]);
