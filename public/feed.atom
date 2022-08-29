@@ -2,20 +2,34 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Gojabako Zone</title>
   <link href="https://gojabako.zone"/>
-  <updated>2022-08-29T08:52:28+09:00</updated>
+  <updated>2022-08-29T23:27:52+09:00</updated>
   <id>https://gojabako.zone</id>
+  <entry>
+    <id>/markdown</id>
+    <title>Markdown動作確認およびタイトルが長い場合の画像生成等の検証用記事</title>
+    <link href="https://gojabako.zone/markdown"/>
+    <updated>2022-08-29T23:27:52+09:00</updated>
+    <published>2021-09-30T00:39:26+09:00</published>
+  </entry>
+  <entry>
+    <id>/app/device</id>
+    <title>デバイス情報の確認</title>
+    <link href="https://gojabako.zone/app/device"/>
+    <updated>2022-08-29T23:27:52+09:00</updated>
+    <published>2022-02-26T00:47:20+09:00</published>
+  </entry>
   <entry>
     <id>/2022/dpop</id>
     <title>DPoPのブラウザ実装</title>
     <link href="https://gojabako.zone/2022/dpop"/>
-    <updated>2022-08-29T08:52:28+09:00</updated>
+    <updated>2022-08-29T23:27:52+09:00</updated>
     <published>2022-08-29T02:37:13+09:00</published>
   </entry>
   <entry>
     <id>/2022/disabled-form-element</id>
     <title>disabledなフォーム要素はsubmitされない</title>
     <link href="https://gojabako.zone/2022/disabled-form-element"/>
-    <updated>2022-08-28T23:24:58+09:00</updated>
+    <updated>2022-08-29T23:27:52+09:00</updated>
     <published>2022-08-28T18:13:17+09:00</published>
   </entry>
   <entry>
@@ -24,20 +38,6 @@
     <link href="https://gojabako.zone/2022/ag06modification"/>
     <updated>2022-04-09T13:59:15+09:00</updated>
     <published>2022-04-09T13:59:15+09:00</published>
-  </entry>
-  <entry>
-    <id>/app/device</id>
-    <title>デバイス情報の確認</title>
-    <link href="https://gojabako.zone/app/device"/>
-    <updated>2022-03-04T00:17:32+09:00</updated>
-    <published>2022-02-26T00:47:20+09:00</published>
-  </entry>
-  <entry>
-    <id>/markdown</id>
-    <title>Markdown動作確認およびタイトルが長い場合の画像生成等の検証用記事</title>
-    <link href="https://gojabako.zone/markdown"/>
-    <updated>2022-03-03T23:51:55+09:00</updated>
-    <published>2021-09-30T00:39:26+09:00</published>
   </entry>
   <entry>
     <id></id>

@@ -2,9 +2,9 @@
 
 ここ3年で3回DPoPを実装していい感じなのですが毎度いろいろ調べながらだと時間がかかるので実装の備忘録を書くことにしました。ただcrypto系の仕様とかAPIは毎年充実してきているので調査はしたほうがいいです。
 
-## DPoPのことを知る
+## DPoPを知る
 
-とりあえず次のページは必読です。これより良い解説は見たことがありません。<br/>
+とりあえず次のページは必読です。これより良い解説はないんじゃないでしょうか。<br/>
 [図解 DPoP (OAuth アクセストークンのセキュリティ向上策の一つ)](https://qiita.com/TakahikoKawasaki/items/34c82fb5c0595b6fc289)
 
 ブラウザで動くアプリの場合は次の手順でサーバーにDPoPヘッダー付きリクエストを送ります。
@@ -20,7 +20,7 @@
 
 ## DPoPは何を解決しているのか
 
-アクセストークンのみでアクセスを制限している場合はアクセストークンを盗めば持ち主になりすませてしまいますが、DPoPを要求することでアクセストークンだけではアクセスできないようにできます。ただし、トークンの持ち主以外がDPoPヘッダーを作れてしまう場合は意味がありません。以下でこの点について考察します。
+アクセストークンのみでアクセスを制限している場合はアクセストークンを盗めば持ち主になりすませてしまいますが、DPoPを要求するとアクセストークンだけではアクセスできないようにできます。ただし、トークンの持ち主以外がDPoPヘッダーを作れてしまう場合は意味がありません。以下でこの点について考察します。
 
 ### アクセストークンの持ち主以外がDPoPヘッダーを作れるか
 
@@ -129,7 +129,7 @@ const KeyView = ({name, keyObject: key, extract, noExtract}) => {
 <KeyGenerator/>
 ```
 
-`crypto.subtle.generateKey`の2番目の引数`extractable`を`false`にすることで秘密鍵は`crypto.subtle.exportKey`ができなくなります。
+`crypto.subtle.generateKey`の2番目の引数`extractable`を`false`にすると秘密鍵は`crypto.subtle.exportKey`ができなくなります。
 
 つまり、秘密鍵はアクセストークンの持ち主のブラウザの外に持ち出せません。
 
@@ -145,7 +145,7 @@ XSS以外でのアクセストークン悪用を防ぐ効果が期待できま�
 
 ## 鍵ペアの保管方法
 
-秘密鍵を`extractable=false`で作ることが重要なことはわかりましたが、文字列等に変換できないその秘密鍵をどうやってブラウザに保管するかという問題が残っています。少なくともアクセストークンの期限までは鍵ペアを保管しなければなりません。
+秘密鍵を`extractable=false`で作るのが重要であることはわかりましたが、文字列等に変換できないその秘密鍵をどうやってブラウザに保管するかという問題が残っています。少なくともアクセストークンの期限までは鍵ペアを保管しなければなりません。
 
 `localStorage`や`sessionStorage`等の[Storage](https://developer.mozilla.org/en-US/docs/Web/API/Storage)は文字列しか入らないのでダメですが、[IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)はオブジェクトをオブジェクトのまま保管できます。
 
@@ -221,7 +221,7 @@ const KeyStore = () => {
 このページではIndexedDB APIを直接使っていますが、[idb](https://github.com/jakearchibald/idb)を使うと楽に書けます。`keyId: string`が引数にありますが同じ鍵ペアを参照したいので基本的には`app`等の固定値を渡すことになると思います。
 
 ```typescript
-const openDB = async () => new Promise((resolve, reject) => {
+const openDB = async () => new Promise<IDBDatabase>((resolve, reject) => {
     const request = indexedDB.open('KeyPairTest', 1);
     request.onerror = reject;
     request.onupgradeneeded = () => {
@@ -247,7 +247,7 @@ const storeKeyPair = async (keyId: string, keyPair: CryptoKeyPair) => {
 
 const loadKeyPair = async (keyId: string) => {
     const db = await openDB();
-    return await new Promise((resolve, reject) => {
+    return await new Promise<CryptoKeyPair>((resolve, reject) => {
         const transaction = db.transaction(['keyPair'], 'readwrite');
         const objectStore = transaction.objectStore('keyPair');
         const getRequest = objectStore.get(keyId);
@@ -264,6 +264,7 @@ const loadKeyPair = async (keyId: string) => {
 1. `crypto.subtle.exportKey`できないとブラウザの外に鍵を持ち出せない
 1. ブラウザの外に鍵を持ち出せないとDPoPヘッダーをブラウザ外で作れない
 1. DPoPヘッダーをブラウザ外で作れないとブラウザ外からのなりすましを防げる
+1. 秘密鍵はIndexedDBに保管できる
 
 ページそのもののリクエストにDPoPヘッダーはつけられないのでSSRを考えるならcookieにアクセストークンを乗せてSSRはそっちで認証しつつ、Web APIエンドポイントはDPoP必須にするなどが考えられます。
 
