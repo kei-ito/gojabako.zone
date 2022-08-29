@@ -8,7 +8,7 @@ Reactだとたいていの`<form>`でsubmitをpreventDefaultするので意識�
 
 あるフォームで二重にボタンが押せないようにする際に`<input>`の値も保護しようとして適当にdisabledを設定すると、値が足らずサーバーがBadRequestを返すようになりました。足りていない値を確認するとdisabledを設定した要素のvalueでした。
 
-```jsx (include)
+```js (import)
 import {useState, useEffect} from 'react';
 const Query = () => {
     const [query, setQuery] = useState('なし');
@@ -19,7 +19,9 @@ const Query = () => {
     }, []);
     return <code>{query}</code>;
 };
-/****************/
+```
+
+```jsx (include)
 <form id="form1" action="#form1" method="GET">
     <h1>disabledなinputのあるフォーム</h1>
     <p>このページにGETするので送信するとアドレスバーのクエリ文字列で値を確認できます。おそらく<code>{'?input1=value1&input2=value2'}</code>になるはずです。</p>

@@ -18,9 +18,11 @@ HTML
 include TSX
 -----------
 
-```jsx (include)
+```js (import)
 import {Counter} from '../packages/components/site/Counter';
-/****************/
+```
+
+```jsx (include)
 <Counter/>
 ```
 

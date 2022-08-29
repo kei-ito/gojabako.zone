@@ -51,7 +51,7 @@ const keyPair = await crypto.subtle.generateKey(
 
 以下で実際に鍵ペアを作れます。それぞれExportKeyもクリックして試してみてください。
 
-```jsx (include)
+```js (import)
 import {useState, useEffect, useCallback} from 'react';
 const generateKeyPair = async () => {
     const algorithm = {name: 'ECDSA', namedCurve: 'P-256'};
@@ -123,7 +123,9 @@ const KeyView = ({name, keyObject: key, extract, noExtract}) => {
         {jwk && <pre><code>{jwk}</code></pre>}
     </fieldset>;
 };
-/****************/
+```
+
+```tsx (include)
 <KeyGenerator/>
 ```
 
@@ -147,7 +149,7 @@ XSS以外でのアクセストークン悪用を防ぐ効果が期待できま�
 
 `localStorage`や`sessionStorage`等の[Storage](https://developer.mozilla.org/en-US/docs/Web/API/Storage)は文字列しか入らないのでダメですが、[IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)はオブジェクトをオブジェクトのまま保管できます。
 
-```jsx (include)
+```js (import)
 const openDB = async () => new Promise((resolve, reject) => {
     const request = indexedDB.open('KeyPairTest', 1);
     request.onerror = reject;
@@ -210,7 +212,9 @@ const KeyStore = () => {
         }
     </form>;
 };
-/****************/
+```
+
+```jsx (include)
 <KeyStore/>
 ```
 
