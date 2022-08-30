@@ -125,7 +125,7 @@ const KeyView = ({name, keyObject: key, extract, noExtract}) => {
 };
 ```
 
-```tsx (include)
+```jsx (include)
 <KeyGenerator/>
 ```
 
