@@ -78,4 +78,4 @@ const Query = () => {
 
 例えば「*Q2で **いいえ** と答えた方は入力してください*」のように文脈で無効である場合にはdisabledを使い、送信中の値の保護であればreadonly[^1]を使うようにしています。
 
-[^1]: readonlyは`<input type="submit"/>`に使えないなどの条件があります。参考: https://developer.mozilla.org/ja/docs/Web/HTML/Attributes/readonly
+[^1]: readonlyは`<input type="submit"/>`に使えないなどの条件があります。参考: [HTML 属性: readonly - HTML: HyperText Markup Language | MDN](https://developer.mozilla.org/ja/docs/Web/HTML/Attributes/readonly)
