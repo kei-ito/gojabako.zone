@@ -1,6 +1,6 @@
 # DPoPのブラウザ実装
 
-ここ3年で3回DPoPを実装していい感じなのですが毎度いろいろ調べながらだと時間がかかるので実装の備忘録を書くことにしました。ただcrypto系の仕様とかAPIは毎年充実してきているので調査はしたほうがいいです。
+ここ3年で3回DPoPを実装していい感じなのですが、毎度調べながらだと時間がかかるので実装の備忘録を書くことにしました。ただcrypto系の仕様とかAPIは毎年充実してきているので毎度調査はしたほうがいいです。
 
 ## DPoPを知る
 
@@ -20,11 +20,11 @@
 
 ## DPoPは何を解決しているのか
 
-アクセストークンのみでアクセスを制限している場合はアクセストークンを盗めば持ち主になりすませてしまいますが、DPoPを要求するとアクセストークンだけではアクセスできないようにできます。ただし、トークンの持ち主以外がDPoPヘッダーを作れてしまう場合は意味がありません。以下でこの点について考察します。
+アクセストークンのみでアクセスを制限している場合はアクセストークンを盗めば持ち主になりすませてしまいますが、DPoPを要求するとアクセストークンだけではなりすましできなくなります。ただし、トークンの持ち主以外がDPoPヘッダーを作れてしまう場合は意味がありません。以下でこの点について考察します。
 
 ### アクセストークンの持ち主以外がDPoPヘッダーを作れるか
 
-アクセストークンを盗んだ側の視点で考えてみましょう。
+アクセストークンを盗んだ側の視点で考えてみます。
 
 > **盗:** DPoPヘッダーを要求された。DPoPヘッダーは「ヘッダーに公開鍵、ペイロードにメソッドとエンドポイントのURLを詰めて先の秘密鍵で署名したJWT」 らしい。<br/>
 > **盗:** ペイロード部分はリクエストのエンドポイント情報なので問題ない。<br/>
@@ -49,7 +49,7 @@ const keyPair = await crypto.subtle.generateKey(
 );
 ```
 
-以下で実際に鍵ペアを作れます。それぞれExportKeyもクリックして試してみてください。
+以下で実際に鍵ペアを作れます。それぞれExportKeyもクリックして鍵データの出力を試してみてください。
 
 ```js (import)
 import {useState, useEffect, useCallback} from 'react';
@@ -129,9 +129,7 @@ const KeyView = ({name, keyObject: key, extract, noExtract}) => {
 <KeyGenerator/>
 ```
 
-`crypto.subtle.generateKey`の2番目の引数`extractable`を`false`にすると秘密鍵は`crypto.subtle.exportKey`ができなくなります。
-
-つまり、秘密鍵はアクセストークンの持ち主のブラウザの外に持ち出せません。
+`crypto.subtle.generateKey`の2番目の引数`extractable`を`false`にするとGoogle Chromeでは "InvalidAccessError: key is not extractable" となり出力できません。つまり、`extractable:false`の秘密鍵はアクセストークンの持ち主のブラウザの外に持ち出せません。
 
 ### まとめ
 
@@ -139,15 +137,15 @@ Q. アクセストークンの持ち主の鍵ペアを盗めるか？<br/>
 A. アクセストークンの持ち主のブラウザの外には盗み出せません。
 
 Q. アクセストークンの持ち主以外がDPoPヘッダーを作れるか？<br/>
-A. アクセストークンの持ち主のブラウザの外では作れません。
+A. アクセストークンの持ち主の鍵ペアが持ち出せずブラウザの外では作れません。
 
-XSS以外でのアクセストークン悪用を防ぐ効果が期待できます。
+ブラウザ側が`extractable:false`を正しく実装していればXSS以外でのアクセストークン悪用を防ぐ効果が期待できます。
 
 ## 鍵ペアの保管方法
 
-秘密鍵を`extractable=false`で作るのが重要であることはわかりましたが、文字列等に変換できないその秘密鍵をどうやってブラウザに保管するかという問題が残っています。少なくともアクセストークンの期限までは鍵ペアを保管しなければなりません。
+秘密鍵を`extractable:false`で作ることはわかりましたが、文字列等に変換できないその鍵をどうやってブラウザに保管するかという問題が残っています。少なくともアクセストークンの期限までは鍵ペアを保管しなければなりません。
 
-`localStorage`や`sessionStorage`等の[Storage](https://developer.mozilla.org/en-US/docs/Web/API/Storage)は文字列しか入らないのでダメですが、[IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)はオブジェクトをオブジェクトのまま保管できます。
+`localStorage`や`sessionStorage`等の[Storage](https://developer.mozilla.org/en-US/docs/Web/API/Storage)は文字列しか入らないので使えませんが、[IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)はオブジェクトをオブジェクトのまま保管できます。
 
 ```js (import)
 const openDB = async () => new Promise((resolve, reject) => {
@@ -218,7 +216,7 @@ const KeyStore = () => {
 <KeyStore/>
 ```
 
-このページではIndexedDB APIを直接使っていますが、[idb](https://github.com/jakearchibald/idb)を使うと楽に書けます。`keyId: string`が引数にありますが同じ鍵ペアを参照したいので基本的には`app`等の固定値を渡すことになると思います。
+`keyId: string`が引数にありますが同じ鍵ペアを参照したいので基本的には`app`等の固定値を渡すことになると思います。
 
 ```typescript
 const openDB = async () => new Promise<IDBDatabase>((resolve, reject) => {
@@ -248,7 +246,7 @@ const storeKeyPair = async (keyId: string, keyPair: CryptoKeyPair) => {
 const loadKeyPair = async (keyId: string) => {
     const db = await openDB();
     return await new Promise<CryptoKeyPair>((resolve, reject) => {
-        const transaction = db.transaction(['keyPair'], 'readwrite');
+        const transaction = db.transaction(['keyPair'], 'readonly');
         const objectStore = transaction.objectStore('keyPair');
         const getRequest = objectStore.get(keyId);
         getRequest.onerror = reject;
