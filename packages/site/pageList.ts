@@ -24,8 +24,8 @@ export const pageListByPublishedAt: Array<PageData> = [
         "title": "disabledなフォーム要素はsubmitされない",
         "filePath": "pages/2022/disabled-form-element/index.page.md",
         "publishedAt": "2022-08-28T18:13:17+09:00",
-        "updatedAt": "2022-08-30T16:27:09+09:00",
-        "commitCount": 5
+        "updatedAt": "2022-09-01T01:03:29+09:00",
+        "commitCount": 6
     },
     {
         "pathname": "/2022/ag06modification",
