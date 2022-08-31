@@ -1,12 +1,12 @@
 # disabledなフォーム要素はsubmitされない
 
-Reactだとたいていの`<form>`でsubmitをpreventDefaultするので意識しないのですがNext.jsは[API Routes](https://nextjs.org/docs/api-routes/introduction)があるので`<form>`のactionでそこに繋ぐことがあります。
+Reactだとたいていの`<form>`でsubmitをpreventDefaultするので意識しないのですが、Next.jsは[API Routes](https://nextjs.org/docs/api-routes/introduction)があるので`<form>`のactionでそこに繋ぐことがあります。
 
-また、一度押したボタンは`<button disabled>`にすると二重に押せないようにできますが、このdisabledのボタンを無効にする以外の作用についてよく知らなかったのでその記録です。動作確認はGoogle Chromeでやっています。
+このときユーザーに操作させない要素をdisabledにすることがあるのですが、操作を無効にする以外のdisabled属性の作用についてよく知らなかったのでその実験をしました。
 
 ## disabledなフォーム要素
 
-あるフォームで二重にボタンが押せないようにする際に`<input>`の値も保護しようとして適当にdisabledを設定すると、値が足らずサーバーがBadRequestを返すようになりました。足りていない値を確認するとdisabledを設定した要素のvalueでした。
+`<input>`の値を保護しようとしてdisabledを設定すると、値が足らずサーバーがBadRequestを返すようになりました。足りていない値を確認するとdisabledを設定した要素のvalueでした。
 
 ```js (import)
 import {useState, useEffect} from 'react';
@@ -24,19 +24,19 @@ const Query = () => {
 ```jsx (include)
 <form id="form1" action="#form1" method="GET">
     <h1>disabledなinputのあるフォーム</h1>
-    <p>このページにGETするので送信するとアドレスバーのクエリ文字列で値を確認できます。おそらく<code>{'?input1=value1&input2=value2'}</code>になるはずです。</p>
+    <p>このページにGETするので送信するとアドレスバーのクエリ文字列で値を確認できます。おそらく<code>{'?v1-1=value1&v1-2=value2'}</code>になるはずです。</p>
     <p>現在のクエリ文字列: <Query/></p>
-    <label htmlFor="input1-1"><code>{'<input name="v1-1" type="text"/>'}</code></label>
-    <input id="input1-1" name="v1-1" type="text" defaultValue="value1"/>
-    <label htmlFor="input1-2"><code>{'<input name="v1-2" type="text" readonly/>'}</code></label>
-    <input id="input1-2" name="v1-2" type="text" defaultValue="value2" readOnly/>
-    <label htmlFor="input1-3"><code>{'<input name="v1-3" type="text" disabled/>'}</code></label>
-    <input id="input1-3" name="v1-3" type="text" defaultValue="value3" disabled/>
+    <label htmlFor="v1-1"><code>{'<input name="v1-1" type="text"/>'}</code></label>
+    <input id="v1-1" name="v1-1" type="text" defaultValue="value1"/>
+    <label htmlFor="v1-2"><code>{'<input name="v1-2" type="text" readonly/>'}</code></label>
+    <input id="v1-2" name="v1-2" type="text" defaultValue="value2" readOnly/>
+    <label htmlFor="v1-3"><code>{'<input name="v1-3" type="text" disabled/>'}</code></label>
+    <input id="v1-3" name="v1-3" type="text" defaultValue="value3" disabled/>
     <button type="submit">送信</button>
 </form>
 ```
 
-いつもJavaScriptで値を集めてfetchで送っていたので気がつかなかったのですが、disabledな要素の値はフォームの送信に含まれません。
+いつもfetchで送っていたので気がつかなかったのですが、disabledな要素の値はフォームの送信に含まれません。
 
 ## disabledなfieldset
 
@@ -49,30 +49,30 @@ const Query = () => {
     <p>現在のクエリ文字列: <Query/></p>
     <fieldset>
         <legend><code>{'<fieldset>'}</code></legend>
-        <label htmlFor="input2-1"><code>{'<input name="v2-1" type="text"/>'}</code></label>
-        <input id="input2-1" name="v2-1" type="text" defaultValue="value1"/>
-        <label htmlFor="input2-2"><code>{'<input name="v2-2" type="text"/>'}</code></label>
-        <input id="input2-2" name="v2-2" type="text" defaultValue="value2"/>
+        <label htmlFor="v2-1"><code>{'<input name="v2-1" type="text"/>'}</code></label>
+        <input id="v2-1" name="v2-1" type="text" defaultValue="value1"/>
+        <label htmlFor="v2-2"><code>{'<input name="v2-2" type="text"/>'}</code></label>
+        <input id="v2-2" name="v2-2" type="text" defaultValue="value2"/>
     </fieldset>
     <fieldset readOnly>
         <legend><code>{'<fieldset readonly>'}</code></legend>
-        <label htmlFor="input2-3"><code>{'<input name="v2-3" type="text"/>'}</code></label>
-        <input id="input2-3" name="v2-3" type="text" defaultValue="value3"/>
-        <label htmlFor="input2-4"><code>{'<input name="v2-4" type="text"/>'}</code></label>
-        <input id="input2-4" name="v2-4" type="text" defaultValue="value4"/>
+        <label htmlFor="v2-3"><code>{'<input name="v2-3" type="text"/>'}</code></label>
+        <input id="v2-3" name="v2-3" type="text" defaultValue="value3"/>
+        <label htmlFor="v2-4"><code>{'<input name="v2-4" type="text"/>'}</code></label>
+        <input id="v2-4" name="v2-4" type="text" defaultValue="value4"/>
     </fieldset>
     <fieldset disabled>
         <legend><code>{'<fieldset disabled>'}</code></legend>
-        <label htmlFor="input2-5"><code>{'<input name="v2-5" type="text"/>'}</code></label>
-        <input id="input2-5" name="v2-5" type="text" defaultValue="value5"/>
-        <label htmlFor="input2-6"><code>{'<input name="v2-6" type="text"/>'}</code></label>
-        <input id="input2-6" name="v2-6" type="text" defaultValue="value6"/>
+        <label htmlFor="v2-5"><code>{'<input name="v2-5" type="text"/>'}</code></label>
+        <input id="v2-5" name="v2-5" type="text" defaultValue="value5"/>
+        <label htmlFor="v2-6"><code>{'<input name="v2-6" type="text"/>'}</code></label>
+        <input id="v2-6" name="v2-6" type="text" defaultValue="value6"/>
     </fieldset>
     <button type="submit">送信</button>
 </form>
 ```
 
-3つ目の`<fieldset>`の中の`v2-5`と`v2-6`は送信されません。readonlyな要素であれば送信されます。
+3つ目の`<fieldset>`の中の`v2-5`と`v2-6`は送信されません。disabledな`<fieldset>`の中の値は送信されません。readonlyは送信されます。
 
 ## disabledの使い所
 
