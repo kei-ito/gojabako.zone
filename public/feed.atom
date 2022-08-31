@@ -2,21 +2,21 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Gojabako Zone</title>
   <link href="https://gojabako.zone"/>
-  <updated>2022-09-01T01:03:29+09:00</updated>
+  <updated>2022-09-01T01:19:28+09:00</updated>
   <id>https://gojabako.zone</id>
+  <entry>
+    <id>/2022/dpop</id>
+    <title>DPoPのブラウザ実装</title>
+    <link href="https://gojabako.zone/2022/dpop"/>
+    <updated>2022-09-01T01:19:28+09:00</updated>
+    <published>2022-08-29T02:37:13+09:00</published>
+  </entry>
   <entry>
     <id>/2022/disabled-form-element</id>
     <title>disabledなフォーム要素はsubmitされない</title>
     <link href="https://gojabako.zone/2022/disabled-form-element"/>
     <updated>2022-09-01T01:03:29+09:00</updated>
     <published>2022-08-28T18:13:17+09:00</published>
-  </entry>
-  <entry>
-    <id>/2022/dpop</id>
-    <title>DPoPのブラウザ実装</title>
-    <link href="https://gojabako.zone/2022/dpop"/>
-    <updated>2022-08-30T10:13:01+09:00</updated>
-    <published>2022-08-29T02:37:13+09:00</published>
   </entry>
   <entry>
     <id>/markdown</id>

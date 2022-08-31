@@ -67,7 +67,7 @@ export const pageImages: Record<string, PageImageData | undefined> = {
         "height": 630
     },
     "/2022/dpop": {
-        "path": "/covers/_Pg6tsq3/UrQ3kJ7O/LcoTXe36.png",
+        "path": "/covers/_Pg6tsq3/SdAO46RN/fqsMoNK_.png",
         "width": 1200,
         "height": 630
     },
