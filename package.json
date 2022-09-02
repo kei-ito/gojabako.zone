@@ -50,7 +50,7 @@
         "@types/jest": "28.1.8",
         "@types/katex": "0.14.0",
         "@types/kuromoji": "0.1.1",
-        "@types/react": "18.0.17",
+        "@types/react": "18.0.18",
         "@types/sharp": "0.30.5",
         "@typescript-eslint/eslint-plugin": "5.36.1",
         "@typescript-eslint/parser": "5.35.1",
