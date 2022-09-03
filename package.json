@@ -16,7 +16,7 @@
         "build": "run-s build:*",
         "build:tool": "run-s build:tool:*",
         "build:tool:cli": "ts-node --project tsconfig.cli.json packages/build/cli.ts",
-        "build:tool:images": "if [[ $(node -v) =~ \"v18\" ]]; then node --no-experimental-fetch .output/build/images.mjs; else node .output/build/images.mjs; fi",
+        "build:images": "if [[ $(node -v) =~ \"v18\" ]]; then node --no-experimental-fetch cli/build-images.mjs; else node cli/build-images.mjs; fi",
         "build:css": "esifycss --css=pages/app.css --ext=.ts packages/components",
         "build:next": "next build",
         "build-meta": "run-s build:tool build-meta:*",
@@ -30,9 +30,12 @@
         "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs pages packages server.ts"
     },
     "dependencies": {
+        "@gjbkz/gojabako.zone-build-images": "0.1.5",
+        "@gjbkz/gojabako.zone-build-pagelist": "0.1.5",
         "@gjbkz/gojabako.zone-markdown-component-loader-cjs": "0.1.5",
         "@gjbkz/gojabako.zone-markdown-page-loader-cjs": "0.1.5",
         "@gjbkz/gojabako.zone-markdown-util": "0.1.5",
+        "@gjbkz/gojabako.zone-node-util": "0.1.5",
         "@nlib/typing": "0.5.7",
         "jose": "4.9.2",
         "next": "12.2.5",
