@@ -8,7 +8,6 @@ import * as stackBlur from 'stackblur-canvas';
 import type {PageMetaData} from '@gjbkz/gojabako.zone-build-pagelist';
 import {getHash, rmrf} from '@gjbkz/gojabako.zone-node-util';
 import {nullaryCache} from '../es/cache';
-import {Date, JSON, Math} from '../es/global';
 import {coverImagesDirectory, publicDirectory} from '../../paths.mjs';
 import {listPhrases} from '../kuromoji/listPhrases';
 import {siteDomain} from '../../site.mjs';

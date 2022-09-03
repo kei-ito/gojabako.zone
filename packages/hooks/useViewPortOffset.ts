@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
-import {isBrowser} from '../dom/global';
-import {globalThis} from '../es/global';
+import {isBrowser} from '../es/isBrowser';
 
 export const useViewPortOffset = () => {
     const [offset, setOffset] = useState({left: 0, top: 0});

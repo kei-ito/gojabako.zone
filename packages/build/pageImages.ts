@@ -2,7 +2,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as process from 'process';
 import {rootDirectory} from '../../paths.mjs';
-import {JSON} from '../es/global';
 import type {PageImageData} from '../page/generatePageImage';
 import {generatePageImage} from '../page/generatePageImage';
 import {pageListByPublishedAt} from '../site/pageList';

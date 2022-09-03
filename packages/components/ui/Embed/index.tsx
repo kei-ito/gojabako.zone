@@ -1,7 +1,6 @@
 import type {PropsWithChildren} from 'react';
 import {useEffect, useRef} from 'react';
 import {isHTMLElement} from '../../../dom/isHTMLElement';
-import {Number} from '../../../es/global';
 import {onError} from '../../../es/onError';
 import {getTwitterSDK} from '../../../dom/getTwitterSDK';
 import {className} from './style.module.css';

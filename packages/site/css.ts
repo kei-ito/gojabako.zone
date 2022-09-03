@@ -3,7 +3,6 @@ import * as path from 'path';
 import * as postcss from 'postcss';
 import sass from 'sass';
 import {nullaryCache} from '../es/cache';
-import {Error, Map} from '../es/global';
 import type {Resolved} from '../es/type';
 import {pagesDirectory} from '../../paths.mjs';
 

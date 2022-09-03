@@ -1,5 +1,4 @@
 import {useEffect, useMemo} from 'react';
-import {ResizeObserver} from '../dom/global';
 
 export const useResizeObserver = (
     element: Element | null | undefined,

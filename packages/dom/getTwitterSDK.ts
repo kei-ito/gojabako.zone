@@ -1,5 +1,3 @@
-import {Promise} from '../es/global';
-
 interface TwitterSDK {
     widgets: {
         load: (element?: HTMLElement) => void,

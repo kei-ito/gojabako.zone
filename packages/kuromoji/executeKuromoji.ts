@@ -1,7 +1,6 @@
 import * as path from 'path';
 import kuromoji from 'kuromoji';
 import {nullaryCache} from '../es/cache';
-import {Promise} from '../es/global';
 import {rootDirectory} from '../../paths.mjs';
 
 const dicPath = path.join(rootDirectory, 'node_modules', 'kuromoji', 'dict');

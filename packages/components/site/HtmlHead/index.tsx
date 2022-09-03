@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import type {PropsWithChildren} from 'react';
-import {Error, JSON, URL} from '../../../es/global';
 import {authorName, siteDomain, siteName} from '../../../../site.mjs';
 import {meta} from '../../meta';
 import {usePageData} from '../../../hooks/usePageData';

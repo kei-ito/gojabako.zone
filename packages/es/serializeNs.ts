@@ -1,4 +1,3 @@
-import {Math, Number} from './global';
 import {serializeMs} from './serializeMs';
 
 const LN1000 = Math.log(1000);
