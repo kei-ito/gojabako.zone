@@ -2,8 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Gojabako Zone</title>
   <link href="https://gojabako.zone"/>
-  <updated>2022-09-03T09:56:55+09:00</updated>
+  <updated>2022-09-03T17:58:06+09:00</updated>
   <id>https://gojabako.zone</id>
+  <entry>
+    <id></id>
+    <title>Gojabako Zone</title>
+    <link href="https://gojabako.zone/"/>
+    <updated>2022-09-03T17:58:06+09:00</updated>
+    <published>2021-09-29T00:33:31+09:00</published>
+  </entry>
   <entry>
     <id>/2022/dpop</id>
     <title>DPoPのブラウザ実装</title>
@@ -38,13 +45,6 @@
     <link href="https://gojabako.zone/2022/ag06modification"/>
     <updated>2022-04-09T13:59:15+09:00</updated>
     <published>2022-04-09T13:59:15+09:00</published>
-  </entry>
-  <entry>
-    <id></id>
-    <title>Gojabako Zone</title>
-    <link href="https://gojabako.zone/"/>
-    <updated>2022-03-03T23:51:55+09:00</updated>
-    <published>2021-09-29T00:33:31+09:00</published>
   </entry>
   <entry>
     <id>/author</id>
