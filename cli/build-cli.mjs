@@ -1,17 +1,13 @@
+import * as console from 'console';
 import * as fs from 'fs';
-import {join} from 'path';
 import {builtinModules} from 'module';
-import type * as esbuild from 'esbuild';
-import {Error, JSON, Object, Set} from '../es/global';
-import {rootDirectory} from '../../paths.mjs';
+import * as nodepath from 'path';
+import * as esbuild from 'esbuild';
+import {rootDirectory} from '../paths.mjs';
 
-export const markDependenciesAsExternal = (
-    {includeDev}: {includeDev?: boolean} = {includeDev: false},
-): esbuild.Plugin => {
-    const packageJson = JSON.parse(fs.readFileSync(join(rootDirectory, 'package.json'), 'utf8')) as {
-        dependencies: Record<string, string>,
-        devDependencies: Record<string, string>,
-    };
+/** @param {boolean} includeDev */
+export const markDependenciesAsExternal = (includeDev) => {
+    const packageJson = JSON.parse(fs.readFileSync(nodepath.join(rootDirectory, 'package.json'), 'utf8'));
     const externalModuleNames = new Set([
         ...builtinModules,
         ...Object.keys(packageJson.dependencies),
@@ -40,3 +36,18 @@ export const markDependenciesAsExternal = (
         },
     };
 };
+
+const buildDirectoryPath = nodepath.join(rootDirectory, 'packages/build');
+for (const name of await fs.promises.readdir(buildDirectoryPath)) {
+    if (name.endsWith('.ts')) {
+        await esbuild.build({
+            entryPoints: [nodepath.join(buildDirectoryPath, name)],
+            outfile: nodepath.join(rootDirectory, `.output/build/${name.slice(0, -3)}.mjs`),
+            plugins: [markDependenciesAsExternal({includeDev: true})],
+            bundle: true,
+            target: 'esnext',
+            format: 'esm',
+        });
+        console.info(`BuildCLI: ${name}`);
+    }
+}

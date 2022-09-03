@@ -15,7 +15,7 @@
         "dev-next": "run-s build-meta dev-next:*",
         "dev-next:watch": "next dev",
         "build": "run-s build:*",
-        "build:cli": "ts-node --project tsconfig.cli.json packages/build/cli.ts",
+        "build:cli": "node cli/build-cli.mjs",
         "build:images": "if [[ $(node -v) =~ \"v18\" ]]; then node --no-experimental-fetch cli/build-images.mjs; else node cli/build-images.mjs; fi",
         "build:css": "esifycss --css=pages/app.css --ext=.ts packages/components",
         "build:next": "next build",
