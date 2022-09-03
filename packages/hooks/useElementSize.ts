@@ -1,5 +1,4 @@
-import {useCallback, useEffect, useReducer} from 'react';
-import {useResizeObserver} from './useResizeObserver';
+import {useEffect, useReducer} from 'react';
 
 interface Size {
     width: number,
@@ -18,13 +17,21 @@ export const useElementSize = (
     initialSize: Size = {width: 0, height: 0},
 ) => {
     const [size, dispatch] = useReducer(reducer, initialSize);
-    useResizeObserver(element, useCallback(({contentRect}: ResizeObserverEntry) => {
-        dispatch(contentRect);
-    }, []));
     useEffect(() => {
+        const observer = new ResizeObserver((entries) => {
+            for (const entry of entries) {
+                dispatch(entry.contentRect);
+            }
+        });
         if (element) {
+            observer.observe(element);
             dispatch(element.getBoundingClientRect());
         }
+        return () => {
+            if (element) {
+                observer.unobserve(element);
+            }
+        };
     }, [element]);
     return size;
 };
