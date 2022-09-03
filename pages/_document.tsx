@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-page-custom-font */
 import {Head, Html, Main, NextScript} from 'next/document';
 import {meta} from '../packages/components/meta';
-import {authorName, authorTwitter, siteName} from '../packages/site/constants';
+import {authorName, authorTwitter, siteName} from '../site.mjs';
 
 const Document = () => <Html lang="ja">
     <Head>

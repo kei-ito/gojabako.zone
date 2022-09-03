@@ -11,7 +11,7 @@ import {nullaryCache} from '../es/cache';
 import {Date, JSON, Math} from '../es/global';
 import {coverImagesDirectory, publicDirectory} from '../fs/constants';
 import {listPhrases} from '../kuromoji/listPhrases';
-import {siteDomain} from '../site/constants';
+import {siteDomain} from '../../site.mjs';
 import {getSiteColors} from '../site/css';
 import {statOrNull} from '../fs/statOrNull';
 

@@ -1,15 +1,16 @@
 import * as path from 'path';
-import {URL, fileURLToPath} from 'url';
 import {buildImages} from '@gjbkz/gojabako.zone-build-images';
 import {listFiles} from '@gjbkz/gojabako.zone-node-util';
+import {
+    coverImagesDirectory,
+    pagesDirectory,
+    processedImageDirectory,
+    publicDirectory,
+    rootDirectory,
+} from '../paths.mjs';
 
-// eslint-disable-next-line @nlib/no-globals
-const rootDirectory = fileURLToPath(new URL('..', import.meta.url));
-const publicDirectory = path.join(rootDirectory, 'public');
-const pagesDirectory = path.join(rootDirectory, 'pages');
-const processedImageDirectory = path.join(publicDirectory, 'images');
-const coverImagesDirectory = path.join(publicDirectory, 'covers');
 const extensions = ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.heic'];
+/** @param {string} file */
 const isImageFileToBeProcessed = (file) => {
     if (!extensions.includes(path.extname(file))) {
         return false;

@@ -15,20 +15,17 @@
         "dev-next": "run-s build-meta dev-next:*",
         "dev-next:watch": "next dev",
         "build": "run-s build:*",
-        "build:tool": "run-s build:tool:*",
-        "build:tool:cli": "ts-node --project tsconfig.cli.json packages/build/cli.ts",
+        "build:cli": "ts-node --project tsconfig.cli.json packages/build/cli.ts",
         "build:images": "if [[ $(node -v) =~ \"v18\" ]]; then node --no-experimental-fetch cli/build-images.mjs; else node cli/build-images.mjs; fi",
         "build:css": "esifycss --css=pages/app.css --ext=.ts packages/components",
         "build:next": "next build",
-        "build-meta": "run-s build:tool build-meta:*",
+        "build-meta": "run-s build:cli build-meta:*",
         "build-meta:pageList": "node cli/build-pagelist.mjs",
         "build-meta:pageImages": "node .output/build/pageImages.mjs",
-        "build-meta:sitemap": "node .output/build/sitemap.mjs",
-        "build-meta:feed": "node .output/build/feed.mjs",
         "start": "NODE_ENV=production ts-node --project tsconfig.cli.json server.ts",
         "lint": "run-s lint:*",
         "lint:next": "next lint",
-        "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs pages packages server.ts"
+        "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs pages packages cli server.ts *.mjs"
     },
     "dependencies": {
         "@gjbkz/gojabako.zone-build-images": "0.1.7",
