@@ -1,7 +1,5 @@
 import type {FC} from 'react';
 import {useEffect, useState} from 'react';
-import {cancelAnimationFrame, devicePixelRatio, requestAnimationFrame} from '../../../dom/global';
-import {Math} from '../../../es/global';
 import {useElementSize} from '../../../hooks/useElementSize';
 import {className} from './style.module.css';
 

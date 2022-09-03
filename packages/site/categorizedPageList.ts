@@ -1,4 +1,3 @@
-import {Map} from '../es/global';
 import type {PageData} from './pageList';
 import {pageListByPublishedAt} from './pageList';
 

@@ -1,19 +1,14 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as process from 'process';
-import {JSON} from '../es/global';
-import {rootDirectoryPath} from '../fs/constants';
-import {runScript} from '../node/runScript';
+import {rootDirectory} from '../../paths.mjs';
 import type {PageImageData} from '../page/generatePageImage';
 import {generatePageImage} from '../page/generatePageImage';
-import {listPageMetaData} from '../page/listPageMetaData';
+import {pageListByPublishedAt} from '../site/pageList';
 
-runScript(async () => {
-    if (process.env.CI) {
-        return;
-    }
+if (!process.env.CI) {
     const pageImages: Record<string, PageImageData> = {};
-    for await (const page of listPageMetaData()) {
+    for await (const page of pageListByPublishedAt) {
         const result = await generatePageImage(page);
         pageImages[page.pathname] = result;
     }
@@ -27,6 +22,6 @@ export interface PageImageData {
 }
 export const pageImages: Record<string, PageImageData | undefined> = ${JSON.stringify(pageImages, null, 4)};
 `.trimStart();
-    const dest = path.join(rootDirectoryPath, 'packages/site/pageImageList.ts');
+    const dest = path.join(rootDirectory, 'packages/site/pageImageList.ts');
     await fs.promises.writeFile(dest, code);
-});
+}

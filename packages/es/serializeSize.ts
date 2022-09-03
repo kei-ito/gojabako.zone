@@ -1,5 +1,3 @@
-import {Error, Math, Number} from './global';
-
 const BASE = 1024;
 
 export const serializeSize = (size: bigint | number): string => {

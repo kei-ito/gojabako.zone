@@ -1,5 +1,3 @@
-import {Math} from './global';
-
 const Ms1s = 1000;
 const Ms1m = 60 * Ms1s;
 const Ms1h = 60 * Ms1m;

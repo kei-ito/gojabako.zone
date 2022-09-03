@@ -5,7 +5,6 @@ import * as https from 'https';
 import * as process from 'process';
 import * as url from 'url';
 import next from 'next';
-import {URL} from './packages/es/global';
 import {onError} from './packages/es/onError';
 
 const config = {

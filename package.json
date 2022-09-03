@@ -7,6 +7,7 @@
         "test": "run-s build-meta test:*",
         "test:type": "tsc --noEmit",
         "test:jest": "npx jest",
+        "test:deadcode": "ts-prune --ignore \".css.ts|.component.tsx\"",
         "dev": "run-s build-meta dev:*",
         "dev:watch": "run-p dev:watch:*",
         "dev:watch:css": "esifycss --css=pages/app.css --ext=.ts --watch packages/components",
@@ -14,25 +15,25 @@
         "dev-next": "run-s build-meta dev-next:*",
         "dev-next:watch": "next dev",
         "build": "run-s build:*",
-        "build:tool": "run-s build:tool:*",
-        "build:tool:cli": "ts-node --project tsconfig.cli.json packages/build/cli.ts",
-        "build:tool:images": "if [[ $(node -v) =~ \"v18\" ]]; then node --no-experimental-fetch .output/build/images.mjs; else node .output/build/images.mjs; fi",
+        "build:cli": "node cli/build-cli.mjs",
+        "build:images": "if [[ $(node -v) =~ \"v18\" ]]; then node --no-experimental-fetch cli/build-images.mjs; else node cli/build-images.mjs; fi",
         "build:css": "esifycss --css=pages/app.css --ext=.ts packages/components",
         "build:next": "next build",
-        "build-meta": "run-s build:tool build-meta:*",
-        "build-meta:pageList": "node .output/build/pageList.mjs",
+        "build-meta": "run-s build:cli build-meta:*",
+        "build-meta:pageList": "node cli/build-pagelist.mjs",
         "build-meta:pageImages": "node .output/build/pageImages.mjs",
-        "build-meta:sitemap": "node .output/build/sitemap.mjs",
-        "build-meta:feed": "node .output/build/feed.mjs",
         "start": "NODE_ENV=production ts-node --project tsconfig.cli.json server.ts",
         "lint": "run-s lint:*",
         "lint:next": "next lint",
-        "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs pages packages server.ts"
+        "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs pages packages cli server.ts *.mjs"
     },
     "dependencies": {
-        "@gjbkz/gojabako.zone-markdown-component-loader-cjs": "0.1.2",
-        "@gjbkz/gojabako.zone-markdown-page-loader-cjs": "0.1.2",
-        "@gjbkz/gojabako.zone-markdown-util": "0.1.2",
+        "@gjbkz/gojabako.zone-build-images": "0.1.9",
+        "@gjbkz/gojabako.zone-build-pagelist": "0.1.9",
+        "@gjbkz/gojabako.zone-markdown-component-loader-cjs": "0.1.9",
+        "@gjbkz/gojabako.zone-markdown-page-loader-cjs": "0.1.9",
+        "@gjbkz/gojabako.zone-markdown-util": "0.1.9",
+        "@gjbkz/gojabako.zone-node-util": "0.1.9",
         "@nlib/typing": "0.5.7",
         "jose": "4.9.2",
         "next": "12.2.5",
@@ -43,8 +44,9 @@
         "ts-node": "10.9.1"
     },
     "devDependencies": {
-        "@gjbkz/gojabako.zone-markdown-parser": "0.1.2",
-        "@nlib/eslint-config": "3.19.4",
+        "@gjbkz/gojabako.zone-kuromoji": "0.1.9",
+        "@gjbkz/gojabako.zone-markdown-parser": "0.1.9",
+        "@nlib/eslint-config": "3.19.5",
         "@nlib/githooks": "0.1.0",
         "@nlib/lint-commit": "0.2.0",
         "@squoosh/lib": "0.4.1",
@@ -63,11 +65,11 @@
         "eslint-import-resolver-typescript": "3.5.0",
         "eslint-plugin-jest": "26.9.0",
         "jest": "28.1.3",
-        "kuromoji": "0.1.2",
         "lint-staged": "13.0.3",
         "npm-run-all": "4.1.5",
         "stackblur-canvas": "2.5.0",
-        "ts-jest": "28.0.8"
+        "ts-jest": "28.0.8",
+        "ts-prune": "0.10.3"
     },
     "browserslist": [
         ">10%"
@@ -122,16 +124,7 @@
                     "jest/globals": true
                 },
                 "rules": {
-                    "max-lines-per-function": "off",
-                    "@nlib/no-globals": "off"
-                }
-            },
-            {
-                "files": [
-                    "next.config.mjs"
-                ],
-                "rules": {
-                    "@nlib/no-globals": "off"
+                    "max-lines-per-function": "off"
                 }
             },
             {

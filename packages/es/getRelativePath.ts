@@ -1,5 +1,3 @@
-import {Math} from './global';
-
 export const getRelativePath = (
     from: string,
     to: string,

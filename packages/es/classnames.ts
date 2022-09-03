@@ -1,5 +1,3 @@
-import {Array} from './global';
-
 type ClassNameEntry = Array<ClassNameEntry> | string | false | null | undefined;
 
 export const classnames = (...args: Array<ClassNameEntry>) => [...list(args)].join(' ');

@@ -1,10 +1,20 @@
 import {useEffect, useState} from 'react';
-import {cancelAnimationFrame, devicePixelRatio, requestAnimationFrame, screen} from '../../../dom/global';
-import {globalThis, Math} from '../../../es/global';
+import {isBrowser} from '../../../es/isBrowser';
 import {useElementRect} from '../../../hooks/useElementRect';
 import {useElementSize} from '../../../hooks/useElementSize';
 import {useViewPortOffset} from '../../../hooks/useViewPortOffset';
 import {className} from './style.module.css';
+
+const screen = globalThis.screen as Screen & {
+    availLeft?: number,
+    availTop?: number,
+};
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+if (isBrowser && !screen.orientation) {
+    Object.defineProperty(screen, 'orientation', {
+        value: {type: 'N/A', angle: 0},
+    });
+}
 
 export const ScreenInspector = () => {
     const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);

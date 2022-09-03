@@ -1,5 +1,3 @@
-import {Object} from './global';
-
 export const nullaryCache = <T>(fn: () => T) => {
     let cached: {value: T} | null = null;
     const clearCache = () => {

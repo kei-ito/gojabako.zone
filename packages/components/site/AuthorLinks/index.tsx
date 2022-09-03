@@ -1,4 +1,4 @@
-import {authorGitHub, authorTwitter} from '../../../site/constants';
+import {authorGitHub, authorTwitter} from '../../../../site.mjs';
 import {HiddenText} from '../../ui/HiddenText';
 import {IconGitHub, IconTwitter} from '../../ui/Icon';
 import {className} from './style.module.css';
