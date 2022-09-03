@@ -2,8 +2,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as postcss from 'postcss';
 import sass from 'sass';
+import type {Resolved} from '@nlib/typing';
 import {nullaryCache} from '../es/cache';
-import type {Resolved} from '../es/type';
 import {pagesDirectory} from '../../paths.mjs';
 
 export const getSiteCSS = nullaryCache(async () => {

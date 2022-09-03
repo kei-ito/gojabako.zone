@@ -129,9 +129,7 @@ const drawRoundedRect = (
     h: number,
     r: number,
 ) => {
-    const arc = () => {
-        ctx.arcTo(0, 0, 0, r, r);
-    };
+    const arc = () => ctx.arcTo(0, 0, 0, r, r);
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(x + w / 2, y);
