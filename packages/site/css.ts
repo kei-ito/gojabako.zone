@@ -5,10 +5,10 @@ import sass from 'sass';
 import {nullaryCache} from '../es/cache';
 import {Error, Map} from '../es/global';
 import type {Resolved} from '../es/type';
-import {rootDirectoryPath} from '../fs/constants';
+import {pagesDirectory} from '../../paths.mjs';
 
 export const getSiteCSS = nullaryCache(async () => {
-    const cssFilePath = path.join(rootDirectoryPath, 'pages/globals.scss');
+    const cssFilePath = path.join(pagesDirectory, 'globals.scss');
     const css = await fs.promises.readFile(cssFilePath, 'utf8');
     const compiled = await sass.compileStringAsync(css);
     return postcss.parse(compiled.css);

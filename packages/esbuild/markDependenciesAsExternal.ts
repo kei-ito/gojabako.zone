@@ -1,11 +1,17 @@
+import * as fs from 'fs';
+import {join} from 'path';
 import {builtinModules} from 'module';
 import type * as esbuild from 'esbuild';
 import {Error, JSON, Object, Set} from '../es/global';
-import {packageJson} from '../fs/constants';
+import {rootDirectory} from '../../paths.mjs';
 
 export const markDependenciesAsExternal = (
     {includeDev}: {includeDev?: boolean} = {includeDev: false},
 ): esbuild.Plugin => {
+    const packageJson = JSON.parse(fs.readFileSync(join(rootDirectory, 'package.json'), 'utf8')) as {
+        dependencies: Record<string, string>,
+        devDependencies: Record<string, string>,
+    };
     const externalModuleNames = new Set([
         ...builtinModules,
         ...Object.keys(packageJson.dependencies),

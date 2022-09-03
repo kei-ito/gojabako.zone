@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as process from 'process';
+import {rootDirectory} from '../../paths.mjs';
 import {JSON} from '../es/global';
-import {rootDirectoryPath} from '../fs/constants';
 import {runScript} from '../node/runScript';
 import type {PageImageData} from '../page/generatePageImage';
 import {generatePageImage} from '../page/generatePageImage';
@@ -27,6 +27,6 @@ export interface PageImageData {
 }
 export const pageImages: Record<string, PageImageData | undefined> = ${JSON.stringify(pageImages, null, 4)};
 `.trimStart();
-    const dest = path.join(rootDirectoryPath, 'packages/site/pageImageList.ts');
+    const dest = path.join(rootDirectory, 'packages/site/pageImageList.ts');
     await fs.promises.writeFile(dest, code);
 });

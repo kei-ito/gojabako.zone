@@ -2,17 +2,17 @@ import * as console from 'console';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as esbuild from 'esbuild';
+import {rootDirectory} from '../../paths.mjs';
 import {markDependenciesAsExternal} from '../esbuild/markDependenciesAsExternal';
-import {rootDirectoryPath} from '../fs/constants';
 import {runScript} from '../node/runScript';
 
 runScript(async () => {
-    const buildDirectoryPath = path.join(rootDirectoryPath, 'packages/build');
+    const buildDirectoryPath = path.join(rootDirectory, 'packages/build');
     for (const name of await fs.promises.readdir(buildDirectoryPath)) {
         if (name !== 'cli.ts' && name.endsWith('.ts')) {
             await esbuild.build({
                 entryPoints: [path.join(buildDirectoryPath, name)],
-                outfile: path.join(rootDirectoryPath, `.output/build/${name.slice(0, -3)}.mjs`),
+                outfile: path.join(rootDirectory, `.output/build/${name.slice(0, -3)}.mjs`),
                 plugins: [markDependenciesAsExternal({includeDev: true})],
                 bundle: true,
                 target: 'esnext',
