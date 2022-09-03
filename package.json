@@ -124,16 +124,7 @@
                     "jest/globals": true
                 },
                 "rules": {
-                    "max-lines-per-function": "off",
-                    "@nlib/no-globals": "off"
-                }
-            },
-            {
-                "files": [
-                    "next.config.mjs"
-                ],
-                "rules": {
-                    "@nlib/no-globals": "off"
+                    "max-lines-per-function": "off"
                 }
             },
             {

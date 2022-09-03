@@ -14,7 +14,7 @@ export const getTwitterSDK = async (): Promise<TwitterSDK> => {
 };
 
 const load = async (): Promise<TwitterSDK> => {
-    // eslint-disable-next-line @nlib/no-globals, no-undef, @typescript-eslint/no-unnecessary-condition
+    // eslint-disable-next-line no-undef, @typescript-eslint/no-unnecessary-condition
     const g = globalThis || {};
     if (!('document' in g)) {
         return {widgets: {load: () => null}};
