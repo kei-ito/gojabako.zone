@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import {ignoreENOENT} from './ignoreENOENT';
+import {ignoreENOENT} from '@gjbkz/gojabako.zone-node-util';
 
 export const statOrNull = async (...args: Parameters<typeof fs.promises.stat>) => {
     return await fs.promises.stat(...args).catch(ignoreENOENT);
