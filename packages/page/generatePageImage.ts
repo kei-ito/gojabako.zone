@@ -1,4 +1,4 @@
-import * as fs from 'fs';
+import * as fs from 'fs/promises';
 import * as path from 'path';
 import * as console from 'console';
 import {Buffer} from 'buffer';
@@ -6,13 +6,12 @@ import * as nodeCanvas from 'canvas';
 import type {CanvasRenderingContext2D} from 'canvas';
 import * as stackBlur from 'stackblur-canvas';
 import type {PageMetaData} from '@gjbkz/gojabako.zone-build-pagelist';
-import {getHash, rmrf} from '@gjbkz/gojabako.zone-node-util';
+import {getTokenizer, listPhrases} from '@gjbkz/gojabako.zone-kuromoji';
+import {getHash, ignoreENOENT, rmrf} from '@gjbkz/gojabako.zone-node-util';
 import {nullaryCache} from '../es/cache';
-import {coverImagesDirectory, publicDirectory} from '../../paths.mjs';
-import {listPhrases} from '../kuromoji/listPhrases';
+import {coverImagesDirectory, publicDirectory, rootDirectory} from '../../paths.mjs';
 import {siteDomain} from '../../site.mjs';
 import {getSiteColors} from '../site/css';
-import {statOrNull} from '../fs/statOrNull';
 
 const setupFont = nullaryCache(() => {
     nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD角ゴ StdN W4.otf', {family: 'HiraginoW4'});
@@ -68,9 +67,9 @@ export const generatePageImage = async (page: PageMetaData): Promise<PageImageDa
 const generate = async (page: PageMetaData) => {
     const pathDirectory = path.join(coverImagesDirectory, getHash(page.pathname).toString('base64url').slice(0, 8));
     const versionDirectory = path.join(pathDirectory, getHash(JSON.stringify({page, version})).toString('base64url').slice(0, 8));
-    const stats = await statOrNull(versionDirectory);
+    const stats = await fs.stat(versionDirectory).catch(ignoreENOENT);
     if (stats && stats.isDirectory()) {
-        const names = await fs.promises.readdir(versionDirectory);
+        const names = await fs.readdir(versionDirectory);
         if (names.length === 1) {
             return path.join(versionDirectory, names[0]);
         }
@@ -79,8 +78,8 @@ const generate = async (page: PageMetaData) => {
     const canvas = await draw(page);
     const buffer = await getPNGBuffer(canvas);
     const dest = path.join(versionDirectory, `${getHash(buffer).toString('base64url').slice(0, 8)}.png`);
-    await fs.promises.mkdir(path.dirname(dest), {recursive: true});
-    await fs.promises.writeFile(dest, buffer);
+    await fs.mkdir(path.dirname(dest), {recursive: true});
+    await fs.writeFile(dest, buffer);
     console.info(`generated: ${path.relative(publicDirectory, dest)} (${page.pathname})`);
     return dest;
 };
@@ -226,6 +225,7 @@ const drawTitle = async (
     }
 };
 
+const tokenizerPromise = getTokenizer(rootDirectory);
 const listTitleLines = async function* (
     ctx: CanvasRenderingContext2D,
     source: string,
@@ -233,7 +233,8 @@ const listTitleLines = async function* (
 ) {
     let buffer = '';
     let lineCount = 0;
-    for await (const phrase of listPhrases(source)) {
+    const tokenizer = await tokenizerPromise;
+    for await (const phrase of listPhrases(tokenizer, source)) {
         const line = `${buffer}${phrase}`.trim();
         const result = ctx.measureText(line);
         let maxLineWidth = cardContent.width;

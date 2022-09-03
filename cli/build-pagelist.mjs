@@ -16,8 +16,8 @@ const writeToFile = async (dest, serializer) => {
         writer.write(`${line}\n`);
     }
     writer.end();
-
 };
+/** TODO: skip on CI */
 const list = await getPageList({rootDirectory, pagesDirectory});
 const {pageListByPublishedAt} = list;
 const pageListByUpdatedAt = list.toListByUpdatedAt.map((i) => pageListByPublishedAt[i]);
