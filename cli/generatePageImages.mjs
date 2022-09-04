@@ -2,7 +2,7 @@
 import * as fs from 'fs/promises';
 import * as path from 'path';
 import * as console from 'console';
-import * as sass from 'sass';
+import sass from 'sass';
 import * as postcss from 'postcss';
 import * as nodeCanvas from 'canvas';
 import * as stackBlur from 'stackblur-canvas';
