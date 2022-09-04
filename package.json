@@ -15,16 +15,16 @@
         "dev": "run-s build-meta dev:*",
         "dev:watch": "run-p dev:watch:*",
         "dev:watch:css": "esifycss --css=src/app.css --ext=.ts --watch src/components",
-        "dev:watch:next": "ts-node --project tsconfig.server.json server.ts",
+        "dev:watch:next": "node server.mjs",
         "dev-next": "run-s build-meta dev-next:*",
         "dev-next:watch": "next dev",
         "build": "run-s build-meta build:*",
         "build:css": "esifycss --css=src/app.css --ext=.ts src/components",
         "build:next": "next build",
-        "start": "NODE_ENV=production ts-node --project tsconfig.server.json server.ts",
+        "start": "NODE_ENV=production node server.mjs",
         "lint": "run-s lint:*",
         "lint:next": "next lint",
-        "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs src cli server.ts *.mjs"
+        "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs src cli *.mjs"
     },
     "dependencies": {
         "@gjbkz/gojabako.zone-build-images": "0.1.12",
@@ -39,8 +39,7 @@
         "postcss": "8.4.16",
         "react": "18.2.0",
         "react-dom": "18.2.0",
-        "sass": "1.54.5",
-        "ts-node": "10.9.1"
+        "sass": "1.54.5"
     },
     "devDependencies": {
         "@gjbkz/gojabako.zone-kuromoji": "0.1.12",

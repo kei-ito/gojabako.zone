@@ -1,3 +1,4 @@
+// @ts-check
 import * as console from 'console';
 import * as fs from 'fs';
 import * as http from 'http';
@@ -5,7 +6,6 @@ import * as https from 'https';
 import * as process from 'process';
 import * as url from 'url';
 import next from 'next';
-import {onError} from './src/util/onError';
 
 const config = {
     noHttps: process.argv.includes('--http'),
@@ -22,7 +22,7 @@ const {rootUrl, server} = config.noHttps ? {
         cert: fs.readFileSync(`certificates/${config.hostname}/fullchain.pem`),
     }),
 };
-const parseUrl = (requestPath = '/'): url.UrlWithParsedQuery & {pathname: string} => {
+const parseUrl = (requestPath = '/') => {
     const parsedUrl = url.parse(new URL(requestPath, rootUrl).href, true);
     return {
         ...parsedUrl,
@@ -36,20 +36,25 @@ const app = next({
     hostname: config.hostname,
     port: config.port,
 });
-app.prepare().then(() => {
-    const handleRequest = app.getRequestHandler();
-    const onRequest = (req: http.IncomingMessage, res: http.ServerResponse) => {
-        const parsedUrl = parseUrl(req.url);
-        if (!parsedUrl.pathname.startsWith('/_')) {
-            console.info(`${req.method} ${req.url}`);
-        }
-        handleRequest(req, res, parsedUrl).catch(onError);
-    };
-    server.once('error', onError);
-    server.once('listening', () => console.info(`> Ready on ${rootUrl.href}`));
-    server.on('request', onRequest);
-    server.listen(config.port);
-}).catch((error: unknown) => {
-    onError(error);
+await app.prepare();
+const handleRequest = app.getRequestHandler();
+/**
+ * @param {http.IncomingMessage} req
+ * @param {http.ServerResponse} res
+ */
+const onRequest = (req, res) => {
+    const parsedUrl = parseUrl(req.url);
+    if (!parsedUrl.pathname.startsWith('/_')) {
+        console.info(`${req.method} ${req.url}`);
+    }
+    handleRequest(req, res, parsedUrl).catch((error) => {
+        console.error(error);
+    });
+};
+server.once('error', (error) => {
+    console.error(error);
     process.exit(1);
 });
+server.once('listening', () => console.info(`> Ready on ${rootUrl.href}`));
+server.on('request', onRequest);
+server.listen(config.port);

@@ -10,11 +10,11 @@
 ._7{font-size:115%;line-height:1}
 ._8{block-size:1rem;fill:currentColor}
 @media (max-width: 280px){._8{display:none}}
-._9{display:grid;grid-auto-flow:row;row-gap:0.2rem}
-._a{display:block;font-size:80%}
-._b{justify-self:start;display:flex;flex-wrap:wrap;align-items:baseline;text-decoration-line:none;color:currentColor}
-._b:hover{text-decoration-line:underline}
-._c{white-space:nowrap;font-size:80%;opacity:0.6}
+._9{justify-self:start;display:flex;flex-wrap:wrap;align-items:baseline;text-decoration-line:none;color:currentColor}
+._9:hover{text-decoration-line:underline}
+._a{white-space:nowrap;font-size:80%;opacity:0.6}
+._b{display:grid;grid-auto-flow:row;row-gap:0.2rem}
+._c{display:block;font-size:80%}
 ._d{position:sticky;inset-block-start:100%;display:grid;grid-auto-flow:row;justify-content:stretch;padding-block-start:1rem;background-color:var(--gray2);border-block-start:solid 1px var(--gray3)}
 ._e{display:grid;grid-template-columns:1fr repeat(2, auto);grid-auto-flow:column;column-gap:0.5rem;justify-items:end;align-items:center;padding-block-start:1rem;padding-block-end:1rem}
 ._f{display:grid;grid-auto-flow:column;column-gap:0.2em;align-items:center;color:inherit;text-decoration:none}
