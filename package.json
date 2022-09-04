@@ -68,7 +68,7 @@
     ],
     "jest": {
         "roots": [
-            "<rootDir>/packages"
+            "<rootDir>/src"
         ],
         "moduleFileExtensions": [
             "cjs",
