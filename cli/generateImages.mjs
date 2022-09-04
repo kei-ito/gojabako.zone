@@ -33,6 +33,7 @@ const listImageFiles = async function* () {
 await buildImages({
     imageFiles: listImageFiles(),
     rootDirectory,
+    pagesDirectory,
     publicDirectory,
     processedImageDirectory,
 });
