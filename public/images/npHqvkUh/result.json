@@ -1,0 +1,33 @@
+{
+    "version": 1,
+    "source": {
+        "path": "/public/apple-touch-icon.png",
+        "hash": "2lX_FZ9SoBAHYIwuiBUsMjiDhP1g49ZG8gRdYsWe5mQ",
+        "width": 180,
+        "height": 180,
+        "size": 1124
+    },
+    "results": [
+        {
+            "path": "/images/npHqvkUh/w180.0vk0XSHh.webp",
+            "hash": "0vk0XSHhDAlnhGygS8l6aodzE007YbWBRra7dDKg1FY",
+            "width": 180,
+            "height": 180,
+            "size": 418
+        },
+        {
+            "path": "/images/npHqvkUh/w180.xvYastfh.png",
+            "hash": "xvYastfhr3VcWtwOWXz-IsbHudzwK2gcAWJ55F_ESXM",
+            "width": 180,
+            "height": 180,
+            "size": 800
+        },
+        {
+            "path": "/images/npHqvkUh/w180._gLEN-CW.avif",
+            "hash": "_gLEN-CWvBVv-VTeTu2IBoy_t6hBb6-TB5ugWy0yWIY",
+            "width": 180,
+            "height": 180,
+            "size": 695
+        }
+    ]
+}

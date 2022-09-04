@@ -1,0 +1,33 @@
+{
+    "version": 1,
+    "source": {
+        "path": "/src/pages/2021/au-denki/2021-8.png",
+        "hash": "3xiiC4qpaXLudgHj7lka0GHvCK0CHsMy2AL-kvb3JBA",
+        "width": 640,
+        "height": 500,
+        "size": 6689
+    },
+    "results": [
+        {
+            "path": "/images/eIlxUjwr/w600.9Myjx52i.webp",
+            "hash": "9Myjx52iSTLsjG8NOqnV_Y4ihF2qgvnuNKuDNYD1WCs",
+            "width": 600,
+            "height": 469,
+            "size": 20512
+        },
+        {
+            "path": "/images/eIlxUjwr/w600.AaVxaSa-.png",
+            "hash": "AaVxaSa-R7AHd-uioAu5pHwVOnFpAZE44kkRPvBMqG4",
+            "width": 600,
+            "height": 469,
+            "size": 59835
+        },
+        {
+            "path": "/images/eIlxUjwr/w600.2uNlMPg1.avif",
+            "hash": "2uNlMPg17gkxk7fZUpgb2G7TM3oYcOPYxZy3RtZ_Iwc",
+            "width": 600,
+            "height": 469,
+            "size": 11025
+        }
+    ]
+}

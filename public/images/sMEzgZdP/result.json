@@ -1,0 +1,75 @@
+{
+    "version": 1,
+    "source": {
+        "path": "/public/logo.png",
+        "hash": "-T3VdaktqC1AhIl9U-p8cIYBiW2skJJc83zKzegEFMY",
+        "width": 1080,
+        "height": 1080,
+        "size": 15133
+    },
+    "results": [
+        {
+            "path": "/images/sMEzgZdP/w600.sereW6pT.webp",
+            "hash": "sereW6pT01xWl9xLHEKx3Xth_f-urrMlC2WC9lzhteU",
+            "width": 600,
+            "height": 600,
+            "size": 1296
+        },
+        {
+            "path": "/images/sMEzgZdP/w600.kLNOVOUY.png",
+            "hash": "kLNOVOUY7ENhmqruQKFx2_onl5iG-EPNpDqV7fKIPZo",
+            "width": 600,
+            "height": 600,
+            "size": 4869
+        },
+        {
+            "path": "/images/sMEzgZdP/w600.f584vT9v.avif",
+            "hash": "f584vT9vQn-0pNIcZtfpyanklAQ1UtaLJm1NaIxhWJ0",
+            "width": 600,
+            "height": 600,
+            "size": 928
+        },
+        {
+            "path": "/images/sMEzgZdP/w800.wg7XtCVT.webp",
+            "hash": "wg7XtCVTtQQlC0r4b79N3izc25po53da_30OORTFeMc",
+            "width": 800,
+            "height": 800,
+            "size": 1972
+        },
+        {
+            "path": "/images/sMEzgZdP/w800.3xtlCx3f.avif",
+            "hash": "3xtlCx3fHrGfDh3-VJUvLzlvxtv55-UkK_w2UoD7gJg",
+            "width": 800,
+            "height": 800,
+            "size": 1107
+        },
+        {
+            "path": "/images/sMEzgZdP/w800.qUwU0zq9.png",
+            "hash": "qUwU0zq9uoxQc90YCnVEI1g-UHaXmv8CcdxGzXZA8ME",
+            "width": 800,
+            "height": 800,
+            "size": 9788
+        },
+        {
+            "path": "/images/sMEzgZdP/w1000.SWG0SEwB.webp",
+            "hash": "SWG0SEwBqNu9_0lSAWLRMvbXtFwUQ5rm3LDPbDj-aFU",
+            "width": 1000,
+            "height": 1000,
+            "size": 2822
+        },
+        {
+            "path": "/images/sMEzgZdP/w1000.jDTWGQbd.avif",
+            "hash": "jDTWGQbdHjLLGm7Xf-vdjmwnEbg7LoHI9XZUTpBb-tg",
+            "width": 1000,
+            "height": 1000,
+            "size": 1293
+        },
+        {
+            "path": "/images/sMEzgZdP/w1000.X8npfxPa.png",
+            "hash": "X8npfxPaZVUo8BJr7W2RUeeHAorG2h0HTl-eUOEJJw4",
+            "width": 1000,
+            "height": 1000,
+            "size": 12854
+        }
+    ]
+}
