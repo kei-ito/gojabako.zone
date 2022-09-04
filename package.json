@@ -15,7 +15,7 @@
         "dev": "run-s build-meta dev:*",
         "dev:watch": "run-p dev:watch:*",
         "dev:watch:css": "esifycss --css=pages/app.css --ext=.ts --watch packages/components",
-        "dev:watch:next": "ts-node --project tsconfig.cli.json server.ts",
+        "dev:watch:next": "ts-node --project tsconfig.server.json server.ts",
         "dev-next": "run-s build-meta dev-next:*",
         "dev-next:watch": "next dev",
         "build": "run-s build:*",
