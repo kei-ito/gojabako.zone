@@ -1,5 +1,5 @@
-import type {PageData} from './pageList';
-import {pageListByPublishedAt} from './pageList';
+import type {PageData} from '../../generated.pageList.mjs';
+import {pageListByPublishedAt} from '../../generated.pageList.mjs';
 
 const blogPost = new Map<string, Array<PageData>>();
 const others: Array<PageData> = [];

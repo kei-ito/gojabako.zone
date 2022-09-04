@@ -3,7 +3,7 @@ import type {PropsWithChildren} from 'react';
 import {authorName, siteDomain, siteName} from '../../../../site.mjs';
 import {meta} from '../../meta';
 import {usePageData} from '../../../hooks/usePageData';
-import {pageImages} from '../../../site/pageImageList';
+import {pageImages} from '../../../../generated.pageImageList.mjs';
 
 export interface HtmlHeadProps {
     pathname: string,

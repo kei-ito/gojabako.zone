@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
-import {pageListByPublishedAt} from '../site/pageList';
+import {pageListByPublishedAt} from '../../generated.pageList.mjs';
 
 export const usePageData = (pathname: string) => useMemo(() => {
     for (const page of pageListByPublishedAt) {

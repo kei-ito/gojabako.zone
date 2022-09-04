@@ -2,7 +2,7 @@ import Link from 'next/link';
 import {HtmlHead} from '../packages/components/site/HtmlHead';
 import {PageLinkUpdated} from '../packages/components/site/PageLink';
 import {PageTitle} from '../packages/components/site/PageTitle';
-import {pageListByUpdatedAt} from '../packages/site/pageList';
+import {pageListByUpdatedAt} from '../generated.pageList.mjs';
 import {authorName} from '../site.mjs';
 
 export const Page = () => <>
