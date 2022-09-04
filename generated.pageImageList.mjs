@@ -5,102 +5,102 @@
 /** @type {Record<string, PageImageData | undefined>} */
 export const pageImages = {
     "/2022/dpop": {
-        "path": "/covers/_Pg6tsq3/o-BQfC-6/9V1R2U3W.png",
+        "path": "/covers/_Pg6tsq3/BhXNCwiY/FlxZgRJk.png",
         "width": 1200,
         "height": 630
     },
     "/2022/disabled-form-element": {
-        "path": "/covers/e0AM0qUs/G2qA5-lm/3DVdyi0B.png",
+        "path": "/covers/e0AM0qUs/kc401tjh/dtMn8SB6.png",
         "width": 1200,
         "height": 630
     },
     "/2022/ag06modification": {
-        "path": "/covers/K5RZHYom/Eav215Jt/Axy5H5eE.png",
+        "path": "/covers/K5RZHYom/KYyKASBG/VXHn7jKC.png",
         "width": 1200,
         "height": 630
     },
     "/app/device": {
-        "path": "/covers/6bAdtvDW/hHlquzWP/ZS5LXg7i.png",
+        "path": "/covers/6bAdtvDW/UbSPeDJy/jN6TByRS.png",
         "width": 1200,
         "height": 630
     },
     "/2022/iphone12": {
-        "path": "/covers/C4al8FNS/OgUQa2uV/AUwFRktc.png",
+        "path": "/covers/C4al8FNS/_i3D8Gk2/j45zw2vp.png",
         "width": 1200,
         "height": 630
     },
     "/2022/page-images": {
-        "path": "/covers/yEbsLghZ/HKgrlApT/stHHzjYM.png",
+        "path": "/covers/yEbsLghZ/AorUp1q2/ZFEncRL0.png",
         "width": 1200,
         "height": 630
     },
     "/2022/image-preprocessor": {
-        "path": "/covers/foR4ezoK/TfEzqYW1/UH23krEg.png",
+        "path": "/covers/foR4ezoK/Ui9LMJwa/ixMb213s.png",
         "width": 1200,
         "height": 630
     },
     "/2021/aws-errors": {
-        "path": "/covers/TzRZIKCA/Z-N3RtTJ/91PQjDQZ.png",
+        "path": "/covers/TzRZIKCA/Mjj4Jq-6/Vhj8Qwb8.png",
         "width": 1200,
         "height": 630
     },
     "/2021/ipad-case": {
-        "path": "/covers/3pChiagg/uuVJ1CuV/BUjcQVeJ.png",
+        "path": "/covers/3pChiagg/upPmtBN_/BaabI8pW.png",
         "width": 1200,
         "height": 630
     },
     "/2021/au-denki": {
-        "path": "/covers/9cPn0k2Z/GfvlcLRo/qm6DbgRG.png",
+        "path": "/covers/9cPn0k2Z/8tSJaHhh/E9sbCOqV.png",
         "width": 1200,
         "height": 630
     },
     "/2021/nextjs12": {
-        "path": "/covers/FqWvXwk8/P_qJRdsd/RFIcW8w4.png",
+        "path": "/covers/FqWvXwk8/gVV-34WN/FhDPD2EU.png",
         "width": 1200,
         "height": 630
     },
     "/author": {
-        "path": "/covers/2NbUOuVG/lilQEwoe/Pq07fQrT.png",
+        "path": "/covers/2NbUOuVG/6vPBcZ2D/hhr9OpY6.png",
         "width": 1200,
         "height": 630
     },
     "/2021/nextjs-https": {
-        "path": "/covers/ZX-cXk49/GgDLuVFz/IqM0--0b.png",
+        "path": "/covers/ZX-cXk49/C3X1fPb2/2V_OFHoM.png",
         "width": 1200,
         "height": 630
     },
     "/2021/nextjs": {
-        "path": "/covers/s373Le5-/-0YyBPEx/4TxZivlU.png",
+        "path": "/covers/s373Le5-/lF-WiIoC/7KmGmwYR.png",
         "width": 1200,
         "height": 630
     },
     "/markdown": {
-        "path": "/covers/tiihd--T/77c8jd7p/eI0t1rWh.png",
+        "path": "/covers/tiihd--T/9ju6n2Vr/mudPj8w7.png",
         "width": 1200,
         "height": 630
     },
     "": {
-        "path": "/covers/47DEQpj8/lBCEAquS/qz7PX5s-.png",
+        "path": "/covers/47DEQpj8/2p734ci-/qz7PX5s-.png",
         "width": 1200,
         "height": 630
     },
     "/2020/new-computer": {
-        "path": "/covers/-AL1gWae/A72tSTzY/3g8Yv8UV.png",
+        "path": "/covers/-AL1gWae/A-GaKOea/m3bZ11I5.png",
         "width": 1200,
         "height": 630
     },
     "/2019/gitlab-runner": {
-        "path": "/covers/TmSvdGod/aT7U2gYf/w2OtiiQV.png",
+        "path": "/covers/TmSvdGod/S1H5s71_/pPXJEC2n.png",
         "width": 1200,
         "height": 630
     },
     "/2019/error-propagation": {
-        "path": "/covers/SWD-1E4N/NH3QWbf8/VGuJD87d.png",
+        "path": "/covers/SWD-1E4N/ubQ2X2no/f002DmnJ.png",
         "width": 1200,
         "height": 630
     },
     "/2018/monitor-stand": {
-        "path": "/covers/M6w8jGfI/8goLu9RL/7--0uiKI.png",
+        "path": "/covers/M6w8jGfI/7RogGiqL/iwhgN92v.png",
         "width": 1200,
         "height": 630
     }

@@ -1,0 +1,33 @@
+{
+    "version": 1,
+    "source": {
+        "path": "/src/pages/2018/monitor-stand/rail.jpg",
+        "hash": "K0fdkiWlqMHJ44J2dV9P4WDYmbquijQ3FZwy-itEBc4",
+        "width": 604,
+        "height": 410,
+        "size": 39803
+    },
+    "results": [
+        {
+            "path": "/images/KNNzmB3L/w600.bmiUBxc0.jpg",
+            "hash": "bmiUBxc0XIZ8684YPpC6O8ioCn92rI1d5n4sKRWWCSk",
+            "width": 600,
+            "height": 407,
+            "size": 14612
+        },
+        {
+            "path": "/images/KNNzmB3L/w600.MlETK6jH.webp",
+            "hash": "MlETK6jHULe2rxVh9r03ts1PtcLmZPwS1TwmT_f1FTw",
+            "width": 600,
+            "height": 407,
+            "size": 9694
+        },
+        {
+            "path": "/images/KNNzmB3L/w600.FkupCs_Z.avif",
+            "hash": "FkupCs_ZyBpLKIFkfvMB-HEAQU4OTMQnhAoSVlaHE-A",
+            "width": 600,
+            "height": 407,
+            "size": 5558
+        }
+    ]
+}

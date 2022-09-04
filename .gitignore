@@ -38,8 +38,7 @@ yarn-error.log*
 tsconfig.tsbuildinfo
 
 # CSS
-*.css.ts
-pages/app.css
+*.scss.d.ts
 
 next-env.d.ts
 *.component.tsx

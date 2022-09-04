@@ -1,0 +1,117 @@
+{
+    "version": 1,
+    "source": {
+        "path": "/src/pages/2022/ag06modification/attach.jpg",
+        "hash": "JjeBnuXRhY-qpK347k83rmwenYqJreMQHNCYKgrkDhY",
+        "width": 1600,
+        "height": 1200,
+        "size": 464487
+    },
+    "results": [
+        {
+            "path": "/images/jl_IQOum/w600.x7qQt-zC.jpg",
+            "hash": "x7qQt-zCVk9DEYe-lurHwssBpA7VILazx_K3so6UQy0",
+            "width": 600,
+            "height": 450,
+            "size": 20714
+        },
+        {
+            "path": "/images/jl_IQOum/w600.0DsC-Dro.webp",
+            "hash": "0DsC-DroEvNfDfKk_kDtmG90eUzHoTXFfADzryNm07U",
+            "width": 600,
+            "height": 450,
+            "size": 13602
+        },
+        {
+            "path": "/images/jl_IQOum/w600.-NwvS0lB.avif",
+            "hash": "-NwvS0lBS_gjyHLfpmm-m4GCxZphJvPq1_DCV0yGaAY",
+            "width": 600,
+            "height": 450,
+            "size": 8481
+        },
+        {
+            "path": "/images/jl_IQOum/w800.Md6hW9Nz.jpg",
+            "hash": "Md6hW9NzdnBhvrr33boYOXmuNKmTsqGd7LEIe9DibkU",
+            "width": 800,
+            "height": 600,
+            "size": 30549
+        },
+        {
+            "path": "/images/jl_IQOum/w800.DXJ1-FFb.webp",
+            "hash": "DXJ1-FFbefwhLpiRwQDho2AUCBao_fjJV6MMRXwMjQk",
+            "width": 800,
+            "height": 600,
+            "size": 19866
+        },
+        {
+            "path": "/images/jl_IQOum/w800.MHo5rqNy.avif",
+            "hash": "MHo5rqNylo4GplGOBxQsvDm7xADBY-vu6oeYYPhCQ1w",
+            "width": 800,
+            "height": 600,
+            "size": 11795
+        },
+        {
+            "path": "/images/jl_IQOum/w1000.8AKwN2vD.jpg",
+            "hash": "8AKwN2vDPssjl8GYSOeMPuDzyRVR7n30d0kxptSzisI",
+            "width": 1000,
+            "height": 750,
+            "size": 42472
+        },
+        {
+            "path": "/images/jl_IQOum/w1000.ViQ-jQpV.webp",
+            "hash": "ViQ-jQpVvF0P3ORbuCJpJW6UlGou77Tvl8e5PFzKClE",
+            "width": 1000,
+            "height": 750,
+            "size": 27022
+        },
+        {
+            "path": "/images/jl_IQOum/w1000.p6X2GoQL.avif",
+            "hash": "p6X2GoQLas6JLR5jWgxtG5uuvRT34W-CUB3J9w292oc",
+            "width": 1000,
+            "height": 750,
+            "size": 15657
+        },
+        {
+            "path": "/images/jl_IQOum/w1200.D4y5wGfJ.jpg",
+            "hash": "D4y5wGfJP9HugrMP_zwdmaDBd-jtx8uJZntv-P1QgGA",
+            "width": 1200,
+            "height": 900,
+            "size": 55964
+        },
+        {
+            "path": "/images/jl_IQOum/w1200.eWHUR-S5.webp",
+            "hash": "eWHUR-S5B5JkOmwNjFfu6nzQ0sdWTfEWY6uhH0rmysg",
+            "width": 1200,
+            "height": 900,
+            "size": 35136
+        },
+        {
+            "path": "/images/jl_IQOum/w1200.ATbXPLXD.avif",
+            "hash": "ATbXPLXDF1Hm_9I9DNwwZHPE0StlOn-8El-LFma28qY",
+            "width": 1200,
+            "height": 900,
+            "size": 19546
+        },
+        {
+            "path": "/images/jl_IQOum/w1500.5qhBgSf3.jpg",
+            "hash": "5qhBgSf31RzqGb4C25vwiIgegnGW7RwOZGZ0wphMHGs",
+            "width": 1500,
+            "height": 1125,
+            "size": 78863
+        },
+        {
+            "path": "/images/jl_IQOum/w1500.DY7YfqbV.webp",
+            "hash": "DY7YfqbVIvKzXZbZnZKoO6DfF9G4ByIU5ZUqYf3e1ow",
+            "width": 1500,
+            "height": 1125,
+            "size": 48080
+        },
+        {
+            "path": "/images/jl_IQOum/w1500.4Zf_2biJ.avif",
+            "hash": "4Zf_2biJNT8X3BAquk-OYYCxeQPucl0HHQtp2vlhyQQ",
+            "width": 1500,
+            "height": 1125,
+            "size": 25665
+        }
+    ]
+}

@@ -3,8 +3,8 @@ import * as path from 'path';
 import * as fs from 'fs';
 import {toJsxSafeString} from '@gjbkz/gojabako.zone-markdown-parser';
 import {getPageList, pageListToJsModule} from '@gjbkz/gojabako.zone-build-pagelist';
-import {siteDomain, siteName} from '../site.mjs';
-import {rootDirectory, pagesDirectory, publicDirectory} from '../paths.mjs';
+import {siteDomain, siteName} from '../config.site.mjs';
+import {rootDirectory, pagesDirectory, publicDirectory} from '../config.paths.mjs';
 
 /**
  * @param {URL | string} dest

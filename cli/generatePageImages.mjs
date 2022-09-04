@@ -4,13 +4,12 @@ import * as path from 'path';
 import * as console from 'console';
 import sass from 'sass';
 import * as postcss from 'postcss';
-import * as nodeCanvas from 'canvas';
 import * as stackBlur from 'stackblur-canvas';
 import {getTokenizer, listPhrases} from '@gjbkz/gojabako.zone-kuromoji';
 import {getHash, ignoreENOENT, rmrf} from '@gjbkz/gojabako.zone-node-util';
 import {ensure, isString} from '@nlib/typing';
-import {coverImagesDirectory, pagesDirectory, publicDirectory, rootDirectory} from '../paths.mjs';
-import {siteDomain} from '../site.mjs';
+import {coverImagesDirectory, publicDirectory, rootDirectory, srcDirectory} from '../config.paths.mjs';
+import {siteDomain} from '../config.site.mjs';
 import {pageListByPublishedAt} from '../generated.pageList.mjs';
 /** @typedef {import('canvas').CanvasRenderingContext2D} CanvasRenderingContext2D */
 /** @typedef {import('canvas').Canvas} NodeCanvas */
@@ -35,7 +34,7 @@ const cache = (fn) => {
 };
 
 const getSiteColors = cache(async () => {
-    const globalScssPath = path.join(pagesDirectory, 'globals.scss');
+    const globalScssPath = path.join(srcDirectory, 'globals.scss');
     const css = await fs.readFile(globalScssPath, 'utf8');
     const compiled = await sass.compileStringAsync(css);
     const root = postcss.parse(compiled.css);
@@ -62,12 +61,6 @@ const getSiteColors = cache(async () => {
         gray8: isString,
         gray9: isString,
     });
-});
-
-const setupFont = cache(() => {
-    nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD角ゴ StdN W4.otf', {family: 'HiraginoW4'});
-    nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD角ゴ StdN W6.otf', {family: 'HiraginoW6'});
-    nodeCanvas.registerFont('/Library/Fonts/ヒラギノ角ゴ StdN W8.otf', {family: 'HiraginoW8'});
 });
 
 /**
@@ -143,7 +136,10 @@ const getPNGBuffer = async (canvas) => {
 
 /** @param {PageMetaData} page */
 const draw = async (page) => {
-    setupFont();
+    const nodeCanvas = await import('canvas');
+    nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD角ゴ StdN W4.otf', {family: 'HiraginoW4'});
+    nodeCanvas.registerFont('/Library/Fonts/ヒラギノUD角ゴ StdN W6.otf', {family: 'HiraginoW6'});
+    nodeCanvas.registerFont('/Library/Fonts/ヒラギノ角ゴ StdN W8.otf', {family: 'HiraginoW8'});
     const canvas = nodeCanvas.createCanvas(image.width, image.height);
     const ctx = canvas.getContext('2d');
     await clearCanvas(ctx);
