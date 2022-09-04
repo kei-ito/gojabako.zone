@@ -1,3 +1,4 @@
+// @ts-check
 import * as path from 'path';
 import {buildImages} from '@gjbkz/gojabako.zone-build-images';
 import {listFiles} from '@gjbkz/gojabako.zone-node-util';

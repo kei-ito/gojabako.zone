@@ -1,30 +1,31 @@
-/* eslint-disable no-lone-blocks */
+// @ts-check
 import * as path from 'path';
 import * as fs from 'fs';
 import {toJsxSafeString} from '@gjbkz/gojabako.zone-markdown-parser';
-import {getPageList, pageListToTsModule} from '@gjbkz/gojabako.zone-build-pagelist';
+import {getPageList, pageListToJsModule} from '@gjbkz/gojabako.zone-build-pagelist';
 import {siteDomain, siteName} from '../site.mjs';
 import {rootDirectory, pagesDirectory, publicDirectory} from '../paths.mjs';
 
+/**
+ * @param {URL | string} dest
+ * @param {() => AsyncIterable<string> | Iterable<string>} serializer
+ */
+const writeToFile = async (dest, serializer) => {
+    const writer = fs.createWriteStream(dest);
+    for await (const line of serializer()) {
+        writer.write(`${line}\n`);
+    }
+    writer.end();
+};
+
 if (!process.env.CI) {
-    /**
-     * @param {URL | string} dest
-     * @param {() => AsyncIterable<string> | Iterable<string>} serializer
-     */
-    const writeToFile = async (dest, serializer) => {
-        const writer = fs.createWriteStream(dest);
-        for await (const line of serializer()) {
-            writer.write(`${line}\n`);
-        }
-        writer.end();
-    };
     const list = await getPageList({rootDirectory, pagesDirectory});
     const {pageListByPublishedAt} = list;
     const pageListByUpdatedAt = list.toListByUpdatedAt.map((i) => pageListByPublishedAt[i]);
     await Promise.all([
         fs.promises.writeFile(
-            path.join(rootDirectory, 'packages/site/pageList.ts'),
-            pageListToTsModule(list),
+            path.join(rootDirectory, 'generated.pageList.mjs'),
+            pageListToJsModule(list),
         ),
         writeToFile(path.join(publicDirectory, 'feed.atom'), function* () {
             yield '<?xml version="1.0" encoding="utf-8"?>';
