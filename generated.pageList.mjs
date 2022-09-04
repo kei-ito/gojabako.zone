@@ -130,8 +130,8 @@ export const pageListByPublishedAt = [
         "title": "Gojabako Zone",
         "filePath": "pages/index.tsx",
         "publishedAt": "2021-09-29T00:33:31+09:00",
-        "updatedAt": "2022-09-03T17:58:06+09:00",
-        "commitCount": 25
+        "updatedAt": "2022-09-04T11:11:45+09:00",
+        "commitCount": 26
     },
     {
         "pathname": "/2020/new-computer",

@@ -80,7 +80,7 @@ export const pageImages = {
         "height": 630
     },
     "": {
-        "path": "/covers/47DEQpj8/o3KZagGC/uh7x03gM.png",
+        "path": "/covers/47DEQpj8/lBCEAquS/qz7PX5s-.png",
         "width": 1200,
         "height": 630
     },
