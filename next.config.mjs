@@ -1,11 +1,9 @@
 import * as path from 'path';
-import {fileURLToPath} from 'url';
 import EsifyCSSWebpackPlugin from 'esifycss-webpack-plugin';
+import {srcDirectory, pagesDirectory} from './config.paths.mjs';
 
-const rootDirectory = fileURLToPath(new URL('.', import.meta.url));
-const pagesDirectory = path.join(rootDirectory, 'pages');
 /** @param {string} componentName */
-const getComponentPath = (componentName) => path.join(rootDirectory, 'packages/components', componentName);
+const getComponentPath = (componentName) => path.join(srcDirectory, 'components', componentName);
 
 const nextConfig = {
     swcMinify: true,

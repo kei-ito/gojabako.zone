@@ -5,7 +5,7 @@ import * as https from 'https';
 import * as process from 'process';
 import * as url from 'url';
 import next from 'next';
-import {onError} from './packages/util/onError';
+import {onError} from './src/util/onError';
 
 const config = {
     noHttps: process.argv.includes('--http'),

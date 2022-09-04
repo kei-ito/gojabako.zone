@@ -9,8 +9,8 @@ import * as stackBlur from 'stackblur-canvas';
 import {getTokenizer, listPhrases} from '@gjbkz/gojabako.zone-kuromoji';
 import {getHash, ignoreENOENT, rmrf} from '@gjbkz/gojabako.zone-node-util';
 import {ensure, isString} from '@nlib/typing';
-import {coverImagesDirectory, pagesDirectory, publicDirectory, rootDirectory} from '../paths.mjs';
-import {siteDomain} from '../site.mjs';
+import {coverImagesDirectory, publicDirectory, rootDirectory, srcDirectory} from '../config.paths.mjs';
+import {siteDomain} from '../config.site.mjs';
 import {pageListByPublishedAt} from '../generated.pageList.mjs';
 /** @typedef {import('canvas').CanvasRenderingContext2D} CanvasRenderingContext2D */
 /** @typedef {import('canvas').Canvas} NodeCanvas */
@@ -35,7 +35,7 @@ const cache = (fn) => {
 };
 
 const getSiteColors = cache(async () => {
-    const globalScssPath = path.join(pagesDirectory, 'globals.scss');
+    const globalScssPath = path.join(srcDirectory, 'globals.scss');
     const css = await fs.readFile(globalScssPath, 'utf8');
     const compiled = await sass.compileStringAsync(css);
     const root = postcss.parse(compiled.css);

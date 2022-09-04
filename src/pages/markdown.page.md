@@ -19,7 +19,7 @@ include TSX
 -----------
 
 ```js (import)
-import {Counter} from '../packages/components/site/Counter';
+import {Counter} from '../components/site/Counter';
 ```
 
 ```jsx (include)
@@ -143,7 +143,7 @@ Blockquote
 Image
 -----
 
-![ここはキャプション](../public/logo.png)
+![ここはキャプション](../../public/logo.png)
 
 -------------
 

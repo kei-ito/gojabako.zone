@@ -14,17 +14,17 @@
         "test:deadcode": "ts-prune --ignore \".css.ts|.component.tsx\"",
         "dev": "run-s build-meta dev:*",
         "dev:watch": "run-p dev:watch:*",
-        "dev:watch:css": "esifycss --css=pages/app.css --ext=.ts --watch packages/components",
+        "dev:watch:css": "esifycss --css=src/app.css --ext=.ts --watch src/components",
         "dev:watch:next": "ts-node --project tsconfig.server.json server.ts",
         "dev-next": "run-s build-meta dev-next:*",
         "dev-next:watch": "next dev",
         "build": "run-s build:*",
-        "build:css": "esifycss --css=pages/app.css --ext=.ts packages/components",
+        "build:css": "esifycss --css=src/app.css --ext=.ts src/components",
         "build:next": "next build",
         "start": "NODE_ENV=production ts-node --project tsconfig.server.json server.ts",
         "lint": "run-s lint:*",
         "lint:next": "next lint",
-        "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs pages packages cli server.ts *.mjs"
+        "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs src cli server.ts *.mjs"
     },
     "dependencies": {
         "@gjbkz/gojabako.zone-build-images": "0.1.10",
@@ -104,13 +104,6 @@
             "import/dynamic-import-chunkname": "off",
             "import/no-relative-parent-imports": "off"
         },
-        "settings": {
-            "import/resolver": {
-                "typescript": {
-                    "project": "packages/*/tsconfig.json"
-                }
-            }
-        },
         "overrides": [
             {
                 "files": [
@@ -128,7 +121,7 @@
             },
             {
                 "files": [
-                    "pages/**/*.tsx"
+                    "src/pages/**/*.tsx"
                 ],
                 "rules": {
                     "import/no-default-export": "off",

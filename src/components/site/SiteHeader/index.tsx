@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type {FC} from 'react';
-import {siteName} from '../../../../site.mjs';
+import {siteName} from '../../../../config.site.mjs';
 import {AuthorLinks} from '../AuthorLinks';
 import {Logo} from '../Logo';
 import {className} from './style.module.css';

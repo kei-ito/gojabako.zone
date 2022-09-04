@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import type {PropsWithChildren} from 'react';
-import {authorName, siteDomain, siteName} from '../../../../site.mjs';
+import {authorName, siteDomain, siteName} from '../../../../config.site.mjs';
 import {meta} from '../../meta';
 import {usePageData} from '../../../hooks/usePageData';
 import {pageImages} from '../../../../generated.pageImageList.mjs';
