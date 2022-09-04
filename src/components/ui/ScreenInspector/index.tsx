@@ -56,10 +56,17 @@ const getHtmlElement = () => {
     return null;
 };
 const padding = 32 * 2;
-const getScreenArea = () => ({
-    width: (screen.availLeft || 0) + screen.width,
-    height: (screen.availTop || 0) + screen.height,
-});
+const getScreenArea = () => {
+    let {availLeft: left = 0, availTop: top = 0} = screen;
+    const {width, height} = screen;
+    if (left < 0) {
+        left = width + left;
+    }
+    if (top < 0) {
+        top = height + top;
+    }
+    return {left, top, width, height};
+};
 const draw = (
     ctx: CanvasRenderingContext2D,
     {width: canvasWidth, height: canvasHeight}: {width: number, height: number},
@@ -94,10 +101,10 @@ const draw = (
     ctx.fillStyle = '#94a3b8';
     drawRect(ctx, scale, 0, 0, screen.width, screen.height);
     ctx.fillStyle = '#ffffff';
-    drawRect(ctx, scale, screen.availLeft || 0, screen.availTop || 0, screen.availWidth, screen.availHeight);
+    drawRect(ctx, scale, 0, screenArea.top, screen.availWidth, screen.availHeight);
     ctx.fillStyle = '#cbd5e1';
-    const sx = globalThis.screenLeft || globalThis.screenX;
-    const sy = globalThis.screenTop || globalThis.screenY;
+    const sx = (globalThis.screenLeft || globalThis.screenX) - (screen.availLeft || 0);
+    const sy = (globalThis.screenTop || globalThis.screenY) + (screenArea.top - (screen.availTop || 0));
     drawRect(ctx, scale, sx, sy, globalThis.outerWidth, globalThis.outerHeight);
     ctx.translate(sx, sy);
     ctx.fillStyle = '#f1f5f9';
