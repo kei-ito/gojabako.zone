@@ -1,8 +1,8 @@
 import type {PropsWithChildren} from 'react';
 import {useEffect, useRef} from 'react';
-import {isHTMLElement} from '../../../dom/isHTMLElement';
-import {onError} from '../../../es/onError';
-import {getTwitterSDK} from '../../../dom/getTwitterSDK';
+import {getTwitterSDK} from '../../../util/dom/getTwitterSDK';
+import {isHTMLElement} from '../../../util/isHTMLElement';
+import {onError} from '../../../util/onError';
 import {className} from './style.module.css';
 
 interface EmbedProps {

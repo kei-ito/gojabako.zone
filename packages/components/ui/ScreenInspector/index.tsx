@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {isBrowser} from '../../../es/isBrowser';
+import {isBrowser} from '../../../util/isBrowser';
 import {useElementRect} from '../../../hooks/useElementRect';
 import {useElementSize} from '../../../hooks/useElementSize';
 import {useViewPortOffset} from '../../../hooks/useViewPortOffset';

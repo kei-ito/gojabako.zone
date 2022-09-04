@@ -1,5 +1,5 @@
 import type {FC} from 'react';
-import {categorizedPageListByPublishedAt} from '../../../site/categorizedPageList';
+import {categorizedPageListByPublishedAt} from '../../../util/categorizedPageList';
 import {AuthorLinks} from '../AuthorLinks';
 import {PageLinkPublished} from '../PageLink';
 import {className} from './style.module.css';
