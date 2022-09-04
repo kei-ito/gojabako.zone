@@ -3,7 +3,7 @@ import {isBrowser} from '../../../util/isBrowser';
 import {useElementRect} from '../../../hooks/useElementRect';
 import {useElementSize} from '../../../hooks/useElementSize';
 import {useViewPortOffset} from '../../../hooks/useViewPortOffset';
-import {className} from './style.module.css';
+import style from './style.module.scss';
 
 const screen = globalThis.screen as Screen & {
     availLeft?: number,
@@ -46,7 +46,7 @@ export const ScreenInspector = () => {
             cancelAnimationFrame(frameId);
         };
     }, [size, canvas, viewportOffset, rootRect]);
-    return <canvas ref={setCanvas} className={className.canvas}/>;
+    return <canvas ref={setCanvas} className={style.canvas}/>;
 };
 
 const getHtmlElement = () => {

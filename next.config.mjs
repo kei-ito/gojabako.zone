@@ -1,5 +1,5 @@
+// @ts-check
 import * as path from 'path';
-import EsifyCSSWebpackPlugin from 'esifycss-webpack-plugin';
 import {srcDirectory, pagesDirectory} from './config.paths.mjs';
 
 /** @param {string} componentName */
@@ -32,7 +32,6 @@ const nextConfig = {
                 ],
             },
         );
-        config.resolve.plugins.push(new EsifyCSSWebpackPlugin());
         return config;
     },
 };

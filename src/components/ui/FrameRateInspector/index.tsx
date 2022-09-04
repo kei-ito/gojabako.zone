@@ -1,7 +1,7 @@
 import type {FC} from 'react';
 import {useEffect, useState} from 'react';
 import {useElementSize} from '../../../hooks/useElementSize';
-import {className} from './style.module.css';
+import style from './style.module.scss';
 
 const msToRad = Math.PI / 500;
 const lineWidth = 16;
@@ -52,7 +52,7 @@ export const FrameRateInspector: FC = () => {
         });
         return () => cancelAnimationFrame(frameId);
     }, [size, canvas]);
-    return <canvas ref={setCanvas} className={className.canvas}/>;
+    return <canvas ref={setCanvas} className={style.canvas}/>;
 };
 
 const draw = (

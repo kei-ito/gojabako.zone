@@ -3,14 +3,14 @@ import {useEffect, useRef} from 'react';
 import {getTwitterSDK} from '../../../util/dom/getTwitterSDK';
 import {isHTMLElement} from '../../../util/isHTMLElement';
 import {onError} from '../../../util/onError';
-import {className} from './style.module.css';
+import style from './style.module.scss';
 
 interface EmbedProps {
     type: string,
 }
 
 export const Embed = ({type, children}: PropsWithChildren<EmbedProps>) => {
-    return <figure ref={useEmbed(type)} data-type={type} className={className.figure}>
+    return <figure ref={useEmbed(type)} data-type={type} className={style.figure}>
         {children}
     </figure>;
 };

@@ -1,7 +1,7 @@
 import type {PropsWithChildren} from 'react';
 import {usePageData} from '../../../hooks/usePageData';
 import {DateString} from '../../ui/DateString';
-import {className} from './style.module.css';
+import style from './style.module.scss';
 
 export interface PageDataProps {
     pathname: string,
@@ -13,9 +13,9 @@ export const PageTitle = (
 ) => {
     const {title, commitCount, filePath} = usePageData(pathname);
     const historyUrl = `https://github.com/gjbkz/gojabako.zone/commits/main/${filePath}`;
-    return <header className={className.container}>
+    return <header className={style.container}>
         <h1>{title}</h1>
-        <div className={className.data}>
+        <div className={style.data}>
             <Date pathname={pathname} onlyUpdate={onlyUpdate}/>
             &ensp;
             <a href={historyUrl} target="_blank" rel="noreferrer">履歴 ({commitCount})</a>

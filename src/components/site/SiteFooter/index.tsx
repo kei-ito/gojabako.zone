@@ -2,9 +2,9 @@ import type {FC} from 'react';
 import {categorizedPageListByPublishedAt} from '../../../util/categorizedPageList';
 import {AuthorLinks} from '../AuthorLinks';
 import {PageLinkPublished} from '../PageLink';
-import {className} from './style.module.css';
+import style from './style.module.scss';
 
-export const SiteFooter: FC = () => <footer className={className.footer}>
+export const SiteFooter: FC = () => <footer className={style.footer}>
     <section>
         <h2>書いたもの</h2>
         {categorizedPageListByPublishedAt.blogPost.map(([year, pages]) => <div key={year}>
@@ -17,7 +17,7 @@ export const SiteFooter: FC = () => <footer className={className.footer}>
         <ul>{categorizedPageListByPublishedAt.others.map((page) => <li key={page.pathname}><PageLinkPublished {...page}/></li>)}</ul>
     </section>
     <section>
-        <div className={className.sign}>
+        <div className={style.sign}>
             <span>&copy; 2013- Kei Ito</span>
             <AuthorLinks/>
         </div>

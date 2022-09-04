@@ -2,7 +2,6 @@ import type {AppProps} from 'next/app';
 import {SiteFooter} from '../components/site/SiteFooter';
 import {SiteHeader} from '../components/site/SiteHeader';
 import '../globals.scss';
-import '../app.css';
 
 const Root = ({Component, pageProps}: AppProps) => <>
     <SiteHeader/>

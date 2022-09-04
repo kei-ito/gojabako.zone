@@ -3,14 +3,14 @@ import type {FC} from 'react';
 import {siteName} from '../../../../config.site.mjs';
 import {AuthorLinks} from '../AuthorLinks';
 import {Logo} from '../Logo';
-import {className} from './style.module.css';
+import style from './style.module.scss';
 
-export const SiteHeader: FC = () => <header className={className.header}>
-    <div className={className.container}>
+export const SiteHeader: FC = () => <header className={style.header}>
+    <div className={style.container}>
         <Link href="/">
-            <a className={className.link}>
-                <Logo className={className.logo} />
-                <h1 className={className.title}>{siteName}</h1>
+            <a className={style.link}>
+                <Logo className={style.logo} />
+                <h1 className={style.title}>{siteName}</h1>
             </a>
         </Link>
         <div/>
