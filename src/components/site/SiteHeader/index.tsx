@@ -1,15 +1,13 @@
-import Link from 'next/link';
-import {MeiliSearch} from 'meilisearch';
-import type {ChangeEvent} from 'react';
-import {useEffect, useCallback, useMemo, useState} from 'react';
 import type {GuardedType} from '@nlib/typing';
 import {createTypeChecker, ensure, isString} from '@nlib/typing';
+import {MeiliSearch} from 'meilisearch';
+import Link from 'next/link';
+import {useEffect, useMemo, useState} from 'react';
 import {siteName} from '../../../../config.site.mjs';
+import {useDebouncedValue} from '../../../hooks/useDebouncedValue';
+import {classnames} from '../../../util/classnames';
 import {AuthorLinks} from '../AuthorLinks';
 import {Logo} from '../Logo';
-import {classnames} from '../../../util/classnames';
-import {useFocus} from '../../../hooks/useFocus';
-import {useDebouncedValue} from '../../../hooks/useDebouncedValue';
 import style from './style.module.scss';
 
 const meilisearchHost = ensure(process.env.NEXT_PUBLIC_MEILISEARCH_HOST, isString);
@@ -39,7 +37,7 @@ const listSearchResult = function* (hits: Array<Record<string, unknown>>) {
 };
 
 const highlightTag = '[hit]';
-const useCandidates = (search: string) => {
+export const useCandidates = (search: string) => {
     const debounced = useDebouncedValue(search, 200);
     const index = useMeilisearchIndex('page');
     const [candidates, setCandidates] = useState<Array<PageInfo> | null>(null);
@@ -78,7 +76,7 @@ interface SearchResultProps {
     value: string,
     candidates: Array<PageInfo>,
 }
-const SearchResult = ({focused, value, candidates}: SearchResultProps) => {
+export const SearchResult = ({focused, value, candidates}: SearchResultProps) => {
     const [hidden, setHidden] = useState(true);
     useEffect(() => {
         if (focused) {
@@ -127,12 +125,12 @@ const SearchResultItem = (page: PageInfo) => {
 };
 
 export const SiteHeader = () => {
-    const {focused, onFocus, onBlur} = useFocus();
-    const [value, setValue] = useState('');
-    const onChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        setValue(event.target.value.trim());
-    }, []);
-    const candidates = useCandidates(value);
+    // const {focused, onFocus, onBlur} = useFocus();
+    // const [value, setValue] = useState('');
+    // const onChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    //     setValue(event.target.value.trim());
+    // }, []);
+    // const candidates = useCandidates(value);
     return <header className={style.header}>
         <div className={style.container}>
             <Link href="/">
@@ -141,19 +139,20 @@ export const SiteHeader = () => {
                     <h1 className={style.title}>{siteName}</h1>
                 </a>
             </Link>
-            <input
+            <div/>
+            {/* <input
                 className={classnames(style.search, value && style.active)}
                 onChange={onChange}
                 defaultValue={value}
                 onFocus={onFocus}
                 onBlur={onBlur}
-            />
+            /> */}
             <AuthorLinks/>
         </div>
-        {candidates && <SearchResult
+        {/* {candidates && <SearchResult
             focused={focused}
             value={value}
             candidates={candidates}
-        />}
+        />} */}
     </header>;
 };
