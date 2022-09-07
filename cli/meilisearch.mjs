@@ -12,12 +12,12 @@ import {ensure, isString} from '@nlib/typing';
 import {pagesDirectory, rootDirectory} from '../config.paths.mjs';
 import {pageListByUpdatedAt} from '../generated.pageList.mjs';
 
-/** @typedef {{id: string, pathname: string, body: string, publishedAt: string, updatedAt: string}} Page */
+/** @typedef {{id: string, pathname: string, title: string, body: string, publishedAt: string, updatedAt: string}} Page */
 
 const env = ensure(
     dotenv.parse(await fs.readFile(path.join(rootDirectory, '.env'))),
     {
-        MEILISEARCH_HOST: isString,
+        NEXT_PUBLIC_MEILISEARCH_HOST: isString,
         MEILISEARCH_ADMIN_API_KEY: isString,
     },
 );
@@ -87,7 +87,7 @@ const getId = (pagePath) => {
     return hash.digest('base64url');
 };
 const client = new MeiliSearch({
-    host: env.MEILISEARCH_HOST,
+    host: env.NEXT_PUBLIC_MEILISEARCH_HOST,
     apiKey: env.MEILISEARCH_ADMIN_API_KEY,
 });
 const pageIndex = client.index('page');
@@ -100,6 +100,7 @@ if (process.argv.includes('--put')) {
             documents.push({
                 id: getId(page.pathname),
                 pathname: page.pathname,
+                title: page.title,
                 body: await getBodyFromMarkdown(page.pageFile),
                 publishedAt: page.publishedAt,
                 updatedAt: page.updatedAt,
@@ -110,6 +111,7 @@ if (process.argv.includes('--put')) {
             documents.push({
                 id: getId(page.pathname),
                 pathname: page.pathname,
+                title: page.title,
                 body: await getBodyFromTsx(page.pageFile),
                 publishedAt: page.publishedAt,
                 updatedAt: page.updatedAt,
@@ -121,6 +123,7 @@ if (process.argv.includes('--put')) {
     }
     const response = await pageIndex.addDocuments(documents);
     console.info(response);
+    await pageIndex.updateTypoTolerance({enabled: true});
 } else {
     const {results} = await pageIndex.getTasks();
     for (const task of results) {

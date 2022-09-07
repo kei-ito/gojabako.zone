@@ -15,10 +15,11 @@
     align-items: center;
     justify-content: stretch;
     justify-items: center;
-    padding-block-start: 0.4rem;
-    padding-block-end: 0.4rem;
+    min-block-size: 2.16rem;
+    padding-block: 0.2rem;
     background-color: var(--gray2);
     border-block-end: solid 1px var(--gray3);
+    overflow: visible;
 }
 
 .link {
@@ -38,10 +39,58 @@
 .logo {
     block-size: 1rem;
     fill: currentColor;
+    @media (max-width: 280px) {
+        display: none;
+    }
 }
 
-@media (max-width: 280px) {
-    .logo {
-        display: none;
+.search {
+    padding-block: 0.3rem;
+    padding-inline: 0.5rem;
+    border-radius: 0.3rem;
+    font-size: 90%;
+    &:focus, &.active {
+        background-color: var(--gray0);
+    }
+}
+
+.searchResult {
+    --gap: 0.5rem;
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 100%;
+    display: grid;
+    max-block-size: 50vh;
+    row-gap: var(--gap);
+    column-gap: var(--gap);
+    padding: var(--gap);
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    background-color: var(--gray1);
+    overflow-y: auto;
+    border-block-end-style: solid;
+    border-block-end-color: var(--gray3);
+    &.empty {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        font-size: 80%;
+    }
+    &>a {
+        display: grid;
+        row-gap: 0.5rem;
+        padding: 1rem;
+        background-color: var(--gray0);
+        &>* {
+            inline-size: auto;
+        }
+        &>h1 {
+            font-size: 90%;
+        }
+        &>.body {
+            font-size: 80%;
+            overflow-wrap: anywhere;
+            &>em {
+                font-weight: bold;
+            }
+        }
     }
 }
