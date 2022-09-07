@@ -1,10 +1,9 @@
-import type {FC} from 'react';
 import {categorizedPageListByPublishedAt} from '../../../util/categorizedPageList';
 import {AuthorLinks} from '../AuthorLinks';
 import {PageLinkPublished} from '../PageLink';
 import style from './style.module.scss';
 
-export const SiteFooter: FC = () => <footer className={style.footer}>
+export const SiteFooter = () => <footer className={style.footer}>
     <section>
         <h2>書いたもの</h2>
         {categorizedPageListByPublishedAt.blogPost.map(([year, pages]) => <div key={year}>

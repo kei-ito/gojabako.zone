@@ -1,4 +1,3 @@
-import type {FC} from 'react';
 import {useEffect, useState} from 'react';
 import {useElementSize} from '../../../hooks/useElementSize';
 import style from './style.module.scss';
@@ -7,7 +6,7 @@ const msToRad = Math.PI / 500;
 const lineWidth = 16;
 const offsetRad = Math.PI / -2;
 
-export const FrameRateInspector: FC = () => {
+export const FrameRateInspector = () => {
     const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
     const size = useElementSize(canvas);
     useEffect(() => {

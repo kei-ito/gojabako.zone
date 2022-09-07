@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import {MeiliSearch} from 'meilisearch';
-import type {ChangeEvent, FC} from 'react';
+import type {ChangeEvent} from 'react';
 import {useEffect, useCallback, useMemo, useState} from 'react';
 import type {GuardedType} from '@nlib/typing';
 import {createTypeChecker, ensure, isString} from '@nlib/typing';
@@ -126,7 +126,7 @@ const SearchResultItem = (page: PageInfo) => {
     </Link>;
 };
 
-export const SiteHeader: FC = () => {
+export const SiteHeader = () => {
     const {focused, onFocus, onBlur} = useFocus();
     const [value, setValue] = useState('');
     const onChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
