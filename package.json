@@ -35,6 +35,7 @@
         "@gjbkz/gojabako.zone-node-util": "0.1.13",
         "@nlib/typing": "0.5.7",
         "jose": "4.9.2",
+        "meilisearch": "0.27.0",
         "next": "12.2.5",
         "postcss": "8.4.16",
         "react": "18.2.0",
@@ -49,11 +50,12 @@
         "@nlib/lint-commit": "0.2.0",
         "@types/jest": "28.1.8",
         "@types/react": "18.0.18",
-        "@typescript-eslint/eslint-plugin": "5.36.1",
-        "@typescript-eslint/parser": "5.36.1",
-        "canvas": "2.10.0",
+        "@typescript-eslint/eslint-plugin": "5.36.2",
+        "@typescript-eslint/parser": "5.36.2",
+        "canvas": "2.10.1",
+        "dotenv": "16.0.2",
         "eslint-config-next": "12.2.5",
-        "eslint-import-resolver-typescript": "3.5.0",
+        "eslint-import-resolver-typescript": "3.5.1",
         "eslint-plugin-jest": "26.9.0",
         "jest": "28.1.3",
         "lint-staged": "13.0.3",
@@ -61,7 +63,9 @@
         "stackblur-canvas": "2.5.0",
         "ts-jest": "28.0.8",
         "ts-prune": "0.10.3",
-        "typed-scss-modules": "6.5.0"
+        "typed-scss-modules": "6.5.0",
+        "typescript": "4.8.2",
+        "vercel": "28.2.2"
     },
     "browserslist": [
         ">10%"
