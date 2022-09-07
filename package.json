@@ -21,7 +21,6 @@
         "build": "run-s build-meta build:*",
         "build:css": "typed-scss-modules src/components --logLevel error",
         "build:next": "next build",
-        "build:search": "node cli/meilisearch.mjs --put",
         "start": "NODE_ENV=production node server.mjs",
         "lint": "run-s lint:*",
         "lint:next": "next lint",
