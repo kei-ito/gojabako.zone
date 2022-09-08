@@ -1,17 +1,19 @@
 import type {GuardedType} from '@nlib/typing';
-import {createTypeChecker, ensure, isString} from '@nlib/typing';
+import {createTypeChecker, isString} from '@nlib/typing';
 import {MeiliSearch} from 'meilisearch';
 import Link from 'next/link';
-import {useEffect, useMemo, useState} from 'react';
+import type {ChangeEvent} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import {siteName} from '../../../../config.site.mjs';
 import {useDebouncedValue} from '../../../hooks/useDebouncedValue';
+import {useFocus} from '../../../hooks/useFocus';
 import {classnames} from '../../../util/classnames';
 import {AuthorLinks} from '../AuthorLinks';
 import {Logo} from '../Logo';
 import style from './style.module.scss';
 
-const meilisearchHost = ensure(process.env.NEXT_PUBLIC_MEILISEARCH_HOST, isString);
-const meilisearchApiKey = ensure(process.env.NEXT_PUBLIC_MEILISEARCH_SEARCH_API_KEY, isString);
+const meilisearchHost = 'https://search.gojabako.zone';
+const meilisearchApiKey = 'c374be2d44102f736d5c0631b3f3d23e336bb3602e84801bf1908e658aa22d3a';
 const useMeilisearchClient = () => useMemo(() => {
     return new MeiliSearch({host: meilisearchHost, apiKey: meilisearchApiKey});
 }, []);
@@ -125,12 +127,12 @@ const SearchResultItem = (page: PageInfo) => {
 };
 
 export const SiteHeader = () => {
-    // const {focused, onFocus, onBlur} = useFocus();
-    // const [value, setValue] = useState('');
-    // const onChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    //     setValue(event.target.value.trim());
-    // }, []);
-    // const candidates = useCandidates(value);
+    const {focused, onFocus, onBlur} = useFocus();
+    const [value, setValue] = useState('');
+    const onChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+        setValue(event.target.value.trim());
+    }, []);
+    const candidates = useCandidates(value);
     return <header className={style.header}>
         <div className={style.container}>
             <Link href="/">
@@ -139,20 +141,20 @@ export const SiteHeader = () => {
                     <h1 className={style.title}>{siteName}</h1>
                 </a>
             </Link>
-            <div/>
-            {/* <input
+            {/* <div/> */}
+            <input
                 className={classnames(style.search, value && style.active)}
                 onChange={onChange}
                 defaultValue={value}
                 onFocus={onFocus}
                 onBlur={onBlur}
-            /> */}
+            />
             <AuthorLinks/>
         </div>
-        {/* {candidates && <SearchResult
+        {candidates && <SearchResult
             focused={focused}
             value={value}
             candidates={candidates}
-        />} */}
+        />}
     </header>;
 };

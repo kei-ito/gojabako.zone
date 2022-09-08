@@ -15,7 +15,7 @@ import {pageListByUpdatedAt} from '../generated.pageList.mjs';
 /** @typedef {{id: string, pathname: string, title: string, body: string, publishedAt: string, updatedAt: string}} Page */
 
 const env = ensure(
-    dotenv.parse(await fs.readFile(path.join(rootDirectory, '.env'))),
+    dotenv.parse(await fs.readFile(path.join(rootDirectory, '.env.development.local'))),
     {
         NEXT_PUBLIC_MEILISEARCH_HOST: isString,
         MEILISEARCH_ADMIN_API_KEY: isString,
