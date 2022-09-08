@@ -1,27 +1,17 @@
 import type {GuardedType} from '@nlib/typing';
 import {createTypeChecker, isString} from '@nlib/typing';
-import {MeiliSearch} from 'meilisearch';
 import Link from 'next/link';
 import type {ChangeEvent} from 'react';
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {siteName} from '../../../../config.site.mjs';
-import {useDebouncedValue} from '../../../hooks/useDebouncedValue';
 import {useFocus} from '../../../hooks/useFocus';
+import type {SearchState} from '../../../hooks/useSearchResult';
+import {useSearchResult} from '../../../hooks/useSearchResult';
 import {classnames} from '../../../util/classnames';
 import {AuthorLinks} from '../AuthorLinks';
 import {Logo} from '../Logo';
 import style from './style.module.scss';
 
-const meilisearchHost = 'https://search.gojabako.zone';
-const meilisearchApiKey = 'c374be2d44102f736d5c0631b3f3d23e336bb3602e84801bf1908e658aa22d3a';
-const useMeilisearchClient = () => useMemo(() => {
-    return new MeiliSearch({host: meilisearchHost, apiKey: meilisearchApiKey});
-}, []);
-
-const useMeilisearchIndex = (indexName: string) => {
-    const client = useMeilisearchClient();
-    return useMemo(() => client.index(indexName), [client, indexName]);
-};
 const isPageInfo = createTypeChecker('PageInfo', {
     pathname: isString,
     title: isString,
@@ -30,55 +20,17 @@ const isPageInfo = createTypeChecker('PageInfo', {
     updatedAt: isString,
 });
 type PageInfo = GuardedType<typeof isPageInfo>;
-const listSearchResult = function* (hits: Array<Record<string, unknown>>) {
-    for (const {_formatted} of hits) {
-        if (isPageInfo(_formatted)) {
-            yield _formatted;
-        }
-    }
-};
-
-const highlightTag = '[hit]';
-export const useCandidates = (search: string) => {
-    const debounced = useDebouncedValue(search, 200);
-    const index = useMeilisearchIndex('page');
-    const [candidates, setCandidates] = useState<Array<PageInfo> | null>(null);
-    useEffect(() => {
-        let aborted = false;
-        if (debounced.trim()) {
-            index.search(debounced, {
-                highlightPreTag: highlightTag,
-                highlightPostTag: highlightTag,
-                attributesToHighlight: ['body'],
-                attributesToRetrieve: ['pathname', 'title', 'publishedAt', 'updatedAt'],
-                attributesToCrop: ['body'],
-                cropLength: 20,
-            })
-            .then((result) => {
-                if (!aborted) {
-                    setCandidates([...listSearchResult(result.hits)]);
-                }
-            })
-            .catch((error) => {
-                // eslint-disable-next-line no-console
-                console.error(error);
-            });
-        } else {
-            setCandidates(null);
-        }
-        return () => {
-            aborted = true;
-        };
-    }, [index, debounced]);
-    return candidates;
-};
 
 interface SearchResultProps {
     focused: boolean,
-    value: string,
-    candidates: Array<PageInfo>,
+    search: SearchState<PageInfo>,
 }
-export const SearchResult = ({focused, value, candidates}: SearchResultProps) => {
+const SearchResult = (
+    {
+        focused,
+        search: {active, loading, result},
+    }: SearchResultProps,
+) => {
     const [hidden, setHidden] = useState(true);
     useEffect(() => {
         if (focused) {
@@ -93,16 +45,21 @@ export const SearchResult = ({focused, value, candidates}: SearchResultProps) =>
             clearTimeout(timerId);
         };
     }, [focused]);
-    if (hidden) {
+    if (active && loading && !result) {
+        return <div className={classnames(style.searchResult, style.empty)}>
+            検索中です
+        </div>;
+    }
+    if (hidden || !active || !result) {
         return null;
     }
-    if (candidates.length === 0) {
+    if (result.items.length === 0) {
         return <div className={classnames(style.searchResult, style.empty)}>
-            &quot;{value}&quot;を含むページが見つかりませんでした
+            &quot;{result.query}&quot;を含むページが見つかりませんでした
         </div>;
     }
     return <div className={style.searchResult}>
-        {candidates.map((item) => <SearchResultItem {...item} key={item.pathname}/>)}
+        {result.items.map((item) => <SearchResultItem {...item} key={item.pathname}/>)}
     </div>;
 };
 
@@ -126,13 +83,23 @@ const SearchResultItem = (page: PageInfo) => {
     </Link>;
 };
 
+const highlightTag = '[hit]';
+const searchOptions = {
+    highlightPreTag: highlightTag,
+    highlightPostTag: highlightTag,
+    attributesToHighlight: ['body'],
+    attributesToRetrieve: ['pathname', 'title', 'publishedAt', 'updatedAt'],
+    attributesToCrop: ['body'],
+    cropLength: 20,
+};
+
 export const SiteHeader = () => {
     const {focused, onFocus, onBlur} = useFocus();
     const [value, setValue] = useState('');
     const onChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setValue(event.target.value.trim());
     }, []);
-    const candidates = useCandidates(value);
+    const search = useSearchResult('page', value, searchOptions, isPageInfo);
     return <header className={style.header}>
         <div className={style.container}>
             <Link href="/">
@@ -151,10 +118,6 @@ export const SiteHeader = () => {
             />
             <AuthorLinks/>
         </div>
-        {candidates && <SearchResult
-            focused={focused}
-            value={value}
-            candidates={candidates}
-        />}
+        <SearchResult focused={focused} search={search}/>
     </header>;
 };
