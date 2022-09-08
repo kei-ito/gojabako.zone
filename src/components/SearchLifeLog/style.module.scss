@@ -1,0 +1,64 @@
+.form {
+    display: grid;
+    grid-template-columns: 1fr max-content;
+    column-gap: 0.5rem;
+    &>div {
+        display: grid;
+        grid-template-rows: max-content 1fr;
+        &>label {
+            font-size: 80%;
+            color: var(--gray6);
+        }
+        &>input {
+            padding-block: 0.6rem;
+            border-style: solid;
+            border-radius: 0.2rem;
+            padding-block: 0.5rem;
+            padding-inline: 0.5rem;
+            &[type=number] {
+                inline-size: 4rem;
+            }
+        }
+    }
+}
+
+.params {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: 0.5rem;
+    row-gap: 0.2rem;
+    font-size: 80%;
+    &.loading {
+        color: var(--gray6);
+    }
+}
+
+.items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    inline-size: 100%;
+    --gap: 1rem;
+    padding: var(--gap);
+    row-gap: var(--gap);
+    column-gap: var(--gap);
+    background-color: var(--gray2);
+}
+
+.item {
+    display: grid;
+    grid-auto-flow: row;
+    align-content: flex-start;
+    padding: 0.5rem;
+    row-gap: 0.2rem;
+    font-size: 80%;
+    background-color: var(--gray0);
+    &>header {
+        color: var(--gray6);
+    }
+    &>div {
+        &>em {
+            font-weight: bold;
+            background-color: greenyellow;
+        }
+    }
+}

@@ -8,10 +8,20 @@ import {useFocus} from '../../../hooks/useFocus';
 import type {SearchState} from '../../../hooks/useSearchResult';
 import {useSearchResult} from '../../../hooks/useSearchResult';
 import {classnames} from '../../../util/classnames';
+import {SearchResultText} from '../../ui/SearchResultText';
 import {AuthorLinks} from '../AuthorLinks';
 import {Logo} from '../Logo';
 import style from './style.module.scss';
 
+const highlightTag = '[hit]';
+const searchOptions = {
+    highlightPreTag: highlightTag,
+    highlightPostTag: highlightTag,
+    attributesToHighlight: ['body'],
+    attributesToRetrieve: ['pathname', 'title', 'publishedAt', 'updatedAt'],
+    attributesToCrop: ['body'],
+    cropLength: 20,
+};
 const isPageInfo = createTypeChecker('PageInfo', {
     pathname: isString,
     title: isString,
@@ -63,34 +73,15 @@ const SearchResult = (
     </div>;
 };
 
-const parseBody = function* (body: string) {
-    let count = 0;
-    for (const word of body.split(highlightTag)) {
-        if (count++ % 2) {
-            yield <em key={count}>{word}</em>;
-        } else {
-            yield word;
-        }
-    }
-};
-
 const SearchResultItem = (page: PageInfo) => {
     return <Link href={page.pathname || '/'}>
         <a>
             <h1>{page.title}</h1>
-            <div className={style.body}>{[...parseBody(page.body)]}</div>
+            <div className={style.body}>
+                <SearchResultText text={page.body} highlightTag={highlightTag}/>
+            </div>
         </a>
     </Link>;
-};
-
-const highlightTag = '[hit]';
-const searchOptions = {
-    highlightPreTag: highlightTag,
-    highlightPostTag: highlightTag,
-    attributesToHighlight: ['body'],
-    attributesToRetrieve: ['pathname', 'title', 'publishedAt', 'updatedAt'],
-    attributesToCrop: ['body'],
-    cropLength: 20,
 };
 
 export const SiteHeader = () => {

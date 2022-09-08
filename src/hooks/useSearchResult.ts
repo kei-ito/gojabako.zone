@@ -27,9 +27,11 @@ const listFormatted = function* <T>(
 
 interface Result<T> extends Omit<SearchResponse, 'hits'> {
     items: Array<T>,
+    totalMs: number,
 }
 
 export interface SearchState<T> {
+    host: string,
     active: boolean,
     loading: boolean,
     result?: Result<T>,
@@ -43,20 +45,27 @@ export const useSearchResult = <T>(
     typeChecker: TypeChecker<T>,
 ) => {
     const index = useMeilisearchIndex(indexName);
-    const [searchState, setSearchState] = useState<SearchState<T>>({active: false, loading: false});
+    const [searchState, setSearchState] = useState<SearchState<T>>({
+        host: meilisearchHost,
+        active: false,
+        loading: false,
+    });
     useEffect(() => {
         let aborted = false;
         if (query.trim()) {
             setSearchState((c) => ({...c, active: true, loading: true}));
+            const startedAt = Date.now();
             index.search(query, options)
             .then(({hits, ...others}) => {
                 if (!aborted) {
                     setSearchState({
+                        host: meilisearchHost,
                         active: true,
                         loading: false,
                         result: {
                             ...others,
                             items: [...listFormatted(hits, typeChecker)],
+                            totalMs: Date.now() - startedAt,
                         },
                     });
                 }
@@ -67,7 +76,11 @@ export const useSearchResult = <T>(
                 setSearchState((c) => ({...c, active: true, loading: false, error: `${error}`}));
             });
         } else {
-            setSearchState({active: false, loading: false});
+            setSearchState({
+                host: meilisearchHost,
+                active: false,
+                loading: false,
+            });
         }
         return () => {
             aborted = true;
