@@ -2,8 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Gojabako Zone</title>
   <link href="https://gojabako.zone"/>
-  <updated>2022-09-04T12:16:57+09:00</updated>
+  <updated>2022-09-08T17:57:01+09:00</updated>
   <id>https://gojabako.zone</id>
+  <entry>
+    <id>/app/search</id>
+    <title>Meilisearchの動作テスト</title>
+    <link href="https://gojabako.zone/app/search"/>
+    <updated>2022-09-08T17:57:01+09:00</updated>
+    <published>2022-09-08T17:57:01+09:00</published>
+  </entry>
   <entry>
     <id>/markdown</id>
     <title>Markdown動作確認およびタイトルが長い場合の画像生成等の検証用記事</title>
@@ -136,12 +143,5 @@
     <link href="https://gojabako.zone/2019/error-propagation"/>
     <updated>2022-09-04T12:16:57+09:00</updated>
     <published>2019-04-26T18:46:08Z</published>
-  </entry>
-  <entry>
-    <id>/2018/monitor-stand</id>
-    <title>モニタースタンドに棚をつけるDIY記録</title>
-    <link href="https://gojabako.zone/2018/monitor-stand"/>
-    <updated>2022-09-04T12:16:57+09:00</updated>
-    <published>2018-11-29T17:01:41Z</published>
   </entry>
 </feed>

@@ -6,6 +6,14 @@
 /** @type {Array<PageData>} */
 export const pageListByPublishedAt = [
     {
+        "pathname": "/app/search",
+        "title": "Meilisearchの動作テスト",
+        "filePath": "src/pages/app/search/index.page.md",
+        "publishedAt": "2022-09-08T17:57:01+09:00",
+        "updatedAt": "2022-09-08T17:57:01+09:00",
+        "commitCount": 1
+    },
+    {
         "pathname": "/2022/dpop",
         "title": "DPoPのブラウザ実装",
         "filePath": "src/pages/2022/dpop/index.page.md",
@@ -172,24 +180,25 @@ export const pageListByPublishedAt = [
 ];
 /** @type {Array<PageData>} */
 export const pageListByUpdatedAt = [
-    14,
+    0,
     15,
-    11,
-    3,
-    5,
+    16,
+    12,
     4,
     6,
-    0,
+    5,
+    7,
     1,
     2,
-    10,
-    12,
+    3,
+    11,
     13,
-    8,
-    7,
+    14,
     9,
-    16,
+    8,
+    10,
     17,
     18,
-    19
+    19,
+    20
 ].map((index) => pageListByPublishedAt[index]);

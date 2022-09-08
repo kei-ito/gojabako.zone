@@ -4,6 +4,11 @@
 /** @typedef {{path: string, width: number, height: number}} PageImageData */
 /** @type {Record<string, PageImageData | undefined>} */
 export const pageImages = {
+    "/app/search": {
+        "path": "/covers/AYllKs6P/l_vtdbn0/-CZydI81.png",
+        "width": 1200,
+        "height": 630
+    },
     "/2022/dpop": {
         "path": "/covers/_Pg6tsq3/BhXNCwiY/FlxZgRJk.png",
         "width": 1200,
