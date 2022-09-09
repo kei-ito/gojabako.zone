@@ -175,6 +175,10 @@ if (process.argv.includes('check-status')) {
         const index = client.index(indexName);
         const {results} = await index.getTasks();
         console.info(`## ${indexName}`);
+        const settings = await index.getSettings();
+        console.info(settings);
+        const stats = await index.getStats();
+        console.info(stats);
         for (const task of results) {
             console.info(task);
         }
