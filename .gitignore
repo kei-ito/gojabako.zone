@@ -44,3 +44,4 @@ tsconfig.tsbuildinfo
 next-env.d.ts
 *.component.tsx
 crowd_liflog_10000.tsv
+cli/aozorabunko
