@@ -8,7 +8,7 @@ import * as stream from 'stream';
 import * as rl from 'readline';
 import * as unzipper from 'unzipper';
 import archiver from 'archiver';
-import {createTypeChecker, isObject, isString} from '@nlib/typing';
+import {createTypeChecker, isString} from '@nlib/typing';
 import {rootDirectory} from '../config.paths.mjs';
 
 /** @param {number} durationMs */
@@ -68,8 +68,6 @@ const readStream = async (readable) => await new Promise((resolve, reject) => {
     }))
     .once('error', reject);
 });
-const zipDirectory = path.join(rootDirectory, 'cli', 'aozorabunko');
-await fs.promises.mkdir(zipDirectory, {recursive: true});
 const defaultHeaders = {
     'accept': '*/*',
     'accept-encoding': 'gzip, deflate, br',
@@ -78,6 +76,7 @@ const defaultHeaders = {
     'referer': 'https://www.aozora.gr.jp/',
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
 };
+const zipDirectory = path.join(rootDirectory, 'cli', 'aozorabunko');
 /**
  * @param {URL} url
  * @param {string} name
@@ -85,6 +84,7 @@ const defaultHeaders = {
  * @param {number} timeoutMs
  */
 const getOrDownloadZip = async (url, name, headers = defaultHeaders, timeoutMs = 0) => {
+    await fs.promises.mkdir(zipDirectory, {recursive: true});
     const zipPath = path.join(zipDirectory, name);
     const zipStats = await fs.promises.stat(zipPath).catch(() => null);
     if (!zipStats || !zipStats.isFile()) {
@@ -100,40 +100,46 @@ const getOrDownloadZip = async (url, name, headers = defaultHeaders, timeoutMs =
     console.info(`zipPath: ${zipPath}`);
     return zipPath;
 };
-/** @param {string} zipPath */
-const parseZip = async function* (zipPath) {
-    console.info(`unzip ${zipPath}`);
-    const zipStream = fs.createReadStream(zipPath).pipe(unzipper.Parse({forceStream: true}));
+/**
+ * @param {string} zipPath
+ * @param {RegExp} pattern
+ * @returns {Promise<stream.Readable | null>}
+ */
+const getFileFromZip = async (zipPath, pattern) => {
+    /** @type {stream.Readable | null} */
+    let found = null;
     try {
-        for await (const entry of zipStream) {
-            console.info(`unzip entry ${entry.path}`);
-            yield entry;
+        for await (const entry of fs.createReadStream(zipPath).pipe(unzipper.Parse({forceStream: true}))) {
+            if (!found && pattern.test(entry.path)) {
+                const pass = new stream.PassThrough();
+                found = pass;
+                pass.end(await readStream(entry));
+            } else {
+                entry.autodrain();
+            }
         }
     } catch (error) {
-        if (!isObject(error) || error.code !== 'ERR_STREAM_PREMATURE_CLOSE') {
-            throw error;
-        }
-    } finally {
-        console.info(`unzip ${zipPath} done`);
+        // console.error(error);
     }
+    return found;
 };
 const listItems = async function* () {
     const listZipPath = await getOrDownloadZip(
         new URL('https://www.aozora.gr.jp/index_pages/list_person_all_utf8.zip'),
         'all.zip',
     );
-    for await (const entry of parseZip(listZipPath)) {
-        if (`${entry.path}`.endsWith('.csv')) {
-            for await (const line of listLines(entry)) {
-                const row = line.split(',', 4);
-                const authorId = row[0];
-                const authorName = row[1].slice(1, -1);
-                const bookId = row[2];
-                const title = row[3].slice(1, -1);
-                if ((/^\d+$/).test(authorId) && (/^\d+$/).test(bookId)) {
-                    yield {authorId, authorName, bookId, title};
-                }
-            }
+    const entry = await getFileFromZip(listZipPath, /\.csv$/);
+    if (!entry) {
+        throw new Error(`NoCSV: ${listZipPath}`);
+    }
+    for await (const line of listLines(entry)) {
+        const row = line.split(',', 4);
+        const authorId = row[0];
+        const authorName = row[1].slice(1, -1);
+        const bookId = row[2];
+        const title = row[3].slice(1, -1);
+        if ((/^\d+$/).test(authorId) && (/^\d+$/).test(bookId)) {
+            yield {authorId, authorName, bookId, title};
         }
     }
 };
@@ -247,35 +253,45 @@ if (process.argv.includes('download')) {
     }
 } else if (process.argv.includes('zip')) {
     const archive = archiver('zip', {zlib: {level: 9}});
-    const writePromise = new Promise((resolve, reject) => {
-        const dest = path.join(zipDirectory, '_aozorabunko.zip');
-        archive.pipe(fs.createWriteStream(dest))
-        .once('error', reject)
+    const outputPromise = new Promise((resolve, reject) => {
+        /** @param {unknown} error */
+        const onError = (error) => {
+            console.error(error);
+            reject(error);
+        };
+        archive.once('warning', onError).once('error', onError);
+        archive.pipe(fs.createWriteStream(`${zipDirectory}.zip`))
+        .once('error', onError)
         .once('finish', resolve);
     });
-    for (const name of await fs.promises.readdir(zipDirectory)) {
-        if ((/^\d+-\d+\.json$/).test(name)) {
-            const json = await fs.promises.readFile(path.join(zipDirectory, name), 'utf8');
-            const book = JSON.parse(json);
-            if (isBookInfo(book)) {
-                for await (const entry of parseZip(book.zipPath)) {
-                    if (`${entry.path}`.endsWith('.txt')) {
-                        const buffer = Buffer.from([
-                            `${JSON.stringify({
-                                url: getAozoraBunkoPageUrl(book.authorId, book.bookId),
-                                authorId: book.authorId,
-                                authorName: book.authorName,
-                                bookId: book.bookId,
-                                title: book.title,
-                            }, null, 2)}`,
-                            await extractBodyFromAozoraSourceText(entry),
-                        ].join('\n'));
-                        archive.append(buffer, {name: `${book.authorId}-${book.authorName}.txt`});
-                    }
-                }
+    const names = (await fs.promises.readdir(zipDirectory)).filter((name) => (/^\d+-\d+\.json$/).test(name));
+    console.info(`${names.length} files`);
+    for (const name of names) {
+        const json = await fs.promises.readFile(path.join(zipDirectory, name), 'utf8');
+        const book = JSON.parse(json);
+        if (isBookInfo(book)) {
+            const fileName = `${book.authorId}-${book.bookId}.txt`;
+            console.info(`${fileName}: ${book.authorName} ${book.title}`);
+            const entry = await getFileFromZip(book.zipPath, /\.txt$/);
+            if (entry) {
+                const buffer = Buffer.from([
+                    `${JSON.stringify({
+                        url: getAozoraBunkoPageUrl(book.authorId, book.bookId),
+                        authorId: book.authorId,
+                        authorName: book.authorName,
+                        bookId: book.bookId,
+                        title: book.title,
+                    }, null, 2)}`,
+                    await extractBodyFromAozoraSourceText(entry),
+                ].join('\n'));
+                archive.append(buffer, {name: fileName});
+            } else {
+                console.error(`NoEntry: ${book.zipPath}`);
             }
         }
     }
-    archive.finalize();
-    await writePromise;
+    console.info('finalizing...');
+    await archive.finalize();
+    await outputPromise;
+    console.info('finalized');
 }
