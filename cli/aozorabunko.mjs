@@ -7,13 +7,18 @@ import * as https from 'https';
 import * as stream from 'stream';
 import * as rl from 'readline';
 import * as unzipper from 'unzipper';
-import {isObject} from '@nlib/typing';
+import archiver from 'archiver';
+import {createTypeChecker, isObject, isString} from '@nlib/typing';
 import {rootDirectory} from '../config.paths.mjs';
 
 /** @param {number} durationMs */
 const wait = async (durationMs) => await new Promise((resolve) => {
     setTimeout(resolve, durationMs);
 });
+/** @param {stream.Readable} readable */
+const listLines = async function* (readable) {
+    yield* rl.createInterface({input: readable, crlfDelay: Infinity});
+};
 const timeoutError = new Error('Timeout');
 /**
  * @param {string | URL} url
@@ -90,7 +95,7 @@ const getOrDownloadZip = async (url, name, headers = defaultHeaders, timeoutMs =
             .once('error', reject)
             .once('finish', resolve);
         });
-        await wait(50);
+        await wait(0);
     }
     console.info(`zipPath: ${zipPath}`);
     return zipPath;
@@ -117,9 +122,9 @@ const listItems = async function* () {
         new URL('https://www.aozora.gr.jp/index_pages/list_person_all_utf8.zip'),
         'all.zip',
     );
-    for await (const input of parseZip(listZipPath)) {
-        if (`${input.path}`.endsWith('.csv')) {
-            for await (const line of rl.createInterface({input, crlfDelay: Infinity})) {
+    for await (const entry of parseZip(listZipPath)) {
+        if (`${entry.path}`.endsWith('.csv')) {
+            for await (const line of listLines(entry)) {
                 const row = line.split(',', 4);
                 const authorId = row[0];
                 const authorName = row[1].slice(1, -1);
@@ -132,33 +137,145 @@ const listItems = async function* () {
         }
     }
 };
-/** @type {Array<Promise<unknown>>} */
-const tasks = [];
-for await (const {authorId, authorName, bookId, title} of listItems()) {
-    console.info(`${bookId} ${authorName} ${title}`);
-    const pageUrl = `https://www.aozora.gr.jp/cards/${authorId}/card${bookId.replace(/^0+/, '')}.html`;
-    const htmlPath = path.join(zipDirectory, `${authorId}-${bookId}.html`);
-    let html = await fs.promises.readFile(htmlPath, 'utf8').catch(() => null);
-    if (!html) {
-        const response = await get(pageUrl, {headers: {referer: pageUrl}});
-        html = `${await readStream(response)}`;
-        await fs.promises.writeFile(htmlPath, html);
-    }
-    const matched = (/<td><a[^>]*?href="(.*?.zip)"[^>]*?>/).exec(html);
-    if (matched) {
-        tasks.push(
-            getOrDownloadZip(
+/**
+ * @param {string} authorId
+ * @param {string} bookId
+ */
+const getAozoraBunkoPageUrl = (authorId, bookId) => {
+    return `https://www.aozora.gr.jp/cards/${authorId}/card${bookId.replace(/^0+/, '')}.html`;
+};
+const listBookZipFiles = async function* () {
+    for await (const item of listItems()) {
+        const {authorId, authorName, bookId, title} = item;
+        console.info(`${bookId} ${authorName} ${title}`);
+        const pageUrl = getAozoraBunkoPageUrl(authorId, bookId);
+        const htmlPath = path.join(zipDirectory, `${authorId}-${bookId}.html`);
+        let html = await fs.promises.readFile(htmlPath, 'utf8').catch(() => null);
+        if (!html) {
+            const response = await get(pageUrl, {headers: {referer: pageUrl}});
+            html = `${await readStream(response)}`;
+            await fs.promises.writeFile(htmlPath, html);
+        }
+        const matched = (/<td><a[^>]*?href="(.*?.zip)"[^>]*?>/).exec(html);
+        if (matched) {
+            const zipPath = await getOrDownloadZip(
                 new URL(matched[1], pageUrl),
                 `${authorId}-${bookId}.zip`,
                 defaultHeaders,
                 6000,
-            )
-            .catch((error) => {
+            ).catch((error) => {
                 console.error(error);
-            }),
-        );
-        if (6 < tasks.length) {
-            await Promise.all(tasks);
+                return null;
+            });
+            if (zipPath) {
+                yield {...item, zipPath};
+            }
         }
     }
+};
+/**
+ * @param {string} input
+ * @param {boolean} debug
+ */
+const removeAozoraBunkoMarkups = (input, debug = false) => input
+.replace(/(?:｜(.*?))?《[^》]+》/g, (matched, result = '') => {
+    if (debug) {
+        console.info(`ruby: ${matched} → "${result}"`);
+    }
+    return result;
+})
+.replace(/※?［＃[^］]+］/g, (matched) => {
+    if (debug) {
+        console.info(`note: ${matched}`);
+    }
+    return '';
+});
+/** https://www.aozora.gr.jp/KOSAKU/MANUAL_2.html#ruby */
+console.info(removeAozoraBunkoMarkups(
+    [
+        '武州｜青梅《おうめ》の宿',
+        '確実さで、益※［＃二の字点、面区点番号1-2-22］《ますます》はっきりと',
+        '兄きのような Fanatiker《ファナチイケル》 とは',
+        'Kosinski《コジンスキイ》 soll《ゾル》 leben《レエベン》 !',
+        'そんな｜お伽話《フェヤリー・ストーリース》は、',
+        'いいか｜釜右ヱ門《かまえもん》。',
+        '彼は ｜Au revoir《さらば》 と、',
+    ].join('\n'),
+    true,
+));
+/** @param {stream.Readable} readable */
+const extractBodyFromAozoraSourceText = async (readable) => {
+    const sjisDecoder = new TextDecoder('shift_jis');
+    const decoded = readable.pipe(new stream.Transform({
+        transform(chunk, _encoding, callback) {
+            this.push(sjisDecoder.decode(chunk));
+            callback();
+        },
+    }));
+    let part = 0;
+    let body = '';
+    let emptyCount = 0;
+    for await (let line of listLines(decoded)) {
+        line = line.trim();
+        const isDelimiter = (/^----------*$/).test(line);
+        const isFootNoteStart = 2 <= emptyCount && line.startsWith('底本');
+        if (isDelimiter || isFootNoteStart) {
+            part += 1;
+        }
+        if (!isDelimiter && part === 2) {
+            const normalized = removeAozoraBunkoMarkups(line).normalize('NFKC').trim();
+            if (0 < normalized.length) {
+                body += `${normalized}\n`;
+            }
+        }
+        emptyCount = line.length === 0 ? emptyCount + 1 : 0;
+    }
+    return body.trimEnd();
+};
+const isBookInfo = createTypeChecker('BookInfo', {
+    authorId: isString,
+    authorName: isString,
+    bookId: isString,
+    title: isString,
+    zipPath: isString,
+});
+if (process.argv.includes('download')) {
+    for await (const book of listBookZipFiles()) {
+        console.info(`${book.authorId}-${book.bookId} ${book.authorName} ${book.title}`);
+        const jsonDest = path.join(zipDirectory, `${book.authorId}-${book.bookId}.json`);
+        await fs.promises.writeFile(jsonDest, JSON.stringify(book, null, 2));
+    }
+} else if (process.argv.includes('zip')) {
+    const archive = archiver('zip', {zlib: {level: 9}});
+    const writePromise = new Promise((resolve, reject) => {
+        const dest = path.join(zipDirectory, '_aozorabunko.zip');
+        archive.pipe(fs.createWriteStream(dest))
+        .once('error', reject)
+        .once('finish', resolve);
+    });
+    for (const name of await fs.promises.readdir(zipDirectory)) {
+        if ((/^\d+-\d+\.json$/).test(name)) {
+            const json = await fs.promises.readFile(path.join(zipDirectory, name), 'utf8');
+            const book = JSON.parse(json);
+            if (isBookInfo(book)) {
+                for await (const entry of parseZip(book.zipPath)) {
+                    if (`${entry.path}`.endsWith('.txt')) {
+                        const buffer = Buffer.from([
+                            `${JSON.stringify({
+                                url: getAozoraBunkoPageUrl(book.authorId, book.bookId),
+                                authorId: book.authorId,
+                                authorName: book.authorName,
+                                bookId: book.bookId,
+                                title: book.title,
+                            }, null, 2)}`,
+                            await extractBodyFromAozoraSourceText(entry),
+                        ].join('\n'));
+                        archive.append(buffer, {name: `${book.authorId}-${book.authorName}.txt`});
+                    }
+                }
+            }
+        }
+    }
+    archive.finalize();
+    await writePromise;
 }
