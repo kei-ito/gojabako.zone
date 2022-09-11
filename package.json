@@ -54,7 +54,7 @@
         "@typescript-eslint/parser": "5.36.2",
         "canvas": "2.10.1",
         "dotenv": "16.0.2",
-        "eslint-config-next": "12.2.5",
+        "eslint-config-next": "12.3.0",
         "eslint-import-resolver-typescript": "3.5.1",
         "eslint-plugin-jest": "26.9.0",
         "jest": "28.1.3",
