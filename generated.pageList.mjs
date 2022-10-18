@@ -156,8 +156,8 @@ export const pageListByPublishedAt = [
         "title": "加重平均の誤差伝播",
         "filePath": "src/pages/2019/error-propagation/index.page.md",
         "publishedAt": "2019-04-26T18:46:08Z",
-        "updatedAt": "2022-09-04T12:16:57+09:00",
-        "commitCount": 4,
+        "updatedAt": "2022-10-18T19:54:02+09:00",
+        "commitCount": 5,
         "archiveOf": "https://kei-itof.goat.me/heZeNIQCCQ"
     },
     {
@@ -172,6 +172,7 @@ export const pageListByPublishedAt = [
 ];
 /** @type {Array<PageData>} */
 export const pageListByUpdatedAt = [
+    18,
     14,
     15,
     11,
@@ -190,6 +191,5 @@ export const pageListByUpdatedAt = [
     9,
     16,
     17,
-    18,
     19
 ].map((index) => pageListByPublishedAt[index]);

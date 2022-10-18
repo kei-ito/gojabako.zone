@@ -95,7 +95,7 @@ export const pageImages = {
         "height": 630
     },
     "/2019/error-propagation": {
-        "path": "/covers/SWD-1E4N/ubQ2X2no/f002DmnJ.png",
+        "path": "/covers/SWD-1E4N/h717O1e6/XHlesHt6.png",
         "width": 1200,
         "height": 630
     },
