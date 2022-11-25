@@ -34,7 +34,7 @@
         "@gjbkz/gojabako.zone-markdown-util": "0.1.13",
         "@gjbkz/gojabako.zone-node-util": "0.1.13",
         "@nlib/typing": "0.5.7",
-        "jose": "4.11.0",
+        "jose": "4.11.1",
         "meilisearch": "0.29.1",
         "next": "12.3.4",
         "postcss": "8.4.19",
