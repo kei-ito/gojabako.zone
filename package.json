@@ -65,7 +65,7 @@
         "ts-prune": "0.10.3",
         "typed-scss-modules": "6.6.0",
         "typescript": "4.9.3",
-        "vercel": "28.7.0"
+        "vercel": "28.7.2"
     },
     "browserslist": [
         ">10%"
