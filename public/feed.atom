@@ -2,8 +2,15 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Gojabako Zone</title>
   <link href="https://gojabako.zone"/>
-  <updated>2022-10-18T19:54:02+09:00</updated>
+  <updated>2023-01-05T12:02:40+09:00</updated>
   <id>https://gojabako.zone</id>
+  <entry>
+    <id></id>
+    <title>Gojabako Zone</title>
+    <link href="https://gojabako.zone/"/>
+    <updated>2023-01-05T12:02:40+09:00</updated>
+    <published>2021-09-29T00:33:31+09:00</published>
+  </entry>
   <entry>
     <id>/2019/error-propagation</id>
     <title>加重平均の誤差伝播</title>
@@ -17,13 +24,6 @@
     <link href="https://gojabako.zone/markdown"/>
     <updated>2022-09-04T12:16:57+09:00</updated>
     <published>2021-09-30T00:39:26+09:00</published>
-  </entry>
-  <entry>
-    <id></id>
-    <title>Gojabako Zone</title>
-    <link href="https://gojabako.zone/"/>
-    <updated>2022-09-04T12:16:57+09:00</updated>
-    <published>2021-09-29T00:33:31+09:00</published>
   </entry>
   <entry>
     <id>/author</id>
