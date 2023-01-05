@@ -18,7 +18,7 @@ export const Page = () => <>
             </ul>
             <h2>管理者</h2>
             <ul>
-                <li><Link href="/author"><a>伊藤 慶 - Kei Ito</a></Link></li>
+                <li><Link href="/author">伊藤 慶 - Kei Ito</Link></li>
             </ul>
         </article>
     </main>

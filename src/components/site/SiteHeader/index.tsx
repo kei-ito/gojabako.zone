@@ -116,12 +116,12 @@ const parseBody = function* (body: string) {
 };
 
 const SearchResultItem = (page: PageInfo) => {
-    return <Link href={page.pathname || '/'}>
-        <a>
+    return (
+        <Link href={page.pathname || '/'}>
             <h1>{page.title}</h1>
             <div className={style.body}>{[...parseBody(page.body)]}</div>
-        </a>
-    </Link>;
+        </Link>
+    );
 };
 
 export const SiteHeader = () => {
@@ -131,28 +131,30 @@ export const SiteHeader = () => {
     //     setValue(event.target.value.trim());
     // }, []);
     // const candidates = useCandidates(value);
-    return <header className={style.header}>
-        <div className={style.container}>
-            <Link href="/">
-                <a className={style.link}>
+    return (
+        <header className={style.header}>
+            <div className={style.container}>
+                <Link href="/" className={style.link}>
+
                     <Logo className={style.logo} />
                     <h1 className={style.title}>{siteName}</h1>
-                </a>
-            </Link>
-            <div/>
-            {/* <input
-                className={classnames(style.search, value && style.active)}
-                onChange={onChange}
-                defaultValue={value}
-                onFocus={onFocus}
-                onBlur={onBlur}
-            /> */}
-            <AuthorLinks/>
-        </div>
-        {/* {candidates && <SearchResult
-            focused={focused}
-            value={value}
-            candidates={candidates}
-        />} */}
-    </header>;
+
+                </Link>
+                <div/>
+                {/* <input
+                    className={classnames(style.search, value && style.active)}
+                    onChange={onChange}
+                    defaultValue={value}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
+                /> */}
+                <AuthorLinks/>
+            </div>
+            {/* {candidates && <SearchResult
+                focused={focused}
+                value={value}
+                candidates={candidates}
+            />} */}
+        </header>
+    );
 };

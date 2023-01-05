@@ -6,24 +6,18 @@ import style from './style.module.scss';
 
 export const PageLinkPublished = (
     {pathname, title, publishedAt}: PropsWithChildren<PageData>,
-) => <Link href={pathname || '/'}>
-    <a className={style.link}>
-        {title}
-        &ensp;
-        <span className={style.meta}>
-            <DateString dateTime={publishedAt}/> 公開
-        </span>
-    </a>
+) => <Link href={pathname || '/'} className={style.link}>
+    {title}
+    <span className={style.meta}>
+        <DateString dateTime={publishedAt}/> 公開
+    </span>
 </Link>;
 
 export const PageLinkUpdated = (
     {pathname, title, updatedAt}: PropsWithChildren<PageData>,
-) => <Link href={pathname || '/'}>
-    <a className={style.link}>
-        {title}
-        &ensp;
-        <span className={style.meta}>
-            <DateString dateTime={updatedAt}/> 更新
-        </span>
-    </a>
+) => <Link href={pathname || '/'} className={style.link}>
+    {title}
+    <span className={style.meta}>
+        <DateString dateTime={updatedAt}/> 更新
+    </span>
 </Link>;
