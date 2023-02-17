@@ -50,7 +50,7 @@
         "@nlib/lint-commit": "0.2.0",
         "@types/jest": "29.4.0",
         "@types/react": "18.0.28",
-        "@typescript-eslint/eslint-plugin": "5.51.0",
+        "@typescript-eslint/eslint-plugin": "5.52.0",
         "@typescript-eslint/parser": "5.51.0",
         "canvas": "2.11.0",
         "dotenv": "16.0.3",
