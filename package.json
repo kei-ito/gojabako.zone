@@ -48,7 +48,7 @@
         "@nlib/eslint-config": "3.19.6",
         "@nlib/githooks": "0.1.0",
         "@nlib/lint-commit": "0.2.0",
-        "@types/jest": "29.4.4",
+        "@types/jest": "29.5.0",
         "@types/react": "18.0.28",
         "@typescript-eslint/eslint-plugin": "5.55.0",
         "@typescript-eslint/parser": "5.55.0",
