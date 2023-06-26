@@ -49,7 +49,7 @@
         "@nlib/githooks": "0.1.0",
         "@nlib/lint-commit": "0.2.0",
         "@types/jest": "29.5.2",
-        "@types/react": "18.2.13",
+        "@types/react": "18.2.14",
         "@typescript-eslint/eslint-plugin": "5.60.0",
         "@typescript-eslint/parser": "5.60.0",
         "canvas": "2.11.2",
