@@ -1,7 +1,4 @@
 {
-  "ts-node": {
-    "transpileOnly": true
-  },
   "compilerOptions": {
     "incremental": true,
     "target": "esnext",
@@ -30,6 +27,6 @@
       }
     ]
   },
-  "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["**/*.mts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

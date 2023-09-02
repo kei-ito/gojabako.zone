@@ -4,22 +4,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build-meta": "run-s build-meta:*",
-    "build-meta:pageList": "node cli/generatePageList.mjs",
-    "build-meta:images": "if [[ $(node -v) =~ \"v18\" ]]; then node --no-experimental-fetch cli/generateImages.mjs; else node cli/generateImages.mjs; fi",
-    "build-meta:pageImages": "node cli/generatePageImages.mjs",
-    "test": "run-s build-meta test:*",
+    "test": "run-s test:*",
     "test:type": "tsc --noEmit",
     "test:jest": "npx jest",
-    "test:deadcode": "ts-prune --ignore \".css.ts|.component.tsx\"",
-    "dev": "run-s build-meta dev:*",
-    "dev:watch": "run-p dev:watch:*",
-    "dev:watch:css": "typed-scss-modules src/components --watch --logLevel info",
-    "dev:watch:next": "node server.mjs",
-    "dev-next": "run-s build-meta dev-next:*",
-    "dev-next:watch": "next dev",
-    "build": "run-s build-meta build:*",
-    "build:css": "typed-scss-modules src/components --logLevel error",
+    "dev": "run-p dev:*",
+    "dev:css": "typed-scss-modules app --watch --logLevel info",
+    "dev:next": "next",
+    "build": "run-s build:*",
+    "build:css": "typed-scss-modules app --logLevel error",
     "build:next": "next build",
     "start": "NODE_ENV=production node server.mjs",
     "lint": "run-s lint:*",
@@ -27,23 +19,24 @@
     "lint:eslint": "eslint src *.mjs"
   },
   "dependencies": {
-    "@nlib/typing": "1.1.0",
-    "jose": "4.14.4",
-    "meilisearch": "0.34.1",
-    "next": "13.4.19"
-  },
-  "devDependencies": {
     "@nlib/eslint-config": "3.20.2",
     "@nlib/githooks": "0.2.0",
     "@nlib/lint-commit": "1.0.1",
+    "@nlib/tsm": "0.1.0",
+    "@nlib/typing": "1.1.0",
     "@types/node": "20.5.8",
     "@types/react": "18.2.21",
     "@typescript-eslint/eslint-plugin": "6.5.0",
     "@typescript-eslint/parser": "6.5.0",
+    "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
+    "jose": "4.14.4",
     "lint-staged": "14.0.1",
+    "meilisearch": "0.34.1",
+    "next": "13.4.12",
     "npm-run-all": "4.1.5",
     "prettier": "3.0.3",
+    "sass": "1.66.1",
     "typed-scss-modules": "7.1.4",
     "typescript": "5.2.2"
   },
@@ -57,12 +50,22 @@
     ],
     "ignorePatterns": [
       "next-env.d.ts",
-      "cli/*"
+      "cli/**",
+      "old-src/**"
     ],
     "rules": {
       "no-unused-private-class-members": "off",
       "import/dynamic-import-chunkname": "off",
-      "import/no-relative-parent-imports": "off"
+      "import/no-default-export": "off",
+      "import/no-relative-parent-imports": "off",
+      "import/no-unassigned-import": [
+        "error",
+        {
+          "allow": [
+            "**/*.scss"
+          ]
+        }
+      ]
     },
     "overrides": [
       {
@@ -79,7 +82,6 @@
           "src/pages/**/*.tsx"
         ],
         "rules": {
-          "import/no-default-export": "off",
           "import/no-unassigned-import": "off"
         }
       }
