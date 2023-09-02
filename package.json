@@ -9,7 +9,7 @@
     "test:jest": "npx jest",
     "dev": "run-p dev:*",
     "dev:css": "typed-scss-modules app --watch --logLevel info",
-    "dev:next": "next",
+    "dev:next": "NODE_OPTIONS='--experimental-loader=@nlib/tsm' next",
     "build": "run-s build:*",
     "build:css": "typed-scss-modules app --logLevel error",
     "build:next": "next build",
@@ -19,11 +19,15 @@
     "lint:eslint": "eslint src *.mjs"
   },
   "dependencies": {
+    "@mdx-js/loader": "2.3.0",
+    "@mdx-js/react": "2.3.0",
+    "@next/mdx": "13.4.19",
     "@nlib/eslint-config": "3.20.2",
     "@nlib/githooks": "0.2.0",
     "@nlib/lint-commit": "1.0.1",
     "@nlib/tsm": "0.1.0",
     "@nlib/typing": "1.1.0",
+    "@types/mdx": "2.0.7",
     "@types/node": "20.5.8",
     "@types/react": "18.2.21",
     "@typescript-eslint/eslint-plugin": "6.5.0",
@@ -36,6 +40,7 @@
     "next": "13.4.12",
     "npm-run-all": "4.1.5",
     "prettier": "3.0.3",
+    "remark-gfm": "3.0.1",
     "sass": "1.66.1",
     "typed-scss-modules": "7.1.4",
     "typescript": "5.2.2"
