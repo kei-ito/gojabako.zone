@@ -1,3 +1,4 @@
+'use client';
 import { useCallback, useReducer } from 'react';
 import style from './style.module.scss';
 
