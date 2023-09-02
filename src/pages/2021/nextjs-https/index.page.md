@@ -7,9 +7,9 @@
 ## やりたいこと
 
 1. https://localhost.gojabako.zone:3000 で開発中のページを見る
-    1. DNSはlocalhost.gojabako.zoneに127.0.0.1を返す
-    1. ブラウザは127.0.0.1:3000にリクエストする
-    1. ローカルで3000をlistenしているサーバーがコンテンツを返す
+   1. DNSはlocalhost.gojabako.zoneに127.0.0.1を返す
+   1. ブラウザは127.0.0.1:3000にリクエストする
+   1. ローカルで3000をlistenしているサーバーがコンテンツを返す
 1. 証明書はcertbot (Let's encrypt)で普通のやつをつくる
 
 ![やりたいことの図](./https-outline.jpg)
@@ -36,7 +36,7 @@ sudo certbot certonly \
     --preferred-challenges dns
 ```
 
-表示される値を_acme-challenge.localhost.gojabako.zoneのTXTレコードに設定してEnterを押すと証明書ができます。
+表示される値を\_acme-challenge.localhost.gojabako.zoneのTXTレコードに設定してEnterを押すと証明書ができます。
 
 ```txt 証明書の場所 (macOS, certbot 1.19.0)
 /etc/letsencrypt/live/localhost.gojabako.zone/README
@@ -46,7 +46,7 @@ sudo certbot certonly \
 /etc/letsencrypt/live/localhost.gojabako.zone/privkey.pem
 ```
 
-でもここから読むのはsudoが必要で手間なのでプロジェクトの中にコピーします。秘密鍵はそのままだと読めないのでコピー後に権限をつけます。[.gitignore]で*.pemをコミットしないようにしているので[GitHubではREADMEだけがある](https://github.com/gjbkz/gojabako.zone/tree/main/certificates/localhost.gojabako.zone)状態になっています[^1]。
+でもここから読むのはsudoが必要で手間なのでプロジェクトの中にコピーします。秘密鍵はそのままだと読めないのでコピー後に権限をつけます。[.gitignore]で\*.pemをコミットしないようにしているので[GitHubではREADMEだけがある](https://github.com/gjbkz/gojabako.zone/tree/main/certificates/localhost.gojabako.zone)状態になっています[^1]。
 
 ```sh コピーと権限付与のコマンド
 sudo cp /etc/letsencrypt/live/localhost.gojabako.zone certificates

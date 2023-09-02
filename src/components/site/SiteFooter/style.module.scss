@@ -1,21 +1,21 @@
 .footer {
-    position: sticky;
-    inset-block-start: 100%;
-    display: grid;
-    grid-auto-flow: row;
-    justify-content: stretch;
-    padding-block-start: 1rem;
-    background-color: var(--gray2);
-    border-block-start: solid 1px var(--gray3);
+  position: sticky;
+  inset-block-start: 100%;
+  display: grid;
+  grid-auto-flow: row;
+  justify-content: stretch;
+  padding-block-start: 1rem;
+  background-color: var(--gray2);
+  border-block-start: solid 1px var(--gray3);
 }
 
 .sign {
-    display: grid;
-    grid-template-columns: 1fr repeat(2, auto);
-    grid-auto-flow: column;
-    column-gap: 0.5rem;
-    justify-items: end;
-    align-items: center;
-    padding-block-start: 1rem;
-    padding-block-end: 1rem;
+  display: grid;
+  grid-template-columns: 1fr repeat(2, auto);
+  grid-auto-flow: column;
+  column-gap: 0.5rem;
+  justify-items: end;
+  align-items: center;
+  padding-block-start: 1rem;
+  padding-block-end: 1rem;
 }

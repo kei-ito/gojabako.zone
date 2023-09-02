@@ -1,18 +1,18 @@
 .link {
-    justify-self: start;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    text-decoration-line: none;
-    color: currentColor;
+  justify-self: start;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  text-decoration-line: none;
+  color: currentColor;
 }
 
 .link:hover {
-    text-decoration-line: underline;
+  text-decoration-line: underline;
 }
 
 .meta {
-    white-space: nowrap;
-    font-size: 80%;
-    opacity: 0.6;
+  white-space: nowrap;
+  font-size: 80%;
+  opacity: 0.6;
 }

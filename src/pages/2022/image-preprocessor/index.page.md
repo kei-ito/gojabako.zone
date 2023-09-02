@@ -8,7 +8,7 @@
 
 1. srcとpublicの画像を列挙する
 2. それぞれについて 幅(300, 400, ..., 1800) × 形式(オリジナル, webp, avif) の画像を生成する
-    - 例えば 幅(300, 400, 800) × 形式(jpeg, webp, avif) なら9種類
+   - 例えば 幅(300, 400, 800) × 形式(jpeg, webp, avif) なら9種類
 3. 生成した画像の一覧を使って `{元ファイル}.component.tsx` を生成する（このファイルは.gitignoreする）
 4. 画像がすでに生成してあれば省略する（.gitignoreしてるのでコンポーネントの生成は毎度やる）
 
@@ -41,6 +41,6 @@ export default Image;
 ## 参考文献
 
 1. MDN Web Docs
-    1. [`<picture>`: The Picture element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture)
-    2. [`<source>`: The Media or Image Source element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source)
-    3. [`<img>`: The Image Embed element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img)
+   1. [`<picture>`: The Picture element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture)
+   2. [`<source>`: The Media or Image Source element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source)
+   3. [`<img>`: The Image Embed element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img)

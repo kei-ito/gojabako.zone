@@ -1,138 +1,97 @@
 {
-    "name": "@gjbkz/gojabako.zone",
-    "homepage": "https://gojabako.zone/",
-    "version": "0.0.0",
-    "private": true,
-    "scripts": {
-        "build-meta": "run-s build-meta:*",
-        "build-meta:pageList": "node cli/generatePageList.mjs",
-        "build-meta:images": "if [[ $(node -v) =~ \"v18\" ]]; then node --no-experimental-fetch cli/generateImages.mjs; else node cli/generateImages.mjs; fi",
-        "build-meta:pageImages": "node cli/generatePageImages.mjs",
-        "test": "run-s build-meta test:*",
-        "test:type": "tsc --noEmit",
-        "test:jest": "npx jest",
-        "test:deadcode": "ts-prune --ignore \".css.ts|.component.tsx\"",
-        "dev": "run-s build-meta dev:*",
-        "dev:watch": "run-p dev:watch:*",
-        "dev:watch:css": "typed-scss-modules src/components --watch --logLevel info",
-        "dev:watch:next": "node server.mjs",
-        "dev-next": "run-s build-meta dev-next:*",
-        "dev-next:watch": "next dev",
-        "build": "run-s build-meta build:*",
-        "build:css": "typed-scss-modules src/components --logLevel error",
-        "build:next": "next build",
-        "start": "NODE_ENV=production node server.mjs",
-        "lint": "run-s lint:*",
-        "lint:next": "next lint",
-        "lint:eslint": "eslint --ext .ts,.tsx,.cjs,.mjs src cli *.mjs"
-    },
-    "dependencies": {
-        "@gjbkz/gojabako.zone-build-images": "0.1.15",
-        "@gjbkz/gojabako.zone-build-pagelist": "0.1.15",
-        "@gjbkz/gojabako.zone-markdown-component-loader-cjs": "0.1.15",
-        "@gjbkz/gojabako.zone-markdown-page-loader-cjs": "0.1.15",
-        "@gjbkz/gojabako.zone-markdown-util": "0.1.15",
-        "@gjbkz/gojabako.zone-node-util": "0.1.15",
-        "@nlib/typing": "0.5.7",
-        "jose": "4.14.4",
-        "meilisearch": "0.34.1",
-        "next": "13.4.19",
-        "postcss": "8.4.29",
-        "react": "18.2.0",
-        "react-dom": "18.2.0",
-        "sass": "1.66.1"
-    },
-    "devDependencies": {
-        "@gjbkz/gojabako.zone-kuromoji": "0.1.15",
-        "@gjbkz/gojabako.zone-markdown-parser": "0.1.15",
-        "@nlib/eslint-config": "3.20.0",
-        "@nlib/githooks": "0.2.0",
-        "@nlib/lint-commit": "0.2.0",
-        "@types/jest": "29.5.4",
-        "@types/react": "18.2.21",
-        "@typescript-eslint/eslint-plugin": "5.62.0",
-        "@typescript-eslint/parser": "5.62.0",
-        "canvas": "2.11.2",
-        "dotenv": "16.3.1",
-        "eslint-config-next": "13.4.19",
-        "eslint-import-resolver-typescript": "3.6.0",
-        "eslint-plugin-jest": "27.2.3",
-        "jest": "29.6.4",
-        "lint-staged": "13.3.0",
-        "npm-run-all": "4.1.5",
-        "stackblur-canvas": "2.6.0",
-        "ts-jest": "29.1.1",
-        "ts-prune": "0.10.3",
-        "typed-scss-modules": "7.1.4",
-        "typescript": "4.9.5",
-        "vercel": "28.20.0"
-    },
-    "browserslist": [
-        ">10%"
+  "name": "@gjbkz/gojabako.zone",
+  "homepage": "https://gojabako.zone/",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build-meta": "run-s build-meta:*",
+    "build-meta:pageList": "node cli/generatePageList.mjs",
+    "build-meta:images": "if [[ $(node -v) =~ \"v18\" ]]; then node --no-experimental-fetch cli/generateImages.mjs; else node cli/generateImages.mjs; fi",
+    "build-meta:pageImages": "node cli/generatePageImages.mjs",
+    "test": "run-s build-meta test:*",
+    "test:type": "tsc --noEmit",
+    "test:jest": "npx jest",
+    "test:deadcode": "ts-prune --ignore \".css.ts|.component.tsx\"",
+    "dev": "run-s build-meta dev:*",
+    "dev:watch": "run-p dev:watch:*",
+    "dev:watch:css": "typed-scss-modules src/components --watch --logLevel info",
+    "dev:watch:next": "node server.mjs",
+    "dev-next": "run-s build-meta dev-next:*",
+    "dev-next:watch": "next dev",
+    "build": "run-s build-meta build:*",
+    "build:css": "typed-scss-modules src/components --logLevel error",
+    "build:next": "next build",
+    "start": "NODE_ENV=production node server.mjs",
+    "lint": "run-s lint:*",
+    "lint:next": "next lint",
+    "lint:eslint": "eslint src *.mjs"
+  },
+  "dependencies": {
+    "@nlib/typing": "1.1.0",
+    "jose": "4.14.4",
+    "meilisearch": "0.34.1",
+    "next": "13.4.19"
+  },
+  "devDependencies": {
+    "@nlib/eslint-config": "3.20.2",
+    "@nlib/githooks": "0.2.0",
+    "@nlib/lint-commit": "1.0.1",
+    "@types/node": "20.5.8",
+    "@types/react": "18.2.21",
+    "@typescript-eslint/eslint-plugin": "6.5.0",
+    "@typescript-eslint/parser": "6.5.0",
+    "eslint-config-next": "13.4.19",
+    "lint-staged": "14.0.1",
+    "npm-run-all": "4.1.5",
+    "prettier": "3.0.3",
+    "typed-scss-modules": "7.1.4",
+    "typescript": "5.2.2"
+  },
+  "browserslist": [
+    ">10%"
+  ],
+  "eslintConfig": {
+    "extends": [
+      "next/core-web-vitals",
+      "@nlib/eslint-config"
     ],
-    "jest": {
-        "roots": [
-            "<rootDir>/src"
-        ],
-        "moduleFileExtensions": [
-            "cjs",
-            "mjs",
-            "js",
-            "jsx",
-            "ts",
-            "tsx"
-        ],
-        "preset": "ts-jest/presets/js-with-ts",
-        "transformIgnorePatterns": [
-            "node_modules/(?!(mdast-|unist-|micromark|parse-entities|character-entities|ccount|escape-string-regexp|markdown-table|lowlight|fault|decode-named-character-reference))"
-        ],
-        "collectCoverage": true
+    "ignorePatterns": [
+      "next-env.d.ts",
+      "cli/*"
+    ],
+    "rules": {
+      "no-unused-private-class-members": "off",
+      "import/dynamic-import-chunkname": "off",
+      "import/no-relative-parent-imports": "off"
     },
-    "eslintConfig": {
-        "extends": [
-            "next/core-web-vitals",
-            "@nlib/eslint-config"
-        ],
-        "ignorePatterns": [
-            "next-env.d.ts"
+    "overrides": [
+      {
+        "files": [
+          "*.test.*"
         ],
         "rules": {
-            "no-unused-private-class-members": "off",
-            "import/dynamic-import-chunkname": "off",
-            "import/no-relative-parent-imports": "off"
-        },
-        "overrides": [
-            {
-                "files": [
-                    "*.test.ts"
-                ],
-                "plugins": [
-                    "jest"
-                ],
-                "env": {
-                    "jest/globals": true
-                },
-                "rules": {
-                    "max-lines-per-function": "off"
-                }
-            },
-            {
-                "files": [
-                    "src/pages/**/*.tsx"
-                ],
-                "rules": {
-                    "import/no-default-export": "off",
-                    "import/no-unassigned-import": "off"
-                }
-            }
-        ]
-    },
-    "lint-staged": {
-        "*!(.d).{ts,tsx,js,mjs,cjs,jsx}": "eslint"
-    },
-    "renovate": {
-        "extends": [
-            "github>nlibjs/renovate-config"
-        ]
-    }
+          "max-lines-per-function": "off",
+          "@typescript-eslint/no-floating-promises": "off"
+        }
+      },
+      {
+        "files": [
+          "src/pages/**/*.tsx"
+        ],
+        "rules": {
+          "import/no-default-export": "off",
+          "import/no-unassigned-import": "off"
+        }
+      }
+    ]
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown",
+    "**/*.*(m|c)+(j|t)s*(x)": "eslint"
+  },
+  "renovate": {
+    "extends": [
+      "github>nlibjs/renovate-config"
+    ]
+  }
 }

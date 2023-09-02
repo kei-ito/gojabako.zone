@@ -74,8 +74,8 @@ https://mieru.auone.jp/app/api/v1/dailyPowerReports/K000000000
 ```javascript 9月と10月のデータをGETするスクリプト
 fetch(
   'https://mieru.auone.jp/app/api/v1/dailyPowerReports/K000000000?startDate=20210901&endDate=20211101&withHalfHourlyUsages=1',
-  {headers: {'x-evass-api': '1'}},
-)
+  { headers: { 'x-evass-api': '1' } },
+);
 ```
 
 WebDriverの方でデータは取得できていたのでここで手を動かすのはやめました。

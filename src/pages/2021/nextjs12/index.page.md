@@ -31,40 +31,36 @@ ES Modulesで書けるようになったとのことでnext.config.jsをnext.con
 content-typeのわがままは要件であるとします。`/pages/api`とrewriteを使うのは迂回をしている感じで具合が悪かったのでここをmiddlewareで解消することにしました。
 
 ```typescript [_middleware.ts](https://github.com/gjbkz/gojabako.zone/blob/b6916051706c2cf23b99986b35d98d4654d4114f/pages/_middleware.ts)
-import {NextResponse} from 'next/server';
-import type {NextRequest} from 'next/server';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export const middleware = (req: NextRequest) => {
-    const {pathname} = req.nextUrl;
-    switch (pathname) {
+  const { pathname } = req.nextUrl;
+  switch (pathname) {
     case '/sitemap.xml':
-        return respondSitemap();
+      return respondSitemap();
     case '/feed.atom':
-        return respondFeed();
+      return respondFeed();
     default:
-        return undefined;
-    }
+      return undefined;
+  }
 };
 
-const respondSitemap = () => new NextResponse(
-    [...serializeSitemap()].join('\n'),
-    {
-        headers: {
-            'content-type': 'application/xml; charset=utf-8',
-            'cache-control': 'public, max-age=3600',
-        },
+const respondSitemap = () =>
+  new NextResponse([...serializeSitemap()].join('\n'), {
+    headers: {
+      'content-type': 'application/xml; charset=utf-8',
+      'cache-control': 'public, max-age=3600',
     },
-);
+  });
 
-const respondFeed = () => new NextResponse(
-    [...serializeFeed()].join('\n'),
-    {
-        headers: {
-            'content-type': 'application/atom+xml; charset=utf-8',
-            'cache-control': 'public, max-age=3600',
-        },
+const respondFeed = () =>
+  new NextResponse([...serializeFeed()].join('\n'), {
+    headers: {
+      'content-type': 'application/atom+xml; charset=utf-8',
+      'cache-control': 'public, max-age=3600',
     },
-);
+  });
 ```
 
 これで`/pages/api`とrewriteの設定は不要になりました。

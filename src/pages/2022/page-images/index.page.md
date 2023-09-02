@@ -26,12 +26,12 @@ SNSでURLをシェアしたときに表示されるページ情報に画像が�
 
 ```typescript [/src/pageList.ts#L3-L10](https://github.com/gjbkz/gojabako.zone/blob/49482751596fc3b46bbaf7086b374a2eeec83c4e/src/pageList.ts#L3-L10)
 export interface PageData {
-    pathname: string,
-    title: string,
-    filePath: string,
-    publishedAt: string,
-    updatedAt: string,
-    commitCount: number,
+  pathname: string;
+  title: string;
+  filePath: string;
+  publishedAt: string;
+  updatedAt: string;
+  commitCount: number;
 }
 ```
 
