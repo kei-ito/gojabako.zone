@@ -483,6 +483,9 @@ figure[data-lang='math'] > figcaption {
   opacity: 0;
   overflow: hidden;
 }
+.katex-mathml {
+  display: none;
+}
 .katex-inline {
   margin-inline: 0.1rem;
 }
