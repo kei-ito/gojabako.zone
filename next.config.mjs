@@ -1,25 +1,21 @@
-//@ts-check
 import mdx from '@next/mdx';
 import remarkGfm from 'remark-gfm';
-import remarkRuby from 'remark-ruby';
 import remarkMath from 'remark-math';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeSlug from 'rehype-slug';
 import rehypeKatex from 'rehype-katex';
-import rehypeEmbed from './src/rehype/embed.mjs';
-import rehypeWrap from './src/rehype/wrap.mjs';
+import rehypeEmbed from './src/rehype/embed.mts';
+import rehypeArticle from './src/rehype/article.mjs';
 
 const withMDX = mdx({
   options: {
-    // @ts-ignore
-    remarkPlugins: [remarkGfm, remarkRuby, remarkMath],
-    // @ts-ignore
+    remarkPlugins: [remarkGfm, remarkMath],
     rehypePlugins: [
       rehypeEmbed,
       rehypeHighlight,
       rehypeSlug,
       rehypeKatex,
-      rehypeWrap,
+      rehypeArticle,
     ],
   },
 });

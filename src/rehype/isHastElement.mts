@@ -1,11 +1,15 @@
 import { isString } from '@nlib/typing';
 import type { Element, ElementContent, Root, RootContent } from 'hast';
 
-export const isHastElement = (
+interface HastElement<T extends string> extends Element {
+  tagName: T;
+}
+
+export const isHastElement = <T extends string>(
   element: ElementContent | Root | RootContent,
-  tagName: string,
+  tagName: T,
   requiredClassNames?: Array<string>,
-): element is Element => {
+): element is HastElement<T> => {
   if (element.type !== 'element') {
     return false;
   }
