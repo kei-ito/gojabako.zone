@@ -62,6 +62,10 @@
   }
 }
 body {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: max-content minmax(max-content, 1fr) max-content;
+  align-content: start;
   & > header {
     z-index: 1;
     position: sticky;
@@ -69,28 +73,20 @@ body {
     inset-inline: 0;
     box-shadow: inset 0 -1px 0 var(--gray3);
   }
-  & > main {
-    min-block-size: 90vh;
-  }
   min-block-size: 100vh;
 }
 main {
   display: grid;
   grid-auto-flow: row;
-  row-gap: 1rem;
-  padding-block-end: 3rem;
   align-content: start;
-  background-color: var(--gray0);
 }
 article,
 section {
   display: grid;
   grid-auto-flow: row;
-  justify-items: center;
+  grid-template-columns: var(--baseWidth);
+  justify-content: center;
   row-gap: var(--baseGap);
-  & > * {
-    inline-size: var(--baseWidth);
-  }
 }
 article {
   & > header {

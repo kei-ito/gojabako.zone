@@ -23,12 +23,6 @@
       grid-template-columns: 2em auto;
       column-gap: 0.4em;
       align-items: center;
-      & > span {
-        white-space: nowrap;
-        & > br {
-          display: inline;
-        }
-      }
     }
     & > a[title='GitHub'] {
       grid-column: -2/-1;
