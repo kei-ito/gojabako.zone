@@ -3,6 +3,7 @@ import { appDir, rootDir, srcDir } from '../util/node/directories.mjs';
 import { getPageData } from '../util/node/getPageData.mjs';
 import { walkFiles } from '../util/node/walkFiles.mjs';
 import { serializeToJs } from '../util/serializeToJs.mjs';
+import type { Page } from '../util/type.mjs';
 
 const prefix = 'build/pageList:';
 
@@ -18,16 +19,25 @@ const listPageFiles = async function* (): AsyncGenerator<URL> {
 };
 
 const generateCode = async function* () {
-  yield "import type { Page } from './type.mjs';\n";
-  yield 'export const pageList: Array<Page> = [\n';
+  const pageList: Array<Page> = [];
   for await (const file of listPageFiles()) {
     console.info(prefix, file.pathname.slice(appDir.pathname.length));
-    const page = await getPageData(file);
-    yield '  ';
-    yield* serializeToJs(page, 1);
-    yield ',\n';
+    pageList.push(await getPageData(file));
   }
-  yield '];\n';
+  pageList.sort((a, b) => {
+    const ga = a.url.split('/', 1)[0];
+    const gb = b.url.split('/', 1)[0];
+    if (ga === gb) {
+      const ta = new Date(a.publishedAt).getTime();
+      const tb = new Date(b.publishedAt).getTime();
+      return tb - ta;
+    }
+    return gb.localeCompare(ga);
+  });
+  yield "import type { Page } from './type.mjs';\n";
+  yield 'export const pageList: Array<Page> = ';
+  yield* serializeToJs(pageList);
+  yield ';\n';
 };
 
 let code = '';

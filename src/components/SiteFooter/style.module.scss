@@ -1,13 +1,34 @@
 .container {
   display: grid;
-  grid-template-columns: var(--gjBaseWidth);
+  grid-template-columns: 1fr;
   justify-content: center;
+  background-color: var(--gjGray2);
+  padding-block-start: 2em;
+  padding-block-end: 1em;
+  row-gap: 1em;
 
   & > section {
     &:last-child {
       display: grid;
       grid-auto-flow: column;
       justify-items: end;
+    }
+  }
+}
+
+.page {
+  & > a {
+    text-decoration: none;
+    color: inherit;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    & > time {
+      margin-inline-start: 0.5em;
+      opacity: 0.6;
+      font-size: 80%;
     }
   }
 }

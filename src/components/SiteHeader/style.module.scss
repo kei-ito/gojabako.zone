@@ -20,16 +20,25 @@
       align-items: center;
     }
 
-    & > a[href='/'] {
-      grid-column: 1/2;
-      display: grid;
-      grid-template-columns: 2em auto;
-      column-gap: 0.4em;
-      align-items: center;
-    }
+    & > a {
+      text-decoration: none;
+      color: inherit;
 
-    & > a[title='GitHub'] {
-      grid-column: -2/-1;
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &[href='/'] {
+        grid-column: 1/2;
+        display: grid;
+        grid-template-columns: 2em auto;
+        column-gap: 0.4em;
+        align-items: center;
+      }
+
+      &[href='/author'] {
+        grid-column: -2/-1;
+      }
     }
   }
 }

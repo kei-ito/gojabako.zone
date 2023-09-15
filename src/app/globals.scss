@@ -79,7 +79,7 @@ section {
   grid-auto-flow: row;
   grid-template-columns: var(--gjBaseWidth);
   justify-content: center;
-  row-gap: 1em;
+  row-gap: 0.4em;
 }
 
 img,
@@ -190,31 +190,8 @@ h3,
 h4,
 h5,
 h6 {
+  margin-block-start: 0.4em;
   font-weight: 600;
-}
-
-h2,
-h3 {
-  margin-block-start: 1em;
-}
-
-h1 {
-  font-size: 130%;
-}
-
-h2 {
-  font-size: 112%;
-}
-
-h3 {
-  font-size: 106%;
-}
-
-header {
-  & + h2,
-  & + h3 {
-    margin-block-start: 0;
-  }
 }
 
 body {
@@ -277,6 +254,7 @@ li {
   row-gap: inherit;
   column-gap: 0.5em;
   align-items: baseline;
+  justify-items: start;
 }
 
 li > * {
@@ -284,6 +262,7 @@ li > * {
 }
 
 li::before {
+  justify-self: end;
   grid-column: 1 / 2;
   text-align: end;
 }

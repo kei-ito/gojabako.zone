@@ -11,9 +11,7 @@ export const SiteHeader = (props: HTMLAttributes<HTMLElement>) => (
         <Logo />
         <span>Gojabako Zone</span>
       </Link>
-      <Link target="_blank" href="https://github.com/gjbkz" title="GitHub">
-        Kei Ito
-      </Link>
+      <Link href="/author">Kei Ito</Link>
     </div>
   </header>
 );
