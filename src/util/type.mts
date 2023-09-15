@@ -7,6 +7,7 @@ export interface Commit {
 export interface Page {
   url: string;
   filePath: string;
+  title: string;
   publishedAt: string;
   updatedAt: string;
   commits: number;

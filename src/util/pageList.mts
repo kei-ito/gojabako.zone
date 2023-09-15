@@ -3,6 +3,7 @@ export const pageList: Array<Page> = [
   {
     url: '2018/monitor-stand',
     filePath: 'src/app/2018/monitor-stand/index.page.md',
+    title: 'モニタースタンドに棚をつけるDIY記録',
     publishedAt: '2022-02-15T18:36:03+09:00',
     updatedAt: '2023-09-02T17:23:48+09:00',
     commits: 9,
@@ -10,6 +11,7 @@ export const pageList: Array<Page> = [
   {
     url: '2019/error-propagation',
     filePath: 'src/app/2019/error-propagation/index.page.md',
+    title: '加重平均の誤差伝播',
     publishedAt: '2022-02-20T23:12:14+09:00',
     updatedAt: '2023-09-02T17:23:48+09:00',
     commits: 8,
@@ -17,6 +19,7 @@ export const pageList: Array<Page> = [
   {
     url: '2019/gitlab-runner',
     filePath: 'src/app/2019/gitlab-runner/index.page.md',
+    title: 'GitLab Runner環境をCloudFormationでつくる',
     publishedAt: '2022-02-16T01:01:22+09:00',
     updatedAt: '2023-09-02T17:23:48+09:00',
     commits: 6,
@@ -24,6 +27,7 @@ export const pageList: Array<Page> = [
   {
     url: '2020/new-computer',
     filePath: 'src/app/2020/new-computer/index.page.md',
+    title: 'ラックマウントPC',
     publishedAt: '2022-02-15T23:38:24+09:00',
     updatedAt: '2023-09-02T17:23:48+09:00',
     commits: 6,
@@ -31,6 +35,7 @@ export const pageList: Array<Page> = [
   {
     url: '2021/au-denki',
     filePath: 'src/app/2021/au-denki/index.page.md',
+    title: 'auでんきの使用量をCSVにする',
     publishedAt: '2021-12-01T00:59:21+09:00',
     updatedAt: '2023-09-04T01:55:56+09:00',
     commits: 10,
@@ -38,6 +43,7 @@ export const pageList: Array<Page> = [
   {
     url: '2021/aws-errors',
     filePath: 'src/app/2021/aws-errors/index.page.md',
+    title: 'AWSの開発でたまに遭うエラーと原因',
     publishedAt: '2021-12-17T00:15:30+09:00',
     updatedAt: '2023-09-02T17:23:48+09:00',
     commits: 7,
@@ -45,6 +51,7 @@ export const pageList: Array<Page> = [
   {
     url: '2021/ipad-case',
     filePath: 'src/app/2021/ipad-case/index.page.md',
+    title: 'iPad Proケースの製作',
     publishedAt: '2021-12-13T22:53:16+09:00',
     updatedAt: '2023-09-02T17:23:48+09:00',
     commits: 7,
@@ -52,6 +59,7 @@ export const pageList: Array<Page> = [
   {
     url: '2021/nextjs',
     filePath: 'src/app/2021/nextjs/index.page.md',
+    title: 'サイトをNext.js + Vercelに移行した',
     publishedAt: '2021-10-05T23:51:46+09:00',
     updatedAt: '2023-09-02T17:23:48+09:00',
     commits: 16,
@@ -59,6 +67,7 @@ export const pageList: Array<Page> = [
   {
     url: '2021/nextjs-https',
     filePath: 'src/app/2021/nextjs-https/index.page.md',
+    title: 'Next.jsの開発環境をHTTPSにする',
     publishedAt: '2021-10-11T00:26:45+09:00',
     updatedAt: '2023-09-02T17:23:48+09:00',
     commits: 10,
@@ -66,6 +75,7 @@ export const pageList: Array<Page> = [
   {
     url: '2021/nextjs12',
     filePath: 'src/app/2021/nextjs12/index.page.md',
+    title: 'Next.js 12にしました',
     publishedAt: '2021-10-29T22:24:14+09:00',
     updatedAt: '2023-09-02T17:23:48+09:00',
     commits: 9,
@@ -73,6 +83,7 @@ export const pageList: Array<Page> = [
   {
     url: '2022/ag06modification',
     filePath: 'src/app/2022/ag06modification/index.page.md',
+    title: 'AG06にマイクをGoProマウントする',
     publishedAt: '2022-04-09T13:59:15+09:00',
     updatedAt: '2023-09-02T17:23:48+09:00',
     commits: 4,
@@ -80,6 +91,7 @@ export const pageList: Array<Page> = [
   {
     url: '2022/disabled-form-element',
     filePath: 'src/app/2022/disabled-form-element/index.page.md',
+    title: 'disabledなフォーム要素はsubmitされない',
     publishedAt: '2022-08-28T18:13:17+09:00',
     updatedAt: '2023-09-02T17:23:48+09:00',
     commits: 10,
@@ -87,6 +99,7 @@ export const pageList: Array<Page> = [
   {
     url: '2022/dpop',
     filePath: 'src/app/2022/dpop/index.page.md',
+    title: 'DPoPのブラウザ実装',
     publishedAt: '2022-08-29T02:37:13+09:00',
     updatedAt: '2023-09-02T17:23:48+09:00',
     commits: 12,
@@ -94,6 +107,7 @@ export const pageList: Array<Page> = [
   {
     url: '2022/image-preprocessor',
     filePath: 'src/app/2022/image-preprocessor/index.page.md',
+    title: 'next/imageが遅いのでやめた',
     publishedAt: '2022-02-05T18:20:17+09:00',
     updatedAt: '2023-09-02T17:23:48+09:00',
     commits: 7,
@@ -101,6 +115,7 @@ export const pageList: Array<Page> = [
   {
     url: '2022/iphone12',
     filePath: 'src/app/2022/iphone12/index.page.md',
+    title: 'Appleでオンライン購入したiPhone 12がau回線で使えるようになるまで',
     publishedAt: '2022-02-13T18:21:58+09:00',
     updatedAt: '2023-09-02T17:23:48+09:00',
     commits: 6,
@@ -108,6 +123,7 @@ export const pageList: Array<Page> = [
   {
     url: '2022/page-images',
     filePath: 'src/app/2022/page-images/index.page.md',
+    title: 'ブログ記事の画像を生成する',
     publishedAt: '2022-02-11T23:48:29+09:00',
     updatedAt: '2023-09-02T17:23:48+09:00',
     commits: 8,
