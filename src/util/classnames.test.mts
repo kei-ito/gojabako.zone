@@ -1,6 +1,6 @@
-import { describe, test } from 'node:test';
 import * as assert from 'node:assert';
-import { classnames } from './classnames';
+import { describe, test } from 'node:test';
+import { classnames } from './classnames.mjs';
 
 describe(classnames.name, () => {
   test('returns a string for className', () => {

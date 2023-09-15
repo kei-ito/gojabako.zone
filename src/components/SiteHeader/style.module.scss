@@ -1,0 +1,37 @@
+.container {
+  min-block-size: 36px;
+  display: grid;
+  grid-template-columns: var(--baseWidth);
+  justify-content: center;
+  background-color: hsla(0, 0%, 100%, 0.8);
+  backdrop-filter: blur(2px);
+  font-weight: 500;
+  line-height: 1;
+  & > div {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: 1fr;
+    column-gap: 0.5em;
+    & > * {
+      display: grid;
+      grid-auto-flow: column;
+      align-items: center;
+    }
+    & > a[href='/'] {
+      grid-column: 1/2;
+      display: grid;
+      grid-template-columns: 2em auto;
+      column-gap: 0.4em;
+      align-items: center;
+      & > span {
+        white-space: nowrap;
+        & > br {
+          display: inline;
+        }
+      }
+    }
+    & > a[title='GitHub'] {
+      grid-column: -2/-1;
+    }
+  }
+}

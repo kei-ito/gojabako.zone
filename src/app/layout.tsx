@@ -1,5 +1,7 @@
 import './globals.scss';
 import type { PropsWithChildren } from 'react';
+import { SiteFooter } from '../components/SiteFooter';
+import { SiteHeader } from '../components/SiteHeader';
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
@@ -28,10 +30,12 @@ export default function RootLayout({ children }: PropsWithChildren) {
           integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn"
           crossOrigin="anonymous"
         />
+        <meta name="theme-color" content="hsla(0,0%,100%,0.8)" />
       </head>
       <body>
-        <header>Header</header>
-        {children}
+        <SiteHeader />
+        <main>{children}</main>
+        <SiteFooter />
       </body>
     </html>
   );

@@ -24,6 +24,21 @@ const withMDX = mdx({
 const nextConfig = {
   pageExtensions: ['tsx', 'mdx'],
   reactStrictMode: true,
+  webpack: (config, _options) => {
+    config.module.rules.push({
+      test: /\.mts$/,
+      loader: 'esbuild-loader',
+      options: { loader: 'ts' },
+    });
+    config.resolve = {
+      ...config.resolve,
+      extensionAlias: {
+        ...config.resolve?.extensionAlias,
+        '.mjs': ['.mts', '.mjs'],
+      },
+    };
+    return config;
+  },
 };
 
 export default withMDX(nextConfig);
