@@ -1,0 +1,17 @@
+{
+  "extends": ["stylelint-config-standard-scss"],
+  "rules": {
+    "custom-property-pattern": [
+      "^gj([A-Z0-9][a-z0-9]*)+$",
+      {
+        "message": "Expected custom property name to be prefixed with 'gj'."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["**/*.scss"],
+      "customSyntax": "postcss-scss"
+    }
+  ]
+}

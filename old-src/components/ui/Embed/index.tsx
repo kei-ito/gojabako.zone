@@ -36,7 +36,7 @@ const processElement = (type: string, element: HTMLElement) => {
         const width = element.getAttribute('width');
         const height = element.getAttribute('height');
         if (width && height) {
-          element.style.blockSize = `calc(var(--baseWidth) * ${(
+          element.style.blockSize = `calc(var(--BaseWidth) * ${(
             Number(height) / Number(width)
           ).toFixed(3)})`;
           element.removeAttribute('width');

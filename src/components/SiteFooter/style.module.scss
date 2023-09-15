@@ -1,7 +1,8 @@
 .container {
   display: grid;
-  grid-template-columns: var(--baseWidth);
+  grid-template-columns: var(--gjBaseWidth);
   justify-content: center;
+
   & > section {
     &:last-child {
       display: grid;
