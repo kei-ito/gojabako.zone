@@ -1,5 +1,5 @@
-import { test } from 'node:test';
 import * as assert from 'node:assert';
+import { test } from 'node:test';
 import { serializeToJs } from './serializeToJs.mjs';
 
 const s = (...args: Parameters<typeof serializeToJs>) => {
