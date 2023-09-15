@@ -4,7 +4,7 @@ import remarkMath from 'remark-math';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeSlug from 'rehype-slug';
 import rehypeKatex from 'rehype-katex';
-import rehypeEmbed from './src/rehype/embed.mts';
+import rehypeEmbed from './src/rehype/embed.mjs';
 import rehypeArticle from './src/rehype/article.mjs';
 
 const withMDX = mdx({

@@ -11,6 +11,7 @@
     "dev:css": "typed-scss-modules app --watch --logLevel info",
     "dev:next": "NODE_OPTIONS='--experimental-loader=@nlib/tsm' next",
     "build": "run-s build:*",
+    "build:pageList": "node --experimental-loader=@nlib/tsm src/build/pageList.mts",
     "build:css": "typed-scss-modules app --logLevel error",
     "build:next": "next build",
     "start": "NODE_ENV=production node server.mjs",
@@ -50,53 +51,6 @@
     "typescript": "5.2.2",
     "unified": "11.0.2",
     "unist-util-visit": "5.0.0"
-  },
-  "browserslist": [
-    ">10%"
-  ],
-  "eslintConfig": {
-    "extends": [
-      "next/core-web-vitals",
-      "@nlib/eslint-config"
-    ],
-    "ignorePatterns": [
-      "next-env.d.ts",
-      "cli/**",
-      "old-src/**"
-    ],
-    "rules": {
-      "no-unused-private-class-members": "off",
-      "import/dynamic-import-chunkname": "off",
-      "import/no-default-export": "off",
-      "import/no-relative-parent-imports": "off",
-      "import/no-unassigned-import": [
-        "error",
-        {
-          "allow": [
-            "**/*.scss"
-          ]
-        }
-      ]
-    },
-    "overrides": [
-      {
-        "files": [
-          "*.test.*"
-        ],
-        "rules": {
-          "max-lines-per-function": "off",
-          "@typescript-eslint/no-floating-promises": "off"
-        }
-      },
-      {
-        "files": [
-          "src/pages/**/*.tsx"
-        ],
-        "rules": {
-          "import/no-unassigned-import": "off"
-        }
-      }
-    ]
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown",
