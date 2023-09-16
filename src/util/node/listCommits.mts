@@ -1,5 +1,5 @@
-import type { Commit } from '../type.mjs';
-import { spawn } from './spawn.mjs';
+import type { Commit } from '../type.mts';
+import { spawn } from './spawn.mts';
 
 /**
  * https://git-scm.com/docs/pretty-formats

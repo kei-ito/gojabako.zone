@@ -1,6 +1,6 @@
 import * as assert from 'node:assert';
 import { test } from 'node:test';
-import { serializeToJs } from './serializeToJs.mjs';
+import { serializeToJs } from './serializeToJs.mts';
 
 const s = (...args: Parameters<typeof serializeToJs>) => {
   let result = '';

@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { HtmlHead } from '../components/site/HtmlHead';
 import { PageLinkUpdated } from '../components/site/PageLink';
 import { PageTitle } from '../components/site/PageTitle';
-import { pageListByUpdatedAt } from '../../generated.pageList.mjs';
-import { authorName } from '../../config.site.mjs';
+import { pageListByUpdatedAt } from '../../generated.pageList.mts';
+import { authorName } from '../../config.site.mts';
 
 export const Page = () => (
   <>

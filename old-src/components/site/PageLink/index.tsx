@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { PropsWithChildren } from 'react';
-import type { PageData } from '../../../../generated.pageList.mjs';
+import type { PageData } from '../../../../generated.pageList.mts';
 import { DateString } from '../../ui/DateString';
 import style from './style.module.scss';
 

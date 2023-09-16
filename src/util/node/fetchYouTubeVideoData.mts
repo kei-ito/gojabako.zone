@@ -1,5 +1,5 @@
 import { isFiniteNumber } from '@nlib/typing';
-import { fetchWebPageMetaData } from './fetchWebPageMetaData.mjs';
+import { fetchWebPageMetaData } from './fetchWebPageMetaData.mts';
 
 interface VideoData {
   title: string;

@@ -1,7 +1,7 @@
 import * as assert from 'node:assert';
 import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
-import { extractPageMetaDataFromHtml } from './extractPageMetaDataFromHtml.mjs';
+import { extractPageMetaDataFromHtml } from './extractPageMetaDataFromHtml.mts';
 
 test(extractPageMetaDataFromHtml.name, async () => {
   const html = await readFile(

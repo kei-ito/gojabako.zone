@@ -3,7 +3,7 @@ import { createTypeChecker, ensure, isString } from '@nlib/typing';
 import { MeiliSearch } from 'meilisearch';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
-import { siteName } from '../../../../config.site.mjs';
+import { siteName } from '../../../../config.site.mts';
 import { useDebouncedValue } from '../../../hooks/useDebouncedValue';
 import { classnames } from '../../../util/classnames';
 import { AuthorLinks } from '../AuthorLinks';

@@ -1,5 +1,5 @@
-import { getPageTitleFromMarkdown } from './getPageTitleFromMarkdown.mjs';
-import { getPageTitleFromScript } from './getPageTitleFromScript.mjs';
+import { getPageTitleFromMarkdown } from './getPageTitleFromMarkdown.mts';
+import { getPageTitleFromScript } from './getPageTitleFromScript.mts';
 
 export const getPageTitle = async (file: URL): Promise<string | null> => {
   switch (file.pathname.slice(file.pathname.lastIndexOf('.'))) {

@@ -8,7 +8,7 @@ import {
   processedImageDirectory,
   publicDirectory,
   rootDirectory,
-} from '../config.paths.mjs';
+} from '../config.paths.mts';
 
 const extensions = ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.heic'];
 /** @param {string} file */

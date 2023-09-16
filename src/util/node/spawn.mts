@@ -1,7 +1,7 @@
 import type { ExecOptions } from 'child_process';
 import { spawn as nodeSpawn } from 'node:child_process';
 import * as process from 'process';
-import { Terminator } from './Terminator.mjs';
+import { Terminator } from './Terminator.mts';
 
 interface SpawnResult {
   stdout: string;

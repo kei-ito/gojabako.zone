@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from 'react';
-import { classnames } from '../../util/classnames.mjs';
+import { classnames } from '../../util/classnames.mts';
 import { SiteMap } from '../SiteMap';
 import * as style from './style.module.scss';
 

@@ -3,9 +3,9 @@ import type { Element, Root } from 'hast';
 import type { MdxJsxFlowElement, MdxJsxTextElement } from 'mdast-util-mdx-jsx';
 import type { Transformer } from 'unified';
 import { SKIP, visit } from 'unist-util-visit';
-import { embedTwitter } from './embedTwitter.mjs';
-import { embedYouTube } from './embedYouTube.mjs';
-import { isHastElement } from './isHastElement.mjs';
+import { embedTwitter } from './embedTwitter.mts';
+import { embedYouTube } from './embedYouTube.mts';
+import { isHastElement } from './isHastElement.mts';
 
 declare module 'hast' {
   interface RootContentMap {

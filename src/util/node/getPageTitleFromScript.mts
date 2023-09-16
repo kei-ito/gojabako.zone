@@ -1,7 +1,7 @@
 /* eslint-disable import/no-named-as-default-member */
 import { readFile } from 'node:fs/promises';
 import ts from 'typescript';
-import { rootDir } from './directories.mjs';
+import { rootDir } from './directories.mts';
 
 export const getPageTitleFromScript = async (
   file: URL,

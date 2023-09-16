@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { HTMLAttributes } from 'react';
-import { classnames } from '../../util/classnames.mjs';
+import { classnames } from '../../util/classnames.mts';
 import { Logo } from '../Logo';
 import * as style from './style.module.scss';
 

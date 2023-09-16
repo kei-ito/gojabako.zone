@@ -3,7 +3,7 @@ import { toString as hastToString } from 'hast-util-to-string';
 import rehypeParse from 'rehype-parse';
 import { unified } from 'unified';
 import { EXIT, visit } from 'unist-util-visit';
-import { fetchYouTubeVideoData } from '../util/node/fetchYouTubeVideoData.mjs';
+import { fetchYouTubeVideoData } from '../util/node/fetchYouTubeVideoData.mts';
 
 export const embedYouTube = async function* (
   node: Element,

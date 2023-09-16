@@ -1,9 +1,9 @@
 import { writeFile } from 'fs/promises';
-import { appDir, rootDir, srcDir } from '../util/node/directories.mjs';
-import { getPageData } from '../util/node/getPageData.mjs';
-import { walkFiles } from '../util/node/walkFiles.mjs';
-import { serializeToJs } from '../util/serializeToJs.mjs';
-import type { Page } from '../util/type.mjs';
+import { appDir, rootDir, srcDir } from '../util/node/directories.mts';
+import { getPageData } from '../util/node/getPageData.mts';
+import { walkFiles } from '../util/node/walkFiles.mts';
+import { serializeToJs } from '../util/serializeToJs.mts';
+import type { Page } from '../util/type.mts';
 
 const prefix = 'build/pageList:';
 
@@ -34,7 +34,7 @@ const generateCode = async function* () {
     }
     return gb.localeCompare(ga);
   });
-  yield "import type { Page } from './type.mjs';\n";
+  yield "import type { Page } from './type.mts';\n";
   yield 'export const pageList: Array<Page> = ';
   yield* serializeToJs(pageList);
   yield ';\n';

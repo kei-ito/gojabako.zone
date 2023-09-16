@@ -2,8 +2,8 @@ import { isNonNegativeSafeInteger, isString } from '@nlib/typing';
 import type { Element, Root } from 'hast';
 import type { Transformer } from 'unified';
 import { SKIP, visit } from 'unist-util-visit';
-import { insertLineNumbers } from './insertLineNumbers.mjs';
-import { isHastElement } from './isHastElement.mjs';
+import { insertLineNumbers } from './insertLineNumbers.mts';
+import { isHastElement } from './isHastElement.mts';
 
 // eslint-disable-next-line max-lines-per-function
 const rehypeArticle = (): Transformer<Root> => (tree, _file) => {

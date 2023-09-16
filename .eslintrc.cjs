@@ -10,7 +10,7 @@ module.exports = {
     'import/no-unassigned-import': ['error', { allow: ['**/*.scss'] }],
     '@typescript-eslint/no-restricted-imports': [
       'error',
-      { patterns: ['**/*.mts'] },
+      { patterns: ['**/*.mjs'] },
     ],
   },
   overrides: [

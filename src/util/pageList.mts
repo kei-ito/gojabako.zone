@@ -1,4 +1,4 @@
-import type { Page } from './type.mjs';
+import type { Page } from './type.mts';
 export const pageList: Array<Page> = [
   {
     url: 'page.tsx',

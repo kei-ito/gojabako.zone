@@ -1,10 +1,10 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { isString } from '@nlib/typing';
-import type { PageMetaData } from '../extractPageMetaDataFromHtml.mjs';
-import { extractPageMetaDataFromHtml } from '../extractPageMetaDataFromHtml.mjs';
-import { cacheDir } from './directories.mjs';
-import { getHash } from './getHash.mjs';
-import { ignoreENOENT } from './ignoreENOENT.mjs';
+import type { PageMetaData } from '../extractPageMetaDataFromHtml.mts';
+import { extractPageMetaDataFromHtml } from '../extractPageMetaDataFromHtml.mts';
+import { cacheDir } from './directories.mts';
+import { getHash } from './getHash.mts';
+import { ignoreENOENT } from './ignoreENOENT.mts';
 
 const sessionCache = new Map<string, PageMetaData>();
 const fnCacheDir = new URL('fetchWebPageMetaData/', cacheDir);

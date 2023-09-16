@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import type { PropsWithChildren } from 'react';
-import { authorName, siteDomain, siteName } from '../../../../config.site.mjs';
+import { authorName, siteDomain, siteName } from '../../../../config.site.mts';
 import { meta } from '../../meta';
 import { usePageData } from '../../../hooks/usePageData';
-import { pageImages } from '../../../../generated.pageImageList.mjs';
+import { pageImages } from '../../../../generated.pageImageList.mts';
 
 export interface HtmlHeadProps {
   pathname: string;

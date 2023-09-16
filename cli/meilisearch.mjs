@@ -9,8 +9,8 @@ import { ignoreENOENT } from '@gjbkz/gojabako.zone-node-util';
 import { createSerializeMarkdownContext } from '@gjbkz/gojabako.zone-markdown-parser';
 import { getTextContent } from '@gjbkz/gojabako.zone-markdown-util';
 import { ensure, isString } from '@nlib/typing';
-import { pagesDirectory, rootDirectory } from '../config.paths.mjs';
-import { pageListByUpdatedAt } from '../generated.pageList.mjs';
+import { pagesDirectory, rootDirectory } from '../config.paths.mts';
+import { pageListByUpdatedAt } from '../generated.pageList.mts';
 
 /** @typedef {{id: string, pathname: string, title: string, body: string, publishedAt: string, updatedAt: string}} Page */
 

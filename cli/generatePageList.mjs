@@ -6,12 +6,12 @@ import {
   getPageList,
   pageListToJsModule,
 } from '@gjbkz/gojabako.zone-build-pagelist';
-import { siteDomain, siteName } from '../config.site.mjs';
+import { siteDomain, siteName } from '../config.site.mts';
 import {
   rootDirectory,
   pagesDirectory,
   publicDirectory,
-} from '../config.paths.mjs';
+} from '../config.paths.mts';
 
 /**
  * @param {URL | string} dest

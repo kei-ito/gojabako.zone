@@ -13,9 +13,9 @@ import {
   publicDirectory,
   rootDirectory,
   srcDirectory,
-} from '../config.paths.mjs';
-import { siteDomain } from '../config.site.mjs';
-import { pageListByPublishedAt } from '../generated.pageList.mjs';
+} from '../config.paths.mts';
+import { siteDomain } from '../config.site.mts';
+import { pageListByPublishedAt } from '../generated.pageList.mts';
 /** @typedef {import('canvas').CanvasRenderingContext2D} CanvasRenderingContext2D */
 /** @typedef {import('canvas').Canvas} NodeCanvas */
 /** @typedef {import('@gjbkz/gojabako.zone-build-pagelist').PageMetaData} PageMetaData */

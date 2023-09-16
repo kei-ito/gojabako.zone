@@ -1,4 +1,4 @@
-import { authorGitHub, authorTwitter } from '../../../../config.site.mjs';
+import { authorGitHub, authorTwitter } from '../../../../config.site.mts';
 import { HiddenText } from '../../ui/HiddenText';
 import { IconGitHub, IconTwitter } from '../../ui/Icon';
 import style from './style.module.scss';

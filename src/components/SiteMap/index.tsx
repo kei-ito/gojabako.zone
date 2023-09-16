@@ -1,5 +1,5 @@
-import { pageList } from '../../util/pageList.mjs';
-import type { Page } from '../../util/type.mjs';
+import { pageList } from '../../util/pageList.mts';
+import type { Page } from '../../util/type.mts';
 import * as style from './style.module.scss';
 
 export const SiteMap = () => [...listGroups()];

@@ -1,7 +1,7 @@
-import type { Page } from '../type.mjs';
-import { appDir, rootDir } from './directories.mjs';
-import { getPageTitle } from './getPageTitle.mjs';
-import { listCommits } from './listCommits.mjs';
+import type { Page } from '../type.mts';
+import { appDir, rootDir } from './directories.mts';
+import { getPageTitle } from './getPageTitle.mts';
+import { listCommits } from './listCommits.mts';
 
 export const getPageData = async (file: URL): Promise<Page> => {
   const [history, title] = await Promise.all([
