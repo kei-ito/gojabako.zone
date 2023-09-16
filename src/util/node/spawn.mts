@@ -1,6 +1,6 @@
-import type { ExecOptions } from 'child_process';
+import type { ExecOptions } from 'node:child_process';
 import { spawn as nodeSpawn } from 'node:child_process';
-import * as process from 'process';
+import * as process from 'node:process';
 import { Terminator } from './Terminator.mts';
 
 interface SpawnResult {

@@ -1,31 +1,19 @@
 import type { Element, Text } from 'hast';
+import { createRehypeElement } from './createRehypeElement.mts';
 
-export const insertLineNumbers = (node: Element, codeBlockNumber: number) => {
+export const insertLineNumbers = (node: Element, codeId: string) => {
   let lineNumber = 0;
   const elements: Array<Element> = [];
   for (const line of listCodeLines(node)) {
-    const id = `C${codeBlockNumber}L${++lineNumber}`;
+    const id = `${codeId}L${++lineNumber}`;
     elements.push(
-      {
-        type: 'element',
-        tagName: 'a',
-        properties: { href: `#${id}`, className: ['hljs-ln'] },
-        children: [
-          {
-            type: 'element',
-            tagName: 'span',
-            properties: { id, dataLineFocus: true },
-            children: [],
-          },
-          { type: 'text', value: `${lineNumber}` },
-        ],
-      },
-      {
-        type: 'element',
-        tagName: 'span',
-        properties: {},
-        children: line,
-      },
+      createRehypeElement(
+        'a',
+        { href: `#${id}`, className: ['hljs-ln'], draggable: 'false' },
+        createRehypeElement('span', { id, dataLineFocus: true }),
+        createRehypeElement('span', {}, `${lineNumber}`),
+      ),
+      createRehypeElement('span', {}, ...line),
     );
   }
   node.children = elements;

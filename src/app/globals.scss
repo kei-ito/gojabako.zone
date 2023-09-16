@@ -44,6 +44,24 @@
   --gjGray7: #475569;
   --gjGray8: #334155;
   --gjGray9: #1e293b;
+  --gjYellow1: #fef9c3;
+  --gjYellow2: #fef08a;
+  --gjYellow3: #fde047;
+  --gjYellow4: #facc15;
+  --gjYellow5: #eab308;
+  --gjYellow6: #ca8a04;
+  --gjYellow7: #a16207;
+  --gjYellow8: #854d0e;
+  --gjYellow9: #713f12;
+  --gjBlue1: #dbeafe;
+  --gjBlue2: #bfdbfe;
+  --gjBlue3: #93c5fd;
+  --gjBlue4: #60a5fa;
+  --gjBlue5: #3b82f6;
+  --gjBlue6: #2563eb;
+  --gjBlue7: #1d4ed8;
+  --gjBlue8: #1e40af;
+  --gjBlue9: #1e3a8a;
   --gjFontSans: 'Helvetica Neue', arial, 'Hiragino Kaku Gothic ProN', meiryo,
     sans-serif;
   --gjFontMonospace: menlo, consolas, monospace;
@@ -67,19 +85,28 @@
   }
 }
 
-main {
-  display: grid;
-  grid-auto-flow: row;
-  align-content: start;
+a {
+  color: rgb(0 0 207);
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
-article,
-section {
-  display: grid;
-  grid-auto-flow: row;
-  grid-template-columns: var(--gjBaseWidth);
-  justify-content: center;
-  row-gap: 0.4em;
+s,
+del {
+  text-decoration-line: line-through;
+}
+
+b,
+strong {
+  font-weight: bolder;
+}
+
+i,
+em {
+  font-style: italic;
 }
 
 img,
@@ -95,27 +122,6 @@ img {
 
 picture {
   overflow: hidden;
-}
-
-a {
-  color: rgb(0 0 207);
-  text-decoration: underline;
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-s {
-  text-decoration-line: line-through;
-}
-
-b {
-  font-weight: bolder;
-}
-
-i {
-  font-style: italic;
 }
 
 pre {
@@ -172,10 +178,6 @@ button {
   }
 }
 
-iframe {
-  justify-self: stretch;
-}
-
 .sr-only {
   position: absolute !important;
   margin: 0 !important;
@@ -192,29 +194,6 @@ h5,
 h6 {
   margin-block-start: 0.4em;
   font-weight: 600;
-}
-
-body {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: max-content minmax(max-content, 1fr) max-content;
-  align-content: start;
-  min-block-size: 100%;
-
-  & > header {
-    z-index: 1;
-    position: sticky;
-    inset-block-start: 0;
-    inset-inline: 0;
-    box-shadow: 0 1px 0 var(--gjGray3);
-  }
-}
-
-article {
-  & > header {
-    margin-block-start: 2em;
-    margin-block-end: 1em;
-  }
 }
 
 .link {
@@ -247,45 +226,24 @@ figcaption {
   font-size: 80%;
 }
 
-li {
-  counter-increment: listItemIndex;
-  display: grid;
-  grid-template-columns: 1.5em 1fr;
-  row-gap: inherit;
-  column-gap: 0.5em;
-  align-items: baseline;
-  justify-items: start;
+ol {
+  list-style-type: decimal;
 }
 
-li > * {
-  grid-column: -2 / -1;
-}
-
-li::before {
-  justify-self: end;
-  grid-column: 1 / 2;
-  text-align: end;
+ul {
+  list-style-type: disc;
 }
 
 ol,
 ul {
-  counter-reset: listItemIndex;
   display: grid;
   grid-auto-flow: row;
   row-gap: 0.25em;
+  padding-inline-start: 1.6em;
 
-  & > li > ol,
-  & > li > ul {
-    margin-inline-start: -0.5em;
+  & > li {
+    list-style-type: inherit;
   }
-}
-
-ol > li::before {
-  content: counter(listItemIndex) '.';
-}
-
-ul > li::before {
-  content: '●';
 }
 
 hr {
@@ -408,25 +366,9 @@ fieldset {
 .hljs {
   display: grid;
   grid-template-columns: max-content 1fr;
-  column-gap: 0.5em;
-  justify-items: start;
-  align-items: start;
+  justify-items: stretch;
+  align-items: stretch;
   line-height: 1.5;
-
-  & > a {
-    justify-self: end;
-    color: inherit;
-    opacity: 0.6;
-    font-family: var(--gjFontMonospace);
-    text-decoration: none;
-    user-select: none;
-
-    & > [data-line-focus] {
-      position: absolute;
-      inset-inline: 0;
-      inset-block-start: var(--gjFocusOffset);
-    }
-  }
 }
 
 .hljs-comment,
@@ -520,6 +462,43 @@ fieldset {
   }
 }
 
+.hljs-ln {
+  color: inherit;
+  padding-inline: 0.4em;
+  font-family: var(--gjFontMonospace);
+  text-decoration: none;
+  user-select: none;
+  text-align: end;
+  border-inline-end: solid var(--gj1px) var(--gjGray3);
+
+  & > span {
+    color: var(--gjGray4);
+  }
+
+  & > [data-line-focus] {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: var(--gjFocusOffset);
+  }
+
+  & + span {
+    padding-inline: 0.4em;
+  }
+
+  &.hljs-target {
+    background-color: var(--gjYellow1);
+    border-inline-end-color: var(--gjYellow3);
+
+    & > span {
+      color: var(--gjGray5);
+    }
+
+    & + span {
+      background-color: var(--gjYellow1);
+    }
+  }
+}
+
 sup[data-footnote-ref] {
   font-size: 80%;
   overflow: visible;
@@ -588,4 +567,26 @@ figure > .katex > .katex-html > .base {
 
 .twitter-tweet {
   display: block;
+}
+
+main {
+  display: grid;
+  grid-auto-flow: row;
+  align-content: start;
+}
+
+body {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: max-content minmax(max-content, 1fr) max-content;
+  align-content: start;
+  min-block-size: 100%;
+
+  & > header {
+    z-index: 1;
+    position: sticky;
+    inset-block-start: 0;
+    inset-inline: 0;
+    box-shadow: 0 1px 0 var(--gjGray3);
+  }
 }

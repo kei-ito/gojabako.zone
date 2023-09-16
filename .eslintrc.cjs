@@ -1,4 +1,6 @@
 /* eslint-disable import/unambiguous, import/no-commonjs */
+const { builtinModules } = require('node:module');
+
 module.exports = {
   extends: ['next/core-web-vitals', '@nlib/eslint-config'],
   ignorePatterns: ['next-env.d.ts', 'cli/**', 'old-src/**'],
@@ -10,7 +12,13 @@ module.exports = {
     'import/no-unassigned-import': ['error', { allow: ['**/*.scss'] }],
     '@typescript-eslint/no-restricted-imports': [
       'error',
-      { patterns: ['**/*.mjs'] },
+      {
+        paths: builtinModules.map((name) => ({
+          name,
+          message: `Please use 'node:${name}' instead.`,
+        })),
+        patterns: ['**/*.mjs'],
+      },
     ],
   },
   overrides: [

@@ -13,6 +13,7 @@ export const getPageData = async (file: URL): Promise<Page> => {
   }
   let url = file.pathname.slice(appDir.pathname.length);
   url = url.replace(/\/page\.\w+$/, '');
+  url = url.replace(/\([^/]+\)\//, '');
   return {
     url,
     filePath: file.pathname.slice(rootDir.pathname.length),

@@ -23,9 +23,11 @@ export const listCommits = async function* (
   ].join(NewLine);
   let before = startCommitish;
   while (true) {
-    const { stdout, stderr } = await spawn(
-      `git log --follow --format="${format}" --before=${before} -- ${relativePath}`,
-    );
+    let command = 'git log --follow';
+    command += ` --format="${format}"`;
+    command += ` --before=${before}`;
+    command += ` -- ${sanitizePath(relativePath)}`;
+    const { stdout, stderr } = await spawn(command);
     if (!stdout || stderr) {
       break;
     }
@@ -43,6 +45,8 @@ export const listCommits = async function* (
     }
   }
 };
+
+const sanitizePath = (filePath: string) => filePath.replace(/[()]/g, '\\$&');
 
 const parseCommitOutput = (entry: string): Commit => {
   const [commit, abbr, aDate] = [...entry.split(/[\r\n]+/)];

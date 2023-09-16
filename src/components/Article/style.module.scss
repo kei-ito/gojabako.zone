@@ -1,0 +1,41 @@
+.container {
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  row-gap: 0.5em;
+  padding-block-start: 1em;
+  padding-block-end: 2em;
+
+  & > * {
+    inline-size: var(--gjBaseWidth);
+    max-inline-size: 100%;
+  }
+
+  & > figure {
+    &[data-type='math'] {
+      inline-size: unset;
+      padding-inline: 1em;
+    }
+  }
+
+  & > header {
+    justify-self: stretch;
+    display: grid;
+    grid-auto-flow: row;
+    justify-items: center;
+    inline-size: unset;
+
+    & > * {
+      inline-size: var(--gjBaseWidth);
+    }
+
+    & > h1 {
+      font-size: 120%;
+    }
+
+    & > div {
+      font-size: 80%;
+    }
+  }
+}

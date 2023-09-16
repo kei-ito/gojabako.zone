@@ -24,6 +24,10 @@
       text-decoration: none;
       color: inherit;
 
+      & > span {
+        padding-block-start: var(--gj1px);
+      }
+
       &:hover {
         text-decoration: underline;
       }

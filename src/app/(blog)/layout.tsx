@@ -1,5 +1,6 @@
 import type { PropsWithChildren } from 'react';
+import { Article } from '../../components/Article';
 
 export default function Layout({ children }: PropsWithChildren) {
-  return <article>{children}</article>;
+  return <Article>{children}</Article>;
 }
