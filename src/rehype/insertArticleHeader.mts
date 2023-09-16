@@ -1,7 +1,7 @@
 import { pathToFileURL } from 'node:url';
 import type { Element, Root } from 'hast';
 import { getPageFromFileUrl } from '../util/getPage.mts';
-import type { Page } from '../util/type.mts';
+import type { PageData } from '../util/type.mts';
 import { createRehypeElement } from './createRehypeElement.mts';
 
 export const insertArticleHeader = (root: Root, file: { path: string }) => {
@@ -22,7 +22,9 @@ export const insertArticleHeader = (root: Root, file: { path: string }) => {
   );
 };
 
-const listMetaElements = function* (page: Page): Generator<Element | string> {
+const listMetaElements = function* (
+  page: PageData,
+): Generator<Element | string> {
   yield createRehypeElement(
     'span',
     { title: page.publishedAt },

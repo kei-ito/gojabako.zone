@@ -1,12 +1,12 @@
 import { pageList } from '../../util/pageList.mts';
-import type { Page } from '../../util/type.mts';
-import * as style from './style.module.scss';
+import type { PageData } from '../../util/type.mts';
+import { PageLink } from '../PageLink';
 
 export const SiteMap = () => [...listGroups()];
 
 interface PageGroup {
   name: string;
-  pages: Array<Page>;
+  pages: Array<PageData>;
 }
 
 const listGroups = function* () {
@@ -37,19 +37,14 @@ const listGroups = function* () {
 
 const isBlogGroupName = (groupName: string) => /^\d{4,}$/.test(groupName);
 
-const PageList = ({ pages }: { pages: Array<Page> }) => (
+const PageList = ({ pages }: { pages: Array<PageData> }) => (
   <ul>
     {[
       ...(function* () {
         for (const page of pages) {
-          const d = new Date(page.publishedAt);
-          const date = `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
           yield (
-            <li key={page.url} className={style.page}>
-              <a href={page.url}>
-                <span>{page.title}</span>
-                <time dateTime={page.publishedAt}>{date}公開</time>
-              </a>
+            <li key={page.url}>
+              <PageLink page={page} />
             </li>
           );
         }

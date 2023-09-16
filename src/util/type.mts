@@ -4,7 +4,7 @@ export interface Commit {
   aDate: string;
 }
 
-export interface Page {
+export interface PageData {
   url: string;
   filePath: string;
   title: string;

@@ -1,5 +1,5 @@
-import type { Page } from './type.mts';
-export const pageList: Array<Page> = [
+import type { PageData } from './type.mts';
+export const pageList: Array<PageData> = [
   {
     url: 'page.tsx',
     filePath: 'src/app/page.tsx',
@@ -13,8 +13,8 @@ export const pageList: Array<Page> = [
     filePath: 'src/app/(blog)/mdx/page.mdx',
     title: 'MDXの動作確認ページ',
     publishedAt: '2021-09-30T00:39:26+09:00',
-    updatedAt: '2023-09-16T17:49:58+09:00',
-    commits: 31,
+    updatedAt: '2023-09-17T01:36:45+09:00',
+    commits: 32,
   },
   {
     url: 'author',

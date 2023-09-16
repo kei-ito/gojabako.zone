@@ -1,8 +1,8 @@
 import { rootDir } from './node/directories.mts';
 import { pageList } from './pageList.mts';
-import type { Page } from './type.mts';
+import type { PageData } from './type.mts';
 
-const defaultFallback: Page = {
+const defaultFallback: PageData = {
   url: '/not-found',
   filePath: 'app/not-found.tsx',
   title: 'Not Found',
@@ -13,8 +13,8 @@ const defaultFallback: Page = {
 
 export const getPageFromFileUrl = (
   fileUrl: URL,
-  fallback: Partial<Page> = {},
-): Page => {
+  fallback: Partial<PageData> = {},
+): PageData => {
   const filePath = fileUrl.pathname.slice(rootDir.pathname.length);
   for (const page of pageList) {
     if (page.filePath === filePath) {

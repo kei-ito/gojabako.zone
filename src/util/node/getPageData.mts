@@ -1,9 +1,9 @@
-import type { Page } from '../type.mts';
+import type { PageData } from '../type.mts';
 import { appDir, rootDir } from './directories.mts';
 import { getPageTitle } from './getPageTitle.mts';
 import { listCommits } from './listCommits.mts';
 
-export const getPageData = async (file: URL): Promise<Page> => {
+export const getPageData = async (file: URL): Promise<PageData> => {
   const [history, title] = await Promise.all([
     scanCommits(file),
     getPageTitle(file),

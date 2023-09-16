@@ -3,7 +3,7 @@ import { appDir, rootDir, srcDir } from '../util/node/directories.mts';
 import { getPageData } from '../util/node/getPageData.mts';
 import { walkFiles } from '../util/node/walkFiles.mts';
 import { serializeToJs } from '../util/serializeToJs.mts';
-import type { Page } from '../util/type.mts';
+import type { PageData } from '../util/type.mts';
 
 const prefix = 'build/pageList:';
 
@@ -19,7 +19,7 @@ const listPageFiles = async function* (): AsyncGenerator<URL> {
 };
 
 const generateCode = async function* () {
-  const pageList: Array<Page> = [];
+  const pageList: Array<PageData> = [];
   for await (const file of listPageFiles()) {
     console.info(prefix, file.pathname.slice(appDir.pathname.length));
     pageList.push(await getPageData(file));
@@ -34,8 +34,8 @@ const generateCode = async function* () {
     }
     return gb.localeCompare(ga);
   });
-  yield "import type { Page } from './type.mts';\n";
-  yield 'export const pageList: Array<Page> = ';
+  yield "import type { PageData } from './type.mts';\n";
+  yield 'export const pageList: Array<PageData> = ';
   yield* serializeToJs(pageList);
   yield ';\n';
 };
