@@ -1,22 +1,43 @@
 'use client';
-import { useCallback, useReducer } from 'react';
+import { isFiniteNumber } from '@nlib/typing';
+import type { ChangeEvent } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import style from './style.module.scss';
 
-const reducer = (current: number, diff: number) => current + diff;
-
 export const Counter = () => {
-  const [count, dispatch] = useReducer(reducer, 0);
-  const increment = useCallback(() => dispatch(1), []);
-  const decrement = useCallback(() => dispatch(-1), []);
+  const [count, setCount] = useState(100);
+  const [input, setInput] = useState<HTMLInputElement | null>(null);
+  const increment = useCallback(() => setCount((c) => c + 1), []);
+  const decrement = useCallback(() => setCount((c) => c - 1), []);
+  const onChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    const value = Number(event.target.value);
+    if (isFiniteNumber(value)) {
+      setCount(value);
+    }
+  }, []);
+  useEffect(() => {
+    const abc = new AbortController();
+    if (input) {
+      input.addEventListener(
+        'wheel',
+        /** This disables page scrolling */
+        (event) => event.stopPropagation(),
+        { passive: false, signal: abc.signal },
+      );
+    }
+    return () => abc.abort();
+  }, [input]);
   return (
     <div className={style.container}>
-      <button className={style.button} onClick={decrement}>
-        -1
-      </button>
-      <div className={style.button}>{count}</div>
-      <button className={style.button} onClick={increment}>
-        +1
-      </button>
+      <button onClick={decrement}>-1</button>
+      <input
+        ref={setInput}
+        type="number"
+        step={1}
+        value={count}
+        onChange={onChange}
+      />
+      <button onClick={increment}>+1</button>
     </div>
   );
 };

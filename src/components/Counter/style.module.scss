@@ -1,21 +1,13 @@
 .container {
   display: grid;
-  grid-template-columns: 2em 3em 2em;
-  justify-items: center;
-  justify-content: stretch;
+  grid-auto-flow: column;
+  column-gap: 0.5em;
+  justify-content: start;
   align-items: baseline;
   text-align: center;
-}
 
-.button {
-  padding: 0.2em 0.5em;
-  border-style: solid;
-  border-radius: 0.2em;
-}
-
-.count {
-  min-inline-size: 3.5em;
-  padding-inline-start: 0.5em;
-  padding-inline-end: 0.5em;
-  font-size: 140%;
+  & > input {
+    width: 6em;
+    text-align: end;
+  }
 }

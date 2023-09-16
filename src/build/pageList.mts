@@ -10,7 +10,7 @@ const prefix = 'build/pageList:';
 const listPageFiles = async function* (): AsyncGenerator<URL> {
   let count = 0;
   for await (const file of walkFiles(appDir)) {
-    if (/\.page\.\w+$/.test(file.pathname)) {
+    if (/\/page\.\w+$/.test(file.pathname)) {
       count += 1;
       yield file;
     }

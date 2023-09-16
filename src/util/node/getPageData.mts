@@ -12,7 +12,7 @@ export const getPageData = async (file: URL): Promise<Page> => {
     throw new Error(`NoTitle: ${file.pathname.slice(rootDir.pathname.length)}`);
   }
   let url = file.pathname.slice(appDir.pathname.length);
-  url = url.replace(/(\/index)?\.page\.\w+$/, '');
+  url = url.replace(/\/page\.\w+$/, '');
   return {
     url,
     filePath: file.pathname.slice(rootDir.pathname.length),

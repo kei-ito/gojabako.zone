@@ -14,11 +14,15 @@ declare module 'hast' {
   }
 }
 
-const services = new Map<string, (e: Element) => Iterable<Element>>();
+const services = new Map<
+  string,
+  (e: Element) => AsyncIterable<Element> | Iterable<Element>
+>();
 services.set('youtube', embedYouTube);
 services.set('twitter', embedTwitter);
 
-const rehypeEmbed = (): Transformer<Root> => (tree, _file) => {
+const rehypeEmbed = (): Transformer<Root> => async (tree, _file) => {
+  const tasks: Array<() => Promise<void>> = [];
   visit(tree, 'element', (node, index, parent) => {
     if (
       !parent ||
@@ -44,13 +48,20 @@ const rehypeEmbed = (): Transformer<Root> => (tree, _file) => {
     const service = className[i].slice(prefix.length);
     const fn = services.get(service);
     if (fn) {
-      parent.children.splice(index, 1, ...fn(codeElement));
+      tasks.unshift(async () => {
+        const replacements = [];
+        for await (const c of fn(codeElement)) {
+          replacements.push(c);
+        }
+        parent.children.splice(index, 1, ...replacements);
+      });
     } else {
       className[i] = 'language-html';
       codeElement.properties['data-embed'] = service;
     }
-    return [SKIP, index];
+    return [SKIP, index + 1];
   });
+  await Promise.all(tasks.map(async (task) => await task()));
   return tree;
 };
 
