@@ -30,13 +30,6 @@ const nextConfig = {
       loader: 'esbuild-loader',
       options: { loader: 'ts' },
     });
-    config.resolve = {
-      ...config.resolve,
-      extensionAlias: {
-        ...config.resolve?.extensionAlias,
-        '.mjs': ['.mts', '.mjs'],
-      },
-    };
     return config;
   },
 };
