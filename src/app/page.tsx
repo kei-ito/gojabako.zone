@@ -1,12 +1,7 @@
-import type { Metadata } from 'next';
 import { Article } from '../components/Article';
 import { PageLink } from '../components/PageLink';
 import { pageList } from '../util/pageList.mts';
 import type { PageData } from '../util/type.mts';
-
-export const metadata: Metadata = {
-  title: 'Home',
-};
 
 export default function Page() {
   return (

@@ -4,6 +4,10 @@ import type { PropsWithChildren } from 'react';
 import { SiteFooter } from '../components/SiteFooter';
 import { SiteHeader } from '../components/SiteHeader';
 
+export const metadata = {
+  title: { template: '%s ・ Gojabako Zone', default: 'Gojabako Zone' },
+};
+
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html>

@@ -5,8 +5,8 @@ export const pageList: Array<PageData> = [
     filePath: 'src/app/page.tsx',
     title: 'Home',
     publishedAt: '2023-09-02T15:11:01+09:00',
-    updatedAt: '2023-09-16T17:24:11+09:00',
-    commits: 4,
+    updatedAt: '2023-09-17T02:01:41+09:00',
+    commits: 5,
   },
   {
     url: 'mdx',

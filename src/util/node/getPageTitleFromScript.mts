@@ -5,10 +5,11 @@ import { rootDir } from './directories.mts';
 
 export const getPageTitleFromScript = async (
   file: URL,
+  code?: string,
 ): Promise<string | null> => {
   const src = ts.createSourceFile(
     file.pathname.slice(rootDir.pathname.length),
-    await readFile(file, 'utf8'),
+    code ?? (await readFile(file, 'utf8')),
     ts.ScriptTarget.ESNext,
     true,
     ts.ScriptKind.TSX,

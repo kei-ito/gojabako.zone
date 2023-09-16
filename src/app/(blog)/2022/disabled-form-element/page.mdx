@@ -1,4 +1,6 @@
-# disabledなフォーム要素はsubmitされない
+export const metadata = {
+  title: 'disabledなフォーム要素はsubmitされない',
+};
 
 Reactだとたいていの`<form>`でsubmitをpreventDefaultするので意識しないのですが、Next.jsは[API Routes](https://nextjs.org/docs/api-routes/introduction)があるので`<form>`のactionでそこに繋ぐことがあります。
 
