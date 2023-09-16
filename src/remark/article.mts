@@ -1,10 +1,10 @@
 /* eslint-disable max-lines-per-function */
 import { isNonNegativeSafeInteger } from '@nlib/typing';
 import type { Root } from 'mdast';
-import type { Transformer } from 'unified';
 import { visit } from 'unist-util-visit';
+import type { VFileLike } from '../util/unified.mts';
 
-const remarkArticle = (): Transformer<Root> => (tree, _file) => {
+const remarkArticle = () => (tree: Root, _file: VFileLike) => {
   visit(tree, (_node, index, parent) => {
     if (!parent || !isNonNegativeSafeInteger(index)) {
       return null;

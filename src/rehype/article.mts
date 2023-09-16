@@ -1,15 +1,15 @@
 /* eslint-disable max-lines-per-function */
 import { isNonNegativeSafeInteger, isString } from '@nlib/typing';
 import type { Root } from 'hast';
-import type { Transformer } from 'unified';
 import { SKIP, visit } from 'unist-util-visit';
+import type { VFileLike } from '../util/unified.mts';
 import { createRehypeElement } from './createRehypeElement.mts';
 import { insertArticleHeader } from './insertArticleHeader.mts';
 import { insertFootnoteFocus } from './insertFootnoteFocus.mts';
 import { insertLineNumbers } from './insertLineNumbers.mts';
 import { isHastElement } from './isHastElement.mts';
 
-const rehypeArticle = (): Transformer<Root> => (tree, file) => {
+const rehypeArticle = () => (tree: Root, file: VFileLike) => {
   let codeBlockNumber = 0;
   visit(tree, 'element', (node, index, parent) => {
     if (!parent || !isNonNegativeSafeInteger(index)) {

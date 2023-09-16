@@ -1,8 +1,8 @@
 import { isNonNegativeSafeInteger, isString } from '@nlib/typing';
 import type { Element, Root } from 'hast';
 import type { MdxJsxFlowElement, MdxJsxTextElement } from 'mdast-util-mdx-jsx';
-import type { Transformer } from 'unified';
 import { SKIP, visit } from 'unist-util-visit';
+import type { VFileLike } from '../util/unified.mts';
 import { embedTwitter } from './embedTwitter.mts';
 import { embedYouTube } from './embedYouTube.mts';
 import { isHastElement } from './isHastElement.mts';
@@ -21,7 +21,7 @@ const services = new Map<
 services.set('youtube', embedYouTube);
 services.set('twitter', embedTwitter);
 
-const rehypeEmbed = (): Transformer<Root> => async (tree, _file) => {
+const rehypeEmbed = () => async (tree: Root, _file: VFileLike) => {
   const tasks: Array<() => Promise<void>> = [];
   visit(tree, 'element', (node, index, parent) => {
     if (

@@ -4,14 +4,8 @@
 ::marker {
   position: relative;
   box-sizing: border-box;
-  margin-block-start: 0;
-  margin-block-end: 0;
-  margin-inline-start: 0;
-  margin-inline-end: 0;
-  padding-block-start: 0;
-  padding-block-end: 0;
-  padding-inline-start: 0;
-  padding-inline-end: 0;
+  margin: 0;
+  padding: 0;
   border-style: none;
   border-width: var(--gj1px);
   border-color: currentcolor;
@@ -109,6 +103,13 @@ em {
   font-style: italic;
 }
 
+hr {
+  block-size: var(--gj1px);
+  background-color: currentcolor;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+}
+
 img,
 svg {
   max-inline-size: 100%;
@@ -132,50 +133,6 @@ pre {
 code {
   white-space: pre-wrap;
   font-family: var(--gjFontMonospace);
-  font-size: smaller;
-}
-
-p,
-label {
-  code {
-    font-size: inherit;
-  }
-}
-
-rt {
-  font-size: 60%;
-}
-
-textarea {
-  display: block;
-  inline-size: 100%;
-  min-inline-size: unset;
-  min-block-size: 8em;
-  padding-block-start: 0.6em;
-  padding-block-end: 0.6em;
-  padding-inline-start: 1em;
-  padding-inline-end: 1em;
-  border-style: solid;
-  resize: vertical;
-}
-
-button {
-  padding-block: 0.3em;
-  padding-inline: 0.8em;
-  border-style: solid;
-  border-radius: 1em;
-  border-color: var(--gjGray5);
-  justify-self: end;
-  cursor: pointer;
-  transition: background-color 200ms;
-
-  &:hover {
-    background-color: var(--gjGray2);
-  }
-
-  &:active {
-    background-color: var(--gjGray3);
-  }
 }
 
 .sr-only {
@@ -194,24 +151,6 @@ h5,
 h6 {
   margin-block-start: 0.4em;
   font-weight: 600;
-}
-
-.link {
-  font-size: 70%;
-  color: inherit;
-  opacity: 0.4;
-  user-select: none;
-  text-decoration: none;
-}
-
-.link:hover {
-  opacity: 1;
-}
-
-.anchor {
-  position: absolute;
-  inset-block-start: -4em;
-  visibility: hidden;
 }
 
 figure {
@@ -246,13 +185,6 @@ ul {
   }
 }
 
-hr {
-  block-size: var(--gj1px);
-  background-color: currentcolor;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-}
-
 table {
   max-inline-size: 100%;
   min-inline-size: 20em;
@@ -278,7 +210,7 @@ blockquote {
   display: grid;
   grid-auto-flow: row;
   row-gap: 1em;
-  padding-inline-start: 1em;
+  padding-inline-start: 0.8em;
   border-inline-start-style: solid;
   border-inline-start-width: 0.2em;
   opacity: 0.85;
@@ -368,6 +300,7 @@ fieldset {
   grid-template-columns: max-content 1fr;
   justify-items: stretch;
   align-items: stretch;
+  font-size: 90%;
   line-height: 1.5;
 }
 

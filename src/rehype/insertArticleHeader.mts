@@ -2,9 +2,10 @@ import { pathToFileURL } from 'node:url';
 import type { Element, Root } from 'hast';
 import { getPageFromFileUrl } from '../util/getPage.mts';
 import type { PageData } from '../util/type.mts';
+import type { VFileLike } from '../util/unified.mts';
 import { createRehypeElement } from './createRehypeElement.mts';
 
-export const insertArticleHeader = (root: Root, file: { path: string }) => {
+export const insertArticleHeader = (root: Root, file: VFileLike) => {
   if (0 < root.children.length) {
     const [firstChild] = root.children;
     if (firstChild.type === 'element' && firstChild.tagName === 'h1') {

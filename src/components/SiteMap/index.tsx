@@ -16,7 +16,7 @@ const listGroups = function* () {
       yield <PageList key={`${name}-pages`} pages={pages} />;
     }
   };
-  const misc: PageGroup = { name: 'Others', pages: [] };
+  const others: PageGroup = { name: '', pages: [] };
   let group: PageGroup = { name: '', pages: [] };
   for (const page of pageList) {
     const groupName = page.url.split('/')[0];
@@ -28,11 +28,14 @@ const listGroups = function* () {
       }
       group.pages.push(page);
     } else {
-      misc.pages.push(page);
+      others.pages.push(page);
     }
   }
   yield* flush(group);
-  yield* flush(misc);
+  if (0 < others.pages.length) {
+    yield <hr key="others-hr" />;
+    yield <PageList key="others-pages" pages={others.pages} />;
+  }
 };
 
 const isBlogGroupName = (groupName: string) => /^\d{4,}$/.test(groupName);
