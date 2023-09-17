@@ -31,7 +31,7 @@ export const metadata = {
 
 上記のコードを動かしているのがこれです。
 
-```youtube
+```embed:youtube
 <iframe width="560" height="315" src="https://www.youtube.com/embed/WvFvqi_DCOM" title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 ```
 
@@ -51,10 +51,14 @@ WebDriverを試した後に気が付いたのですが[管理画面]でDeveloper
       "dailyUsage": 13.9,
       "dataType": 0,
       "halfHourlyUsages": [
-        {"usage": 0.3, "status": "0"},
-        {"usage": 0.1, "status": "0"},
-        {"usage": 0.2, "status": "0"},
-        "以下略",
+        { "usage": 0.3, "status": "0" },
+        { "usage": 0.1, "status": "0" },
+        { "usage": 0.2, "status": "0" },
+        "以下略"
+      ]
+    }
+  ]
+}
 ```
 
 `K000000000`（マスク済み）はユーザーIDでしょう。エンドポイントは次のような形式でした。
