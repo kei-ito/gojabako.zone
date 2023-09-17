@@ -47,7 +47,7 @@
         "@gjbkz/gojabako.zone-markdown-parser": "0.1.15",
         "@nlib/eslint-config": "3.20.0",
         "@nlib/githooks": "0.2.0",
-        "@nlib/lint-commit": "0.2.0",
+        "@nlib/lint-commit": "1.0.1",
         "@types/jest": "29.5.4",
         "@types/react": "18.2.21",
         "@typescript-eslint/eslint-plugin": "5.62.0",
