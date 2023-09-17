@@ -51,7 +51,8 @@ const listTargets = function* (
   if (!matched) {
     return;
   }
-  const code = root.querySelector(`code#${matched[1]}`);
+  const codeId = matched[1];
+  const code = root.querySelector(`.fragment-target#${codeId}+code`);
   if (!code) {
     return;
   }
@@ -69,9 +70,9 @@ const listTargets = function* (
     [start, end] = [end, start];
   }
   let line = start;
-  let target = code.querySelector(`a[href='#${code.id}L${line}']`);
+  let target = code.querySelector(`a[href='#${codeId}L${line}']`);
   while (target) {
-    if (target.getAttribute('href') === `#${code.id}L${line}`) {
+    if (target.getAttribute('href') === `#${codeId}L${line}`) {
       yield target;
       line += 1;
       if (end < line) {
