@@ -3,6 +3,7 @@ import type { Root, Element } from 'hast';
 import { EXIT, SKIP } from 'unist-util-visit';
 import { ClassIcon } from '../util/classnames.mts';
 import { getSingle } from '../util/getSingle.mts';
+import { mdToInlineHast } from '../util/node/mdToHast.mts';
 import type { VFileLike } from '../util/unified.mts';
 import { createHastElement } from './createHastElement.mts';
 import { hasClass } from './hasClass.mts';
@@ -145,7 +146,8 @@ const visitPre = (): HastElementVisitor => {
         'figure',
         { dataType: 'code' },
         createHastElement('span', { id, className: ['fragment-target'] }),
-        isString(value) && createHastElement('figcaption', {}, value),
+        isString(value) &&
+          createHastElement('figcaption', {}, ...mdToInlineHast(value)),
         code,
         createHastElement('a', { href: `#${id}`, className: ['fragment-ref'] }),
       ),

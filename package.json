@@ -40,6 +40,7 @@
     "jose": "4.14.6",
     "lint-staged": "14.0.1",
     "mdast-util-from-markdown": "2.0.0",
+    "mdast-util-to-hast": "13.0.2",
     "mdast-util-to-string": "4.0.0",
     "meilisearch": "0.34.2",
     "next": "13.4.12",
