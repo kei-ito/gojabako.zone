@@ -1,66 +1,66 @@
-/* eslint-disable max-lines-per-function */
-import { isNonNegativeSafeInteger, isString } from '@nlib/typing';
+import { isString } from '@nlib/typing';
 import type { Root } from 'hast';
-import { SKIP, visit } from 'unist-util-visit';
+import { SKIP } from 'unist-util-visit';
+import { getSingle } from '../util/getSingle.mts';
 import type { VFileLike } from '../util/unified.mts';
-import { createRehypeElement } from './createRehypeElement.mts';
+import { createHastElement } from './createHastElement.mts';
+import { hasClass } from './hasClass.mts';
 import { insertArticleHeader } from './insertArticleHeader.mts';
 import { insertFootnoteFocus } from './insertFootnoteFocus.mts';
 import { insertLineNumbers } from './insertLineNumbers.mts';
 import { isHastElement } from './isHastElement.mts';
+import type { HastElementVisitor } from './visitHastElement.mts';
+import { visitHastElement } from './visitHastElement.mts';
 
 const rehypeArticle = () => (tree: Root, file: VFileLike) => {
   let codeBlockNumber = 0;
-  visit(tree, 'element', (node, index, parent) => {
-    if (!parent || !isNonNegativeSafeInteger(index)) {
-      return null;
-    }
-    if (isHastElement(node, 'div', ['math-display'])) {
+  visitHastElement(tree, {
+    div: visitDiv,
+    sup: visitSup,
+    pre: (e, index, parent) => {
+      const code = getSingle(e.children);
+      if (!isHastElement(code, 'code', 'hljs')) {
+        return null;
+      }
+      const value = code.data?.meta;
+      const id = (code.properties.id = `C${++codeBlockNumber}`);
+      insertLineNumbers(code, id);
       parent.children.splice(
         index,
         1,
-        createRehypeElement('figure', { dataType: 'math' }, ...node.children),
+        createHastElement(
+          'figure',
+          { dataType: 'code' },
+          code,
+          isString(value) && createHastElement('figcaption', {}, value),
+        ),
       );
       return SKIP;
-    }
-    if (isHastElement(node, 'sup')) {
-      if (node.children.length !== 1) {
-        return null;
-      }
-      const [a] = node.children;
-      if (
-        !isHastElement(a, 'a') ||
-        !('properties' in a) ||
-        !a.properties.dataFootnoteRef
-      ) {
-        return null;
-      }
-      insertFootnoteFocus(node, a);
-      return SKIP;
-    }
-    if (isHastElement(node, 'pre') && node.children.length === 1) {
-      const [code] = node.children;
-      if (isHastElement(code, 'code', ['hljs'])) {
-        const value = code.data?.meta;
-        const id = (code.properties.id = `C${++codeBlockNumber}`);
-        insertLineNumbers(code, id);
-        parent.children.splice(
-          index,
-          1,
-          createRehypeElement(
-            'figure',
-            { dataType: 'code' },
-            node,
-            isString(value) && createRehypeElement('figcaption', {}, value),
-          ),
-        );
-        return SKIP;
-      }
-    }
-    return null;
+    },
   });
   insertArticleHeader(tree, file);
   return tree;
+};
+
+const visitDiv: HastElementVisitor = (e, index, parent) => {
+  if (hasClass(e, 'math-display')) {
+    parent.children.splice(
+      index,
+      1,
+      createHastElement('figure', { dataType: 'math' }, ...e.children),
+    );
+    return SKIP;
+  }
+  return null;
+};
+
+const visitSup: HastElementVisitor = (e) => {
+  const a = getSingle(e.children);
+  if (!isHastElement(a, 'a') || !a.properties.dataFootnoteRef) {
+    return null;
+  }
+  insertFootnoteFocus(e, a);
+  return SKIP;
 };
 
 export default rehypeArticle;

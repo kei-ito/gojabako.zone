@@ -1,31 +1,20 @@
-import { isString } from '@nlib/typing';
 import type { Element, ElementContent, Root, RootContent } from 'hast';
+import { hasClass } from './hasClass.mts';
 
 interface HastElement<T extends string> extends Element {
   tagName: T;
 }
 
 export const isHastElement = <T extends string>(
-  element: ElementContent | Root | RootContent,
+  element: ElementContent | Root | RootContent | null | undefined,
   tagName: T,
-  requiredClassNames?: Array<string>,
+  ...classNames: Array<string>
 ): element is HastElement<T> => {
-  if (element.type !== 'element') {
+  if (!element || element.type !== 'element') {
     return false;
   }
   if (element.tagName !== tagName) {
     return false;
   }
-  if (requiredClassNames) {
-    const { className } = element.properties;
-    if (!isString.array(className)) {
-      return false;
-    }
-    for (const name of requiredClassNames) {
-      if (!className.includes(name)) {
-        return false;
-      }
-    }
-  }
-  return true;
+  return classNames.length === 0 || hasClass(element, ...classNames);
 };

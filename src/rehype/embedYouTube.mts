@@ -1,32 +1,32 @@
 import type { Element } from 'hast';
 import { fromHtml } from 'hast-util-from-html';
 import { toString as hastToString } from 'hast-util-to-string';
-import { EXIT, visit } from 'unist-util-visit';
+import { EXIT } from 'unist-util-visit';
 import { fetchYouTubeVideoData } from '../util/node/fetchYouTubeVideoData.mts';
+import { visitHastElement } from './visitHastElement.mts';
 
 export const embedYouTube = async function* (
   node: Element,
 ): AsyncGenerator<Element> {
   const result: Array<() => Promise<Element>> = [];
-  visit(fromHtml(hastToString(node)), 'element', (e) => {
-    if (e.tagName !== 'iframe') {
-      return null;
-    }
-    const videoId = getYouTubeVideoId(new URL(`${e.properties.src}`));
-    if (!videoId) {
-      throw new Error(`FailedToGetVideoId: ${e.properties.src}`);
-    }
-    result.push(async () => {
-      const data = await fetchYouTubeVideoData(videoId);
-      if (data) {
-        delete e.properties.width;
-        delete e.properties.height;
-        e.properties.style = `aspect-ratio:${data.width}/${data.height};`;
+  visitHastElement(fromHtml(hastToString(node)), {
+    iframe: (e) => {
+      const videoId = getYouTubeVideoId(new URL(`${e.properties.src}`));
+      if (!videoId) {
+        throw new Error(`FailedToGetVideoId: ${e.properties.src}`);
       }
-      e.position = node.position;
-      return e;
-    });
-    return [EXIT];
+      result.push(async () => {
+        const data = await fetchYouTubeVideoData(videoId);
+        if (data) {
+          delete e.properties.width;
+          delete e.properties.height;
+          e.properties.style = `aspect-ratio:${data.width}/${data.height};`;
+        }
+        e.position = node.position;
+        return e;
+      });
+      return EXIT;
+    },
   });
   for (const fn of result) {
     yield await fn();

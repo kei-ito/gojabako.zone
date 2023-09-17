@@ -1,7 +1,7 @@
 import { isString } from '@nlib/typing';
 import type { Element, ElementContent, Properties } from 'hast';
 
-export const createRehypeElement = (
+export const createHastElement = (
   tagName: string,
   properties: Properties,
   ...children: Array<ElementContent | string | false | null | undefined>

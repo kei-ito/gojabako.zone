@@ -1,9 +1,9 @@
 import type { Element } from 'hast';
-import { createRehypeElement } from './createRehypeElement.mts';
+import { createHastElement } from './createHastElement.mts';
 
 export const insertFootnoteFocus = (node: Element, a: Element) => {
   node.children.push(
-    createRehypeElement('span', {
+    createHastElement('span', {
       dataFootnoteFocus: true,
       id: a.properties.id,
     }),

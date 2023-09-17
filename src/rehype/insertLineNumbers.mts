@@ -1,5 +1,5 @@
 import type { Element, Text } from 'hast';
-import { createRehypeElement } from './createRehypeElement.mts';
+import { createHastElement } from './createHastElement.mts';
 
 export const insertLineNumbers = (node: Element, codeId: string) => {
   let lineNumber = 0;
@@ -7,13 +7,13 @@ export const insertLineNumbers = (node: Element, codeId: string) => {
   for (const line of listCodeLines(node)) {
     const id = `${codeId}L${++lineNumber}`;
     elements.push(
-      createRehypeElement(
+      createHastElement(
         'a',
         { href: `#${id}`, className: ['hljs-ln'], draggable: 'false' },
-        createRehypeElement('span', { id, dataLineFocus: true }),
-        createRehypeElement('span', {}, `${lineNumber}`),
+        createHastElement('span', { id, dataLineFocus: true }),
+        createHastElement('span', {}, `${lineNumber}`),
       ),
-      createRehypeElement('span', {}, ...line),
+      createHastElement('span', {}, ...line),
     );
   }
   node.children = elements;

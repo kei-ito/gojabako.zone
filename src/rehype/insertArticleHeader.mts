@@ -3,22 +3,16 @@ import type { Element, Root } from 'hast';
 import { getPageFromFileUrl } from '../util/getPage.mts';
 import type { PageData } from '../util/type.mts';
 import type { VFileLike } from '../util/unified.mts';
-import { createRehypeElement } from './createRehypeElement.mts';
+import { createHastElement } from './createHastElement.mts';
 
 export const insertArticleHeader = (root: Root, file: VFileLike) => {
-  if (0 < root.children.length) {
-    const [firstChild] = root.children;
-    if (firstChild.type === 'element' && firstChild.tagName === 'h1') {
-      root.children.splice(0, 1);
-    }
-  }
   const page = getPageFromFileUrl(pathToFileURL(file.path));
   root.children.unshift(
-    createRehypeElement(
+    createHastElement(
       'header',
       {},
-      createRehypeElement('h1', {}, page.title),
-      createRehypeElement('div', {}, ...listMetaElements(page)),
+      createHastElement('h1', {}, page.title),
+      createHastElement('div', {}, ...listMetaElements(page)),
     ),
   );
 };
@@ -26,10 +20,10 @@ export const insertArticleHeader = (root: Root, file: VFileLike) => {
 const listMetaElements = function* (
   page: PageData,
 ): Generator<Element | string> {
-  yield createRehypeElement(
+  yield createHastElement(
     'span',
     { title: page.publishedAt },
-    createRehypeElement(
+    createHastElement(
       'time',
       { dateTime: page.publishedAt },
       toDateString(page.publishedAt),
@@ -37,11 +31,11 @@ const listMetaElements = function* (
     'に公開',
   );
   if (page.publishedAt !== page.updatedAt) {
-    yield createRehypeElement(
+    yield createHastElement(
       'span',
       { title: page.updatedAt },
       '（',
-      createRehypeElement(
+      createHastElement(
         'time',
         { dateTime: page.updatedAt },
         toDateString(page.updatedAt),
@@ -50,7 +44,7 @@ const listMetaElements = function* (
     );
   }
   if (1 < page.commits) {
-    yield createRehypeElement(
+    yield createHastElement(
       'a',
       {
         href: `https://github.com/gjbkz/gojabako.zone/commits/main/${page.filePath}`,
