@@ -111,7 +111,22 @@ hr {
 }
 
 button {
+  min-inline-size: 4em;
+  padding-block: 0.25em;
+  padding-inline: 0.6em;
+  border-color: var(--gjGray4);
+  border-style: solid;
+  border-radius: 0.3em;
   cursor: pointer;
+  background-color: var(--gjGray0);
+
+  &:hover {
+    background-color: var(--gjGray1);
+  }
+
+  &:active {
+    background-color: var(--gjGray2);
+  }
 }
 
 img,
@@ -278,29 +293,15 @@ form,
 fieldset {
   display: grid;
   grid-auto-flow: row;
-  padding-block: 0.5em;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  row-gap: 1em;
+  padding-block-end: 1em;
+  padding-inline: 1em;
   border-radius: 0.3em;
   border-style: solid;
-  border-color: var(--gjGray5);
+  border-color: var(--gjGray4);
   background-color: var(--gjGray0);
-
-  & > * {
-    margin-block: 0.5em;
-    margin-inline: 3%;
-  }
-
-  & > h1 {
-    margin-block-end: 0.3em;
-    font-size: 100%;
-  }
-
-  & > p {
-    margin-block-start: 0.3em;
-  }
-
-  & > label {
-    margin-block-end: 0;
-  }
 
   input {
     padding-block: 0.3em;
@@ -309,9 +310,15 @@ fieldset {
     border-color: var(--gjGray5);
     background-color: var(--gjGray2);
   }
+}
 
+form {
+  margin-block: 0.5em;
+}
+
+fieldset {
   legend {
-    margin-block-end: 0;
+    margin-inline: 0;
   }
 }
 
@@ -497,6 +504,13 @@ sup {
 
 .katex-inline {
   margin-inline: 0.1em;
+}
+
+.buttons {
+  display: grid;
+  grid-auto-flow: column;
+  column-gap: 0.5em;
+  justify-content: end;
 }
 
 figcaption {
