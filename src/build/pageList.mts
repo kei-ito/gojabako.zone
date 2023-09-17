@@ -25,8 +25,8 @@ const generateCode = async function* () {
     pageList.push(await getPageData(file));
   }
   pageList.sort((a, b) => {
-    const ga = a.url.split('/', 1)[0];
-    const gb = b.url.split('/', 1)[0];
+    const ga = a.url.split('/', 2)[1];
+    const gb = b.url.split('/', 2)[1];
     if (ga === gb) {
       const ta = new Date(a.publishedAt).getTime();
       const tb = new Date(b.publishedAt).getTime();

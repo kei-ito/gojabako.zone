@@ -158,7 +158,7 @@ h3,
 h4,
 h5,
 h6 {
-  margin-block-start: 0.6em;
+  margin-block-start: 1em;
   font-weight: 600;
 
   & > .fragment-ref {
@@ -172,6 +172,13 @@ h6 {
       text-decoration: underline;
     }
   }
+}
+
+h2 + h3,
+h3 + h4,
+h4 + h5,
+h5 + h6 {
+  margin-block-start: 0;
 }
 
 h1,
@@ -502,7 +509,7 @@ figure {
   grid-auto-flow: row;
   row-gap: 0.25em;
   justify-items: center;
-  padding-block: 0.5em;
+  margin-block: 1em;
   overflow: auto;
 
   &[data-type='image'] {

@@ -5,7 +5,7 @@
   justify-items: center;
   row-gap: 0.5em;
   padding-block-start: 1em;
-  padding-block-end: 2em;
+  padding-block-end: 3em;
 
   & > * {
     inline-size: var(--gjBaseWidth);
@@ -17,12 +17,14 @@
     grid-auto-flow: row;
     justify-items: center;
     inline-size: unset;
+    padding-block: 1em;
 
     & > * {
       inline-size: var(--gjBaseWidth);
     }
 
     & > h1 {
+      margin-block-start: 0;
       font-size: 120%;
     }
 

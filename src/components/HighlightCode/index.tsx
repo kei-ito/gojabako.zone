@@ -52,7 +52,13 @@ const listTargets = function* (
     return;
   }
   const codeId = matched[1];
-  const code = root.querySelector(`.fragment-target#${codeId}+code`);
+  let code = root.querySelector(`.fragment-target#${codeId}`);
+  while (code) {
+    if (code.tagName.toLowerCase() === 'code') {
+      break;
+    }
+    code = code.nextElementSibling;
+  }
   if (!code) {
     return;
   }
@@ -86,6 +92,11 @@ const listTargets = function* (
 const getHash = (href: string, expand: boolean) => {
   href = new URL(href, location.href).hash;
   if (!expand) {
+    if (location.hash === href) {
+      const reset = new URL(location.href);
+      reset.hash = '';
+      return reset.href;
+    }
     return href;
   }
   const matched = /(#C\d+)L(\d+)(?:-(\d+))?/.exec(location.hash);
