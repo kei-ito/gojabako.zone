@@ -33,7 +33,7 @@
         "@gjbkz/gojabako.zone-markdown-page-loader-cjs": "0.1.15",
         "@gjbkz/gojabako.zone-markdown-util": "0.1.15",
         "@gjbkz/gojabako.zone-node-util": "0.1.15",
-        "@nlib/typing": "0.5.7",
+        "@nlib/typing": "1.1.0",
         "jose": "4.14.6",
         "meilisearch": "0.34.2",
         "next": "13.4.19",
