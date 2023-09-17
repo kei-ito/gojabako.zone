@@ -6,10 +6,11 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeArticle from './src/rehype/article.mts';
 import rehypeEmbed from './src/rehype/embed.mts';
+import remarkArticle from './src/remark/article.mts';
 
 const withMDX = mdx({
   options: {
-    remarkPlugins: [remarkGfm, remarkMath],
+    remarkPlugins: [remarkArticle, remarkGfm, remarkMath],
     rehypePlugins: [
       rehypeEmbed,
       rehypeHighlight,

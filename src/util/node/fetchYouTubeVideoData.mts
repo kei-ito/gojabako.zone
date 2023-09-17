@@ -7,14 +7,15 @@ interface VideoData {
   width: number;
   height: number;
   duration: string;
+  watchUrl: URL;
 }
 
 export const fetchYouTubeVideoData = async (
   videoId: string,
 ): Promise<VideoData | null> => {
-  const url = new URL('https://www.youtube.com/watch');
-  url.searchParams.set('v', videoId);
-  const data = await fetchWebPageMetaData(url);
+  const watchUrl = new URL('https://www.youtube.com/watch');
+  watchUrl.searchParams.set('v', videoId);
+  const data = await fetchWebPageMetaData(watchUrl);
   const get = (key: string) => {
     const list = data[key] ?? data[`og:${key}`] ?? data[`twitter:${key}`];
     return list?.[0];
@@ -25,7 +26,7 @@ export const fetchYouTubeVideoData = async (
   const height = toNumber(get('height'));
   const duration = get('description');
   if (title && description && width && height && duration) {
-    return { title, description, width, height, duration };
+    return { title, description, width, height, duration, watchUrl };
   }
   return null;
 };

@@ -16,3 +16,5 @@ const list = function* (entries: Array<ClassNameEntry>): Generator<string> {
     }
   }
 };
+
+export const ClassIcon = 'material-symbols-rounded';
