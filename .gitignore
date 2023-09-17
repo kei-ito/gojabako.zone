@@ -44,3 +44,4 @@ tsconfig.tsbuildinfo
 next-env.d.ts
 *.component.tsx
 .cache
+public/images

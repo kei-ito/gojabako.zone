@@ -28,7 +28,7 @@ export const Counter = () => {
     return () => abc.abort();
   }, [input]);
   return (
-    <div className={style.container}>
+    <span className={style.container}>
       <button onClick={decrement}>-1</button>
       <input
         ref={setInput}
@@ -38,6 +38,6 @@ export const Counter = () => {
         onChange={onChange}
       />
       <button onClick={increment}>+1</button>
-    </div>
+    </span>
   );
 };

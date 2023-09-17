@@ -123,7 +123,11 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 ## Image
 
-![ここはキャプション](/logo.png)
+![幅1200px](./course.jpg)
+
+![幅160px](./course-w160.jpg)
+
+本文中に画像![幅160px](./course-w160.jpg)を挿入する。
 
 ---
 
@@ -158,4 +162,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 import { Counter } from '../../../components/Counter';
 
-<Counter />
+<Counter foo="bar1" />
+
+段落中に埋めると<Counter foo="bar2" baz={123} />こうなる。

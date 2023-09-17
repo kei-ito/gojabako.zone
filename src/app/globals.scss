@@ -110,10 +110,15 @@ hr {
   margin-block-end: 1em;
 }
 
+button {
+  cursor: pointer;
+}
+
 img,
 svg {
   max-inline-size: 100%;
-  display: block;
+  block-size: auto;
+  vertical-align: middle;
 }
 
 /* Style for alt */
@@ -215,7 +220,6 @@ ul {
 }
 
 table {
-  max-inline-size: 100%;
   min-inline-size: 20em;
   border-collapse: collapse;
 }
@@ -498,7 +502,13 @@ figure {
   grid-auto-flow: row;
   row-gap: 0.25em;
   justify-items: center;
+  padding-block: 0.5em;
   overflow: auto;
+
+  &[data-type='image'] {
+    inline-size: unset;
+    max-inline-size: var(--gjBaseWidth);
+  }
 
   &[data-type='code'] {
     justify-items: stretch;
@@ -507,10 +517,14 @@ figure {
   &[data-type='math'] {
     justify-items: stretch;
     overflow-x: auto;
-    padding-block-start: 0.2em;
-    padding-block-end: 0.2em;
+    padding-inline: 0.4em;
+    inline-size: unset;
     min-inline-size: var(--gjBaseWidth);
     max-inline-size: 100%;
+
+    & > .fragment-ref {
+      display: none;
+    }
 
     & > .katex-html {
       display: grid;
@@ -518,7 +532,6 @@ figure {
       column-gap: 0.5em;
       padding-inline-start: 0.5em;
       padding-inline-end: 0.5em;
-      user-select: none;
 
       & > .base {
         justify-self: center;

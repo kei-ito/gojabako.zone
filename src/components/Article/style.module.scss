@@ -9,14 +9,6 @@
 
   & > * {
     inline-size: var(--gjBaseWidth);
-    max-inline-size: 100%;
-  }
-
-  & > figure {
-    &[data-type='math'] {
-      inline-size: unset;
-      padding-inline: 1em;
-    }
   }
 
   & > header {

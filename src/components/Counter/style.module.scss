@@ -1,13 +1,20 @@
 .container {
   display: grid;
-  grid-auto-flow: column;
-  column-gap: 0.5em;
-  justify-content: start;
+  grid-template-columns: 2em 4em 2em;
+  justify-content: center;
   align-items: baseline;
   text-align: center;
 
+  & > button {
+    border-style: solid;
+  }
+
   & > input {
-    width: 6em;
     text-align: center;
   }
+}
+
+p > .container {
+  display: inline-grid;
+  margin-inline: 0.5em;
 }

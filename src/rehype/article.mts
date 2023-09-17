@@ -1,15 +1,19 @@
 import { isString } from '@nlib/typing';
-import type { Root, Element } from 'hast';
+import type { Element, Root } from 'hast';
+import type { MdxJsxTextElement } from 'mdast-util-mdx-jsx';
 import { EXIT, SKIP } from 'unist-util-visit';
 import { ClassIcon } from '../util/classnames.mts';
 import { getSingle } from '../util/getSingle.mts';
 import { mdToInlineHast } from '../util/node/mdToHast.mts';
 import type { VFileLike } from '../util/unified.mts';
 import { createHastElement } from './createHastElement.mts';
+import { createMdxEsm } from './createMdxJsEsm.mts';
+import { createMdxJsxTextElement } from './createMdxJsxTextElement.mts';
 import { hasClass } from './hasClass.mts';
 import { insertArticleHeader } from './insertArticleHeader.mts';
 import { insertLineNumbers } from './insertLineNumbers.mts';
 import { isHastElement } from './isHastElement.mts';
+import { serializePropertyValue } from './serializePropertyValue.mts';
 import type { HastElementVisitor } from './visitHastElement.mts';
 import { visitHastElement } from './visitHastElement.mts';
 
@@ -174,19 +178,38 @@ const visitTable = (): HastElementVisitor => {
 
 const visitImg = (): HastElementVisitor => {
   let imageCount = 0;
-  return (e, _index, parent) => {
-    if (!isHastElement(parent, 'p') || parent.children.length !== 1) {
+  const imported = new Map<string, string>();
+  return (e, index, parent) => {
+    const { src } = e.properties;
+    if (!isString(src)) {
       return null;
     }
-    parent.tagName = 'figure';
-    parent.properties.id = `image${++imageCount}`;
-    parent.properties.dataType = 'image';
-    if (isString(e.properties.alt)) {
-      parent.children.unshift(
-        createHastElement('figcaption', {}, e.properties.alt),
-      );
+    if (!src.startsWith('./')) {
+      throw new Error(`InvalidSrc: ${src}`);
     }
-    return SKIP;
+    const elements: Array<Element | MdxJsxTextElement> = [];
+    if (imageCount === 0) {
+      elements.push(createMdxEsm(`import Image from 'next/image';`));
+    }
+    const id = `image${++imageCount}`;
+    let name = imported.get(src);
+    if (!name) {
+      name = `_${id}`;
+      imported.set(src, name);
+      elements.push(createMdxEsm(`import ${name} from '${src}';`));
+    }
+    const alt = serializePropertyValue(e.properties.alt);
+    if (isHastElement(parent, 'p') && parent.children.length === 1) {
+      parent.tagName = 'figure';
+      parent.properties.id = id;
+      parent.properties.dataType = 'image';
+      if (alt) {
+        elements.push(createHastElement('figcaption', {}, alt));
+      }
+    }
+    elements.push(createMdxJsxTextElement('Image', { src: [name], alt }));
+    parent.children.splice(index, 1, ...elements);
+    return [SKIP, index + elements.length];
   };
 };
 
