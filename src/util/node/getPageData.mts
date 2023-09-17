@@ -11,11 +11,11 @@ export const getPageData = async (file: URL): Promise<PageData> => {
   if (!title) {
     throw new Error(`NoTitle: ${file.pathname.slice(rootDir.pathname.length)}`);
   }
-  let url = file.pathname.slice(appDir.pathname.length);
+  let url = file.pathname.slice(appDir.pathname.length - 1);
   url = url.replace(/\/page\.\w+$/, '');
   url = url.replace(/\([^/]+\)\//, '');
   return {
-    url,
+    url: url || '/',
     filePath: file.pathname.slice(rootDir.pathname.length),
     title,
     ...history,

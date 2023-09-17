@@ -19,7 +19,7 @@ const listGroups = function* () {
   const others: PageGroup = { name: '', pages: [] };
   let group: PageGroup = { name: '', pages: [] };
   for (const page of pageList) {
-    const groupName = page.url.split('/')[0];
+    const groupName = page.url.split('/')[1];
     if (isBlogGroupName(groupName)) {
       if (groupName !== group.name) {
         yield* flush(group);
