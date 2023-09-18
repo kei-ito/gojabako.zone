@@ -59,10 +59,12 @@
   --gjFontSans: 'Helvetica Neue', arial, 'Hiragino Kaku Gothic ProN', meiryo,
     sans-serif;
   --gjFontMonospace: menlo, consolas, monospace;
+  --gjListMarkerWidth: 1.6em;
+  --gjLineHeight: 1.6;
 
   font-size: 16px;
   font-family: var(--gjFontSans);
-  line-height: 1.6;
+  line-height: var(--gjLineHeight);
   text-rendering: optimizespeed;
   color: var(--gjGray9);
   block-size: 100%;
@@ -76,6 +78,10 @@
   @media (width <= 600px) {
     font-size: 15px;
   }
+}
+
+.hash-hit {
+  background-color: var(--gjYellow1);
 }
 
 a {
@@ -193,6 +199,10 @@ h6 {
       text-decoration: underline;
     }
   }
+
+  &.hash-hit {
+    box-shadow: 0 0 0 0.5em var(--gjYellow1);
+  }
 }
 
 h2 + h3,
@@ -227,24 +237,38 @@ h4 > .fragment-ref::before {
   pointer-events: none;
 }
 
-ol {
-  list-style-type: decimal;
-}
-
-ul {
-  list-style-type: disc;
-}
-
 ol,
 ul {
+  counter-reset: list;
   display: grid;
   grid-auto-flow: row;
   row-gap: 0.25em;
-  padding-inline-start: 1.6em;
 
   & > li {
+    counter-increment: list;
+    padding-inline-start: var(--gjListMarkerWidth);
     list-style-type: inherit;
+
+    &::before {
+      content: counter(list) '.';
+      position: absolute;
+      inset-inline-end: calc(100% - var(--gjListMarkerWidth) + 0.4em);
+      display: block;
+      text-align: end;
+    }
   }
+}
+
+ul > li::before {
+  --gjSize: 0.4em;
+
+  inset-inline-end: calc(100% - var(--gjListMarkerWidth) + 0.7em);
+  inset-block-start: calc((1em * var(--gjLineHeight) - var(--gjSize)) / 2);
+  content: '';
+  inline-size: var(--gjSize);
+  block-size: var(--gjSize);
+  background-color: currentcolor;
+  border-radius: 50%;
 }
 
 table {
@@ -474,8 +498,7 @@ fieldset {
     padding-inline: 0.4em;
   }
 
-  &.hljs-target {
-    background-color: var(--gjYellow1);
+  &.hash-hit {
     border-inline-end-color: var(--gjYellow3);
 
     & > span {

@@ -8,7 +8,7 @@ export const SiteHeader = (props: HTMLAttributes<HTMLElement>) => (
   <header {...props} className={classnames(style.container, props.className)}>
     <div>
       <Link href="/">
-        <Logo />
+        <Logo className={style.logo} />
         <span>Gojabako Zone</span>
       </Link>
       <Link href="/author">

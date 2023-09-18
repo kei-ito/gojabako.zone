@@ -1,12 +1,12 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useHash } from '../use/Hash.mts';
 
-const targetClassName = 'hljs-target';
+const targetClassName = 'hash-hit';
 
 export const HighlightCode = () => {
   const [div, setDiv] = useState<Element | null>(null);
-  const root = div?.parentElement ?? null;
+  const root = useMemo(() => div?.parentElement ?? null, [div]);
   const [hash, syncHash] = useHash();
   useEffect(() => {
     const targets = new Set<Element>();
