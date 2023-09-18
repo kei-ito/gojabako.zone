@@ -29,5 +29,5 @@
     ]
   },
   "include": ["**/*.mts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "old-src"]
+  "exclude": ["node_modules"]
 }
