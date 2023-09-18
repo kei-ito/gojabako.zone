@@ -1,4 +1,4 @@
-import { isString } from '@nlib/typing';
+import { isObject, isString } from '@nlib/typing';
 import type { Element, Root } from 'hast';
 import type { MdxJsxTextElement } from 'mdast-util-mdx-jsx';
 import { EXIT, SKIP } from 'unist-util-visit';
@@ -159,7 +159,7 @@ const visitPre = (): HastElementVisitor => {
     if (!isHastElement(code, 'code', 'hljs')) {
       return null;
     }
-    const value = code.data?.meta;
+    const value = isObject(code.data) && code.data.meta;
     const id = `C${++count}`;
     insertLineNumbers(code, id);
     parent.children.splice(
