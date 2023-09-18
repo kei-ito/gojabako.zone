@@ -14,7 +14,7 @@
     "https:next": "node --experimental-loader=@nlib/tsm server.mts",
     "build": "run-s build:*",
     "build:pageList": "node --experimental-loader=@nlib/tsm src/build/pageList.mts",
-    "build:css": "typed-scss-modules app --logLevel error",
+    "build:css": "typed-scss-modules src --logLevel error",
     "build:next": "NODE_OPTIONS='--experimental-loader=@nlib/tsm' next build",
     "start": "NODE_ENV=production NODE_OPTIONS='--experimental-loader=@nlib/tsm' node server.mjs",
     "lint": "run-s lint:*",
