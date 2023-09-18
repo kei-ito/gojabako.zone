@@ -1,13 +1,14 @@
+import type { Metadata } from 'next';
+
 export interface Commit {
   commit: string;
   abbr: string;
   aDate: string;
 }
 
-export interface PageData {
+export interface PageData extends Metadata {
   url: string;
   filePath: string;
-  title: string;
   publishedAt: string;
   updatedAt: string;
   commits: number;
