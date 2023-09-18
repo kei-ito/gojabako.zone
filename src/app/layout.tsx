@@ -3,9 +3,10 @@ import './globals.scss';
 import type { PropsWithChildren } from 'react';
 import { SiteFooter } from '../components/SiteFooter';
 import { SiteHeader } from '../components/SiteHeader';
+import { siteName } from '../util/site.mts';
 
 export const metadata = {
-  title: { template: '%s ・ Gojabako Zone', default: 'Gojabako Zone' },
+  title: { template: `%s ・ ${siteName}`, default: siteName },
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {

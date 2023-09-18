@@ -1,6 +1,7 @@
 import { pathToFileURL } from 'node:url';
 import type { Element, Root } from 'hast';
 import { getPageFromFileUrl } from '../util/getPage.mts';
+import { repositoryUrl } from '../util/site.mts';
 import type { PageData } from '../util/type.mts';
 import type { VFileLike } from '../util/unified.mts';
 import { createHastElement } from './createHastElement.mts';
@@ -46,9 +47,7 @@ const listMetaElements = function* (
   if (1 < page.commits) {
     yield createHastElement(
       'a',
-      {
-        href: `https://github.com/gjbkz/gojabako.zone/commits/main/${page.filePath}`,
-      },
+      { href: new URL(`commits/main/${page.filePath}`, repositoryUrl).href },
       `履歴 (${page.commits})`,
     );
   }

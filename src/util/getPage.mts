@@ -1,9 +1,12 @@
 import { rootDir } from './node/directories.mts';
 import { pageList } from './pageList.mts';
+import { pagePathToIri } from './site.mts';
 import type { PageData } from './type.mts';
 
 const defaultFallback: PageData = {
   url: '/not-found',
+  iri: pagePathToIri('/not-found'),
+  group: '',
   filePath: 'app/not-found.tsx',
   title: 'Not Found',
   publishedAt: '1970-01-01T00:00:00Z',

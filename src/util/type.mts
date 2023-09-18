@@ -7,7 +7,9 @@ export interface Commit {
 }
 
 export interface PageData extends Metadata {
+  title: string;
   url: string;
+  iri: string;
   group: string;
   filePath: string;
   publishedAt: string;

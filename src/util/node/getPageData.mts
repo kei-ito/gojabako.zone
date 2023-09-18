@@ -1,5 +1,7 @@
 import { readdir } from 'node:fs/promises';
+import { isString } from '@nlib/typing';
 import type { Metadata } from 'next';
+import { pagePathToIri } from '../site.mts';
 import type { PageData } from '../type.mts';
 import { appDir, rootDir } from './directories.mts';
 import { getPageTitleFromMdx } from './getMetadataFromMdx.mts';
@@ -11,8 +13,10 @@ export const getPageData = async (file: URL): Promise<PageData> => {
     scanCommits(file),
     getMetadata(file),
   ]);
-  if (!metadata?.title) {
-    throw new Error(`NoTitle: ${file.pathname.slice(rootDir.pathname.length)}`);
+  const title = metadata?.title;
+  if (!isString(title)) {
+    const relativePath = file.pathname.slice(rootDir.pathname.length);
+    throw new Error(`${title ? 'Invalid' : 'No'}Title: ${relativePath}`);
   }
   let url = file.pathname.slice(appDir.pathname.length - 1);
   url = url.replace(/\/page\.\w+$/, '');
@@ -21,7 +25,9 @@ export const getPageData = async (file: URL): Promise<PageData> => {
   return {
     ...metadata,
     ...history,
+    title,
     url: url || '/',
+    iri: pagePathToIri(url),
     group: group ? group[1] : '',
     filePath: file.pathname.slice(rootDir.pathname.length),
   };

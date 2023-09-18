@@ -23,7 +23,7 @@ const withMDX = mdx({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  pageExtensions: ['tsx', 'mdx'],
+  pageExtensions: ['tsx', 'mts', 'mdx'],
   reactStrictMode: true,
   webpack: (config, _options) => {
     config.module.rules.push({
