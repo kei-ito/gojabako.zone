@@ -8,7 +8,7 @@ const defaultFallback: PageData = {
   iri: pagePathToIri('/not-found'),
   group: '',
   filePath: 'app/not-found.tsx',
-  title: 'Not Found',
+  title: ['Not', ' ', 'Found'],
   publishedAt: '1970-01-01T00:00:00Z',
   updatedAt: '1970-01-01T00:00:00Z',
   commits: 6,

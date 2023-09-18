@@ -12,7 +12,7 @@ export const insertArticleHeader = (root: Root, file: VFileLike) => {
     createHastElement(
       'header',
       {},
-      createHastElement('h1', {}, page.title),
+      createHastElement('h1', {}, page.title.join('')),
       createHastElement('div', {}, ...listMetaElements(page)),
     ),
   );
