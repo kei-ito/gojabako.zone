@@ -1,0 +1,52 @@
+.container {
+  min-block-size: 2.4em;
+  display: grid;
+  grid-template-columns: var(--gjBaseWidth);
+  justify-content: center;
+  background-color: hsl(0deg 0% 100% / 80%);
+  backdrop-filter: blur(2px);
+  font-weight: 500;
+  line-height: 1;
+
+  & > div {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: 1fr;
+    column-gap: 0.5em;
+
+    & > * {
+      display: grid;
+      grid-auto-flow: column;
+      align-items: center;
+    }
+
+    & > a {
+      text-decoration: none;
+      color: inherit;
+
+      & > span {
+        padding-block-start: var(--gj1px);
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &[href='/'] {
+        grid-column: 1/2;
+        display: grid;
+        grid-template-columns: 2em auto;
+        column-gap: 0.4em;
+        align-items: center;
+      }
+
+      &[href='/author'] {
+        grid-column: -2/-1;
+      }
+    }
+  }
+}
+
+.logo {
+  margin-inline: 0;
+}

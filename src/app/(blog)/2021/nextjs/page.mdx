@@ -1,0 +1,27 @@
+export const metadata = {
+  title: 'サイトをNext.js + Vercelに移行した',
+};
+
+これまでS3にHTMLを置いてCloudFrontで配信していたWebサイトを[Next.js] + [Vercel]で配信するようにしました。`next dev`が快適でまず驚き、GitHubをVercelにつなぐとすぐにオンラインのプレビューを提供してくれてまた驚きました。以下はその詳細です。
+
+[Next.js]: https://nextjs.org/
+[Vercel]: https://vercel.com/home
+
+## 配信部分はVercelにおまかせ
+
+インターネットに何かを公開するとき、配信設備は頭と手間が要るのに手を抜くと訪問者の体験はマイナスになりうる一方で頑張っても待ち時間短縮以上のプラスは期待できません。Vercelはここを手間なく満足な品質で提供してくれたので楽ができました。ありがたい。
+
+ドメインの設定もVercelに設定を追加すると表示されるレコードをRoute53で設定するだけでした。と言うとそりゃどこでも同じだよねとなりますが、例えばレコード追加後の確認をこちらのリクエストなくやってくれるなど、入力を必要最低限にすることが徹底されていると感じました。自分が何か作るときもこういう体験ができるようにしたいですね。
+
+## 足した機能
+
+機能が増えたら追記します。
+
+1. **Markdownで書く** - TypeScriptで`<p>Hello</p>`とか書いてもいいのですが、このページのような文章を書くには邪魔が多いのでMarkdownで書いた文章をページにできるようにしました。Markdownじゃなくてもいいのですが、GitHubのプレビューがあるのでMarkdownに決めました。Loaderはまた別のページで書きます。
+1. **JSXのコンポーネントを表示する** - 文章中に動くサンプルを差し込めると書く体験も読む体験もよくなると思うのでコードブロックのメタ情報を使ってそういう表現ができるようにしました。
+1. **Atomの配信** - 私自身[feedly]と[Reeder]でRSS/Atomの恩恵を受けてきました。便利なのでこのサイトでも提供できるようにしました（[Atom](https://gojabako.zone/feed.atom)）。
+1. **サイトマップの配信** - Atomのついでに作りました。→ [sitemap](https://gojabako.zone/sitemap.xml)
+1. **コンテンツの埋め込み** - YouTube、ツイートをMarkdownで追加できます。
+
+[Feedly]: https://feedly.com/
+[Reeder]: https://reederapp.com/

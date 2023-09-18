@@ -1,0 +1,33 @@
+export const metadata = {
+  title: 'disabledなフォーム要素はsubmitされない',
+};
+
+Reactだとたいていの`<form>`でsubmitをpreventDefaultするので意識しないのですが、Next.jsは[API Routes](https://nextjs.org/docs/api-routes/introduction)があるので`<form>`のactionでそこに繋ぐことがあります。
+
+このときユーザーに操作させない要素をdisabledにすることがあるのですが、操作を無効にする以外のdisabled属性の作用についてよく知らなかったのでその実験をしました。
+
+## disabledなフォーム要素
+
+`<input>`の値を保護しようとしてdisabledを設定すると、値が足らずサーバーがBadRequestを返すようになりました。足りていない値を確認するとdisabledを設定した要素のvalueでした。
+
+import { Form1 } from './Form1';
+
+<Form1 />
+
+いつもfetchで送っていたので気がつかなかったのですが、disabledな要素の値はフォームの送信に含まれません。
+
+## disabledなfieldset
+
+フォームの要素は`<fieldset>`でグループにできます。この`<fieldset>`にはdisabledが指定できます。先の結果から予想するとdisabledにするとそのグループの値は送信されないでしょう。確認してみます。
+
+import { Form2 } from './Form2';
+
+<Form2 />
+
+2つ目の`<fieldset>`の中の`v2-3`と`v2-4`は送信されません。disabledな`<fieldset>`の中の値は送信されません。
+
+## disabledの使い所
+
+例えば「_Q2で **いいえ** と答えた方は入力してください_」のように文脈で無効である場合にはdisabledを使い、送信中の値の保護であればreadonly[^1]を使うようにしています。
+
+[^1]: readonlyは`<input type="submit"/>`に使えないなどの条件があります。参考: [HTML 属性: readonly - HTML: HyperText Markup Language | MDN](https://developer.mozilla.org/ja/docs/Web/HTML/Attributes/readonly)

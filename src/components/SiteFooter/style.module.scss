@@ -1,0 +1,25 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  background-color: var(--gjGray2);
+  padding-block: 1.4em;
+  row-gap: 1em;
+
+  & > section {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-flow: row;
+    justify-items: center;
+    row-gap: 0.4em;
+
+    & > * {
+      inline-size: var(--gjBaseWidth);
+    }
+
+    &:last-child {
+      display: grid;
+      grid-auto-flow: column;
+      text-align: end;
+    }
+  }
+}

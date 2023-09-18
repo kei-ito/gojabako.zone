@@ -1,40 +1,38 @@
-// @ts-check
-import * as path from 'path';
-import {srcDirectory, pagesDirectory} from './config.paths.mjs';
+import mdx from '@next/mdx';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeKatex from 'rehype-katex';
+import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import { rehypeArticle } from './src/rehype/article.mts';
+import { rehypeEmbed } from './src/rehype/embed.mts';
+import { remarkArticle } from './src/remark/article.mts';
 
-/** @param {string} componentName */
-const getComponentPath = (componentName) => path.join(srcDirectory, 'components', componentName);
+const withMDX = mdx({
+  options: {
+    remarkPlugins: [remarkArticle, remarkGfm, remarkMath],
+    rehypePlugins: [
+      rehypeEmbed,
+      rehypeHighlight,
+      rehypeSlug,
+      rehypeKatex,
+      rehypeArticle,
+    ],
+  },
+});
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-    swcMinify: true,
-    reactStrictMode: true,
-    pageExtensions: ['page.md', 'tsx', 'ts'],
-    webpack: (config, {defaultLoaders: {babel}}) => {
-        config.module.rules.push(
-            {
-                test: /\.module\.md$/,
-                use: [
-                    babel,
-                    {
-                        loader: '@gjbkz/gojabako.zone-markdown-component-loader-cjs',
-                        options: {pagesDirectory, getComponentPath},
-                    },
-                ],
-            },
-            {
-                test: /\.page\.md$/,
-                use: [
-                    babel,
-                    {
-                        loader: '@gjbkz/gojabako.zone-markdown-page-loader-cjs',
-                        options: {pagesDirectory, getComponentPath},
-                    },
-                ],
-            },
-        );
-        return config;
-    },
+  pageExtensions: ['tsx', 'mts', 'mdx'],
+  reactStrictMode: true,
+  webpack: (config, _options) => {
+    config.module.rules.push({
+      test: /\.mts$/,
+      loader: 'esbuild-loader',
+      options: { loader: 'ts' },
+    });
+    return config;
+  },
 };
 
-// eslint-disable-next-line import/no-default-export
-export default nextConfig;
+export default withMDX(nextConfig);

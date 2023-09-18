@@ -1,10 +1,9 @@
 {
-  "ts-node": {
-    "transpileOnly": true
-  },
   "compilerOptions": {
     "incremental": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
     "target": "esnext",
+    "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
     "resolveJsonModule": true,
@@ -19,21 +18,16 @@
     "allowJs": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
+    "allowImportingTsExtensions": true,
     "isolatedModules": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
+    "noEmit": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
     ]
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["**/*.mts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", "old-src"]
 }

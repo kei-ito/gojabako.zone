@@ -1,0 +1,136 @@
+export const metadata = {
+  title: '加重平均の誤差伝播',
+  other: {
+    originalLocation: 'https://kei-itof.goat.me/heZeNIQCCQ',
+    originalPublishedAt: '2019-04-26T18:46:08Z',
+  },
+};
+
+https://maxi.wemo.me/ を更新していたのですがビンまとめの式のよい参照先が見つからなかったためここで導出します。
+
+## 測定結果をまとめた量
+
+ある量$x$の測定結果が$N$回分あり、それぞれの測定の精度（分散）$\sigma^2$が得られているとします。
+
+$$
+x_1, x_2, ..., x_N\quad\sigma_{x_1}^2, \sigma_{x_2}^2, ..., \sigma_{x_N}^2
+$$
+
+$x_i$の加重平均 $u$ がほしいとします。
+
+$$
+u=\frac{\sum_{i=1}^N a_i x_i}{\sum_{i=1}^N a_i}
+$$
+
+このとき$u$の誤差（分散）が最小になる$a_i$を導出します。
+
+## 導出
+
+まず、ある$a_i$の組み合わせで$\sigma_u^{2}$が最小になっているなら、そこから$a_i$の値がずれると$\sigma_u^2$は大きくなります。これは$\sigma_u^2$がその$a_i$の組み合わせで極値をとっているということです。
+
+$$
+\forall i \in \{1, 2, ..., N\}: \frac{\partial\sigma_u^2}{\partial a_i}=0
+$$
+
+次に、$u$の誤差伝播の式は次のようになります。
+
+$$
+\sigma_u^2&=\sum_{i=1}^N\left(\frac{\partial u}{\partial x_i}\right)^2\sigma_{x_i}^2
+$$
+
+$u$の微分は$(2)$を使って計算できます。
+
+$$
+\frac{\partial u}{\partial x_i}
+&\overset{(2)}{=}\frac{\partial}{\partial x_i}\frac{\sum_{j=1}^N a_j x_j}{\sum_{j=1}^N a_j}\\
+&=\frac{a_i}{\sum_{j=1}^N a_j}
+$$
+
+すると$(4)$は次のようになります。
+
+$$
+\sigma_u^2
+&=\sum_{i=1}^N\left(\frac{\partial u}{\partial x_i}\right)^2\sigma_{x_i}^2
+\overset{(6)}{=}\frac{\sum_{i=1}^N a_i^2\sigma_{x_i}^2}{\left(\sum_{i=1}^N a_i\right)^2}
+$$
+
+これを極値の条件$(3)$に代入します。
+
+$$
+\frac{\partial}{\partial a_i}\frac{\sum_{j=1}^N a_j^2\sigma_{x_j}^2}{\left(\sum_{j=1}^N a_j\right)^2}&=0\\
+\frac{\partial}{\partial a_i}\left(\sum_{j=1}^N a_j^2\sigma_{x_j}^2\right)\!\left(\sum_{j=1}^N a_j\right)^{-2}&=0
+$$
+
+このまま計算すると横幅が足りないので以下の$f, g$を定義します。
+
+$$
+f(a_1,a_2,...,a_N)&=\sum_{j=1}^N a_j^2\sigma_{x_j}^2\\
+g(a_1,a_2,...,a_N)&=\left(\sum_{j=1}^N a_j\right)^{-2}
+$$
+
+それぞれ微分を計算します。
+
+$$
+\frac{\partial f}{\partial a_i}
+&=\frac{\partial}{\partial a_i}\sum_{j=1}^N a_j^2\sigma_{x_j}^2\\
+&=2a_i\sigma_{x_i}^2\\
+\frac{\partial g}{\partial a_i}
+&=\frac{\partial}{\partial a_i}\left(\sum_{j=1}^N a_j\right)^{-2}\\
+&=-2\left(\sum_{j=1}^N a_j\right)^{-3}\frac{\partial}{\partial a_i}\sum_{j=1}^N a_j\\
+&=-2\left(\sum_{j=1}^N a_j\right)^{-3}
+$$
+
+$(9)$の続きを計算します。
+
+$$
+\frac{\partial}{\partial a_i}f\cdot g&=0\\
+\left(\frac{\partial f}{\partial a_i}\right)g
++f\left(\frac{\partial g}{\partial a_i}\right)&=0\\
+\left(2a_i\sigma_{x_i}^2\right)\left(\sum_{j=1}^N a_j\right)^{-2}
+\!\!\!\!-2\left(\sum_{j=1}^N a_j^2\sigma_{x_j}^2\right)\left(\sum_{j=1}^N a_j\right)^{-3}&=0\\
+2\left(\sum_{j=1}^N a_j\right)^{-3}\left(a_i\sigma_{x_i}^2\sum_{j=1}^N a_j
+-\sum_{j=1}^N a_j^2\sigma_{x_j}^2\right)&=0\\
+a_i\sigma_{x_i}^2\sum_{j=1}^N a_j-\sum_{j=1}^N a_j^2\sigma_{x_j}^2&=0
+$$
+
+$(21)$を$a_i$について整理します。
+
+$$
+a_i&=\frac{1}{\sigma_{x_i}^2}\frac{\sum_{j=1}^N a_j^2\sigma_{x_j}^2}{\sum_{j=1}^N a_j}
+$$
+
+両辺を$i=1,2,...,N$について足し、$\textstyle\sum_{j=1}^N a_j^2\sigma_{x_j}^2$について整理します。
+
+$$
+\sum_{i=1}^N a_i&=\sum_{i=1}^N\frac{1}{\sigma_{x_i}^2}\frac{\sum_{j=1}^N a_j^2\sigma_{x_j}^2}{\sum_{j=1}^N a_j}\\
+\sum_{j=1}^N a_j^2\sigma_{x_j}^2&=\left(\sum_{j=1}^N a_j\right)^2\left(\sum_{j=1}^N\frac{1}{\sigma_{x_j}^2}\right)^{-1}
+$$
+
+$(24)$を$(22)$に代入します。
+
+$$
+a_i&\overset{(24)}{=}\frac{1}{\sigma_{x_i}^2}\left(\sum_{j=1}^N a_j\right)\left(\sum_{j=1}^N\frac{1}{\sigma_{x_j}^2}\right)^{-1}
+$$
+
+$(24)$を$(7)$に代入します。
+
+$$
+\sigma_u^2
+&=\frac{\sum_{i=1}^N a_i^2\sigma_{x_i}^2}{\left(\sum_{i=1}^N a_i\right)^2}
+\overset{(24)}{=}\left(\sum_{j=1}^N\frac{1}{\sigma_{x_j}^2}\right)^{-1}
+$$
+
+## 結論
+
+ある量$x$の複数回の測定結果$x_i$とその分散$\sigma_{x_i}^2$が得られており、その加重平均
+
+$$
+u&=\frac{\sum_{i=1}^N a_i x_i}{\sum_{i=1}^N a_i}
+$$
+
+の誤差（分散）が最小になる$a_i$とそのときの分散$\sigma_u^2$は次の式で表されます。
+
+$$
+a_i&=\frac{1}{\sigma_{x_i}^2}\left(\sum_{j=1}^N a_j\right)\left(\sum_{j=1}^N\frac{1}{\sigma_{x_j}^2}\right)^{-1}\\
+\sigma_u^2&=\left(\sum_{j=1}^N\frac{1}{\sigma_{x_j}^2}\right)^{-1}
+$$
