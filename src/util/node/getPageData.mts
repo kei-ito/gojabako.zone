@@ -7,6 +7,7 @@ import { appDir, rootDir } from './directories.mts';
 import { getPageTitleFromMdx } from './getMetadataFromMdx.mts';
 import { getMetadataFromScript } from './getMetadataFromScript.mts';
 import { listCommits } from './listCommits.mts';
+import { getTokenizer, listPhrases } from './listPhrases.mts';
 
 const knownTitles = new Map<string, string>();
 knownTitles.set('/', 'Home');
@@ -15,9 +16,10 @@ export const getPageData = async (file: URL): Promise<PageData> => {
   let pagePath = file.pathname.slice(appDir.pathname.length - 1);
   pagePath = pagePath.replace(/\/page\.\w+$/, '');
   pagePath = pagePath.replace(/\([^/]+\)\//, '') || '/';
-  const [history, metadata] = await Promise.all([
+  const [history, metadata, tokenizer] = await Promise.all([
     scanCommits(file),
     getMetadata(file),
+    getTokenizer(),
   ]);
   const title = metadata?.title ?? knownTitles.get(pagePath);
   if (!isString(title)) {
@@ -28,7 +30,7 @@ export const getPageData = async (file: URL): Promise<PageData> => {
   return {
     ...metadata,
     ...history,
-    title,
+    title: [...listPhrases(tokenizer, title)],
     path: pagePath,
     iri: pagePathToIri(pagePath),
     group: group ? group[1] : '',

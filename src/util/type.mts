@@ -6,8 +6,8 @@ export interface Commit {
   aDate: number;
 }
 
-export interface PageData extends Metadata {
-  title: string;
+export interface PageData extends Omit<Metadata, 'title'> {
+  title: Array<string>;
   path: string;
   iri: string;
   group: string;
