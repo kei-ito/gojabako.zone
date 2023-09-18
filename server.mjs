@@ -42,7 +42,6 @@ const parseUrl = (requestPath = '/') => {
   };
 };
 /**
- *
  * @param {http.IncomingMessage} req
  * @param {http.ServerResponse} res
  */
@@ -51,9 +50,7 @@ const onRequest = (req, res) => {
   if (!parsedUrl.pathname.startsWith('/_')) {
     console.info(`${req.method} ${req.url}`);
   }
-  handleRequest(req, res, parsedUrl).catch((error) => {
-    console.error(error);
-  });
+  handleRequest(req, res, parsedUrl).catch(console.error);
 };
 server.once('error', (error) => {
   console.error(error);
