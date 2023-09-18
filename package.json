@@ -18,7 +18,6 @@
     "build:next": "NODE_OPTIONS='--experimental-loader=@nlib/tsm' next build",
     "start": "NODE_ENV=production NODE_OPTIONS='--experimental-loader=@nlib/tsm' node server.mjs",
     "lint": "run-s lint:*",
-    "lint:next": "NODE_OPTIONS='--experimental-loader=@nlib/tsm' next lint",
     "lint:eslint": "eslint src *.mjs",
     "lint:css": "stylelint 'src/**/*.scss'"
   },
