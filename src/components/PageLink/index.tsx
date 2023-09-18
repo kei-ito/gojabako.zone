@@ -11,7 +11,7 @@ export const PageLink = ({ page, mode = 'publish' }: PageLinkProps) => {
   const d = new Date(mode === 'publish' ? page.publishedAt : page.updatedAt);
   const date = `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
   return (
-    <Link href={page.url} className={style.container}>
+    <Link href={page.path} className={style.container}>
       <span>{page.title}</span>
       <time dateTime={page.publishedAt}>
         {date}

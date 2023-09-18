@@ -4,7 +4,7 @@ import { PageLink } from '../components/PageLink';
 import { pageList } from '../util/pageList.mts';
 import type { PageData } from '../util/type.mts';
 
-export const metadata: Metadata = { title: 'Home' };
+export const metadata: Metadata = {};
 
 export default function Page() {
   return (
@@ -19,7 +19,7 @@ const listRecentUpdates = function* (limit: number) {
   let count = 0;
   for (const page of pageList.slice().sort(byUpdatedAt)) {
     yield (
-      <li key={page.url}>
+      <li key={page.path}>
         <PageLink page={page} mode="update" />
       </li>
     );

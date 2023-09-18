@@ -18,7 +18,7 @@ const selialize = function* () {
   yield '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
   for (const page of pageList) {
     yield '  <url>\n';
-    yield `    <loc>${new URL(page.url, baseUrl)}</loc>\n`;
+    yield `    <loc>${new URL(page.path, baseUrl)}</loc>\n`;
     yield `    <lastmod>${page.updatedAt}</lastmod>\n`;
     yield '  </url>\n';
   }

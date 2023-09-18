@@ -40,7 +40,7 @@ const PageList = ({ pages }: { pages: Array<PageData> }) => (
       ...(function* () {
         for (const page of pages) {
           yield (
-            <li key={page.url}>
+            <li key={page.path}>
               <PageLink page={page} />
             </li>
           );

@@ -8,7 +8,7 @@ export interface Commit {
 
 export interface PageData extends Metadata {
   title: string;
-  url: string;
+  path: string;
   iri: string;
   group: string;
   filePath: string;

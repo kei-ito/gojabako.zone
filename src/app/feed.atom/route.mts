@@ -28,7 +28,7 @@ const selialize = function* () {
     yield '  <entry>\n';
     yield `    <id>${page.iri}</id>\n`;
     yield `    <title>${page.title}</title>\n`;
-    yield `    <link href="${new URL(page.url, baseUrl)}"/>\n`;
+    yield `    <link href="${new URL(page.path, baseUrl)}"/>\n`;
     yield `    <updated>${page.updatedAt}</updated>\n`;
     yield `    <published>${page.publishedAt}</published>\n`;
     yield '  </entry>\n';

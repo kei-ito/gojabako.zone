@@ -8,26 +8,29 @@ import { getPageTitleFromMdx } from './getMetadataFromMdx.mts';
 import { getMetadataFromScript } from './getMetadataFromScript.mts';
 import { listCommits } from './listCommits.mts';
 
+const knownTitles = new Map<string, string>();
+knownTitles.set('/', 'Home');
+
 export const getPageData = async (file: URL): Promise<PageData> => {
+  let pagePath = file.pathname.slice(appDir.pathname.length - 1);
+  pagePath = pagePath.replace(/\/page\.\w+$/, '');
+  pagePath = pagePath.replace(/\([^/]+\)\//, '') || '/';
   const [history, metadata] = await Promise.all([
     scanCommits(file),
     getMetadata(file),
   ]);
-  const title = metadata?.title;
+  const title = metadata?.title ?? knownTitles.get(pagePath);
   if (!isString(title)) {
     const relativePath = file.pathname.slice(rootDir.pathname.length);
     throw new Error(`${title ? 'Invalid' : 'No'}Title: ${relativePath}`);
   }
-  let url = file.pathname.slice(appDir.pathname.length - 1);
-  url = url.replace(/\/page\.\w+$/, '');
-  url = url.replace(/\([^/]+\)\//, '');
-  const group = /^\/(.*)\/.*?$/.exec(url);
+  const group = /^\/(.*)\/.*?$/.exec(pagePath);
   return {
     ...metadata,
     ...history,
     title,
-    url: url || '/',
-    iri: pagePathToIri(url),
+    path: pagePath,
+    iri: pagePathToIri(pagePath),
     group: group ? group[1] : '',
     filePath: file.pathname.slice(rootDir.pathname.length),
   };

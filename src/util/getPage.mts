@@ -4,7 +4,7 @@ import { pagePathToIri } from './site.mts';
 import type { PageData } from './type.mts';
 
 const defaultFallback: PageData = {
-  url: '/not-found',
+  path: '/not-found',
   iri: pagePathToIri('/not-found'),
   group: '',
   filePath: 'app/not-found.tsx',
