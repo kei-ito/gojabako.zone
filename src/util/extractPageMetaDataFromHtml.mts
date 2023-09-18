@@ -23,10 +23,9 @@ export const extractPageMetaDataFromHtml = (html: string): PageMetaData => {
       list.push(`${value}`);
     }
   };
-  visitHastElement(fromHtml(html), {
-    title: (e) => {
-      set('title', hastToString(e));
-    },
+  visitHastElement(fromHtml(html, { fragment: true }), {
+    html: ({ properties }) => set('lang', properties.lang),
+    title: (e) => set('title', hastToString(e)),
     meta: (e) => {
       const {
         itemProp,
