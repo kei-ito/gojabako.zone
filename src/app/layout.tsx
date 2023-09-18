@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/google-font-display, @next/next/no-page-custom-font */
+// eslint-disable-next-line import/no-unassigned-import
 import './globals.scss';
 import type { PropsWithChildren } from 'react';
 import { SiteFooter } from '../components/SiteFooter';

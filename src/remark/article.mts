@@ -7,7 +7,7 @@ import type { VFileLike } from '../util/unified.mts';
 import type { MdastElementVisitor } from './visitMdastElement.mts';
 import { visitMdastElement } from './visitMdastElement.mts';
 
-const remarkArticle = () => (tree: Root, _file: VFileLike) => {
+export const remarkArticle = () => (tree: Root, _file: VFileLike) => {
   visitMdastElement(tree, {
     math: visitMath,
   });
@@ -26,5 +26,3 @@ const visitMath: MdastElementVisitor<BlockMath> = (node) => {
   node.value = text.value = `\\begin{align}\n${text.value}\n\\end{align}`;
   return SKIP;
 };
-
-export default remarkArticle;

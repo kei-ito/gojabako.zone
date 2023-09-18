@@ -17,7 +17,7 @@ import { serializePropertyValue } from './serializePropertyValue.mts';
 import type { HastElementVisitor } from './visitHastElement.mts';
 import { visitHastElement } from './visitHastElement.mts';
 
-const rehypeArticle = () => (tree: Root, file: VFileLike) => {
+export const rehypeArticle = () => (tree: Root, file: VFileLike) => {
   visitHastElement(tree, {
     div: visitDiv(),
     span: visitSpan,
@@ -231,5 +231,3 @@ const visitImg = (): HastElementVisitor => {
     return [SKIP, index + elements.length];
   };
 };
-
-export default rehypeArticle;

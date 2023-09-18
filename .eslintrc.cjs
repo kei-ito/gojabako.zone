@@ -5,11 +5,7 @@ module.exports = {
   extends: ['next/core-web-vitals', '@nlib/eslint-config'],
   ignorePatterns: ['next-env.d.ts', 'cli/**', 'old-src/**'],
   rules: {
-    'no-unused-private-class-members': 'off',
-    'import/dynamic-import-chunkname': 'off',
-    'import/no-default-export': 'off',
     'import/no-relative-parent-imports': 'off',
-    'import/no-unassigned-import': ['error', { allow: ['**/*.scss'] }],
     '@typescript-eslint/no-restricted-imports': [
       'error',
       {
@@ -30,12 +26,15 @@ module.exports = {
       },
     },
     {
-      files: ['src/pages/**/*.tsx'],
-      rules: { 'import/no-unassigned-import': 'off' },
-    },
-    {
-      files: ['src/build/**/*.mts'],
-      rules: { 'no-console': 'off' },
+      files: [
+        'next.config.mjs',
+        'src/app/**/layout.tsx',
+        'src/app/**/template.tsx',
+        'src/app/**/page.tsx',
+      ],
+      rules: {
+        'import/no-default-export': 'off',
+      },
     },
   ],
 };

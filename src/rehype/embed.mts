@@ -23,7 +23,7 @@ const services = new Map<
 services.set('youtube', embedYouTube);
 services.set('twitter', embedTwitter);
 
-const rehypeEmbed = () => async (tree: Root, _file: VFileLike) => {
+export const rehypeEmbed = () => async (tree: Root, _file: VFileLike) => {
   const tasks: Array<() => Promise<void>> = [];
   visitHastElement(tree, {
     pre: (e, index, parent) => {
@@ -60,5 +60,3 @@ const rehypeEmbed = () => async (tree: Root, _file: VFileLike) => {
   await Promise.all(tasks.map(async (task) => await task()));
   return tree;
 };
-
-export default rehypeEmbed;
