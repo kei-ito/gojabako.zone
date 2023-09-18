@@ -15,9 +15,7 @@ export const KeyGenerator = () => {
     <form onSubmit={onSubmit}>
       <h1>鍵ペアを作成する</h1>
       <div className="buttons">
-        <button type="submit" style={{ justifySelf: 'start' }}>
-          鍵ペアを作成する
-        </button>
+        <button type="submit">鍵ペアを作成する</button>
       </div>
       {keyPair && (
         <>

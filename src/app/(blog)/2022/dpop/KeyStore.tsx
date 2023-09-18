@@ -24,7 +24,7 @@ export const KeyStore = () => {
     <form onSubmit={onSubmit}>
       <h1>鍵ペアをIndexedDBに保管する</h1>
       <div className="buttons">
-        <button type="submit" style={{ justifySelf: 'start' }}>
+        <button type="submit">
           {keyPair ? '鍵ペアを更新して保管する' : '鍵ペアを作成して保管する'}
         </button>
       </div>

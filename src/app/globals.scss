@@ -211,6 +211,17 @@ h4 > .fragment-ref::before {
   content: '###';
 }
 
+p,
+li {
+  code {
+    margin-inline: 0.25em;
+    padding-inline: 0.25em;
+    padding-block: 0.15em;
+    font-size: 90%;
+    background-color: var(--gjGray2);
+  }
+}
+
 .fragment-target {
   position: absolute;
   inline-size: 0;
@@ -296,12 +307,17 @@ fieldset {
   grid-template-columns: 1fr;
   justify-content: center;
   row-gap: 1em;
-  padding-block-end: 1em;
+  padding-block: 1em;
   padding-inline: 1em;
   border-radius: 0.3em;
   border-style: solid;
   border-color: var(--gjGray4);
   background-color: var(--gjGray0);
+
+  & > :first-child,
+  & > .fragment-target + * {
+    margin-block-start: 0;
+  }
 
   input {
     padding-block: 0.3em;
