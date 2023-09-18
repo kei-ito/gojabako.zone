@@ -1,4 +1,5 @@
 import type { Commit } from '../type.mts';
+import { rootDir } from './directories.mts';
 import { spawn } from './spawn.mts';
 
 /**
@@ -11,7 +12,7 @@ const AuthorDate = '%aI';
 const delimiter = '--------';
 
 export const listCommits = async function* (
-  relativePath: string,
+  file: URL,
   startCommitish = 'HEAD',
 ): AsyncGenerator<Commit> {
   const history = new Set<string>();
@@ -26,6 +27,7 @@ export const listCommits = async function* (
     let command = 'git log --follow';
     command += ` --format="${format}"`;
     command += ` --before=${before}`;
+    const relativePath = file.pathname.slice(rootDir.pathname.length);
     command += ` -- ${sanitizePath(relativePath)}`;
     const { stdout, stderr } = await spawn(command);
     if (!stdout || stderr) {
@@ -60,5 +62,5 @@ const parseCommitOutput = (entry: string): Commit => {
   if (!dateRegExp.test(aDate)) {
     throw new Error(`InvalidAuthorDate: ${aDate}`);
   }
-  return { commit, abbr, aDate };
+  return { commit, abbr, aDate: new Date(aDate).getTime() };
 };

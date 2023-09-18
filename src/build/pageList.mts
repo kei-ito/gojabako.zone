@@ -5,8 +5,6 @@ import { walkFiles } from '../util/node/walkFiles.mts';
 import { serializeToJs } from '../util/serializeToJs.mts';
 import type { PageData } from '../util/type.mts';
 
-const prefix = 'build/pageList:';
-
 const listPageFiles = async function* (): AsyncGenerator<URL> {
   let count = 0;
   for await (const file of walkFiles(appDir)) {
@@ -15,15 +13,15 @@ const listPageFiles = async function* (): AsyncGenerator<URL> {
       yield file;
     }
   }
-  console.info(prefix, `${count} pages`);
+  console.info(`build/pageList: ${count} pages`);
 };
 
 const generateCode = async function* () {
-  const pageList: Array<PageData> = [];
+  const tasks: Array<Promise<PageData>> = [];
   for await (const file of listPageFiles()) {
-    console.info(prefix, file.pathname.slice(appDir.pathname.length));
-    pageList.push(await getPageData(file));
+    tasks.push(getPageData(file));
   }
+  const pageList = await Promise.all(tasks);
   pageList.sort((a, b) => {
     return (
       b.group.localeCompare(a.group) ||
@@ -42,4 +40,7 @@ for await (const chunk of generateCode()) {
 }
 const dest = new URL('util/pageList.mts', srcDir);
 await writeFile(dest, code);
-console.info(prefix, 'done', dest.pathname.slice(rootDir.pathname.length));
+console.info(
+  'build/pageList: done',
+  dest.pathname.slice(rootDir.pathname.length),
+);

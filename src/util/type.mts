@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 export interface Commit {
   commit: string;
   abbr: string;
-  aDate: string;
+  aDate: number;
 }
 
 export interface PageData extends Metadata {
