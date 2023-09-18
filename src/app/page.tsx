@@ -17,7 +17,7 @@ export default function Page() {
 
 const listRecentUpdates = function* (limit: number) {
   let count = 0;
-  for (const page of pageList.sort(byUpdatedAt)) {
+  for (const page of pageList.slice().sort(byUpdatedAt)) {
     yield (
       <li key={page.url}>
         <PageLink page={page} mode="update" />

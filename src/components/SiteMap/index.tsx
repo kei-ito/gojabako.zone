@@ -4,41 +4,35 @@ import { PageLink } from '../PageLink';
 
 export const SiteMap = () => [...listGroups()];
 
-interface PageGroup {
-  name: string;
-  pages: Array<PageData>;
-}
-
 const listGroups = function* () {
-  const flush = function* ({ name, pages }: PageGroup) {
-    if (0 < pages.length) {
-      yield <h2 key={name}>{name}</h2>;
-      yield <PageList key={`${name}-pages`} pages={pages} />;
+  const others: Array<PageData> = [];
+  let buffer: Array<PageData> = [];
+  const flush = function* () {
+    if (buffer.length === 0) {
+      return;
     }
+    const [{ group }] = buffer;
+    yield <h2 key={group}>{group}</h2>;
+    yield <PageList key={`${group}-pages`} pages={buffer} />;
+    // eslint-disable-next-line require-atomic-updates
+    buffer = [];
   };
-  const others: PageGroup = { name: '', pages: [] };
-  let group: PageGroup = { name: '', pages: [] };
   for (const page of pageList) {
-    const groupName = page.url.split('/')[1];
-    if (isBlogGroupName(groupName)) {
-      if (groupName !== group.name) {
-        yield* flush(group);
-        // eslint-disable-next-line require-atomic-updates
-        group = { name: groupName, pages: [] };
+    if (page.group) {
+      if (page.group !== buffer[0]?.group) {
+        yield* flush();
       }
-      group.pages.push(page);
+      buffer.push(page);
     } else {
-      others.pages.push(page);
+      others.push(page);
     }
   }
-  yield* flush(group);
-  if (0 < others.pages.length) {
+  yield* flush();
+  if (0 < others.length) {
     yield <hr key="others-hr" />;
-    yield <PageList key="others-pages" pages={others.pages} />;
+    yield <PageList key="others-pages" pages={others} />;
   }
 };
-
-const isBlogGroupName = (groupName: string) => /^\d{4,}$/.test(groupName);
 
 const PageList = ({ pages }: { pages: Array<PageData> }) => (
   <ul>

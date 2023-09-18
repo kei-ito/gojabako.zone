@@ -25,14 +25,10 @@ const generateCode = async function* () {
     pageList.push(await getPageData(file));
   }
   pageList.sort((a, b) => {
-    const ga = a.url.split('/', 2)[1];
-    const gb = b.url.split('/', 2)[1];
-    if (ga === gb) {
-      const ta = new Date(a.publishedAt).getTime();
-      const tb = new Date(b.publishedAt).getTime();
-      return tb - ta;
-    }
-    return gb.localeCompare(ga);
+    return (
+      b.group.localeCompare(a.group) ||
+      b.publishedAt.localeCompare(a.publishedAt)
+    );
   });
   yield "import type { PageData } from './type.mts';\n";
   yield 'export const pageList: Array<PageData> = ';
