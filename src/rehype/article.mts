@@ -20,6 +20,7 @@ import { visitHastElement } from './visitHastElement.mts';
 const rehypeArticle = () => (tree: Root, file: VFileLike) => {
   visitHastElement(tree, {
     div: visitDiv(),
+    span: visitSpan,
     sup: visitSup,
     li: visitLi,
     h1: visitHeading,
@@ -36,25 +37,29 @@ const rehypeArticle = () => (tree: Root, file: VFileLike) => {
   return tree;
 };
 
+const visitSpan: HastElementVisitor = (div, index, parent) => {
+  if (hasClass(div, 'math-inline')) {
+    const katexHtml = getKatexHtml(div);
+    if (!katexHtml) {
+      return null;
+    }
+    katexHtml.properties.className = ['katex', 'katex-html', 'math-inline'];
+    parent.children.splice(index, 1, katexHtml);
+    return SKIP;
+  }
+  return null;
+};
+
 const visitDiv = (): HastElementVisitor => {
   let mathCount = 0;
   return (div, index, parent) => {
     if (hasClass(div, 'math-display')) {
-      const id = `eq${++mathCount}`;
-      let katexHtml: Element | undefined;
-      visitHastElement(div, {
-        span: (span) => {
-          if (hasClass(span, 'katex-html')) {
-            katexHtml = span;
-            return EXIT;
-          }
-          return null;
-        },
-      });
+      const katexHtml = getKatexHtml(div);
       if (!katexHtml) {
         return null;
       }
       katexHtml.properties.className = ['katex', 'katex-html'];
+      const id = `eq${++mathCount}`;
       parent.children.splice(
         index,
         1,
@@ -73,6 +78,20 @@ const visitDiv = (): HastElementVisitor => {
     }
     return null;
   };
+};
+
+const getKatexHtml = (element: Element) => {
+  let katexHtml: Element | undefined;
+  visitHastElement(element, {
+    span: (span) => {
+      if (hasClass(span, 'katex-html')) {
+        katexHtml = span;
+        return EXIT;
+      }
+      return null;
+    },
+  });
+  return katexHtml;
 };
 
 const visitSup: HastElementVisitor = (e) => {

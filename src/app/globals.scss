@@ -131,6 +131,7 @@ button {
 
 img,
 svg {
+  margin-inline: 0.5em;
   max-inline-size: 100%;
   block-size: auto;
   vertical-align: middle;
@@ -152,7 +153,12 @@ pre {
 
 code {
   white-space: pre-wrap;
+  margin-inline: 0.25em;
+  padding-inline: 0.25em;
+  padding-block: 0.15em;
   font-family: var(--gjFontMonospace);
+  font-size: 90%;
+  background-color: var(--gjGray2);
 }
 
 .material-symbols-rounded {
@@ -209,17 +215,6 @@ h3 > .fragment-ref::before {
 
 h4 > .fragment-ref::before {
   content: '###';
-}
-
-p,
-li {
-  code {
-    margin-inline: 0.25em;
-    padding-inline: 0.25em;
-    padding-block: 0.15em;
-    font-size: 90%;
-    background-color: var(--gjGray2);
-  }
 }
 
 .fragment-target {
@@ -363,6 +358,9 @@ fieldset {
   grid-template-columns: max-content 1fr;
   justify-items: stretch;
   align-items: stretch;
+  margin-inline: 0;
+  padding-inline: 0;
+  padding-block: 0.5em;
   font-size: 90%;
   line-height: 1.5;
 }
@@ -460,7 +458,8 @@ fieldset {
 
 .hljs-ln {
   color: inherit;
-  padding-inline: 0.4em;
+  padding-inline-start: 0.5em;
+  padding-inline-end: 0.4em;
   font-family: var(--gjFontMonospace);
   text-decoration: none;
   user-select: none;
@@ -514,6 +513,13 @@ sup {
   overflow: hidden;
 }
 
+.katex-html {
+  svg {
+    margin-inline: unset;
+    vertical-align: unset;
+  }
+}
+
 .katex-mathml {
   display: none;
 }
@@ -545,6 +551,10 @@ figure {
   &[data-type='image'] {
     inline-size: unset;
     max-inline-size: var(--gjBaseWidth);
+
+    & > img {
+      margin-inline: 0;
+    }
   }
 
   &[data-type='code'] {

@@ -1,6 +1,6 @@
 .container {
   display: grid;
-  grid-template-columns: 3em auto 3em;
+  grid-auto-flow: column;
   justify-content: center;
   align-items: baseline;
   text-align: center;

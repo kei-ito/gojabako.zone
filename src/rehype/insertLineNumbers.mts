@@ -18,6 +18,12 @@ export const insertLineNumbers = (node: Element, codeId: string) => {
       );
     }
   }
+  if (
+    2 <= elements.length &&
+    elements[elements.length - 1].children.length === 0
+  ) {
+    elements.splice(-2, 2);
+  }
   node.children = elements;
 };
 
@@ -26,7 +32,7 @@ const listFragments = function* (
 ): Generator<Array<Element | Text> | 0> {
   let buffer: Array<Element | Text> = [];
   const flush = function* (): Generator<Array<Element | Text>> {
-    yield buffer;
+    yield buffer.filter((e) => !isEmptyText(e));
     // eslint-disable-next-line require-atomic-updates
     buffer = [];
   };
@@ -60,21 +66,23 @@ const listFragments = function* (
   }
 };
 
+const isEmptyText = (e: Element | Text) => {
+  return e.type === 'text' && !e.value;
+};
+
 const listLines = function* (text: string): Generator<string | 0> {
   let pos = 0;
   while (pos <= text.length) {
     if (0 < pos) {
       yield 0;
     }
-    let index = text.indexOf('\n', pos);
+    const index = text.indexOf('\n', pos);
     if (index < 0) {
-      index = text.length;
-    }
-    if (pos < index) {
+      yield text.slice(pos);
+      break;
+    } else {
       yield text.slice(pos, index);
       pos = index + 1;
-    } else {
-      break;
     }
   }
 };
