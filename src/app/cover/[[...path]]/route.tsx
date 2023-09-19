@@ -12,8 +12,7 @@ import { pageList } from '../../../util/pageList.mts';
 import { site } from '../../../util/site.mts';
 import type { PageData } from '../../../util/type.mts';
 
-export const size = { width: 1200, height: 630 };
-export const contentType = 'image/png';
+const size = { width: 1200, height: 630 };
 
 type Weight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 interface FontData {
