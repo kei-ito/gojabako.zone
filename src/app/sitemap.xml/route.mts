@@ -1,7 +1,7 @@
 import { HttpStatusCode } from '@nlib/typing';
 import { encodeToUint8Array } from '../../util/encodeToUint8Array.mts';
 import { pageList } from '../../util/pageList.mts';
-import { baseUrl } from '../../util/site.mts';
+import { site } from '../../util/site.mts';
 
 export const GET = () => {
   return new Response(encodeToUint8Array(selialize()), {
@@ -18,7 +18,7 @@ const selialize = function* () {
   yield '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
   for (const page of pageList) {
     yield '  <url>\n';
-    yield `    <loc>${new URL(page.path, baseUrl)}</loc>\n`;
+    yield `    <loc>${new URL(page.path, site.baseUrl)}</loc>\n`;
     yield `    <lastmod>${page.updatedAt}</lastmod>\n`;
     yield '  </url>\n';
   }

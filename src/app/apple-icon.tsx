@@ -1,5 +1,5 @@
 import { ImageResponse } from 'next/server';
-import { logoPathD } from '../util/site.mts';
+import { site } from '../util/site.mts';
 
 export const runtime = 'edge';
 export const size = { width: 180, height: 180 };
@@ -19,7 +19,7 @@ export default function Icon() {
         }}
       >
         <svg viewBox="0 0 8 4" width={size.width * 0.67}>
-          <path d={logoPathD} fill="#1e293b" />
+          <path d={site.logoPathD} fill="#1e293b" />
         </svg>
       </div>
     ),

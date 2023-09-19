@@ -5,11 +5,14 @@ import type { Metadata } from 'next';
 import type { PropsWithChildren } from 'react';
 import { SiteFooter } from '../components/SiteFooter';
 import { SiteHeader } from '../components/SiteHeader';
-import { baseUrl, siteName } from '../util/site.mts';
+import { site } from '../util/site.mts';
 
 export const metadata: Metadata = {
-  title: { template: `%s ・ ${siteName}`, default: siteName },
-  metadataBase: baseUrl,
+  metadataBase: site.baseUrl,
+  title: { template: `%s ・ ${site.name}`, default: site.name },
+  applicationName: site.name,
+  themeColor: 'hsla(0,0%,100%,0.8)',
+  authors: [site.author],
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {
@@ -26,7 +29,6 @@ export default function RootLayout({ children }: PropsWithChildren) {
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
           rel="stylesheet"
         />
-        <meta name="theme-color" content="hsla(0,0%,100%,0.8)" />
       </head>
       <body>
         <SiteHeader />

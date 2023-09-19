@@ -2,7 +2,7 @@ import { pathToFileURL } from 'node:url';
 import type { Element, Root, RootContent } from 'hast';
 import type { MdxjsEsm } from 'mdast-util-mdxjs-esm';
 import { getPageFromFileUrl } from '../util/getPage.mts';
-import { repositoryUrl } from '../util/site.mts';
+import { site } from '../util/site.mts';
 import type { PageData } from '../util/type.mts';
 import type { VFileLike } from '../util/unified.mts';
 import { createHastElement } from './createHastElement.mts';
@@ -54,7 +54,9 @@ const listMetaElements = function* (
   if (1 < page.commits) {
     yield createHastElement(
       'a',
-      { href: new URL(`commits/main/${page.filePath}`, repositoryUrl).href },
+      {
+        href: new URL(`commits/main/${page.filePath}`, site.repositoryUrl).href,
+      },
       `履歴 (${page.commits})`,
     );
   }

@@ -9,7 +9,7 @@ import {
   measureTextWidth,
 } from '../../../util/measureTextWidth.mts';
 import { pageList } from '../../../util/pageList.mts';
-import { baseUrl, logoPathD } from '../../../util/site.mts';
+import { site } from '../../../util/site.mts';
 import type { PageData } from '../../../util/type.mts';
 
 export const size = { width: 1200, height: 630 };
@@ -142,7 +142,7 @@ const ImageComponent = ({ page }: { page: PageData }) => {
             </span>
           )}
         </div>
-        <div>{new URL(page.path, baseUrl).href}</div>
+        <div>{new URL(page.path, site.baseUrl).href}</div>
       </div>
       <svg
         viewBox="0 0 8 4"
@@ -150,7 +150,7 @@ const ImageComponent = ({ page }: { page: PageData }) => {
         height={logoHeight}
         style={{ position: 'absolute', bottom: outerPadding / 2 }}
       >
-        <path d={logoPathD} fill={color} />
+        <path d={site.logoPathD} fill={color} />
       </svg>
     </div>
   );

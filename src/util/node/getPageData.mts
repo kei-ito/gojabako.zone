@@ -1,7 +1,7 @@
 import { readdir } from 'node:fs/promises';
 import { isString } from '@nlib/typing';
 import type { Metadata } from 'next';
-import { pagePathToIri } from '../site.mts';
+import { site } from '../site.mts';
 import type { PageData } from '../type.mts';
 import { appDir, rootDir } from './directories.mts';
 import { getPageTitleFromMdx } from './getMetadataFromMdx.mts';
@@ -32,7 +32,7 @@ export const getPageData = async (file: URL): Promise<PageData> => {
     ...history,
     title: [...listPhrases(tokenizer, title)],
     path: pagePath,
-    iri: pagePathToIri(pagePath),
+    iri: site.iri(pagePath),
     group: group ? group[1] : '',
     filePath: file.pathname.slice(rootDir.pathname.length),
   };
