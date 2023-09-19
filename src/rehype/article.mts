@@ -10,7 +10,7 @@ import { createHastElement } from './createHastElement.mts';
 import { createMdxEsm } from './createMdxJsEsm.mts';
 import { createMdxJsxTextElement } from './createMdxJsxTextElement.mts';
 import { hasClass } from './hasClass.mts';
-import { insertArticleHeader } from './insertArticleHeader.mts';
+import { insertArticleData } from './insertArticleData.mts';
 import { insertLineNumbers } from './insertLineNumbers.mts';
 import { isHastElement } from './isHastElement.mts';
 import { serializePropertyValue } from './serializePropertyValue.mts';
@@ -33,7 +33,7 @@ export const rehypeArticle = () => (tree: Root, file: VFileLike) => {
     table: visitTable(),
     img: visitImg(),
   });
-  insertArticleHeader(tree, file);
+  insertArticleData(tree, file);
   return tree;
 };
 

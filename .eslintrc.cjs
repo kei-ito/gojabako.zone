@@ -28,9 +28,12 @@ module.exports = {
     {
       files: [
         'next.config.mjs',
+        'src/app/**/page.tsx',
         'src/app/**/layout.tsx',
         'src/app/**/template.tsx',
-        'src/app/**/page.tsx',
+        'src/app/**/opengraph-image.tsx',
+        'src/app/**/icon.tsx',
+        'src/app/**/apple-icon.tsx',
       ],
       rules: {
         'import/no-default-export': 'off',

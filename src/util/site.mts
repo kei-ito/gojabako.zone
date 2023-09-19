@@ -1,6 +1,18 @@
-export const siteName = 'Gojabako Zone';
-export const baseUrl = new URL('https://gojabako.zone/');
-export const repositoryUrl = new URL('https://github.com/gjbkz/gojabako.zone/');
-export const pagePathToIri = (pagePath: string): string => {
-  return `gjbkz://${baseUrl.hostname}${pagePath}`;
+import type { Author } from 'next/dist/lib/metadata/types/metadata-types';
+const baseUrl = new URL('https://gojabako.zone/');
+const author: Author = {
+  name: '伊藤 慶 - Kei Ito',
+  url: baseUrl,
+};
+export const site = {
+  name: 'Gojabako Zone',
+  baseUrl,
+  repositoryUrl: new URL('https://github.com/gjbkz/gojabako.zone/'),
+  author,
+  themeColor: 'hsla(0,0%,100%,0.8)',
+  logo: {
+    viewBox: [0, 0, 8, 4],
+    d: 'M0 0H2V1H1V2H2V4H0zM3 0H5V4H3V2H4V1H3zM6 0H8V4H7V3H6z',
+  },
+  iri: (pagePath: string) => `gjbkz://${baseUrl.hostname}${pagePath}`,
 };

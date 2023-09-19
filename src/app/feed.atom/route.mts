@@ -1,7 +1,7 @@
 import { HttpStatusCode } from '@nlib/typing';
 import { encodeToUint8Array } from '../../util/encodeToUint8Array.mts';
 import { pageList } from '../../util/pageList.mts';
-import { baseUrl, siteName } from '../../util/site.mts';
+import { site } from '../../util/site.mts';
 
 export const GET = () => {
   return new Response(encodeToUint8Array(selialize()), {
@@ -16,19 +16,19 @@ export const GET = () => {
 const selialize = function* () {
   yield '<?xml version="1.0" encoding="utf-8"?>\n';
   yield '<feed xmlns="http://www.w3.org/2005/Atom">\n';
-  yield `  <title>${siteName}</title>\n`;
-  yield `  <link href="${baseUrl}"/>\n`;
+  yield `  <title>${site.name}</title>\n`;
+  yield `  <link href="${site.baseUrl}"/>\n`;
   let updated = 0;
   for (const page of pageList) {
     updated = Math.max(updated, new Date(page.updatedAt).getTime());
   }
   yield `  <updated>${new Date(updated).toISOString()}</updated>\n`;
-  yield `  <id>${baseUrl}</id>\n`;
+  yield `  <id>${site.baseUrl}</id>\n`;
   for (const page of pageList) {
     yield '  <entry>\n';
     yield `    <id>${page.iri}</id>\n`;
     yield `    <title>${page.title}</title>\n`;
-    yield `    <link href="${new URL(page.path, baseUrl)}"/>\n`;
+    yield `    <link href="${new URL(page.path, site.baseUrl)}"/>\n`;
     yield `    <updated>${page.updatedAt}</updated>\n`;
     yield `    <published>${page.publishedAt}</published>\n`;
     yield '  </entry>\n';
