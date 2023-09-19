@@ -1,6 +1,16 @@
 import type { PageData } from './type.mts';
 export const pageList: Array<PageData> = [
   {
+    title: ['CSS', ' ', 'Modulesの', ':', 'globalと', ':', 'localの', '効果'],
+    publishedAt: '2023-09-19T16:41:18.330Z',
+    updatedAt: '1970-01-01T00:00:00.000Z',
+    commits: 0,
+    path: '/2023/css-modules',
+    iri: 'gjbkz://gojabako.zone/2023/css-modules',
+    group: '2023',
+    filePath: 'src/app/(blog)/2023/css-modules/page.mdx',
+  },
+  {
     title: ['disabledな', 'フォーム', '要素は', 'submit', 'さ', 'れない'],
     publishedAt: '2023-09-18T10:16:16.000Z',
     updatedAt: '2023-09-18T10:16:16.000Z',

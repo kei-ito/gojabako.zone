@@ -20,6 +20,12 @@
       {
         "message": "Expected custom property name to be prefixed with 'gj'."
       }
+    ],
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global", "local"]
+      }
     ]
   },
   "overrides": [
