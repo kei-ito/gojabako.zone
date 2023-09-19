@@ -145,12 +145,12 @@ const ImageComponent = ({ page }: { page: PageData }) => {
         <div>{new URL(page.path, site.baseUrl).href}</div>
       </div>
       <svg
-        viewBox="0 0 8 4"
+        viewBox={site.logo.viewBox.join(' ')}
         width={logoWidth}
         height={logoHeight}
         style={{ position: 'absolute', bottom: outerPadding / 2 }}
       >
-        <path d={site.logoPathD} fill={color} />
+        <path d={site.logo.d} fill={color} />
       </svg>
     </div>
   );

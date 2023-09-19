@@ -18,8 +18,8 @@ export default function Icon() {
           background: '#ffffff',
         }}
       >
-        <svg viewBox="0 0 8 4" width={size.width * 0.67}>
-          <path d={site.logoPathD} fill="#1e293b" />
+        <svg viewBox={site.logo.viewBox.join(' ')} width={size.width * 0.67}>
+          <path d={site.logo.d} fill="#1e293b" />
         </svg>
       </div>
     ),
