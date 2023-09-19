@@ -1,13 +1,20 @@
 import { pathToFileURL } from 'node:url';
-import type { Element, Root } from 'hast';
+import type { Element, Root, RootContent } from 'hast';
+import type { MdxjsEsm } from 'mdast-util-mdxjs-esm';
 import { getPageFromFileUrl } from '../util/getPage.mts';
 import { repositoryUrl } from '../util/site.mts';
 import type { PageData } from '../util/type.mts';
 import type { VFileLike } from '../util/unified.mts';
 import { createHastElement } from './createHastElement.mts';
+import { setOpenGraphMetadata } from './setOpenGraphMetadata.mts';
 
-export const insertArticleHeader = (root: Root, file: VFileLike) => {
+interface RootLike extends Omit<Root, 'children'> {
+  children: Array<MdxjsEsm | RootContent>;
+}
+
+export const insertArticleData = (root: RootLike, file: VFileLike) => {
   const page = getPageFromFileUrl(pathToFileURL(file.path));
+  setOpenGraphMetadata(root, page);
   root.children.unshift(
     createHastElement(
       'header',

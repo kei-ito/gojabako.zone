@@ -1,36 +1,21 @@
 /* eslint-disable @next/next/google-font-display, @next/next/no-page-custom-font */
 // eslint-disable-next-line import/no-unassigned-import
 import './globals.scss';
+import type { Metadata } from 'next';
 import type { PropsWithChildren } from 'react';
 import { SiteFooter } from '../components/SiteFooter';
 import { SiteHeader } from '../components/SiteHeader';
-import { siteName } from '../util/site.mts';
+import { baseUrl, siteName } from '../util/site.mts';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: { template: `%s ・ ${siteName}`, default: siteName },
+  metadataBase: baseUrl,
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html>
       <head>
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png"
-        />
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"
