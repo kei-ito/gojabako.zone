@@ -1,5 +1,5 @@
 import * as assert from 'node:assert';
-import { test } from 'node:test';
+import { describe, test } from 'node:test';
 import { parse as parseScss } from 'postcss-scss';
 import parseSelector from 'postcss-selector-parser';
 import {
@@ -8,7 +8,7 @@ import {
   listLocalNames,
 } from './generateCssModuleType.mts';
 
-{
+describe(listSelectors.name, () => {
   const cases: Array<[string, ...Array<string>]> = [
     [
       `
@@ -35,9 +35,9 @@ import {
       assert.deepStrictEqual(actual, expected);
     });
   }
-}
+});
 
-{
+describe(listLocalNamesInSelector.name, () => {
   const cases: Array<[string, ...Array<string>]> = [
     [
       /**  https://github.com/css-modules/css-modules#exceptions */
@@ -63,9 +63,9 @@ import {
       assert.deepStrictEqual(actual, expected);
     });
   }
-}
+});
 
-{
+describe(listLocalNames.name, () => {
   const cases: Array<[string, ...Array<string>]> = [
     [
       `
@@ -91,4 +91,4 @@ import {
       assert.deepStrictEqual(actual, expected);
     });
   }
-}
+});

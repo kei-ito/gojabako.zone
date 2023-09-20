@@ -11,40 +11,43 @@ const s = (...args: Parameters<typeof serializeToJs>) => {
 };
 
 test('string', () => {
-  assert.equal(s(''), "''");
-  assert.equal(s('abc'), "'abc'");
-  assert.equal(s("abc'd"), "'abc\\'d'");
+  assert.strictEqual(s(''), "''");
+  assert.strictEqual(s('abc'), "'abc'");
+  assert.strictEqual(s("abc'd"), "'abc\\'d'");
 });
 
 test('number', () => {
-  assert.equal(s(1), '1');
-  assert.equal(s(1.234), '1.234');
+  assert.strictEqual(s(1), '1');
+  assert.strictEqual(s(1.234), '1.234');
   assert.throws(() => s(NaN));
-  assert.equal(s(Infinity), 'Infinity');
-  assert.equal(s(-Infinity), '-Infinity');
+  assert.strictEqual(s(Infinity), 'Infinity');
+  assert.strictEqual(s(-Infinity), '-Infinity');
 });
 
 test('misc', () => {
-  assert.equal(s(undefined), 'undefined');
-  assert.equal(s(null), 'null');
-  assert.equal(s(false), 'false');
-  assert.equal(s(true), 'true');
+  assert.strictEqual(s(undefined), 'undefined');
+  assert.strictEqual(s(null), 'null');
+  assert.strictEqual(s(false), 'false');
+  assert.strictEqual(s(true), 'true');
 });
 
 test('array', () => {
-  assert.equal(s([]), '[]');
-  assert.equal(s([1, '2']), "[\n  1,\n  '2',\n]");
-  assert.equal(s([1, '2'], 1), "[\n    1,\n    '2',\n  ]");
+  assert.strictEqual(s([]), '[]');
+  assert.strictEqual(s([1, '2']), "[\n  1,\n  '2',\n]");
+  assert.strictEqual(s([1, '2'], 1), "[\n    1,\n    '2',\n  ]");
 });
 
 test('object', () => {
-  assert.equal(s({}), '{}');
-  assert.equal(s({ a: 1, b: '2' }), "{\n  a: 1,\n  b: '2',\n}");
-  assert.equal(s({ a: 1, b: '2' }, 2), "{\n      a: 1,\n      b: '2',\n    }");
+  assert.strictEqual(s({}), '{}');
+  assert.strictEqual(s({ a: 1, b: '2' }), "{\n  a: 1,\n  b: '2',\n}");
+  assert.strictEqual(
+    s({ a: 1, b: '2' }, 2),
+    "{\n      a: 1,\n      b: '2',\n    }",
+  );
 });
 
 test('nested', () => {
-  assert.equal(
+  assert.strictEqual(
     s({ a: 1, b: ['2'], c: { d: { e: 3 } } }),
     "{\n  a: 1,\n  b: [\n    '2',\n  ],\n  c: {\n    d: {\n      e: 3,\n    },\n  },\n}",
   );
