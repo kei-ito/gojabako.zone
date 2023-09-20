@@ -1,3 +1,4 @@
+import { Button, Buttons } from '../../../../components/Button';
 import { Query } from './Query';
 
 export const Form2 = () => (
@@ -36,8 +37,8 @@ export const Form2 = () => (
       </label>
       <input id="v2-4" name="v2-4" type="text" defaultValue="value6" />
     </fieldset>
-    <div className="buttons">
-      <button type="submit">送信</button>
-    </div>
+    <Buttons>
+      <Button type="submit">送信</Button>
+    </Buttons>
   </form>
 );

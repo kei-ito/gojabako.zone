@@ -1,6 +1,6 @@
-/* eslint-disable @next/next/google-font-display, @next/next/no-page-custom-font */
-// eslint-disable-next-line import/no-unassigned-import
+/* eslint-disable import/no-unassigned-import, @next/next/google-font-display, @next/next/no-page-custom-font */
 import './globals.scss';
+import './hljs.scss';
 import type { Metadata } from 'next';
 import type { PropsWithChildren } from 'react';
 import { SiteFooter } from '../components/SiteFooter';

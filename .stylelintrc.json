@@ -1,6 +1,7 @@
 {
   "extends": ["stylelint-config-standard-scss"],
   "rules": {
+    "declaration-empty-line-before": ["never", {}],
     "unit-allowed-list": [
       ["em", "ms", "deg", "%", "fr"],
       {

@@ -159,6 +159,9 @@ const visitPre = (): HastElementVisitor => {
     if (!isHastElement(code, 'code', 'hljs')) {
       return null;
     }
+    let language =
+      code.properties.className.find((c) => c.startsWith('language-')) ?? '';
+    language = language.slice('language-'.length);
     const value = isObject(code.data) && code.data.meta;
     const id = `C${++count}`;
     insertLineNumbers(code, id);
@@ -169,10 +172,25 @@ const visitPre = (): HastElementVisitor => {
         'figure',
         { dataType: 'code' },
         createHastElement('span', { id, className: ['fragment-target'] }),
-        isString(value) &&
-          createHastElement('figcaption', {}, ...mdToInlineHast(value)),
+        createHastElement(
+          'figcaption',
+          isString(value) ? {} : { className: ['nocaption'] },
+          createHastElement(
+            'span',
+            {},
+            ...(isString(value) ? mdToInlineHast(value) : []),
+          ),
+          createHastElement(
+            'span',
+            { className: ['language-label'] },
+            language,
+          ),
+          createHastElement('a', {
+            href: `#${id}`,
+            className: ['fragment-ref'],
+          }),
+        ),
         code,
-        createHastElement('a', { href: `#${id}`, className: ['fragment-ref'] }),
       ),
     );
     return SKIP;

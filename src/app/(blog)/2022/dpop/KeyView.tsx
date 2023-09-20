@@ -2,6 +2,7 @@
 import { entries } from '@nlib/typing';
 import type { MouseEvent } from 'react';
 import { useCallback, useEffect, useState } from 'react';
+import { Button } from '../../../../components/Button';
 import * as style from './style.module.scss';
 
 interface KeyViewProps {
@@ -73,13 +74,13 @@ export const KeyView = ({
         </table>
       </div>
       {extractButton && (
-        <button
+        <Button
           type="button"
           onClick={extractKey}
           style={{ justifySelf: 'start' }}
         >
           ExportKey
-        </button>
+        </Button>
       )}
       {jwk && (
         <pre className={style.output}>

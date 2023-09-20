@@ -1,0 +1,26 @@
+.form {
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  row-gap: 1em;
+  padding-block: 1em;
+  padding-inline: 1em;
+  border-radius: 0.3em;
+  border-style: solid;
+  border-color: var(--gjGray4);
+  background-color: var(--gjGray0);
+
+  & > :first-child,
+  & > :global.fragment-target + * {
+    margin-block-start: 0;
+  }
+
+  input {
+    padding-block: 0.3em;
+    padding-inline: 0.5em;
+    border-block-end-style: solid;
+    border-color: var(--gjGray5);
+    background-color: var(--gjGray2);
+  }
+}

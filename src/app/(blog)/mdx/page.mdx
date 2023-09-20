@@ -55,15 +55,19 @@ const c = [
 
 ### with caption
 
-```typescript example.ts
-const foo = 'bar';
-const f00 = 'bar';
-const fOO = 'bar';
+```xml sitemap.xml
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://gojabako.zone/mdx</loc>
+    <lastmod>2023-09-18T10:16:16.000Z</lastmod>
+  </url>
+</urlset>
 ```
 
 ### with rich caption
 
-```typescript [example.ts](https://example.com)
+```typescript [example.ts](https://example.com) Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ←長いキャプション
 const foo = 'bar';
 ```
 
@@ -164,6 +168,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 import { Counter } from '../../../components/Counter';
 
-<Counter foo="bar1" />
+インラインだと<Counter foo="bar2" baz={123} />こうなる。ブロックだと↓こうなる。
 
-段落中に埋めると<Counter foo="bar2" baz={123} />こうなる。
+<Counter foo="bar1" />
