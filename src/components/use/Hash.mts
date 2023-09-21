@@ -1,16 +1,23 @@
 import { useCallback, useEffect, useState } from 'react';
 import { isClient } from '../../util/env.mts';
 
-export const useHash = (): [string, () => void] => {
-  const [hash, setHash] = useState(isClient ? location.hash : '');
-  const syncHash = useCallback(() => setHash(location.hash), []);
+const eventName = '_hashchange';
+const get = () => decodeURIComponent(location.hash);
+
+export const useHash = (): [string, (newHash?: string) => void] => {
+  const [hash, setHash] = useState(isClient ? get() : '');
+  const set = useCallback(() => setHash(get()), []);
+  const syncHash = useCallback((newHash?: string) => {
+    if (newHash) {
+      history.replaceState(null, '', newHash);
+    }
+    dispatchEvent(new Event(eventName));
+  }, []);
   useEffect(() => {
     const abc = new AbortController();
-    addEventListener('hashchange', syncHash, {
-      signal: abc.signal,
-    });
-    syncHash();
+    addEventListener('hashchange', set, { signal: abc.signal });
+    addEventListener(eventName, set, { signal: abc.signal });
     return () => abc.abort();
-  }, [syncHash]);
+  }, [set]);
   return [hash, syncHash];
 };

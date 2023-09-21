@@ -1,6 +1,7 @@
 {
   "extends": ["stylelint-config-standard-scss"],
   "rules": {
+    "declaration-empty-line-before": ["never", {}],
     "unit-allowed-list": [
       ["em", "ms", "deg", "%", "fr"],
       {
@@ -19,6 +20,12 @@
       "^gj([A-Z0-9][a-z0-9]*)+$",
       {
         "message": "Expected custom property name to be prefixed with 'gj'."
+      }
+    ],
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global", "local"]
       }
     ]
   },

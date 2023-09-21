@@ -1,13 +1,10 @@
+import { Button, Buttons } from '../../../../components/Button';
+import { Form } from '../../../../components/Form';
 import { Query } from './Query';
 
 export const Form1 = () => (
-  <form action="#form1" method="GET">
+  <Form action="#form1" method="GET">
     <span id="form1" className="fragment-target" />
-    <h1>disabledなinputのあるフォーム</h1>
-    <p>
-      このページにGETするので送信するとアドレスバーのクエリ文字列で値を確認できます。おそらく
-      <code>{'?v1-1=value1&v1-2=value2'}</code>になるはずです。
-    </p>
     <p>
       現在のクエリ文字列: <Query />
     </p>
@@ -23,8 +20,8 @@ export const Form1 = () => (
       <code>{'<input name="v1-3" type="text" disabled/>'}</code>
     </label>
     <input id="v1-3" name="v1-3" type="text" defaultValue="value3" disabled />
-    <div className="buttons">
-      <button type="submit">送信</button>
-    </div>
-  </form>
+    <Buttons>
+      <Button type="submit">送信</Button>
+    </Buttons>
+  </Form>
 );

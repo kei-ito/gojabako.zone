@@ -18,11 +18,7 @@ export const Highlight = () => {
         target.classList.add(targetClassName);
       }
     }
-    return () => {
-      if (target) {
-        target.classList.remove(targetClassName);
-      }
-    };
+    return () => target?.classList.remove(targetClassName);
   }, [hash]);
   return null;
 };

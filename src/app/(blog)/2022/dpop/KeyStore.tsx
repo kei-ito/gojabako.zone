@@ -2,6 +2,8 @@
 'use client';
 import type { FormEvent } from 'react';
 import { useCallback, useEffect, useState } from 'react';
+import { Button, Buttons } from '../../../../components/Button';
+import { Form } from '../../../../components/Form';
 import { KeyView } from './KeyView';
 import { generateKeyPair, loadKeyPair, storeKeyPair } from './util.mts';
 
@@ -21,13 +23,13 @@ export const KeyStore = () => {
     loadKeyPair(keyId).then(setKeyPair).catch(console.error);
   }, []);
   return (
-    <form onSubmit={onSubmit}>
+    <Form onSubmit={onSubmit}>
       <h1>鍵ペアをIndexedDBに保管する</h1>
-      <div className="buttons">
-        <button type="submit">
+      <Buttons>
+        <Button type="submit">
           {keyPair ? '鍵ペアを更新して保管する' : '鍵ペアを作成して保管する'}
-        </button>
-      </div>
+        </Button>
+      </Buttons>
       {keyPair && (
         <>
           <KeyView name="PublicKey" keyObject={keyPair.publicKey} extract />
@@ -37,6 +39,6 @@ export const KeyStore = () => {
           </p>
         </>
       )}
-    </form>
+    </Form>
   );
 };

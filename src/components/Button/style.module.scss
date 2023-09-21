@@ -1,0 +1,25 @@
+.button {
+  min-inline-size: 4em;
+  padding-block: 0.25em;
+  padding-inline: 0.6em;
+  border-color: var(--gjGray4);
+  border-style: solid;
+  border-radius: 0.3em;
+  cursor: pointer;
+  background-color: var(--gjGray0);
+
+  &:hover {
+    background-color: var(--gjGray1);
+  }
+
+  &:active {
+    background-color: var(--gjGray2);
+  }
+}
+
+.buttons {
+  display: grid;
+  grid-auto-flow: column;
+  column-gap: 0.5em;
+  justify-content: center;
+}

@@ -1,0 +1,6 @@
+/* stylelint-disable block-no-empty */
+.aaa :global(.bbb) .ccc {
+  .ddd {
+    font: inherit;
+  }
+}

@@ -1,5 +1,13 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
+import { minmax } from '../../util/minmax.mts';
+import { noop } from '../../util/noop.mts';
+import {
+  listValues,
+  normalizeRanges,
+  parseRangeListString,
+  toRangeListString,
+} from '../../util/range.mts';
 import { useHash } from '../use/Hash.mts';
 
 const targetClassName = 'hash-hit';
@@ -7,121 +15,137 @@ const targetClassName = 'hash-hit';
 export const HighlightCode = () => {
   const [div, setDiv] = useState<Element | null>(null);
   const root = useMemo(() => div?.parentElement ?? null, [div]);
-  const [hash, syncHash] = useHash();
-  useEffect(() => {
-    const targets = new Set<Element>();
-    for (const target of listTargets(root, hash)) {
-      target.classList.add(targetClassName);
-      targets.add(target);
-    }
-    return () => {
-      for (const target of targets) {
-        target.classList.remove(targetClassName);
-      }
-    };
-  }, [root, hash]);
-  useEffect(() => {
-    const abc = new AbortController();
-    if (root) {
-      for (const a of root.querySelectorAll<HTMLAnchorElement>('a.hljs-ln')) {
-        a.addEventListener(
-          'click',
-          (event) => {
-            event.preventDefault();
-            history.replaceState(null, '', getHash(a.href, event.shiftKey));
-            syncHash();
-          },
-          { signal: abc.signal },
-        );
-      }
-    }
-    return () => abc.abort();
-  }, [root, syncHash]);
+  useClickHandlers(root);
+  useHighlight(root);
   return <div ref={setDiv} style={{ display: 'none' }} />;
 };
 
-const listTargets = function* (
-  root: Element | null,
-  hash: string,
-): Generator<Element> {
-  if (!root) {
-    return;
-  }
-  let matched = /^#(C\d+)(L[\d-]+)?/.exec(hash);
-  if (!matched) {
-    return;
-  }
-  const codeId = matched[1];
-  let code = root.querySelector(`.fragment-target#${codeId}`);
-  while (code) {
-    if (code.tagName.toLowerCase() === 'code') {
-      break;
+const useClickHandlers = (root: Element | null) => {
+  const [, syncHash] = useHash();
+  useEffect(() => {
+    let timerId = setTimeout(noop);
+    let abc = new AbortController();
+    const set = () => {
+      if (!root) {
+        return;
+      }
+      const onClick = (event: MouseEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const a = event.currentTarget as HTMLAnchorElement;
+        syncHash(
+          calculateHash(a.href, {
+            add: event.metaKey || event.ctrlKey,
+            expand: event.shiftKey,
+          }),
+        );
+      };
+      for (const a of root.querySelectorAll<HTMLAnchorElement>('a.hljs-ln')) {
+        a.addEventListener('click', onClick, { signal: abc.signal });
+      }
+    };
+    const reset = () => {
+      clearTimeout(timerId);
+      abc.abort();
+      abc = new AbortController();
+    };
+    const onMutation = () => {
+      reset();
+      timerId = setTimeout(set, 300);
+    };
+    const observer = new MutationObserver(onMutation);
+    if (root) {
+      observer.observe(root, { childList: true });
+      onMutation();
     }
-    code = code.nextElementSibling;
-  }
-  if (!code) {
-    return;
-  }
-  if (!(2 < matched.length)) {
-    yield code;
-    return;
-  }
-  matched = /^L(\d+)(?:-(\d+))?/.exec(matched[2]);
-  if (!matched) {
-    return;
-  }
-  let start = Number(matched[1]);
-  let end = Number(matched[2] || matched[1]);
-  if (end < start) {
-    [start, end] = [end, start];
-  }
-  let line = start;
-  let target = code.querySelector(`a[href='#${codeId}L${line}']`);
-  while (target) {
-    if (target.getAttribute('href') === `#${codeId}L${line}`) {
-      yield target;
-      line += 1;
-      if (end < line) {
-        break;
+    return () => {
+      reset();
+      observer.disconnect();
+    };
+  }, [root, syncHash]);
+};
+
+const useHighlight = (root: Element | null) => {
+  const [hash] = useHash();
+  const [codeId, lineId] = useMemo(() => parseHash(hash), [hash]);
+  const code = useMemo(() => {
+    let element = codeId && root ? root.querySelector(`#${codeId}`) : null;
+    while (element && element.tagName.toLowerCase() !== 'code') {
+      element = element.nextElementSibling;
+    }
+    return element;
+  }, [root, codeId]);
+  const normalizedRanges = useMemo(
+    () => [...normalizeRanges(parseRangeListString(lineId))],
+    [lineId],
+  );
+  useEffect(() => {
+    const targets = new Set<Element>();
+    if (codeId && code) {
+      const expected = toRangeListString(normalizedRanges);
+      if (lineId === expected) {
+        let line = code.firstElementChild;
+        for (const i of listValues(normalizedRanges)) {
+          const href = `#${codeId}L${i}`;
+          while (line && line.getAttribute('href') !== href) {
+            line = line.nextElementSibling;
+          }
+          if (!line) {
+            break;
+          }
+          line.classList.add(targetClassName);
+          targets.add(line);
+        }
+      } else {
+        history.replaceState(null, '', `#${codeId}L${expected}`);
       }
     }
-    target = target.nextElementSibling;
-  }
+    return () => {
+      for (const line of targets) {
+        line.classList.remove(targetClassName);
+      }
+    };
+  }, [codeId, lineId, code, normalizedRanges]);
 };
 
-const getHash = (href: string, expand: boolean) => {
-  href = new URL(href, location.href).hash;
-  if (!expand) {
-    if (location.hash === href) {
-      const reset = new URL(location.href);
-      reset.hash = '';
-      return reset.href;
-    }
-    return href;
-  }
-  const matched = /(#C\d+)L(\d+)(?:-(\d+))?/.exec(location.hash);
-  if (!matched || !href.startsWith(matched[1])) {
-    return href;
-  }
-  const focus = Number(href.slice(matched[1].length + 1));
-  const current = toRange(Number(matched[2]), Number(matched[3] || matched[2]));
-  const { start, end } = toRange(focus, current.start, current.end);
-  if (start === end) {
-    return href;
-  }
-  return `${matched[1]}L${start}-${end}`;
+const parseHash = (hash: string) => {
+  const matched = /^#(.*?)(?:L(.*))?$/.exec(hash) ?? [];
+  return [matched[1] || '', matched[2] || ''];
 };
 
-const toRange = (...list: Array<number>) => {
-  let start = Infinity;
-  let end = -Infinity;
-  for (const item of list) {
-    if (item < start) {
-      start = item;
-    }
-    if (end < item) {
-      end = item;
-    }
+const calculateHash = (
+  requestedHref: string,
+  mode: { add: boolean; expand: boolean },
+) => {
+  const [requestedCodeId, requestedLineId] = parseHash(
+    new URL(requestedHref, location.href).hash,
+  );
+  const [currentCodeId, currentLineId] = parseHash(location.hash);
+  if (requestedCodeId !== currentCodeId) {
+    return requestedHref;
   }
-  return { start, end };
+  if (requestedLineId === currentLineId) {
+    const reset = new URL(location.href);
+    reset.hash = '';
+    return reset.href;
+  }
+  let ranges = [...parseRangeListString(requestedLineId)];
+  if (mode.expand) {
+    ranges = [
+      minmax(
+        (function* (): Generator<number> {
+          for (const item of [ranges, parseRangeListString(currentLineId)]) {
+            for (const [a, b] of item) {
+              yield a;
+              yield b;
+            }
+          }
+        })(),
+      ),
+    ];
+  } else if (mode.add) {
+    const current = [...parseRangeListString(currentLineId)];
+    ranges = [...normalizeRanges([...ranges, ...current])];
+  }
+  return `#${requestedCodeId}L${toRangeListString(ranges)}`;
 };

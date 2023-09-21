@@ -1,0 +1,38 @@
+.form {
+  padding-block: 1em;
+  padding-inline: 1em;
+  border-radius: 0.3em;
+  border-style: solid;
+  border-color: var(--gjGray4);
+  background-color: var(--gjGray0);
+
+  & > :global(.fragment-target) + *,
+  & > legend:first-child + *,
+  & > :first-child {
+    margin-block-start: 0;
+  }
+
+  & > label {
+    display: block;
+    inline-size: 100%;
+    max-inline-size: max-content;
+    margin-block-start: 1em;
+    padding-block-end: 0.25em;
+    cursor: pointer;
+  }
+
+  & > input {
+    display: block;
+    inline-size: 100%;
+    padding-block: 0.3em;
+    padding-inline: 0.5em;
+    margin-block-end: 1em;
+    border-block-end-style: solid;
+    border-color: var(--gjGray5);
+    background-color: var(--gjGray2);
+  }
+
+  & > .form {
+    margin-block-end: 1em;
+  }
+}

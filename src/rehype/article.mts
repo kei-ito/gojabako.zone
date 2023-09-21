@@ -1,15 +1,17 @@
-import { isObject, isString } from '@nlib/typing';
+import { readFile } from 'node:fs/promises';
+import { isNonNegativeSafeInteger, isObject, isString } from '@nlib/typing';
 import type { Element, Root } from 'hast';
 import type { MdxJsxTextElement } from 'mdast-util-mdx-jsx';
+import type { Position } from 'unist';
 import { EXIT, SKIP } from 'unist-util-visit';
 import { ClassIcon } from '../util/classnames.mts';
 import { getSingle } from '../util/getSingle.mts';
 import { mdToInlineHast } from '../util/node/mdToHast.mts';
 import type { VFileLike } from '../util/unified.mts';
+import { addClass, hasClass } from './className.mts';
 import { createHastElement } from './createHastElement.mts';
 import { createMdxEsm } from './createMdxJsEsm.mts';
 import { createMdxJsxTextElement } from './createMdxJsxTextElement.mts';
-import { hasClass } from './hasClass.mts';
 import { insertArticleData } from './insertArticleData.mts';
 import { insertLineNumbers } from './insertLineNumbers.mts';
 import { isHastElement } from './isHastElement.mts';
@@ -17,7 +19,8 @@ import { serializePropertyValue } from './serializePropertyValue.mts';
 import type { HastElementVisitor } from './visitHastElement.mts';
 import { visitHastElement } from './visitHastElement.mts';
 
-export const rehypeArticle = () => (tree: Root, file: VFileLike) => {
+export const rehypeArticle = () => async (tree: Root, file: VFileLike) => {
+  const tasks: Array<Promise<void>> = [];
   visitHastElement(tree, {
     div: visitDiv(),
     span: visitSpan,
@@ -31,8 +34,9 @@ export const rehypeArticle = () => (tree: Root, file: VFileLike) => {
     h6: visitHeading,
     pre: visitPre(),
     table: visitTable(),
-    img: visitImg(),
+    img: visitImg(file, tasks),
   });
+  await Promise.all(tasks);
   insertArticleData(tree, file);
   return tree;
 };
@@ -43,7 +47,7 @@ const visitSpan: HastElementVisitor = (div, index, parent) => {
     if (!katexHtml) {
       return null;
     }
-    katexHtml.properties.className = ['katex', 'katex-html', 'math-inline'];
+    addClass(katexHtml, 'katex', 'katex-html', 'math-inline');
     parent.children.splice(index, 1, katexHtml);
     return SKIP;
   }
@@ -58,7 +62,7 @@ const visitDiv = (): HastElementVisitor => {
       if (!katexHtml) {
         return null;
       }
-      katexHtml.properties.className = ['katex', 'katex-html'];
+      addClass(katexHtml, 'katex', 'katex-html');
       const id = `eq${++mathCount}`;
       parent.children.splice(
         index,
@@ -67,10 +71,12 @@ const visitDiv = (): HastElementVisitor => {
           'figure',
           { dataType: 'math' },
           createHastElement('span', { id, className: ['fragment-target'] }),
-          createHastElement('a', {
-            href: `#${id}`,
-            className: ['fragment-ref'],
-          }),
+          createHastElement(
+            'figcaption',
+            {},
+            createHastElement('span', {}),
+            createFragmentRef(id),
+          ),
           katexHtml,
         ),
       );
@@ -99,7 +105,7 @@ const visitSup: HastElementVisitor = (e) => {
   if (!isHastElement(a, 'a') || !a.properties.dataFootnoteRef) {
     return null;
   }
-  e.properties.className = ['footnote-ref'];
+  addClass(e, 'footnote-ref');
   e.children.unshift(
     createHastElement('span', {
       id: a.properties.id,
@@ -123,7 +129,7 @@ const visitLi: HastElementVisitor = (li) => {
         return null;
       }
       delete a.properties.dataFootnoteBackref;
-      a.properties.className = ['footnote-backref'];
+      addClass(a, 'footnote-backref');
       a.children.splice(
         0,
         a.children.length,
@@ -146,7 +152,7 @@ const visitHeading: HastElementVisitor = (e) => {
   }
   e.children.unshift(
     createHastElement('span', { id, className: ['fragment-target'] }),
-    createHastElement('a', { href: `#${id}`, className: ['fragment-ref'] }),
+    createFragmentRef(id),
   );
   delete e.properties.id;
   return SKIP;
@@ -159,6 +165,9 @@ const visitPre = (): HastElementVisitor => {
     if (!isHastElement(code, 'code', 'hljs')) {
       return null;
     }
+    let language =
+      code.properties.className.find((c) => c.startsWith('language-')) ?? '';
+    language = language.slice('language-'.length);
     const value = isObject(code.data) && code.data.meta;
     const id = `C${++count}`;
     insertLineNumbers(code, id);
@@ -167,12 +176,27 @@ const visitPre = (): HastElementVisitor => {
       1,
       createHastElement(
         'figure',
-        { dataType: 'code' },
+        {
+          dataType: 'code',
+          ...(isString(value) ? { className: ['caption'] } : {}),
+        },
         createHastElement('span', { id, className: ['fragment-target'] }),
-        isString(value) &&
-          createHastElement('figcaption', {}, ...mdToInlineHast(value)),
+        createHastElement(
+          'figcaption',
+          {},
+          createHastElement(
+            'span',
+            {},
+            ...(isString(value) ? mdToInlineHast(value) : []),
+          ),
+          createHastElement(
+            'span',
+            { className: ['language-label'] },
+            language,
+          ),
+          createFragmentRef(id),
+        ),
         code,
-        createHastElement('a', { href: `#${id}`, className: ['fragment-ref'] }),
       ),
     );
     return SKIP;
@@ -195,9 +219,13 @@ const visitTable = (): HastElementVisitor => {
   };
 };
 
-const visitImg = (): HastElementVisitor => {
+const visitImg = (
+  file: VFileLike,
+  tasks: Array<Promise<void>>,
+): HastElementVisitor => {
   let imageCount = 0;
   const imported = new Map<string, string>();
+  let sourcePromise: Promise<string> | undefined;
   return (e, index, parent) => {
     const { src } = e.properties;
     if (!isString(src)) {
@@ -217,17 +245,54 @@ const visitImg = (): HastElementVisitor => {
       imported.set(src, name);
       elements.push(createMdxEsm(`import ${name} from '${src}';`));
     }
-    const alt = serializePropertyValue(e.properties.alt);
     if (isHastElement(parent, 'p') && parent.children.length === 1) {
-      parent.tagName = 'figure';
-      parent.properties.id = id;
-      parent.properties.dataType = 'image';
-      if (alt) {
-        elements.push(createHastElement('figcaption', {}, alt));
+      const alt = createHastElement('span', {});
+      if (e.position) {
+        sourcePromise = sourcePromise ?? readFile(file.path, 'utf8');
+        tasks.push(parseAlt(parent, alt, sourcePromise, e.position));
       }
+      parent.tagName = 'figure';
+      parent.properties.dataType = 'image';
+      elements.push(
+        createHastElement('span', { id, className: ['fragment-target'] }),
+        createHastElement('figcaption', {}, alt, createFragmentRef(id)),
+      );
     }
-    elements.push(createMdxJsxTextElement('Image', { src: [name], alt }));
+    elements.push(
+      createMdxJsxTextElement('Image', {
+        src: [name],
+        alt: serializePropertyValue(e.properties.alt),
+      }),
+    );
     parent.children.splice(index, 1, ...elements);
     return [SKIP, index + elements.length];
   };
 };
+
+const parseAlt = async (
+  parent: Element,
+  alt: Element,
+  sourcePromise: Promise<string>,
+  { start: { offset: start }, end: { offset: end } }: Position,
+) => {
+  if (!(isNonNegativeSafeInteger(start) && isNonNegativeSafeInteger(end))) {
+    return;
+  }
+  const matched = /!\[(.*)\]\(.*?\)/.exec(
+    (await sourcePromise).slice(start, end),
+  );
+  if (!matched) {
+    return;
+  }
+  const children = [...mdToInlineHast(matched[1])];
+  alt.children.push(...children);
+  if (0 < children.length) {
+    addClass(parent, 'caption');
+  }
+};
+
+const createFragmentRef = (id: string) =>
+  createHastElement('a', {
+    href: `#${id}`,
+    className: ['fragment-ref'],
+  });

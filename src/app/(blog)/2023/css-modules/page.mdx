@@ -1,0 +1,142 @@
+export const metadata = {
+  title: 'CSS Modulesの:globalと:localの効果',
+};
+
+import { View } from './View';
+
+CSS Modulesで特定のクラスをインポート対象にせずクラス名をそのまま使いたい場合があります。以下のExceptionsの節で説明されている部分です：
+
+> https://github.com/css-modules/css-modules#exceptions<br/>
+> Example:<br/>`.localA :global .global-b .global-c :local(.localD.localE) .global-d`
+
+Exampleの通りではあるのですが、Next.jsのSCSSで使う場合について`:global`と`:local`の効果を確認します。
+
+## `:global`セレクタだけの場合
+
+```scss sample1.module.scss
+.aaa {
+  :global {
+    .bbb {
+      font: inherit;
+    }
+    .ccc {
+      font: inherit;
+    }
+  }
+}
+```
+
+import sample1 from './sample1.module.scss';
+
+<View
+  id="sample1"
+  style={sample1}
+  caption="sample1.module.scssのインポート結果"
+/>
+
+`:global`の中のクラス名がありません。
+
+## `:global`を含むセレクタの場合
+
+```scss sample2.module.scss
+.aaa .bbb :global .ccc {
+  .ddd {
+    font: inherit;
+  }
+}
+```
+
+import sample2 from './sample2.module.scss';
+
+<View
+  id="sample2"
+  style={sample2}
+  caption="sample2.module.scssのインポート結果"
+/>
+
+`:global`以降とそのセレクタの中のクラス名がありません。
+
+## `:global(.aaa)`形式の場合
+
+```scss sample3.module.scss
+.aaa :global(.bbb) .ccc {
+  .ddd {
+    font: inherit;
+  }
+}
+```
+
+import sample3 from './sample3.module.scss';
+
+<View
+  id="sample3"
+  style={sample3}
+  caption="sample3.module.scssのインポート結果"
+/>
+
+`:global()`の中のクラス名がありません。
+
+## `:global`セレクタと`:local`セレクタを使う場合
+
+```scss sample4.module.scss
+.aaa {
+  :global {
+    .bbb :local .ccc {
+      font: inherit;
+      .ddd {
+        font: inherit;
+      }
+    }
+    .eee :local(.fff) .ggg {
+      font: inherit;
+      .hhh {
+        font: inherit;
+      }
+    }
+  }
+}
+```
+
+import sample4 from './sample4.module.scss';
+
+<View
+  id="sample4"
+  style={sample4}
+  caption="sample4.module.scssのインポート結果"
+/>
+
+CSSに変換するとわかりやすいです。
+
+- [https://sass-lang.com/playground/#eJyNjTsKgDAQRPucYkptF...](https://sass-lang.com/playground/#eJyNjTsKgDAQRPucYkptFmzjabKbL4QEJJ3k7ooErUSbYXg8ZpaFjDHYFaBDrmzy1QFiZuhc5SQkIgMDvpamkUp0W2rrgGStvY0Xp6snyTk31ify3s+gEMLHR4zx/0dXXR0XmThx)
+
+```css sample4.module.scssをCSSに変換した結果
+/*
+LLLL _______ GGGG ______ LLLL */
+.aaa :global .bbb :local .ccc {
+  font: inherit;
+}
+/*
+LLLL _______ GGGG ______ LLLL LLLL */
+.aaa :global .bbb :local .ccc .ddd {
+  font: inherit;
+}
+/*
+LLLL _______ GGGG ______ LLLL  GGGG */
+.aaa :global .eee :local(.fff) .ggg {
+  font: inherit;
+}
+/*
+LLLL _______ GGGG ______ LLLL  GGGG GGGG */
+.aaa :global .eee :local(.fff) .ggg .hhh {
+  font: inherit;
+}
+```
+
+ローカルとグローバルがわかるように`L`と`G`コメントを追加しました。`L`がついているクラス名がインポート結果に含まれています。
+
+以上より`:global`と`:local`の効果は次のようにまとめられるでしょう：
+
+- `:global`以降はグローバルになる（CSS Modulesの対象にならない）
+- `:local`以降はローカルになる（CSS Modulesの対象になる）
+- `:global()`の中はグローバルになる。以降の状態には影響しない。
+- `:local()`の中はローカルになる。以降の状態には影響しない。
