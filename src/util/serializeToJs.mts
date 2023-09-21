@@ -21,7 +21,6 @@ const appendAncestor = (
 const serialize = function* (
   input: unknown,
   indentDepth: number,
-  indent: string,
   ancestors: Array<object>,
 ): Generator<string> {
   if (isString(input)) {
@@ -36,11 +35,10 @@ const serialize = function* (
     }
     yield '[\n';
     for (const item of input) {
-      yield `${indent.repeat(indentDepth + 1)}`;
-      yield* serialize(item, indentDepth + 1, indent, ancestors);
+      yield* serialize(item, indentDepth + 1, ancestors);
       yield ',\n';
     }
-    yield `${indent.repeat(indentDepth)}]`;
+    yield ']';
   } else if (isObject(input)) {
     ancestors = appendAncestor(ancestors, input);
     const items = entries(input);
@@ -51,18 +49,18 @@ const serialize = function* (
     yield '{\n';
     if (items.every(([key]) => /^[^\d\s][^\s]*$/.test(key))) {
       for (const [key, value] of items) {
-        yield `${indent.repeat(indentDepth + 1)}${key}: `;
-        yield* serialize(value, indentDepth + 1, indent, ancestors);
+        yield `${key}: `;
+        yield* serialize(value, indentDepth + 1, ancestors);
         yield ',\n';
       }
     } else {
       for (const [key, value] of items) {
-        yield `${indent.repeat(indentDepth + 1)}'${escapeQuotes(key)}': `;
-        yield* serialize(value, indentDepth + 1, indent, ancestors);
+        yield `'${escapeQuotes(key)}': `;
+        yield* serialize(value, indentDepth + 1, ancestors);
         yield ',\n';
       }
     }
-    yield `${indent.repeat(indentDepth)}}`;
+    yield '}';
   } else if (isBoolean(input)) {
     yield input ? 'true' : 'false';
   } else if (input === undefined) {
@@ -79,10 +77,6 @@ const serialize = function* (
   }
 };
 
-export const serializeToJs = (
-  input: unknown,
-  indentDepth = 0,
-  indent = '  ',
-) => {
-  return serialize(input, indentDepth, indent, []);
+export const serializeToJs = (input: unknown, indentDepth = 0) => {
+  return serialize(input, indentDepth, []);
 };

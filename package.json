@@ -7,7 +7,7 @@
     "test": "run-s test:*",
     "test:type": "tsc --noEmit",
     "test:unit": "tsm-test src",
-    "dev": "run-p dev:*",
+    "dev": "run-p build:pageList dev:*",
     "dev:css": "node --experimental-loader=@nlib/tsm src/build/scssTypes.mts --watch",
     "dev:next": "NODE_OPTIONS='--experimental-loader=@nlib/tsm' next",
     "https": "run-p dev:css https:*",

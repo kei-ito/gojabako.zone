@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { writeFile } from 'node:fs/promises';
 import { appDir, rootDir, srcDir } from '../util/node/directories.mts';
+import { formatCode } from '../util/node/formatCode.mts';
 import { getPageData } from '../util/node/getPageData.mts';
 import { walkFiles } from '../util/node/walkFiles.mts';
 import { serializeToJs } from '../util/serializeToJs.mts';
@@ -32,7 +33,7 @@ const generateCode = async function* () {
   yield "import type { PageData } from './type.mts';\n";
   yield 'export const pageList: Array<PageData> = ';
   yield* serializeToJs(pageList);
-  yield ';\n';
+  yield ';';
 };
 
 let code = '';
@@ -40,7 +41,7 @@ for await (const chunk of generateCode()) {
   code += chunk;
 }
 const dest = new URL('util/pageList.mts', srcDir);
-await writeFile(dest, code);
+await writeFile(dest, await formatCode(code));
 console.info(
   'build/pageList: done',
   dest.pathname.slice(rootDir.pathname.length),

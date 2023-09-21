@@ -2,9 +2,9 @@ import type { PageData } from './type.mts';
 export const pageList: Array<PageData> = [
   {
     title: ['CSS', ' ', 'Modulesの', ':', 'globalと', ':', 'localの', '効果'],
-    publishedAt: '2023-09-19T16:41:18.330Z',
-    updatedAt: '1970-01-01T00:00:00.000Z',
-    commits: 0,
+    publishedAt: '2023-09-19T16:42:34.000Z',
+    updatedAt: '2023-09-19T16:42:34.000Z',
+    commits: 1,
     path: '/2023/css-modules',
     iri: 'gjbkz://gojabako.zone/2023/css-modules',
     group: '2023',
@@ -13,8 +13,8 @@ export const pageList: Array<PageData> = [
   {
     title: ['disabledな', 'フォーム', '要素は', 'submit', 'さ', 'れない'],
     publishedAt: '2023-09-18T10:16:16.000Z',
-    updatedAt: '2023-09-18T10:16:16.000Z',
-    commits: 1,
+    updatedAt: '2023-09-21T03:56:09.000Z',
+    commits: 3,
     path: '/2022/disabled-form-element',
     iri: 'gjbkz://gojabako.zone/2022/disabled-form-element',
     group: '2022',
@@ -23,8 +23,8 @@ export const pageList: Array<PageData> = [
   {
     title: ['DPoPの', 'ブラウザ', '実装'],
     publishedAt: '2023-09-18T10:16:16.000Z',
-    updatedAt: '2023-09-18T10:16:16.000Z',
-    commits: 1,
+    updatedAt: '2023-09-21T03:56:09.000Z',
+    commits: 3,
     path: '/2022/dpop',
     iri: 'gjbkz://gojabako.zone/2022/dpop',
     group: '2022',
@@ -177,8 +177,8 @@ export const pageList: Array<PageData> = [
   },
   {
     publishedAt: '2023-09-18T10:16:16.000Z',
-    updatedAt: '2023-09-18T10:16:16.000Z',
-    commits: 1,
+    updatedAt: '2023-09-20T17:32:36.000Z',
+    commits: 2,
     title: ['Home'],
     path: '/',
     iri: 'gjbkz://gojabako.zone/',
@@ -198,8 +198,8 @@ export const pageList: Array<PageData> = [
   {
     title: ['MDXの', '動作', '確認', 'ページ'],
     publishedAt: '2021-09-29T15:39:26.000Z',
-    updatedAt: '2023-09-18T10:16:16.000Z',
-    commits: 24,
+    updatedAt: '2023-09-21T03:56:59.000Z',
+    commits: 26,
     path: '/mdx',
     iri: 'gjbkz://gojabako.zone/mdx',
     group: '',
