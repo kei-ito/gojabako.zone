@@ -9,7 +9,10 @@ export const generateCssModuleType = async (
 ) => {
   const root = parseScss(await readFile(scssFilePath, 'utf-8'));
   const dest = `${scssFilePath}.d.ts`;
-  await writeFile(dest, generateCode(listLocalNames(root, localByDefault)));
+  await writeFile(
+    dest,
+    generateTypeDefinition(listLocalNames(root, localByDefault)),
+  );
   return dest;
 };
 
@@ -32,17 +35,26 @@ export const listLocalNames = function* (
 export const listSelectors = function* (
   container: AtRule | Root | Rule,
 ): Generator<string> {
-  const selector = 'selector' in container ? container.selector.trim() : '';
-  if (selector) {
-    yield selector;
+  const selectors = new Set<string>();
+  if ('selector' in container) {
+    const root = parseSelector().astSync(container.selector, {
+      lossless: false,
+    });
+    for (const node of root.nodes) {
+      const selector = node.toString();
+      selectors.add(selector);
+      yield selector;
+    }
   }
   for (const child of container.nodes) {
     if ('nodes' in child) {
       for (const s of listSelectors(child)) {
-        if (selector) {
-          yield `${selector}${s.startsWith('&') ? s.slice(1) : ` ${s}`}`;
-        } else {
+        if (selectors.size === 0) {
           yield s;
+        } else {
+          for (const parent of selectors) {
+            yield `${parent}${s.startsWith('&') ? s.slice(1) : ` ${s}`}`;
+          }
         }
       }
     }
@@ -94,9 +106,10 @@ export const listLocalNamesInSelector = function* (
   }
 };
 
-const generateCode = (localNames: Iterable<string>) => {
+export const generateTypeDefinition = (localNames: Iterable<string>) => {
   let code = '';
-  for (const name of localNames) {
+  for (let name of localNames) {
+    name = name.replace(/-+([a-z])/g, (_, c: string) => c.toUpperCase());
     code += `export declare const ${name}: string;\n`;
   }
   return code;
