@@ -1,4 +1,5 @@
 'use client';
+import { isString } from '@nlib/typing';
 import { useCallback, useEffect, useState } from 'react';
 import { isClient } from '../../util/env.mts';
 
@@ -9,8 +10,10 @@ export const useHash = (): [string, (newHash?: string) => void] => {
   const [hash, setHash] = useState(get());
   const set = useCallback(() => setHash(get()), []);
   const syncHash = useCallback((newHash?: string) => {
-    if (newHash) {
-      history.replaceState(null, '', newHash);
+    if (isString(newHash)) {
+      const url = new URL(location.href);
+      url.hash = url.hash === newHash ? '' : newHash;
+      history.replaceState(null, '', url);
     }
     dispatchEvent(new Event(eventName));
   }, []);
