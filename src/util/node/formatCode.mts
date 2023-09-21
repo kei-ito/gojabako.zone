@@ -1,10 +1,16 @@
+import { fileURLToPath } from 'node:url';
 import type { RequiredOptions } from 'prettier';
-import { format } from 'prettier';
-import options from '../../../.prettierrc.json' assert { type: 'json' };
+import { format, resolveConfig } from 'prettier';
+import { rootDir } from './directories.mts';
 
 export const formatCode = async (
   code: string,
-  parser: RequiredOptions['parser'] = 'typescript',
+  options?: RequiredOptions,
 ): Promise<string> => {
-  return await format(code, { ...(options as RequiredOptions), parser });
+  const configFile = new URL('.prettierrc.json', rootDir);
+  return await format(code, {
+    parser: 'typescript',
+    ...(await resolveConfig(fileURLToPath(configFile))),
+    ...options,
+  });
 };
