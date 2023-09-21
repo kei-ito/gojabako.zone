@@ -9,7 +9,11 @@ import { getSingle } from '../util/getSingle.mts';
 import { mdToInlineHast } from '../util/node/mdToHast.mts';
 import type { VFileLike } from '../util/unified.mts';
 import { addClass, hasClass } from './className.mts';
-import { createHastElement } from './createHastElement.mts';
+import {
+  createFragmentRef,
+  createFragmentTarget,
+  createHastElement,
+} from './createHastElement.mts';
 import { createMdxEsm } from './createMdxJsEsm.mts';
 import { createMdxJsxTextElement } from './createMdxJsxTextElement.mts';
 import { insertArticleData } from './insertArticleData.mts';
@@ -70,7 +74,7 @@ const visitDiv = (): HastElementVisitor => {
         createHastElement(
           'figure',
           { dataType: 'math' },
-          createHastElement('span', { id, className: ['fragment-target'] }),
+          createFragmentTarget(id),
           createHastElement(
             'figcaption',
             {},
@@ -107,10 +111,7 @@ const visitSup: HastElementVisitor = (e) => {
   }
   addClass(e, 'footnote-ref');
   e.children.unshift(
-    createHastElement('span', {
-      id: a.properties.id,
-      className: ['fragment-target'],
-    }),
+    createFragmentTarget(serializePropertyValue(a.properties.id)),
   );
   delete a.properties.id;
   delete a.properties.dataFootnoteRef;
@@ -138,9 +139,7 @@ const visitLi: HastElementVisitor = (li) => {
       return EXIT;
     },
   });
-  li.children.unshift(
-    createHastElement('span', { id, className: ['fragment-target'] }),
-  );
+  li.children.unshift(createFragmentTarget(id));
   delete li.properties.id;
   return SKIP;
 };
@@ -150,10 +149,7 @@ const visitHeading: HastElementVisitor = (e) => {
   if (!isString(id)) {
     return null;
   }
-  e.children.unshift(
-    createHastElement('span', { id, className: ['fragment-target'] }),
-    createFragmentRef(id),
-  );
+  e.children.unshift(createFragmentTarget(id), createFragmentRef(id));
   delete e.properties.id;
   return SKIP;
 };
@@ -180,7 +176,7 @@ const visitPre = (): HastElementVisitor => {
           dataType: 'code',
           ...(isString(value) ? { className: ['caption'] } : {}),
         },
-        createHastElement('span', { id, className: ['fragment-target'] }),
+        createFragmentTarget(id),
         createHastElement(
           'figcaption',
           {},
@@ -213,7 +209,7 @@ const visitTable = (): HastElementVisitor => {
       createHastElement(
         'figure',
         { dataType: 'table' },
-        createHastElement('span', { id, className: ['fragment-target'] }),
+        createFragmentTarget(id),
         createHastElement(
           'figcaption',
           {},
@@ -262,7 +258,7 @@ const visitImg = (
       parent.tagName = 'figure';
       parent.properties.dataType = 'image';
       elements.push(
-        createHastElement('span', { id, className: ['fragment-target'] }),
+        createFragmentTarget(id),
         createHastElement('figcaption', {}, alt, createFragmentRef(id)),
       );
     }
@@ -298,9 +294,3 @@ const parseAlt = async (
     addClass(parent, 'caption');
   }
 };
-
-const createFragmentRef = (id: string) =>
-  createHastElement('a', {
-    href: `#${id}`,
-    className: ['fragment-ref'],
-  });

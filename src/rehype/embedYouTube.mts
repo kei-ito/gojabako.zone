@@ -3,7 +3,11 @@ import { fromHtml } from 'hast-util-from-html';
 import { toString as hastToString } from 'hast-util-to-string';
 import { EXIT } from 'unist-util-visit';
 import { fetchYouTubeVideoData } from '../util/node/fetchYouTubeVideoData.mts';
-import { createHastElement } from './createHastElement.mts';
+import {
+  createFragmentRef,
+  createFragmentTarget,
+  createHastElement,
+} from './createHastElement.mts';
 import { visitHastElement } from './visitHastElement.mts';
 
 export const embedYouTube = async function* (
@@ -24,25 +28,23 @@ export const embedYouTube = async function* (
           iframe.properties.style = `aspect-ratio:${data.width}/${data.height};`;
         }
         iframe.position = node.position;
-        const id = `youtube-${videoId}`;
+        const id = `yt-${videoId}`;
         return createHastElement(
           'figure',
-          { id, dataType: 'youtube', className: ['caption'] },
-          createHastElement('span', { id, className: ['fragment-target'] }),
-          createHastElement('a', {
-            href: `#${id}`,
-            className: ['fragment-ref'],
-          }),
-          data &&
-            createHastElement(
-              'figcaption',
-              {},
-              createHastElement(
-                'a',
-                { href: data.watchUrl.href, target: '_blank' },
-                data.title,
-              ),
-            ),
+          { dataType: 'youtube', className: ['caption'] },
+          createFragmentTarget(id),
+          createHastElement(
+            'figcaption',
+            {},
+            data
+              ? createHastElement(
+                  'a',
+                  { href: data.watchUrl.href, target: '_blank' },
+                  data.title,
+                )
+              : createHastElement('span', {}),
+            createFragmentRef(id),
+          ),
           iframe,
         );
       });
