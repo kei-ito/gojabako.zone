@@ -7,7 +7,7 @@ import type {
   Parent,
   Properties,
 } from 'hast';
-import { hasClass } from './hasClass.mts';
+import { hasClass } from './className.mts';
 
 interface ElementWithClassName<T extends string> extends Element {
   tagName: T;

@@ -27,7 +27,7 @@ export const embedYouTube = async function* (
         const id = `youtube-${videoId}`;
         return createHastElement(
           'figure',
-          { id, dataType: 'youtube' },
+          { id, dataType: 'youtube', className: ['caption'] },
           createHastElement('span', { id, className: ['fragment-target'] }),
           createHastElement('a', {
             href: `#${id}`,
