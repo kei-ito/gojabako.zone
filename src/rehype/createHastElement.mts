@@ -29,8 +29,12 @@ const listChildren = function* (
 export const createFragmentTarget = (id: string) =>
   createHastElement('span', { id, className: ['fragment-target'] });
 
-export const createFragmentRef = (id: string) =>
-  createHastElement('a', {
-    href: `#${id}`,
-    className: ['fragment-ref'],
-  });
+export const createFragmentRef = (
+  id: string,
+  ...children: Array<ElementContent | string | false | null | undefined>
+) =>
+  createHastElement(
+    'a',
+    { href: `#${id}`, className: ['fragment-ref'] },
+    ...children,
+  );

@@ -60,6 +60,7 @@ const visitSpan: HastElementVisitor = (div, index, parent) => {
 
 const visitDiv = (): HastElementVisitor => {
   let mathCount = 0;
+  let equationCount = 0;
   return (div, index, parent) => {
     if (hasClass(div, 'math-display')) {
       const katexHtml = getKatexHtml(div);
@@ -84,6 +85,17 @@ const visitDiv = (): HastElementVisitor => {
           katexHtml,
         ),
       );
+      visitHastElement(div, {
+        span: (e) => {
+          if (isHastElement(e, 'span', 'eqn-num')) {
+            const equationId = `eq${++equationCount}`;
+            e.children.push(
+              createFragmentTarget(equationId),
+              createFragmentRef(equationId, `(${equationCount})`),
+            );
+          }
+        },
+      });
       return SKIP;
     }
     return null;
