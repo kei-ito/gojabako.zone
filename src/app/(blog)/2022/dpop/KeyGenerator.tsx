@@ -3,6 +3,7 @@
 import type { FormEvent } from 'react';
 import { useCallback, useState } from 'react';
 import { Button, Buttons } from '../../../../components/Button';
+import { Form } from '../../../../components/Form';
 import { KeyView } from './KeyView';
 import { generateKeyPair } from './util.mts';
 
@@ -13,7 +14,7 @@ export const KeyGenerator = () => {
     generateKeyPair().then(setKeyPair).catch(console.error);
   }, []);
   return (
-    <form onSubmit={onSubmit}>
+    <Form onSubmit={onSubmit}>
       <h1>鍵ペアを作成する</h1>
       <Buttons>
         <Button type="submit">鍵ペアを作成する</Button>
@@ -25,6 +26,6 @@ export const KeyGenerator = () => {
           <p>発行した鍵ペアはJavaScriptコンソールにも表示されています。</p>
         </>
       )}
-    </form>
+    </Form>
   );
 };

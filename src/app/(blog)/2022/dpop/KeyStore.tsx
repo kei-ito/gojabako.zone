@@ -3,6 +3,7 @@
 import type { FormEvent } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { Button, Buttons } from '../../../../components/Button';
+import { Form } from '../../../../components/Form';
 import { KeyView } from './KeyView';
 import { generateKeyPair, loadKeyPair, storeKeyPair } from './util.mts';
 
@@ -22,7 +23,7 @@ export const KeyStore = () => {
     loadKeyPair(keyId).then(setKeyPair).catch(console.error);
   }, []);
   return (
-    <form onSubmit={onSubmit}>
+    <Form onSubmit={onSubmit}>
       <h1>鍵ペアをIndexedDBに保管する</h1>
       <Buttons>
         <Button type="submit">
@@ -38,6 +39,6 @@ export const KeyStore = () => {
           </p>
         </>
       )}
-    </form>
+    </Form>
   );
 };

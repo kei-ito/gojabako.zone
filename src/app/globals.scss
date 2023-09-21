@@ -128,14 +128,16 @@ hr {
 ol,
 ul {
   counter-reset: list;
-  display: grid;
-  grid-auto-flow: row;
-  row-gap: 0.25em;
 
   & > li {
     counter-increment: list;
     padding-inline-start: var(--gjListMarkerWidth);
+    margin-block-end: 0.25em;
     list-style-type: inherit;
+
+    &:last-child {
+      margin-block-end: 0;
+    }
   }
 }
 
@@ -158,4 +160,8 @@ ul > li::before {
   block-size: var(--gjSize);
   background-color: currentcolor;
   border-radius: 50%;
+}
+
+iframe {
+  display: block;
 }

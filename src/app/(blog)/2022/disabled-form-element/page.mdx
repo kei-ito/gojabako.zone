@@ -10,9 +10,15 @@ Reactだとたいていの`<form>`でsubmitをpreventDefaultするので意識�
 
 `<input>`の値を保護しようとしてdisabledを設定すると、値が足らずサーバーがBadRequestを返すようになりました。足りていない値を確認するとdisabledを設定した要素のvalueでした。
 
+### disabledなinputのあるフォーム
+
+このページにGETするので送信するとアドレスバーのクエリ文字列で値を確認できます。おそらく`{'?v1-1=value1&v1-2=value2'}`になるはずです。
+
 import { Form1 } from './Form1';
 
-<Form1 />
+<figure>
+  <Form1 />
+</figure>
 
 いつもfetchで送っていたので気がつかなかったのですが、disabledな要素の値はフォームの送信に含まれません。
 

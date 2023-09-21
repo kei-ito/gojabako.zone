@@ -3,6 +3,7 @@ import { entries } from '@nlib/typing';
 import type { MouseEvent } from 'react';
 import { useCallback, useEffect, useState } from 'react';
 import { Button } from '../../../../components/Button';
+import { FieldSet } from '../../../../components/Form';
 import * as style from './style.module.scss';
 
 interface KeyViewProps {
@@ -39,7 +40,7 @@ export const KeyView = ({
   }, [extract, extractKey]);
   const extractButton = !extract && !noExtract;
   return (
-    <fieldset>
+    <FieldSet>
       <legend>{name}</legend>
       <div className={style.table}>
         <table>
@@ -87,6 +88,6 @@ export const KeyView = ({
           <code>{jwk}</code>
         </pre>
       )}
-    </fieldset>
+    </FieldSet>
   );
 };
