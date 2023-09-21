@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { site } from '../site.mts';
 import type { PageData } from '../type.mts';
 import { appDir, rootDir } from './directories.mts';
-import { getPageTitleFromMdx } from './getMetadataFromMdx.mts';
+import { getMetadataFromMdx } from './getMetadataFromMdx.mts';
 import { getMetadataFromScript } from './getMetadataFromScript.mts';
 import { listCommits } from './listCommits.mts';
 import { getTokenizer, listPhrases } from './listPhrases.mts';
@@ -67,7 +67,7 @@ const scanCommits = async (pageFile: URL) => {
 export const getMetadata = async (file: URL): Promise<Metadata | null> => {
   switch (file.pathname.slice(file.pathname.lastIndexOf('.'))) {
     case '.mdx':
-      return await getPageTitleFromMdx(file);
+      return await getMetadataFromMdx(file);
     case '.mts':
     case '.tsx':
       return await getMetadataFromScript(file);
