@@ -63,7 +63,7 @@ const visitDiv = (): HastElementVisitor => {
         return null;
       }
       addClass(katexHtml, 'katex', 'katex-html');
-      const id = `eq${++mathCount}`;
+      const id = `math${++mathCount}`;
       parent.children.splice(
         index,
         1,
@@ -169,7 +169,7 @@ const visitPre = (): HastElementVisitor => {
       code.properties.className.find((c) => c.startsWith('language-')) ?? '';
     language = language.slice('language-'.length);
     const value = isObject(code.data) && code.data.meta;
-    const id = `C${++count}`;
+    const id = `code${++count}`;
     insertLineNumbers(code, id);
     parent.children.splice(
       index,
@@ -204,14 +204,22 @@ const visitPre = (): HastElementVisitor => {
 };
 
 const visitTable = (): HastElementVisitor => {
-  let count = 0;
+  let tableCount = 0;
   return (e, index, parent) => {
+    const id = `table${++tableCount}`;
     parent.children.splice(
       index,
       1,
       createHastElement(
         'figure',
-        { id: `table${++count}`, dataType: 'table' },
+        { dataType: 'table' },
+        createHastElement('span', { id, className: ['fragment-target'] }),
+        createHastElement(
+          'figcaption',
+          {},
+          createHastElement('span', {}),
+          createFragmentRef(id),
+        ),
         e,
       ),
     );
@@ -238,7 +246,7 @@ const visitImg = (
     if (imageCount === 0) {
       elements.push(createMdxEsm(`import Image from 'next/image';`));
     }
-    const id = `image${++imageCount}`;
+    const id = `img${++imageCount}`;
     let name = imported.get(src);
     if (!name) {
       name = `_${id}`;

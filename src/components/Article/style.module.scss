@@ -131,6 +131,7 @@
       border-style: solid;
       border-color: var(--gjGray4);
       font-size: 90%;
+      background-color: var(--gjColorBackground);
     }
 
     th {
@@ -321,6 +322,7 @@
             user-select: none;
             text-align: end;
             border-inline-end: solid var(--gj1px) var(--gjGray3);
+            background-color: var(--gjColorBackground);
 
             & > span {
               color: var(--gjColorText);
@@ -329,6 +331,11 @@
             & + span {
               padding-inline: 0.4em;
               background-color: var(--gjColorBackground);
+            }
+
+            &:hover {
+              --gjColorText: var(--gjGray5);
+              text-decoration: underline;
             }
 
             &.hash-hit {
