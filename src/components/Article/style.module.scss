@@ -244,6 +244,7 @@
         margin-block-start: 1em;
       }
 
+      &[data-type='table'],
       &[data-type='image'] {
         display: grid;
         grid-auto-flow: row;
@@ -258,6 +259,7 @@
           inline-size: 100%;
         }
 
+        & > table,
         & > img {
           inline-size: max-content;
         }
@@ -301,9 +303,12 @@
         }
 
         & > .hljs {
+          display: grid;
+          grid-template-columns: max-content 1fr;
           padding-block: 0.5em;
           padding-inline: 0;
           margin-inline: auto;
+          line-height: 1.4;
           background-color: var(--gjColorBackground);
 
           & > .hljs-ln {
