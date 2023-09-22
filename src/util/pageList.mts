@@ -186,6 +186,16 @@ export const pageList: Array<PageData> = [
     filePath: 'src/app/(blog)/2018/monitor-stand/page.mdx',
   },
   {
+    title: ['Components'],
+    publishedAt: '2023-09-22T13:04:21.235Z',
+    updatedAt: '1970-01-01T00:00:00.000Z',
+    commits: 0,
+    path: '/stories/',
+    iri: 'gjbkz://gojabako.zone/stories/',
+    group: '',
+    filePath: 'src/app/stories/[[...path]]/page.tsx',
+  },
+  {
     publishedAt: '2023-09-18T10:16:16.000Z',
     updatedAt: '2023-09-22T07:07:01.000Z',
     commits: 4,

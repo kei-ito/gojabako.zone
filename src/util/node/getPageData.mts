@@ -16,6 +16,7 @@ export const getPageData = async (file: URL): Promise<PageData> => {
   let pagePath = file.pathname.slice(appDir.pathname.length - 1);
   pagePath = pagePath.replace(/\/page\.\w+$/, '');
   pagePath = pagePath.replace(/\([^/]+\)\//, '') || '/';
+  pagePath = pagePath.replace(/\[\[\.\.\..*$/, '');
   const [history, metadata, tokenizer] = await Promise.all([
     scanCommits(file),
     getMetadata(file),
@@ -30,16 +31,25 @@ export const getPageData = async (file: URL): Promise<PageData> => {
     );
     title = '';
   }
-  const group = /^\/(.*)\/.*?$/.exec(pagePath);
   return {
     ...metadata,
     ...history,
     title: [...listPhrases(tokenizer, title)],
     path: pagePath,
     iri: site.iri(pagePath),
-    group: group ? group[1] : '',
+    group: getGroup(pagePath),
     filePath: file.pathname.slice(rootDir.pathname.length),
   };
+};
+
+const getGroup = (pagePath: string): string => {
+  const group = /^\/(.*)\/.*?$/.exec(pagePath)?.[1] ?? '';
+  switch (group) {
+    case 'stories':
+      return '';
+    default:
+      return group;
+  }
 };
 
 const scanCommits = async (pageFile: URL) => {

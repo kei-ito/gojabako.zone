@@ -39,7 +39,7 @@ if (process.argv.includes('--watch')) {
       cleanup(`${filePath}.d.ts`).catch(ignoreENOENT);
     }
   };
-  watch(fileURLToPath(srcDir), { ignoreInitial: false })
+  watch(fileURLToPath(srcDir), { ignoreInitial: true })
     .on('add', onChange)
     .on('change', onChange)
     .on('unlink', onUnlink);

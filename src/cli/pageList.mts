@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { writeFile } from 'node:fs/promises';
 import { appDir, rootDir, srcDir } from '../util/node/directories.mts';
 import { formatCode } from '../util/node/formatCode.mts';
