@@ -12,6 +12,9 @@ export const useHash = (): [string, (newHash?: string) => void] => {
   const syncHash = useCallback((newHash?: string) => {
     if (isString(newHash)) {
       const url = new URL(location.href);
+      if (url.hash === newHash && !newHash) {
+        return;
+      }
       url.hash = url.hash === newHash ? '' : newHash;
       history.replaceState(null, '', url);
     }
