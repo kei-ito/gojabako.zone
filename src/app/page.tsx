@@ -17,7 +17,7 @@ export default function Page() {
       <p>
         <Link href="/author">{site.author.name}</Link> のサイトです。
       </p>
-      <h1>最近の更新</h1>
+      <h2>最近の更新</h2>
       <ul>{[...listRecentUpdates(10)]}</ul>
     </Article>
   );
