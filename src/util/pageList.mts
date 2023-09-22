@@ -1,6 +1,16 @@
 import type { PageData } from './type.mts';
 export const pageList: Array<PageData> = [
   {
+    title: ['Next.js', ' ', '13に', 'しました'],
+    publishedAt: '2023-09-22T06:05:07.183Z',
+    updatedAt: '1970-01-01T00:00:00.000Z',
+    commits: 0,
+    path: '/2023/next13',
+    iri: 'gjbkz://gojabako.zone/2023/next13',
+    group: '2023',
+    filePath: 'src/app/(blog)/2023/next13/page.mdx',
+  },
+  {
     title: ['CSS', ' ', 'Modulesの', ':', 'globalと', ':', 'localの', '効果'],
     publishedAt: '2023-09-19T16:42:34.000Z',
     updatedAt: '2023-09-19T16:42:34.000Z',
