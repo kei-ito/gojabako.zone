@@ -1,6 +1,4 @@
-/* eslint-disable max-lines-per-function */
 import type { Root, Parent, Text, RootContentMap } from 'mdast';
-
 import { SKIP } from 'unist-util-visit';
 import { getSingle } from '../util/getSingle.mts';
 import type { VFileLike } from '../util/unified.mts';
