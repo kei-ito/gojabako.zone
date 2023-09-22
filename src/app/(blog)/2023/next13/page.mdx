@@ -1,0 +1,187 @@
+export const metadata = {
+  title: 'Next.js 13にしました',
+};
+
+ようやくこのサイトをNext.js 13にできました。そのメモです。
+
+## webpackローダーのESM対応
+
+いきなりNext.jsではないのですが、[`webpack@5.80`](https://github.com/webpack/webpack/releases/tag/v5.80.0)でESMのLoaderが指定できるようになりました。これがいちばんありがたかったポイントです。
+
+例えば`*.mts`をTypeScriptでロードするために以下のような設定をしたとしましょう。`MyTsLoader`は[`{"type":"module"}`](https://nodejs.org/api/packages.html#type)なパッケージとします。
+
+```javascript webpack.config.js
+const webpackConfig = {
+  module: { rules: [{ test: /\.mts$/, loader: 'MyTsLoader' }] },
+};
+```
+
+`webpack@5.79`と`webpack@5.80`それぞれでの動作は以下で確認できます：
+
+- `webpack@5.79`: [CodeSandbox:repl-webpack-5-79-mjs-loader](https://codesandbox.io/p/sandbox/repl-webpack-5-79-mjs-loader-fdxkyx)
+- `webpack@5.80`: [CodeSandbox:repl-webpack-5-80-mjs-loader](https://codesandbox.io/p/sandbox/repl-webpack-5-80-mjs-loader-3t4sgz)
+
+`webpack@5.79`では以下のエラーになります：
+
+```text 5.79を使用した場合のエラー
+Error [ERR_REQUIRE_ESM]: require() of ES Module /workspace/ts-loader-mjs/index.mjs not supported.
+Instead change the require of /workspace/ts-loader-mjs/index.mjs to a dynamic import() which is available in all CommonJS modules.
+```
+
+そのため`webpack@5.79`以前はCJSからESMを呼ぶなど回り道が必要でしたが、
+
+- 2023/4/20に[`webpack@5.80`]でそれが不要になり
+- 2023/6/9に[`vercel/next.js#50992`]で取り込まれ
+- 2023/6/11に[`next@13.4.5`]でリリースされたことで
+
+Next.js環境でもESMのLoaderが使えるようになりました。
+
+[`webpack@5.80`]: https://github.com/webpack/webpack/releases/tag/v5.80.0
+[`vercel/next.js#50992`]: https://github.com/vercel/next.js/pull/50992/files#diff-7ae45ad102eab3b6d7e7896acd08c427a9b25b346470d7bc6507b6481575d519L239-R239
+[`next@13.4.5`]: https://github.com/vercel/next.js/releases/tag/v13.4.5
+
+## MDXで書く
+
+https://nextjs.org/docs/pages/building-your-application/configuring/mdx
+
+ESMが楽に使えるようになったのでESMでリリースされている[unified](https://unifiedjs.com/)関連のパッケージも楽に使えるようになりました。
+
+### パッケージの追加
+
+[`@next/mdx`] [`@mdx-js/loader`]をインストールします[^mdx-js/react]。
+
+[^mdx-js/react]: [`@mdx-js/react`]は`*.mdx`を[`import`]する必要があれば追加します。
+
+[`@next/mdx`]: https://www.npmjs.com/package/@next/mdx
+[`@mdx-js/loader`]: https://www.npmjs.com/package/@mdx-js/loader
+[`@mdx-js/react`]: https://www.npmjs.com/package/@mdx-js/react
+[`import`]: https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Statements/import
+
+```terminal
+npm install @next/mdx @mdx-js/loader
+```
+
+### mdx-components.jsxの追加
+
+何もしないのであればこれでOKです。
+
+```javascript mdx-components.jsx
+export const useMDXComponents = (components) => ({ ...components });
+```
+
+### next.config.mjsの変更
+
+このサイトの実際の設定は[`next.config.mjs`]を参照してください。
+
+- [`remark-gfm`](https://github.com/remarkjs/remark-gfm): [GFM]で書けるようにします
+- [`remark-math`](https://github.com/remarkjs/remark-math/tree/main/packages/remark-math): 数式ブロックを認識します
+- [`rehype-highlight`](https://github.com/rehypejs/rehype-highlight): コードブロックをハイライトします
+- [`rehype-katex`](https://github.com/remarkjs/remark-math/tree/main/packages/rehype-katex): 数式ブロックを[KaTeX]でレンダリングします
+- [`rehype-slug`](https://github.com/rehypejs/rehype-slug): 見出しにidを付けます
+
+[`next.config.mjs`]: https://github.com/gjbkz/gojabako.zone/blob/main/next.config.mjs
+[GFM]: https://github.github.com/gfm/
+[KaTeX]: https://katex.org/
+
+```javascript next.config.mjs
+import mdx from '@next/mdx';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeKatex from 'rehype-katex';
+import rehypeSlug from 'rehype-slug';
+
+const withMDX = mdx({
+  options: {
+    remarkPlugins: [remarkGfm, remarkMath],
+    rehypePlugins: [rehypeHighlight, rehypeSlug, rehypeKatex],
+  },
+});
+
+const nextConfig = {
+  // page.tsx, page.mdxがレスポンスを返します
+  pageExtensions: ['tsx', 'mdx'],
+};
+
+export default withMDX(nextConfig);
+```
+
+### page.mdxを作って表示してみる
+
+次の`app/mdx-sample/page.mdx`を追加して`/mdx-sample`でページが表示されればOKです。
+
+```mdx app/mdx-sample/page.mdx
+# MDXのサンプル
+
+これは**MDXのサンプル**です。
+```
+
+## 記事やサイトの画像を生成する
+
+[satori]というツールを利用して画像を生成できるようになったので、これを使っています。
+
+`/path/to/page`というページの画像を`/cover/path/to/page`で生成します。
+
+- 例えばこのページの画像はこちら: [`/cover/2023/next13`](/cover/2023/next13)
+- 画像を生成しているコードはこちら: [`/app/cover/[[...path]]/route.tsx`](https://github.com/gjbkz/gojabako.zone/blob/main/src/app/cover/%5B%5B...path%5D%5D/route.tsx)
+  - フォントは [@fontsource/noto-sans-jp](https://www.npmjs.com/package/@fontsource/noto-sans-jp) のフォルダから`readFile`します。
+  - 文字出力の際に提供したフォントにない文字があるとエラーになります。
+  - [adobe-blank](https://github.com/adobe-fonts/adobe-blank)を渡しておけばエラーにはならなくなりそうです。
+  - `runtime`を [edge](https://nextjs.org/docs/pages/api-reference/edge) にするのはファイルの扱いがややこしいのでおすすめしません。
+
+`<meta>`に`/cover/path/to/page`を追加します。MDXでmetadataを設定するには`page.tsx`と同様に`metadata`を`export`します。参考: [configuring/mdx#frontmatter](https://nextjs.org/docs/pages/building-your-application/configuring/mdx#frontmatter)
+
+```javascript page.mdx
+export const metadata = {
+  title: 'Next.js 13にしました',
+  openGraph: {
+    images: [
+      {
+        url: '/cover/2023/next13',
+        width: 1280,
+        height: 640,
+      },
+    ],
+  },
+};
+```
+
+しかしこの`openGraph`の値はパスだけわかれば生成できるし、パスが変わったら修正が必要なのでこのような指定はしたくありません。layout.tsxで設定したいところですが現時点ではうまくできませんでした[^workaround]。そのため後述のようにASTの時点で追加するようにしました。
+
+[^workaround]: [middlewareでヘッダにパスを追加してheaders()でそれを読む](https://github.com/vercel/next.js/discussions/50189)など言及されていますがうまくいきませんでした。
+
+[satori]: https://github.com/vercel/satori
+
+## MDXのASTをいじる
+
+以下の機能を追加しました。
+
+- コード、画像、表、数式、を`<figure>`の中に入れる
+  - `<figcaption>`をつける
+  - それぞれリンクできる[^id-offset]
+- コードブロックに行番号を追加
+  - 行番号にリンクできる
+  - Shift+クリックやCtrl+クリックで範囲指定できる
+- 数式を`\begin{align}`と`\end{align}`で囲む
+- 数式番号にリンクできる
+- YouTube動画のタイトルとリンクをキャプションに追加する
+- `export metadata = {...}`の中に`openGraph`を追加する
+  - MDXの中の`export metadata = {...}`のブロックの`node.type`は`mdxjsEsm`
+  - `node.data.estree`にJavaScriptのASTがあるので`metadata`を`export`するExportNamedDeclarationがあればそれをいじる
+  - `node.value`にコードが文字列で入っていますがそちらを変更してもmetadataは変更されません。
+  - 今考えると`node.value`をいじって[^transform]`node.data.estree`を更新する方が楽でした。
+
+[^id-offset]: idを`position:absolute`で実際の要素よりも上に表示した要素につけるとリンクから飛んできたときにヘッダーで隠れないようにできます。
+[^transform]: 最初の`metadata = {`の直後に`openGraph:{...},`を入れます。
+
+機能追加は以下のような関数を`next.config.mjs`の`remarkPlugins`と`rehypePlugins`に追加すれば動きます。
+
+```typescript rehypePlugin.mts
+// import type { Root } from 'mdast'; // MarkdownのASTをいじる場合
+import type { Root } from 'hast'; // HTMLのASTをいじる場合
+
+export const rehypePlugin = async (tree: Root, file: { path: string }) => {
+  // ここでtreeをいじる
+  return tree;
+};
+```
