@@ -59,7 +59,7 @@
   --gjBlue9: #1e3a8a;
   --gjFontSans: 'Helvetica Neue', arial, 'Hiragino Kaku Gothic ProN', meiryo,
     sans-serif;
-  --gjFontMonospace: menlo, consolas, monospace;
+  --gjFontMonospace: 'Ubuntu Mono', menlo, consolas, monospace;
   --gjListMarkerWidth: 1.6em;
   --gjLineHeight: 1.6;
   --gjColorBackground: var(--gjGray0);
@@ -67,7 +67,7 @@
   --gjColorText2: var(--gjGray5);
   --gjColorFocus1: var(--gjYellow3);
   --gjColorFocus2: var(--gjYellow1);
-  font-size: 16px;
+  font-size: 15px;
   font-family: var(--gjFontSans);
   line-height: var(--gjLineHeight);
   text-rendering: optimizespeed;
@@ -78,11 +78,6 @@
   @media (width <= 667px) {
     --gjBaseWidth: 94%;
   }
-
-  /* stylelint-disable-next-line unit-allowed-list */
-  @media (width <= 600px) {
-    font-size: 15px;
-  }
 }
 
 a {
@@ -92,6 +87,10 @@ a {
   &:hover {
     text-decoration: underline;
     opacity: 1;
+  }
+
+  & > code {
+    color: var(--gjColorText1);
   }
 }
 

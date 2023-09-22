@@ -1,4 +1,5 @@
 import mdx from '@next/mdx';
+import { all } from 'lowlight';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeKatex from 'rehype-katex';
 import rehypeSlug from 'rehype-slug';
@@ -12,10 +13,10 @@ const withMDX = mdx({
   options: {
     remarkPlugins: [remarkArticle, remarkGfm, remarkMath],
     rehypePlugins: [
-      rehypeEmbed,
-      rehypeHighlight,
+      [rehypeHighlight, { languages: { ...all, terminal: all.bash } }],
       rehypeSlug,
       rehypeKatex,
+      rehypeEmbed,
       rehypeArticle,
     ],
   },

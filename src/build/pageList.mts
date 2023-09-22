@@ -4,7 +4,6 @@ import { appDir, rootDir, srcDir } from '../util/node/directories.mts';
 import { formatCode } from '../util/node/formatCode.mts';
 import { getPageData } from '../util/node/getPageData.mts';
 import { walkFiles } from '../util/node/walkFiles.mts';
-import { serializeToJs } from '../util/serializeToJs.mts';
 import type { PageData } from '../util/type.mts';
 
 const listPageFiles = async function* (): AsyncGenerator<URL> {
@@ -32,7 +31,7 @@ const generateCode = async function* () {
   });
   yield "import type { PageData } from './type.mts';\n";
   yield 'export const pageList: Array<PageData> = ';
-  yield* serializeToJs(pageList);
+  yield* JSON.stringify(pageList);
   yield ';';
 };
 
