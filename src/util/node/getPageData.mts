@@ -21,10 +21,14 @@ export const getPageData = async (file: URL): Promise<PageData> => {
     getMetadata(file),
     getTokenizer(),
   ]);
-  const title = metadata?.title ?? knownTitles.get(pagePath);
+  let title = metadata?.title ?? knownTitles.get(pagePath);
   if (!isString(title)) {
     const relativePath = file.pathname.slice(rootDir.pathname.length);
-    throw new Error(`${title ? 'Invalid' : 'No'}Title: ${relativePath}`);
+    // eslint-disable-next-line no-console
+    console.warn(
+      new Error(`${title ? 'Invalid' : 'No'}Title: ${relativePath}`),
+    );
+    title = '';
   }
   const group = /^\/(.*)\/.*?$/.exec(pagePath);
   return {
