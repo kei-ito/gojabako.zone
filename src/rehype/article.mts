@@ -1,6 +1,7 @@
 import type { Root } from 'hast';
 import type { VFileLike } from '../util/unified.mts';
 import { insertArticleData } from './insertArticleData.mts';
+import { visitArticleA } from './visitArticleA.mts';
 import { visitArticleDiv } from './visitArticleDiv.mts';
 import { visitArticleHeading } from './visitArticleHeading.mts';
 import { visitArticleImg } from './visitArticleImg.mts';
@@ -27,6 +28,7 @@ export const rehypeArticle = () => async (tree: Root, file: VFileLike) => {
     pre: visitArticlePre(file, tasks),
     table: visitArticleTable(file, tasks),
     img: visitArticleImg(file, tasks),
+    a: visitArticleA(file, tasks),
   });
   await Promise.all(tasks);
   insertArticleData(tree, file);

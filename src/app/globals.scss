@@ -88,6 +88,10 @@ a {
     text-decoration: underline;
     opacity: 1;
   }
+
+  & > code {
+    color: var(--gjColorText1);
+  }
 }
 
 s,
