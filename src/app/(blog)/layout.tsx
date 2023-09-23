@@ -1,10 +1,11 @@
 import type { PropsWithChildren } from 'react';
 import { Article } from '../../components/Article';
+import { SiteLayout } from '../../components/SiteLayout';
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
-    <main>
+    <SiteLayout>
       <Article>{children}</Article>
-    </main>
+    </SiteLayout>
   );
 }

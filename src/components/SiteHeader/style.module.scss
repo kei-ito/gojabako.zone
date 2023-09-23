@@ -13,6 +13,10 @@
   line-height: 1;
   border-block-end: solid var(--gj1px) var(--gjGray3);
 
+  &.full {
+    --gjBaseWidth: calc(100% - 2em);
+  }
+
   & > div {
     display: grid;
     grid-template-columns: auto 1fr auto;
