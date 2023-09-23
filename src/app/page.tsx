@@ -9,16 +9,18 @@ export const metadata: Metadata = {};
 
 export default function Page() {
   return (
-    <Article>
-      <header>
-        <h1>{site.name}</h1>
-      </header>
-      <p>
-        <Link href="/author">{site.author.name}</Link> のサイトです。
-      </p>
-      <h2>最近の更新</h2>
-      <ul>{[...listRecentPages(10)]}</ul>
-    </Article>
+    <main>
+      <Article>
+        <header>
+          <h1>{site.name}</h1>
+        </header>
+        <p>
+          <Link href="/author">{site.author.name}</Link> のサイトです。
+        </p>
+        <h2>最近の更新</h2>
+        <ul>{[...listRecentPages(10)]}</ul>
+      </Article>
+    </main>
   );
 }
 

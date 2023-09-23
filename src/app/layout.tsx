@@ -42,7 +42,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
       </head>
       <body>
         <SiteHeader />
-        <main>{children}</main>
+        {children}
         <SiteFooter />
       </body>
     </html>
