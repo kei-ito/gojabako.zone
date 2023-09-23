@@ -8,12 +8,19 @@
   cursor: pointer;
   background-color: var(--gjGray0);
 
+  &.hover,
   &:hover {
     background-color: var(--gjGray1);
   }
 
+  &.active,
   &:active {
     background-color: var(--gjGray2);
+  }
+
+  &.focus,
+  &:focus {
+    outline-style: solid;
   }
 }
 
