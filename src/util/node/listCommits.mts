@@ -62,5 +62,5 @@ const parseCommitOutput = (entry: string): Commit => {
   if (!dateRegExp.test(aDate)) {
     throw new Error(`InvalidAuthorDate: ${aDate}`);
   }
-  return { commit, abbr, aDate: new Date(aDate).getTime() };
+  return { commit, abbr, aDate: Date.parse(aDate) };
 };
