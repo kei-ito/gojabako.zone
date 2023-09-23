@@ -29,6 +29,7 @@ const listGroups = function* () {
   }
   yield* flush();
   if (0 < others.length) {
+    others.sort((a, b) => a.path.localeCompare(b.path));
     yield <hr key="others-hr" />;
     yield <PageList key="others-pages" pages={others} />;
   }
