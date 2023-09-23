@@ -6,8 +6,7 @@
     text-decoration: underline;
   }
 
-  & > time {
-    margin-inline-start: 0.5em;
+  & > .time {
     font-size: 80%;
     color: var(--gjColorText2);
   }

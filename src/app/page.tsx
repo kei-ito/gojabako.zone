@@ -27,7 +27,7 @@ const listRecentPages = function* (limit: number) {
   for (const page of pageList) {
     yield (
       <li key={page.path}>
-        <PageLink page={page} mode="update" />
+        <PageLink page={page} />
       </li>
     );
     if (!(++count < limit)) {
