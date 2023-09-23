@@ -17,6 +17,8 @@
   background-size: cover;
   background-color: unset;
   text-size-adjust: none;
+  outline-color: var(--gjBlue6);
+  outline-width: 0.2em;
 
   @media (prefers-reduced-motion: reduce) {
     animation-duration: 0.01ms !important;
