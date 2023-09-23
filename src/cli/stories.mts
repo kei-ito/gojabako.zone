@@ -3,6 +3,7 @@ import { writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { watch } from 'chokidar';
 import { componentsDir, rootDir, srcDir } from '../util/node/directories.mts';
+import { formatCode } from '../util/node/formatCode.mts';
 import { walkFiles } from '../util/node/walkFiles.mts';
 
 const dest = new URL('Storybook/all.mts', componentsDir);
@@ -15,24 +16,22 @@ const onError = (error: unknown) => {
 };
 
 const generate = async () => {
-  const used = new Set<string>();
-  let code = '';
+  let code = "import type { StoryObj } from '@storybook/react';";
+  let count = 0;
+  const groupNames = new Map<string, string>();
   for (const filePath of [...storyFiles].sort((a, b) => a.localeCompare(b))) {
     const relativePath = filePath.slice(componentsDirPath.length);
-    let name = relativePath.slice(0, -storySuffix.length);
-    name = name.split('/').join('_');
-    if (used.has(name)) {
-      let count = 1;
-      while (used.has(`${name}${count}`)) {
-        count++;
-      }
-      name = `${name}${count}`;
-    }
+    const name = `g${++count}`;
+    groupNames.set(relativePath.slice(0, -storySuffix.length), name);
     const source = `../${relativePath}`.replace(/\.tsx?$/, '');
-    code += `import * as ${name} from '${source}';\n`;
-    code += `export { ${name} };\n`;
+    code += `import * as ${name} from '${source}';`;
   }
-  await writeFile(dest, code);
+  code += 'type Stories = Record<string, StoryObj>;';
+  code += 'export const storyGroups = new Map<string, Stories>();';
+  for (const [relativePath, name] of groupNames) {
+    code += `storyGroups.set('${relativePath}', ${name} as Stories);`;
+  }
+  await writeFile(dest, await formatCode(code));
   console.info(`Generated ${dest.pathname.slice(rootDir.pathname.length)}`);
   return dest;
 };

@@ -1,42 +1,34 @@
-import * as all from './all.mts';
+import { storyGroups } from './all.mts';
 import { StorybookNav } from './Nav';
 import * as style from './style.module.scss';
-import { StorybookView } from './View';
 
 interface StorybookProps {
   path: Array<string>;
 }
 
-export const Storybook = ({ path }: StorybookProps) => (
-  <div className={style.container}>
-    <StorybookNav path={path} />
-    <Body path={path} />
-  </div>
-);
-
-const Body = ({ path }: StorybookProps) => {
-  const story = useStory(path);
+export const Storybook = ({ path }: StorybookProps) => {
+  path = path.slice();
+  if (path.length === 1) {
+    path.push('Default');
+  }
+  const story = getStory(path);
   return (
-    <section className={style.body}>
-      {!story && <p>Story not found</p>}
-      {story && <StorybookView story={story} />}
-    </section>
+    <div className={style.container}>
+      <StorybookNav currentPath={path.join('/')} />
+      {!story && (
+        <main>
+          <p>Story not found</p>
+        </main>
+      )}
+      {story?.render && <story.render />}
+    </div>
   );
 };
 
-const useStory = (path: Array<string>) => {
-  const groupName = path.slice(0, -1).join('_');
-  if (isStoryGroupName(groupName)) {
-    // eslint-disable-next-line import/namespace
-    const group = all[groupName];
-    const storyName = path[path.length - 1];
-    return group[storyName as keyof typeof group];
+const getStory = (path: Array<string>) => {
+  const group = storyGroups.get(path.slice(0, -1).join('/'));
+  if (!group) {
+    return null;
   }
-  return null;
+  return group[path[path.length - 1]];
 };
-
-type AllStories = typeof all;
-export type StoryGroup = keyof AllStories;
-
-export const isStoryGroupName = (value: string): value is StoryGroup =>
-  value in all;

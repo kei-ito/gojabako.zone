@@ -1,16 +1,30 @@
 .container {
   display: grid;
   grid-template-columns: minmax(10em, auto) 1fr;
-  block-size: var(--gjFullScreenAvailableHeight);
+  min-block-size: var(--gjFullScreenAvailableHeight);
 
   & > nav {
     background-color: var(--gjGray1);
     border-inline-end: solid var(--gj1px) var(--gjGray4);
   }
+
+  @media (width < 40em) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+
+    & > nav {
+      border-inline-end: unset;
+      border-block-end: solid var(--gj1px) var(--gjGray4);
+    }
+  }
 }
 
 .list {
+  display: grid;
+  grid-auto-flow: row;
+  align-content: start;
   padding: 1em;
+  line-height: 1.4em;
 
   & > .active {
     font-weight: 700;
@@ -22,9 +36,4 @@
   grid-auto-flow: row;
   align-content: start;
   justify-content: start;
-  padding: 1em;
-
-  & > h1 {
-    border-block-end: solid var(--gj1px) var(--gjGray4);
-  }
 }

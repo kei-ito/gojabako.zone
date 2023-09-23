@@ -1,46 +1,45 @@
-import { entries, keys } from '@nlib/typing';
+import { keys } from '@nlib/typing';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { classnames } from '../../util/classnames.mts';
-import * as all from './all.mts';
+import { storyGroups } from './all.mts';
 import * as style from './style.module.scss';
 
 interface StorybookNavProps {
-  path: Array<string>;
+  currentPath?: string;
 }
 
-export const StorybookNav = ({ path }: StorybookNavProps) => {
-  const currentGroup = path.slice(0, -1).join('_');
-  const currentStory = path[path.length - 1];
-  return (
-    <nav>
-      <ul className={style.list}>
-        {entries(all).map(([group, stories]) => {
-          const groupPath = group.split('_').join('/');
-          return (
-            <li
-              key={group}
-              className={classnames(group === currentGroup && style.active)}
-            >
-              <span>{groupPath}</span>
-              <ul>
-                {keys(stories).map((name) => {
-                  const href = `/stories/${groupPath}/${name}`;
-                  return (
-                    <li
-                      key={name}
-                      className={classnames(
-                        name === currentStory && style.active,
-                      )}
-                    >
-                      <Link href={href}>{name}</Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
-  );
+export const StorybookNav = ({ currentPath = '' }: StorybookNavProps) => (
+  <nav className={style.list}>{[...listItems(currentPath)]}</nav>
+);
+
+const listItems = function* (currentPath: string): Generator<ReactNode> {
+  for (const [group, stories] of storyGroups) {
+    const groupPath = group.split('_').join('/');
+    let active = currentPath.startsWith(groupPath);
+    const storyNames = new Set<string>(keys(stories));
+    storyNames.delete('Default');
+    yield (
+      <Link
+        href={`/stories/${groupPath}`}
+        className={classnames(active && style.active)}
+      >
+        {groupPath}
+      </Link>
+    );
+    if (active) {
+      for (const name of storyNames) {
+        const storyPath = `${groupPath}/${name}`;
+        active = currentPath === storyPath;
+        yield (
+          <Link
+            href={`/stories/${groupPath}/${name}`}
+            className={classnames(active && style.active)}
+          >
+            {name}
+          </Link>
+        );
+      }
+    }
+  }
 };
