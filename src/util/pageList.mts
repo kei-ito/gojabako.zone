@@ -23,8 +23,8 @@ export const pageList: Array<PageData> = [
   {
     title: ['disabledな', 'フォーム', '要素は', 'submit', 'さ', 'れない'],
     publishedAt: '2023-09-18T10:16:16.000Z',
-    updatedAt: '2023-09-21T03:56:09.000Z',
-    commits: 3,
+    updatedAt: '2023-09-24T05:15:22.000Z',
+    commits: 4,
     path: '/2022/disabled-form-element',
     iri: 'gjbkz://gojabako.zone/2022/disabled-form-element',
     group: '2022',
