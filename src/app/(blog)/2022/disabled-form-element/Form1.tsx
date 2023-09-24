@@ -1,4 +1,4 @@
-import { Button, Buttons } from '../../../../components/Button';
+import { PrimaryButton, Buttons } from '../../../../components/Button';
 import { Form } from '../../../../components/Form';
 import { Query } from './Query';
 
@@ -21,7 +21,7 @@ export const Form1 = () => (
     </label>
     <input id="v1-3" name="v1-3" type="text" defaultValue="value3" disabled />
     <Buttons>
-      <Button type="submit">送信</Button>
+      <PrimaryButton type="submit">送信</PrimaryButton>
     </Buttons>
   </Form>
 );

@@ -1,6 +1,6 @@
 'use client';
 import { useCallback, useState } from 'react';
-import { Button } from '../Button';
+import { SecondaryButton } from '../Button';
 import style from './style.module.scss';
 
 export const Counter = () => {
@@ -9,9 +9,9 @@ export const Counter = () => {
   const decrement = useCallback(() => setCount((c) => c - 1), []);
   return (
     <span className={style.container}>
-      <Button onClick={decrement}>-1</Button>
+      <SecondaryButton onClick={decrement}>-1</SecondaryButton>
       <span>{count}</span>
-      <Button onClick={increment}>+1</Button>
+      <SecondaryButton onClick={increment}>+1</SecondaryButton>
     </span>
   );
 };
