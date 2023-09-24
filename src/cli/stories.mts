@@ -22,6 +22,10 @@ const generate = async () => {
   for (const filePath of [...storyFiles].sort((a, b) => a.localeCompare(b))) {
     const relativePath = filePath.slice(componentsDirPath.length);
     const name = `g${++count}`;
+    console.info({
+      filePath,
+      relativePath,
+    });
     groupNames.set(relativePath.slice(0, -storySuffix.length), name);
     const source = `../${relativePath}`.replace(/\.tsx?$/, '');
     code += `import * as ${name} from '${source}';`;
@@ -37,19 +41,25 @@ const generate = async () => {
 };
 
 if (process.argv.includes('--watch')) {
+  let previousPromise: Promise<URL> | undefined;
+  const update = async () => {
+    await previousPromise;
+    // eslint-disable-next-line require-atomic-updates
+    previousPromise = generate();
+  };
   const onChange = (filePath: string) => {
     if (filePath.endsWith(storySuffix)) {
       storyFiles.add(filePath);
-      generate().catch(onError);
+      update().catch(onError);
     }
   };
   const onUnlink = (filePath: string) => {
     if (filePath.endsWith(storySuffix)) {
       storyFiles.delete(filePath);
-      generate().catch(onError);
+      update().catch(onError);
     }
   };
-  watch(fileURLToPath(srcDir), { ignoreInitial: false })
+  watch(fileURLToPath(srcDir), { ignoreInitial: true })
     .on('add', onChange)
     .on('change', onChange)
     .on('unlink', onUnlink);

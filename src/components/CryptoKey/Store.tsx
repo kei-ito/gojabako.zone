@@ -2,12 +2,12 @@
 'use client';
 import type { FormEvent } from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { Button, Buttons } from '../../../../components/Button';
-import { Form } from '../../../../components/Form';
-import { KeyView } from './KeyView';
-import { generateKeyPair, loadKeyPair, storeKeyPair } from './util.mts';
+import { Buttons, PrimaryButton } from '../Button';
+import { Form } from '../Form';
+import { generateKeyPair, storeKeyPair, loadKeyPair } from './util.mts';
+import { CryptoKeyView } from './View';
 
-export const KeyStore = () => {
+export const CryptoKeyStore = () => {
   const keyId = 'testKeyPair';
   const [keyPair, setKeyPair] = useState<CryptoKeyPair | null>(null);
   const onSubmit = useCallback((event: FormEvent) => {
@@ -24,16 +24,24 @@ export const KeyStore = () => {
   }, []);
   return (
     <Form onSubmit={onSubmit}>
-      <h1>鍵ペアをIndexedDBに保管する</h1>
+      <p>鍵ペアをIndexedDBに保管します。</p>
       <Buttons>
-        <Button type="submit">
+        <PrimaryButton type="submit">
           {keyPair ? '鍵ペアを更新して保管する' : '鍵ペアを作成して保管する'}
-        </Button>
+        </PrimaryButton>
       </Buttons>
       {keyPair && (
         <>
-          <KeyView name="PublicKey" keyObject={keyPair.publicKey} extract />
-          <KeyView name="PrivateKey" keyObject={keyPair.privateKey} noExtract />
+          <CryptoKeyView
+            name="PublicKey"
+            keyObject={keyPair.publicKey}
+            extract
+          />
+          <CryptoKeyView
+            name="PrivateKey"
+            keyObject={keyPair.privateKey}
+            noExtract
+          />
           <p>
             IndexedDBのコンソールを開いて鍵ペアが格納されていることを確認してください。また、ページをリロードしても鍵ペアが消えないことを確認してください。
           </p>

@@ -14,7 +14,7 @@ export const metadata = {
 
 これより良い解説はないんじゃないでしょうか。
 
-ブラウザで動くアプリの場合は次の手順でサーバーにDPoPヘッダー付きリクエストを送ります。
+ブラウザで動くアプリの場合は次の手順でDPoPヘッダー付きリクエストを送ります。
 
 1. ブラウザは公開鍵・秘密鍵の鍵ペアを生成して保管します
 1. ブラウザは公開鍵をトークンリクエストに乗せます
@@ -33,7 +33,11 @@ export const metadata = {
 
 アクセストークンを盗んだ側の視点で考えてみます。
 
-> **盗:** DPoPヘッダーを要求された。DPoPヘッダーは「ヘッダーに公開鍵、ペイロードにメソッドとエンドポイントのURLを詰めて先の秘密鍵で署名したJWT」 らしい。<br/> > **盗:** ペイロード部分はリクエストのエンドポイント情報なので問題ない。<br/> > **盗:** ヘッダーに詰める公開鍵と署名に使う秘密鍵、つまり鍵ペアが必要だ。<br/> > **盗:** この鍵ペアはアクセストークンの発行に使ったものと同じじゃないといけない。<br/> > **盗:** アクセストークンの持ち主から鍵ペアを盗めればいける。
+- **盗:** DPoPヘッダーを要求された。DPoPヘッダーは「ヘッダーに公開鍵、ペイロードにメソッドとエンドポイントのURLを詰めて先の秘密鍵で署名したJWT」 らしい。
+- **盗:** ペイロード部分はリクエストのエンドポイント情報なので問題ない。
+- **盗:** ヘッダーに詰める公開鍵と署名に使う秘密鍵、つまり鍵ペアが必要だ。
+- **盗:** この鍵ペアはアクセストークンの発行に使ったものと同じじゃないといけない。
+- **盗:** アクセストークンの持ち主から鍵ペアを盗めればいける。
 
 これで「アクセストークンの持ち主以外がDPoPヘッダーを作れるか」は「アクセストークンの持ち主の鍵ペアを盗めるか」という問題になりました。
 
@@ -52,11 +56,11 @@ const keyPair = await crypto.subtle.generateKey(
 );
 ```
 
-以下で実際に鍵ペアを作れます。それぞれExportKeyもクリックして鍵データの出力を試してみてください。
+以下のボタンをクリックすると実際に鍵ペアを作れます。それぞれExportKeyもクリックして鍵データの出力を試してみてください。
 
-import { KeyGenerator } from './KeyGenerator';
+import { CryptoKeyGenerator } from '../../../../components/CryptoKey/Generator';
 
-<KeyGenerator />
+<CryptoKeyGenerator />
 
 `crypto.subtle.generateKey`の2番目の引数`extractable`を`false`にするとGoogle Chromeでは "InvalidAccessError: key is not extractable" となり出力できません。つまり、`extractable:false`の秘密鍵はアクセストークンの持ち主のブラウザの外に持ち出せません。
 
@@ -76,9 +80,9 @@ A. アクセストークンの持ち主の鍵ペアが持ち出せずブラウ�
 
 `localStorage`や`sessionStorage`等の[Storage](https://developer.mozilla.org/en-US/docs/Web/API/Storage)は文字列しか入らないので使えませんが、[IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)はオブジェクトをオブジェクトのまま保管できます。
 
-import { KeyStore } from './KeyStore';
+import { CryptoKeyStore } from '../../../../components/CryptoKey/Store';
 
-<KeyStore />
+<CryptoKeyStore />
 
 `keyId`が引数にありますが、同じ鍵ペアを参照したいので基本的には`app`等の固定値を渡すことになると思います。
 

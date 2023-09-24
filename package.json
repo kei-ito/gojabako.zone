@@ -11,7 +11,7 @@
     "dev:css": "node --experimental-loader=@nlib/tsm src/cli/scssTypes.mts --watch",
     "dev:stories": "node --experimental-loader=@nlib/tsm src/cli/stories.mts --watch",
     "dev:next": "NODE_OPTIONS='--experimental-loader=@nlib/tsm' next",
-    "https": "run-p dev:css https:*",
+    "https": "run-p dev:css dev:stories https:*",
     "https:next": "node --experimental-loader=@nlib/tsm server.mts",
     "build": "run-s build:*",
     "build:meta": "run-p build:meta:*",
