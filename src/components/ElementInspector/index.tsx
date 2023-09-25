@@ -1,6 +1,7 @@
 'use client';
 import type { ChangeEvent } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { isClient } from '../../util/env.mts';
 import { noop } from '../../util/noop.mts';
 import * as style from './style.module.scss';
 
@@ -30,9 +31,7 @@ interface BaseWidthSelectorProps {
 }
 
 const BaseWidthSelector = ({ parent }: BaseWidthSelectorProps) => {
-  const [baseWidth, setBaseWidth] = useState(
-    new URLSearchParams(location.search).get('w') ?? 'default',
-  );
+  const [baseWidth, setBaseWidth] = useState(getInitialBaseWidth());
   useEffect(() => {
     const url = new URL(location.href);
     if (baseWidth === 'default') {
@@ -76,4 +75,11 @@ const BaseWidthSelector = ({ parent }: BaseWidthSelectorProps) => {
       </select>
     </>
   );
+};
+
+const getInitialBaseWidth = () => {
+  if (!isClient) {
+    return 'default';
+  }
+  return new URLSearchParams(location.search).get('w') ?? 'default';
 };
