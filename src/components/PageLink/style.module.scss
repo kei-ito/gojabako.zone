@@ -5,10 +5,15 @@
   &:hover {
     text-decoration: underline;
   }
+}
 
-  & > time {
-    margin-inline-start: 0.5em;
-    font-size: 80%;
-    color: var(--gjColorText2);
-  }
+.time {
+  font-size: 80%;
+  color: var(--gjColorText2);
+}
+
+.description {
+  font-size: 80%;
+  vertical-align: text-top;
+  text-decoration: none;
 }

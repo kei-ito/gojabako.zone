@@ -1,11 +1,9 @@
 /* eslint-disable import/no-unassigned-import, @next/next/google-font-display, @next/next/no-page-custom-font */
-import './globals.scss';
-import './hljs.scss';
 import type { Metadata } from 'next';
 import type { PropsWithChildren } from 'react';
-import { SiteFooter } from '../components/SiteFooter';
-import { SiteHeader } from '../components/SiteHeader';
 import { site } from '../util/site.mts';
+import './globals.scss';
+import './hljs.scss';
 
 export const metadata: Metadata = {
   metadataBase: site.baseUrl,
@@ -40,11 +38,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
           rel="stylesheet"
         />
       </head>
-      <body>
-        <SiteHeader />
-        <main>{children}</main>
-        <SiteFooter />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

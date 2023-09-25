@@ -1,8 +1,18 @@
-// eslint-disable-next-line import/unambiguous
-declare module '*.md' {
-    import type {FunctionComponent} from 'react';
+/* eslint-disable import/unambiguous */
 
-    const Component: FunctionComponent;
-    // eslint-disable-next-line import/no-default-export
-    export default Component;
+declare module '@storybook/react' {
+  import type { StoryAnnotations } from '@storybook/csf';
+  import type { ComponentType, ReactElement } from 'react';
+
+  interface ReactRenderer<P> {
+    component: ComponentType<P>;
+    storyResult: ReactElement<unknown>;
+    canvasElement: HTMLElement;
+  }
+
+  export type Story<P = object> = StoryAnnotations<ReactRenderer<P>>;
+
+  export type StoryObj<C = ComponentType> = C extends ComponentType<infer P>
+    ? Story<P>
+    : never;
 }

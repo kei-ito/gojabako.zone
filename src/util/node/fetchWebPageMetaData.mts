@@ -14,7 +14,7 @@ const getCache = async (pageUrl: URL) => {
   let cached = sessionCache.get(pageUrl.href) ?? null;
   if (!cached) {
     const cacheDest = getCacheDest(pageUrl);
-    const json = await readFile(cacheDest, 'utf8').catch(ignoreENOENT);
+    const json = await readFile(cacheDest, 'utf8').catch(ignoreENOENT());
     if (json) {
       const parsed: unknown = JSON.parse(json);
       if (isString.array.dictionary(parsed)) {

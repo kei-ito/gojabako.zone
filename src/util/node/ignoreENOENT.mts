@@ -1,10 +1,20 @@
-const isError = (input: unknown): input is Error & { code?: string } => {
-  return input instanceof Error;
-};
+import { isObject } from '@nlib/typing';
 
-export const ignoreENOENT = (error: unknown) => {
-  if (isError(error) && error.code === 'ENOENT') {
+interface IgnoreConfig {
+  /** @default true */
+  throw?: boolean;
+}
+
+export const ignoreENOENT =
+  ({ throw: throwError = true }: IgnoreConfig = {}) =>
+  (error: unknown) => {
+    if (!isObject(error) || error.code !== 'ENOENT') {
+      if (throwError) {
+        throw error;
+      } else {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    }
     return null;
-  }
-  throw error;
-};
+  };

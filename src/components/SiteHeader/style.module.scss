@@ -11,7 +11,11 @@
   backdrop-filter: blur(2px);
   font-weight: 500;
   line-height: 1;
-  box-shadow: 0 1px 0 var(--gjGray3);
+  border-block-end: solid var(--gj1px) var(--gjGray3);
+
+  &.full {
+    --gjBaseWidth: calc(100% - 2em);
+  }
 
   & > div {
     display: grid;

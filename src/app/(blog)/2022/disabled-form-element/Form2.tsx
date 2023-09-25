@@ -1,4 +1,4 @@
-import { Button, Buttons } from '../../../../components/Button';
+import { PrimaryButton, Buttons } from '../../../../components/Button';
 import { FieldSet, Form } from '../../../../components/Form';
 import { Query } from './Query';
 
@@ -39,7 +39,7 @@ export const Form2 = () => (
       <input id="v2-4" name="v2-4" type="text" defaultValue="value6" />
     </FieldSet>
     <Buttons>
-      <Button type="submit">送信</Button>
+      <PrimaryButton type="submit">送信</PrimaryButton>
     </Buttons>
   </Form>
 );

@@ -1,19 +1,54 @@
 .button {
+  display: grid;
+  align-items: center;
+  justify-items: center;
   min-inline-size: 4em;
-  padding-block: 0.25em;
-  padding-inline: 0.6em;
-  border-color: var(--gjGray4);
-  border-style: solid;
+  padding-block: 0.3em;
+  padding-inline: 0.8em;
   border-radius: 0.3em;
   cursor: pointer;
-  background-color: var(--gjGray0);
+  font-size: 90%;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: start;
 
-  &:hover {
-    background-color: var(--gjGray1);
+  &.primary {
+    background-color: var(--gjBlue5);
+    color: var(--gjGray0);
+
+    &.hover,
+    &:hover {
+      background-color: var(--gjBlue7);
+    }
+
+    &.active,
+    &:active {
+      background-color: var(--gjBlue8);
+    }
   }
 
-  &:active {
-    background-color: var(--gjGray2);
+  &.secondary {
+    border: solid var(--gj1px) var(--gjGray4);
+  }
+
+  &.secondary,
+  &.text {
+    background-color: var(--gjGray0);
+
+    &.hover,
+    &:hover {
+      background-color: var(--gjGray2);
+    }
+
+    &.active,
+    &:active {
+      background-color: var(--gjGray3);
+    }
+  }
+
+  &.focus,
+  &:focus {
+    outline-style: solid;
   }
 }
 

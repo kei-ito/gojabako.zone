@@ -17,6 +17,8 @@
   background-size: cover;
   background-color: unset;
   text-size-adjust: none;
+  outline-color: var(--gjBlue6);
+  outline-width: 0.2em;
 
   @media (prefers-reduced-motion: reduce) {
     animation-duration: 0.01ms !important;
@@ -29,6 +31,8 @@
   --gj1px: 1px;
   --gjBaseWidth: 627px;
   --gjHeaderHeight: 2.4em;
+  /* stylelint-disable-next-line unit-allowed-list */
+  --gjFullScreenAvailableHeight: calc(100vh - var(--gjHeaderHeight));
   --gjGray0: #fff;
   --gjGray1: #f8fafc;
   --gjGray2: #f1f5f9;
@@ -64,7 +68,7 @@
   --gjLineHeight: 1.6;
   --gjColorBackground: var(--gjGray0);
   --gjColorText1: var(--gjGray9);
-  --gjColorText2: var(--gjGray5);
+  --gjColorText2: var(--gjGray6);
   --gjColorFocus1: var(--gjYellow3);
   --gjColorFocus2: var(--gjYellow1);
   font-size: 15px;

@@ -20,7 +20,7 @@ const selialize = function* () {
   yield `  <link href="${site.baseUrl}"/>\n`;
   let updated = 0;
   for (const page of pageList) {
-    updated = Math.max(updated, new Date(page.updatedAt).getTime());
+    updated = Math.max(updated, Date.parse(page.updatedAt));
   }
   yield `  <updated>${new Date(updated).toISOString()}</updated>\n`;
   yield `  <id>${site.baseUrl}</id>\n`;

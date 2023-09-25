@@ -5,8 +5,19 @@ import { site } from '../../util/site.mts';
 import { Logo } from '../Logo';
 import * as style from './style.module.scss';
 
-export const SiteHeader = (props: HTMLAttributes<HTMLElement>) => (
-  <header {...props} className={classnames(style.container, props.className)}>
+export interface SiteHeaderProps extends HTMLAttributes<HTMLElement> {
+  fullWidth?: boolean;
+}
+
+export const SiteHeader = ({ fullWidth, ...props }: SiteHeaderProps) => (
+  <header
+    {...props}
+    className={classnames(
+      style.container,
+      fullWidth && style.full,
+      props.className,
+    )}
+  >
     <div>
       <Link href="/">
         <Logo className={style.logo} />
