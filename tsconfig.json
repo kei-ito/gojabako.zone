@@ -28,6 +28,6 @@
       }
     ]
   },
-  "include": ["**/*.mts", "**/*.tsx", "typedef.d.ts", ".next/types/**/*.ts"],
+  "include": ["**/*.mts", "**/*.tsx", "**/*.d.ts", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
