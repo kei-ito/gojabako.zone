@@ -21,7 +21,7 @@ const listItems = function* (currentPath: string): Generator<ReactNode> {
     storyNames.delete('Default');
     yield (
       <Link
-        href={`/stories/${groupPath}`}
+        href={`/app/components/${groupPath}`}
         className={classnames(active && style.active)}
       >
         {groupPath}
@@ -33,7 +33,7 @@ const listItems = function* (currentPath: string): Generator<ReactNode> {
         active = currentPath === storyPath;
         yield (
           <Link
-            href={`/stories/${groupPath}/${name}`}
+            href={`/app/components/${groupPath}/${name}`}
             className={classnames(active && style.active)}
           >
             {name}

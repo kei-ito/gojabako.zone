@@ -1,3 +1,4 @@
+import { StoryElement } from '../StoryElement';
 import { storyGroups } from './all.mts';
 import { StorybookNav } from './Nav';
 import * as style from './style.module.scss';
@@ -16,9 +17,9 @@ export const Storybook = ({ path }: StorybookProps) => {
     <div className={style.container}>
       <StorybookNav currentPath={path.join('/')} />
       {!story && (
-        <main>
-          <p>Story not found</p>
-        </main>
+        <StoryElement.Gallery>
+          <p>Select a component from the menu.</p>
+        </StoryElement.Gallery>
       )}
       {story?.render && <story.render />}
     </div>

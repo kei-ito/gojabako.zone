@@ -1,0 +1,28 @@
+/* stylelint-disable unit-allowed-list */
+.parent {
+  --gjSize: 15px;
+  --gjSize2: calc(var(--gjSize) * 2);
+  --gjColor: var(--gjGray1);
+  background-image: linear-gradient(45deg, var(--gjColor) 26%, transparent 26%),
+    linear-gradient(225deg, var(--gjColor) 26%, transparent 26%),
+    linear-gradient(45deg, var(--gjColor) 26%, transparent 26%),
+    linear-gradient(225deg, var(--gjColor) 26%, transparent 26%);
+  background-size: var(--gjSize2) var(--gjSize2);
+  background-repeat: repeat;
+  background-position:
+    50% 0,
+    calc(50% + var(--gjSize)) var(--gjSize),
+    calc(50% + var(--gjSize)) var(--gjSize),
+    calc(50% + var(--gjSize2)) 0;
+  box-shadow: 0 0 0 1px var(--gjGray4);
+}
+
+.controller {
+  position: fixed;
+  inline-size: max-content !important;
+  inset-block-start: calc(var(--gjHeaderHeight) + 1em);
+  inset-inline-end: 1em;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}

@@ -2,6 +2,7 @@
   display: block;
   padding-block-start: 1em;
   padding-block-end: 3em;
+  margin-inline: auto;
 
   & > * {
     inline-size: var(--gjBaseWidth);

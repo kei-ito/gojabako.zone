@@ -1,6 +1,27 @@
 import type { PageData } from './type.mts';
 export const pageList: Array<PageData> = [
   {
+    title: ['Components'],
+    description: 'このサイトを構成する部品の動作確認ページです。',
+    publishedAt: '2023-09-25T00:48:39.219Z',
+    updatedAt: '1970-01-01T00:00:00.000Z',
+    commits: 0,
+    path: '/app/components/',
+    iri: 'gjbkz://gojabako.zone/app/components/',
+    group: 'app/components',
+    filePath: 'src/app/app/components/[[...path]]/page.tsx',
+  },
+  {
+    title: ['MDXの', '動作', '確認', 'ページ'],
+    publishedAt: '2023-09-25T00:48:39.293Z',
+    updatedAt: '1970-01-01T00:00:00.000Z',
+    commits: 0,
+    path: '/app/mdx',
+    iri: 'gjbkz://gojabako.zone/app/mdx',
+    group: 'app',
+    filePath: 'src/app/app/mdx/page.mdx',
+  },
+  {
     title: ['Next.js', ' ', '13に', 'しました'],
     publishedAt: '2023-09-22T06:09:19.000Z',
     updatedAt: '2023-09-22T06:09:19.000Z',
@@ -186,16 +207,6 @@ export const pageList: Array<PageData> = [
     filePath: 'src/app/(blog)/2018/monitor-stand/page.mdx',
   },
   {
-    title: ['Components'],
-    publishedAt: '2023-09-22T13:31:12.000Z',
-    updatedAt: '2023-09-23T15:42:36.000Z',
-    commits: 3,
-    path: '/stories/',
-    iri: 'gjbkz://gojabako.zone/stories/',
-    group: '',
-    filePath: 'src/app/stories/[[...path]]/page.tsx',
-  },
-  {
     publishedAt: '2023-09-18T10:16:16.000Z',
     updatedAt: '2023-09-23T15:42:36.000Z',
     commits: 7,
@@ -214,15 +225,5 @@ export const pageList: Array<PageData> = [
     iri: 'gjbkz://gojabako.zone/author',
     group: '',
     filePath: 'src/app/(blog)/author/page.mdx',
-  },
-  {
-    title: ['MDXの', '動作', '確認', 'ページ'],
-    publishedAt: '2021-09-29T15:39:26.000Z',
-    updatedAt: '2023-09-21T03:56:59.000Z',
-    commits: 26,
-    path: '/mdx',
-    iri: 'gjbkz://gojabako.zone/mdx',
-    group: '',
-    filePath: 'src/app/(blog)/mdx/page.mdx',
   },
 ];
