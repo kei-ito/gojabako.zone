@@ -1,7 +1,7 @@
 import { isString } from '@nlib/typing';
 import { EXIT, SKIP } from 'unist-util-visit';
-import { ClassIcon } from '../util/classnames.mts';
-import type { VFileLike } from '../util/unified.mts';
+import { ClassIcon } from '../classnames.mts';
+import type { VFileLike } from '../unified.mts';
 import { addClass } from './className.mts';
 import {
   createFragmentTarget,

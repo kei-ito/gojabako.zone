@@ -1,9 +1,9 @@
 import type { Root, Parent, Text, RootContentMap } from 'mdast';
 import { SKIP } from 'unist-util-visit';
 import { getSingle } from '../util/getSingle.mts';
+import type { MdastElementVisitor } from '../util/remark/visitMdastElement.mts';
+import { visitMdastElement } from '../util/remark/visitMdastElement.mts';
 import type { VFileLike } from '../util/unified.mts';
-import type { MdastElementVisitor } from './visitMdastElement.mts';
-import { visitMdastElement } from './visitMdastElement.mts';
 
 interface BlockMath extends Parent {
   value: string;

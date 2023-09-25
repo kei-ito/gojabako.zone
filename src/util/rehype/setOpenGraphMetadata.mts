@@ -7,9 +7,9 @@ import type {
 } from 'estree';
 import type { Root, RootContent } from 'hast';
 import type { MdxjsEsm } from 'mdast-util-mdxjs-esm';
-import { createProperty } from '../util/estree.mts';
-import { getSingle } from '../util/getSingle.mts';
-import type { PageData } from '../util/type.mts';
+import { createProperty } from '../estree.mts';
+import { getSingle } from '../getSingle.mts';
+import type { PageData } from '../type.mts';
 
 interface RootLike extends Omit<Root, 'children'> {
   children: Array<MdxjsEsm | RootContent>;

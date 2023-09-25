@@ -1,10 +1,10 @@
 import { pathToFileURL } from 'node:url';
 import type { Element, Root, RootContent } from 'hast';
 import type { MdxjsEsm } from 'mdast-util-mdxjs-esm';
-import { getPageFromFileUrl } from '../util/getPage.mts';
-import { site } from '../util/site.mts';
-import type { PageData } from '../util/type.mts';
-import type { VFileLike } from '../util/unified.mts';
+import { getPageFromFileUrl } from '../getPage.mts';
+import { site } from '../site.mts';
+import type { PageData } from '../type.mts';
+import type { VFileLike } from '../unified.mts';
 import { createHastElement } from './createHastElement.mts';
 import { setOpenGraphMetadata } from './setOpenGraphMetadata.mts';
 

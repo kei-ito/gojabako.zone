@@ -3,11 +3,11 @@ import type { Element, Root } from 'hast';
 import type { MdxJsxFlowElement, MdxJsxTextElement } from 'mdast-util-mdx-jsx';
 import { SKIP } from 'unist-util-visit';
 import { getSingle } from '../util/getSingle.mts';
+import { embedTwitter } from '../util/rehype/embedTwitter.mts';
+import { embedYouTube } from '../util/rehype/embedYouTube.mts';
+import { isHastElement } from '../util/rehype/isHastElement.mts';
+import { visitHastElement } from '../util/rehype/visitHastElement.mts';
 import type { VFileLike } from '../util/unified.mts';
-import { embedTwitter } from './embedTwitter.mts';
-import { embedYouTube } from './embedYouTube.mts';
-import { isHastElement } from './isHastElement.mts';
-import { visitHastElement } from './visitHastElement.mts';
 
 declare module 'hast' {
   interface RootContentMap {

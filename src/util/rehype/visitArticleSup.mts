@@ -1,6 +1,6 @@
 import { SKIP } from 'unist-util-visit';
-import { getSingle } from '../util/getSingle.mts';
-import type { VFileLike } from '../util/unified.mts';
+import { getSingle } from '../getSingle.mts';
+import type { VFileLike } from '../unified.mts';
 import { addClass } from './className.mts';
 import { createFragmentTarget } from './createHastElement.mts';
 import { isHastElement } from './isHastElement.mts';

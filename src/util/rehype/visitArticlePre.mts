@@ -1,8 +1,8 @@
 import { isObject, isString } from '@nlib/typing';
 import { SKIP } from 'unist-util-visit';
-import { getSingle } from '../util/getSingle.mts';
-import { mdToInlineHast } from '../util/node/mdToHast.mts';
-import type { VFileLike } from '../util/unified.mts';
+import { getSingle } from '../getSingle.mts';
+import { mdToInlineHast } from '../node/mdToHast.mts';
+import type { VFileLike } from '../unified.mts';
 import {
   createFragmentRef,
   createFragmentTarget,

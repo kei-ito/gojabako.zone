@@ -2,7 +2,7 @@ import type { Element } from 'hast';
 import { fromHtml } from 'hast-util-from-html';
 import { toString as hastToString } from 'hast-util-to-string';
 import { EXIT } from 'unist-util-visit';
-import { fetchYouTubeVideoData } from '../util/node/fetchYouTubeVideoData.mts';
+import { fetchYouTubeVideoData } from '../node/fetchYouTubeVideoData.mts';
 import {
   createFragmentRef,
   createFragmentTarget,

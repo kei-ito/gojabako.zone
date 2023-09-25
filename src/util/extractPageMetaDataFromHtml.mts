@@ -3,7 +3,7 @@ import type { Properties } from 'hast';
 import { fromHtml } from 'hast-util-from-html';
 import { toString as hastToString } from 'hast-util-to-string';
 import { SKIP } from 'unist-util-visit';
-import { visitHastElement } from '../rehype/visitHastElement.mts';
+import { visitHastElement } from './rehype/visitHastElement.mts';
 
 export type PageMetaData = Record<string, Array<string> | undefined>;
 

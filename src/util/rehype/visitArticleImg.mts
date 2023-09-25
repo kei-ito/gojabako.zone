@@ -4,8 +4,8 @@ import type { Element } from 'hast';
 import type { MdxJsxTextElement } from 'mdast-util-mdx-jsx';
 import type { Position } from 'unist';
 import { SKIP } from 'unist-util-visit';
-import { mdToInlineHast } from '../util/node/mdToHast.mts';
-import type { VFileLike } from '../util/unified.mts';
+import { mdToInlineHast } from '../node/mdToHast.mts';
+import type { VFileLike } from '../unified.mts';
 import { addClass } from './className.mts';
 import {
   createFragmentRef,

@@ -1,6 +1,6 @@
 import { SKIP } from 'unist-util-visit';
-import { site } from '../util/site.mts';
-import type { VFileLike } from '../util/unified.mts';
+import { site } from '../site.mts';
+import type { VFileLike } from '../unified.mts';
 import { serializePropertyValue } from './serializePropertyValue.mts';
 import type { HastElementVisitor } from './visitHastElement.mts';
 
