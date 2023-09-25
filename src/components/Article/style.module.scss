@@ -246,7 +246,11 @@
         margin-block-start: 1em;
       }
 
-      &[data-type='table'],
+      &[data-type='table'] {
+        display: grid;
+        grid-auto-flow: row;
+      }
+
       &[data-type='image'] {
         display: grid;
         grid-auto-flow: row;
@@ -261,9 +265,8 @@
           inline-size: 100%;
         }
 
-        & > table,
         & > img {
-          inline-size: max-content;
+          max-inline-size: max-content;
         }
       }
 
@@ -329,6 +332,7 @@
           font-size: 100%;
           line-height: 1.4;
           background-color: var(--gjColorBackground);
+          overflow-x: auto;
 
           & > .hljs-ln {
             --gjColorText: var(--gjGray4);

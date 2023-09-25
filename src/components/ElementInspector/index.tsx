@@ -5,7 +5,6 @@ import { noop } from '../../util/noop.mts';
 import * as style from './style.module.scss';
 
 export const ElementInspector = () => {
-  const [baseWidth, setBaseWidth] = useState<number>(-1);
   const [div, setContainer] = useState<HTMLElement | null>(null);
   const parent = useMemo(() => div?.parentElement, [div]);
   useEffect(() => {
@@ -19,33 +18,62 @@ export const ElementInspector = () => {
       parent.classList.remove(style.parent);
     };
   }, [parent]);
+  return (
+    <div ref={setContainer} className={style.controller}>
+      <BaseWidthSelector parent={parent} />
+    </div>
+  );
+};
+
+interface BaseWidthSelectorProps {
+  parent?: HTMLElement | null;
+}
+
+const BaseWidthSelector = ({ parent }: BaseWidthSelectorProps) => {
+  const [baseWidth, setBaseWidth] = useState(
+    new URLSearchParams(location.search).get('w') ?? 'default',
+  );
   useEffect(() => {
-    if (!parent || !(0 < baseWidth)) {
+    const url = new URL(location.href);
+    if (baseWidth === 'default') {
+      url.searchParams.delete('w');
+    } else {
+      url.searchParams.set('w', `${baseWidth}`);
+    }
+    if (location.href !== url.href) {
+      history.replaceState(null, '', url);
+    }
+  }, [baseWidth]);
+  useEffect(() => {
+    if (!parent) {
       return noop;
     }
-    parent.style.setProperty('--gjBaseWidth', '94%');
-    parent.style.setProperty('inline-size', `${baseWidth}px`);
+    if (baseWidth !== 'default') {
+      parent.style.setProperty('--gjBaseWidth', '94%');
+    }
+    if (/^[1-9]\d+$/.test(baseWidth)) {
+      parent.style.setProperty('inline-size', `${baseWidth}px`);
+    }
     return () => {
       parent.style.removeProperty('--gjBaseWidth');
       parent.style.removeProperty('inline-size');
     };
   }, [parent, baseWidth]);
-  const onChangeWidth = useCallback((event: ChangeEvent<HTMLSelectElement>) => {
-    setBaseWidth(Number(event.target.value || -1));
-  }, []);
+  const onChange = useCallback(
+    ({ target }: ChangeEvent<HTMLSelectElement>) => setBaseWidth(target.value),
+    [setBaseWidth],
+  );
   return (
-    <div ref={setContainer} className={style.controller}>
+    <>
       <label className="material-symbols-rounded" htmlFor="BaseWidthSelector">
         width
       </label>
-      <select id="BaseWidthSelector" onChange={onChangeWidth}>
-        <option value="">default</option>
-        {[600, 500, 400, 300].map((w) => (
-          <option key={w} value={w}>
-            {w}px
-          </option>
-        ))}
+      <select id="BaseWidthSelector" onChange={onChange} value={baseWidth}>
+        <option value="default">default</option>
+        <option value="full">full</option>
+        <option value="500">500px</option>
+        <option value="300">300px</option>
       </select>
-    </div>
+    </>
   );
 };
