@@ -1,9 +1,8 @@
 /* eslint-disable max-lines-per-function */
-import { readFile } from 'node:fs/promises';
-import { pathToFileURL } from 'node:url';
 import { notFound } from 'next/navigation';
 import type { NextRequest } from 'next/server';
 import { ImageResponse } from 'next/server';
+import type { FontStyle, FontWeight } from '../../../util/fontFace.mts';
 import {
   listLines,
   measureTextWidth,
@@ -12,25 +11,38 @@ import { pageList } from '../../../util/pageList.mts';
 import { site } from '../../../util/site.mts';
 import type { PageData } from '../../../util/type.mts';
 
-const size = { width: 1200, height: 630 };
-
-type Weight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
-interface FontData {
+interface FontOptions {
+  data: ArrayBuffer;
   name: string;
-  weight: Weight;
-  data: ArrayBuffer | Buffer;
+  weight: FontWeight;
+  style: FontStyle;
+  lang?: string;
 }
-const rootDir = pathToFileURL(`${process.cwd()}/`);
-const fontsDir = new URL('node_modules/@fontsource/', rootDir);
-const notoSansJp = async (name: string, weight: Weight): Promise<FontData> => {
-  const data = await readFile(
-    new URL(
-      `noto-sans-jp/files/noto-sans-jp-${name}-${weight}-normal.woff`,
-      fontsDir,
-    ),
-  );
-  return { name, weight, data };
+
+export const runtime = 'edge';
+const size = { width: 1200, height: 630 };
+const loadFont = async (
+  url: URL,
+  options: Omit<FontOptions, 'data'>,
+): Promise<FontOptions> => {
+  const res = await fetch(url);
+  return { ...options, data: await res.arrayBuffer() };
 };
+
+const notoSansJpLatin500 = loadFont(
+  new URL(
+    '../../../../public/fonts/noto-sans-jp/japanese-500-normal.woff',
+    import.meta.url,
+  ),
+  { name: 'Noto Sans JP', style: 'normal', weight: 500 },
+);
+const notoSansJpJp500 = loadFont(
+  new URL(
+    '../../../../public/fonts/noto-sans-jp/japanese-500-normal.woff',
+    import.meta.url,
+  ),
+  { name: 'Noto Sans JP', style: 'normal', weight: 500 },
+);
 
 export const GET = async (req: NextRequest) => {
   const pagePath = req.nextUrl.pathname.slice(6);
@@ -40,10 +52,7 @@ export const GET = async (req: NextRequest) => {
   }
   return new ImageResponse(<ImageComponent page={page} />, {
     ...size,
-    fonts: await Promise.all([
-      notoSansJp('latin', 500),
-      notoSansJp('japanese', 500),
-    ]),
+    fonts: await Promise.all([notoSansJpLatin500, notoSansJpJp500]),
     // debug: true,
   });
 };
