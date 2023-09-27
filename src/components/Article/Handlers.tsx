@@ -1,6 +1,5 @@
 'use client';
-
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useHighlightAndScroll } from '../use/HighlightAndScroll.mts';
 import {
   useHighlightCodeLines,
@@ -12,8 +11,8 @@ export const ArticleHandlers = () => {
   useHighlightAndScroll();
   useInPageLinkHandler();
   const [div, setDiv] = useState<Element | null>(null);
-  const root = useMemo(() => div?.parentElement ?? null, [div]);
-  useLineLinkHandlers(root);
-  useHighlightCodeLines(root);
+  const article = useMemo(() => div?.parentElement ?? null, [div]);
+  useLineLinkHandlers(article);
+  useHighlightCodeLines(article);
   return <div ref={setDiv} style={{ display: 'none' }} />;
 };

@@ -24,5 +24,6 @@
   inset-inline-end: 1em;
   display: grid;
   grid-template-columns: auto 1fr;
+  column-gap: 0.2em;
   align-items: center;
 }

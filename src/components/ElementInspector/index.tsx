@@ -3,6 +3,7 @@ import type { ChangeEvent } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { isClient } from '../../util/env.mts';
 import { noop } from '../../util/noop.mts';
+import { Select } from '../Select';
 import * as style from './style.module.scss';
 
 export const ElementInspector = () => {
@@ -67,12 +68,12 @@ const BaseWidthSelector = ({ parent }: BaseWidthSelectorProps) => {
       <label className="material-symbols-rounded" htmlFor="BaseWidthSelector">
         width
       </label>
-      <select id="BaseWidthSelector" onChange={onChange} value={baseWidth}>
+      <Select id="BaseWidthSelector" onChange={onChange} value={baseWidth}>
         <option value="default">default</option>
         <option value="full">full</option>
         <option value="500">500px</option>
         <option value="300">300px</option>
-      </select>
+      </Select>
     </>
   );
 };
