@@ -22,10 +22,6 @@ const generate = async () => {
   for (const filePath of [...storyFiles].sort((a, b) => a.localeCompare(b))) {
     const relativePath = filePath.slice(componentsDirPath.length);
     const name = `g${++count}`;
-    console.info({
-      filePath,
-      relativePath,
-    });
     groupNames.set(relativePath.slice(0, -storySuffix.length), name);
     const source = `../${relativePath}`.replace(/\.tsx?$/, '');
     code += `import * as ${name} from '${source}';`;

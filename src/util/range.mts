@@ -65,3 +65,15 @@ export const listValues = function* (
     }
   }
 };
+
+export const isInRange = (
+  normalizedRanges: Iterable<Range>,
+  value: number,
+): boolean => {
+  for (const [a, b] of normalizedRanges) {
+    if (a <= value && value <= b) {
+      return true;
+    }
+  }
+  return false;
+};

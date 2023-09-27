@@ -44,7 +44,7 @@
       &[href='/'] {
         grid-column: 1/2;
         display: grid;
-        grid-template-columns: 2em auto;
+        grid-template-columns: auto auto;
         column-gap: 0.4em;
         align-items: center;
       }
@@ -57,5 +57,6 @@
 }
 
 .logo {
+  inline-size: 2em;
   margin-inline: 0;
 }

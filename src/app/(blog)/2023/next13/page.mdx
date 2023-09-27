@@ -118,16 +118,15 @@ export default withMDX(nextConfig);
 
 ## 記事やサイトの画像を生成する
 
-[satori]というツールを利用して画像を生成できるようになったので、これを使っています。
+[satori]というNext.jsに含まれるツールを利用して画像を生成できるようになったので、これを使っています。
 
 `/path/to/page`というページの画像を`/cover/path/to/page`で生成します。
 
 - 例えばこのページの画像はこちら: [`/cover/2023/next13`](/cover/2023/next13)
 - 画像を生成しているコードはこちら: [`/app/cover/[[...path]]/route.tsx`](https://github.com/gjbkz/gojabako.zone/blob/main/src/app/cover/%5B%5B...path%5D%5D/route.tsx)
-  - フォントは [@fontsource/noto-sans-jp](https://www.npmjs.com/package/@fontsource/noto-sans-jp) のフォルダから`readFile`します。
+  - フォントは [@fontsource/noto-sans-jp](https://www.npmjs.com/package/@fontsource/noto-sans-jp) のフォルダから`public`フォルダに事前にコピーしておいたものを`fetch`します。
   - 文字出力の際に提供したフォントにない文字があるとエラーになります。
   - [adobe-blank](https://github.com/adobe-fonts/adobe-blank)を渡しておけばエラーにはならなくなりそうです。
-  - `runtime`を [edge](https://nextjs.org/docs/pages/api-reference/edge) にするのはファイルの扱いがややこしいのでおすすめしません。
 
 `<meta>`に`/cover/path/to/page`を追加します。MDXでmetadataを設定するには`page.tsx`と同様に`metadata`を`export`します。参考: [configuring/mdx#frontmatter](https://nextjs.org/docs/pages/building-your-application/configuring/mdx#frontmatter)
 

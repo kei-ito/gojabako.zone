@@ -25,7 +25,6 @@
 
     code {
       white-space: pre-wrap;
-      margin-inline: 0.25em;
       padding-inline: 0.25em;
       padding-block: 0.15em;
       font-family: var(--gjFontMonospace);
@@ -119,7 +118,6 @@
     }
 
     table {
-      min-inline-size: 20em;
       border-collapse: collapse;
     }
 
@@ -215,8 +213,10 @@
       display: flex;
       flex-direction: row;
       align-items: flex-end;
+      block-size: 0;
       font-size: 80%;
       line-height: 1.25em;
+      overflow: visible;
 
       & > * {
         margin-inline-start: 0.5em;
@@ -233,8 +233,7 @@
     }
 
     figure {
-      margin-block-end: 1em;
-      overflow: auto;
+      margin-block: 1em;
       inline-size: unset;
 
       & > * {
@@ -243,7 +242,9 @@
       }
 
       &.caption {
-        margin-block-start: 1em;
+        & > figcaption {
+          block-size: unset;
+        }
       }
 
       &[data-type='table'] {
