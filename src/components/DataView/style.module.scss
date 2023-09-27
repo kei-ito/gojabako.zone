@@ -19,6 +19,7 @@
 
 .value {
   white-space: pre-wrap;
+  word-break: break-all;
   font-family: var(--gjFontMonospace);
   font-size: 14px;
 }
@@ -111,6 +112,18 @@
         &.last {
           border-block-end: none;
         }
+      }
+    }
+
+    &.primitive {
+      display: block;
+
+      & > .type {
+        margin-inline-end: 0.3em;
+      }
+
+      & > .value {
+        display: inline;
       }
     }
   }

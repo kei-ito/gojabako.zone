@@ -335,6 +335,7 @@
           line-height: 1.4;
           background-color: var(--gjColorBackground);
           overflow-x: auto;
+          white-space: pre;
 
           & > .hljs-ln {
             --gjColorText: var(--gjGray4);
