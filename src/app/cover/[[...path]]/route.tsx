@@ -39,17 +39,7 @@ export const GET = async (req: NextRequest) => {
     ...size,
     fonts: await Promise.all([
       loadFont(
-        new URL(
-          '../../../../public/fonts/noto-sans-jp/japanese-500-normal.woff',
-          import.meta.url,
-        ),
-        { name: 'Noto Sans JP', style: 'normal', weight: 500 },
-      ),
-      loadFont(
-        new URL(
-          '../../../../public/fonts/noto-sans-jp/japanese-500-normal.woff',
-          import.meta.url,
-        ),
+        new URL('/fonts/noto-sans-jp/japanese-500-normal.woff', req.nextUrl),
         { name: 'Noto Sans JP', style: 'normal', weight: 500 },
       ),
     ]),
