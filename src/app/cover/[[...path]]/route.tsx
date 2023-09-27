@@ -29,21 +29,6 @@ const loadFont = async (
   return { ...options, data: await res.arrayBuffer() };
 };
 
-const notoSansJpLatin500 = loadFont(
-  new URL(
-    '../../../../public/fonts/noto-sans-jp/japanese-500-normal.woff',
-    import.meta.url,
-  ),
-  { name: 'Noto Sans JP', style: 'normal', weight: 500 },
-);
-const notoSansJpJp500 = loadFont(
-  new URL(
-    '../../../../public/fonts/noto-sans-jp/japanese-500-normal.woff',
-    import.meta.url,
-  ),
-  { name: 'Noto Sans JP', style: 'normal', weight: 500 },
-);
-
 export const GET = async (req: NextRequest) => {
   const pagePath = req.nextUrl.pathname.slice(6);
   const page = pageList.find((p) => p.path === pagePath);
@@ -52,7 +37,22 @@ export const GET = async (req: NextRequest) => {
   }
   return new ImageResponse(<ImageComponent page={page} />, {
     ...size,
-    fonts: await Promise.all([notoSansJpLatin500, notoSansJpJp500]),
+    fonts: await Promise.all([
+      loadFont(
+        new URL(
+          '../../../../public/fonts/noto-sans-jp/japanese-500-normal.woff',
+          import.meta.url,
+        ),
+        { name: 'Noto Sans JP', style: 'normal', weight: 500 },
+      ),
+      loadFont(
+        new URL(
+          '../../../../public/fonts/noto-sans-jp/japanese-500-normal.woff',
+          import.meta.url,
+        ),
+        { name: 'Noto Sans JP', style: 'normal', weight: 500 },
+      ),
+    ]),
     // debug: true,
   });
 };
