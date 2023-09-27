@@ -1,5 +1,13 @@
 import type { StoryObj } from '@storybook/react';
-import * as g1 from '../Select/index.stories';
+import * as g1 from '../Button/index.stories';
+import * as g2 from '../CryptoKey/index.stories';
+import * as g3 from '../DataView/index.stories';
+import * as g4 from '../Select/index.stories';
+import * as g5 from '../StoryElement/index.stories';
 type Stories = Record<string, StoryObj>;
 export const storyGroups = new Map<string, Stories>();
-storyGroups.set('Select', g1 as Stories);
+storyGroups.set('Button', g1 as Stories);
+storyGroups.set('CryptoKey', g2 as Stories);
+storyGroups.set('DataView', g3 as Stories);
+storyGroups.set('Select', g4 as Stories);
+storyGroups.set('StoryElement', g5 as Stories);

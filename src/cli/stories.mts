@@ -5,6 +5,7 @@ import { watch } from 'chokidar';
 import { componentsDir, rootDir, srcDir } from '../util/node/directories.mts';
 import { formatCode } from '../util/node/formatCode.mts';
 import { walkFiles } from '../util/node/walkFiles.mts';
+import { noop } from '../util/noop.mts';
 
 const dest = new URL('Storybook/all.mts', componentsDir);
 const storySuffix = '/index.stories.tsx';
@@ -37,25 +38,26 @@ const generate = async () => {
 };
 
 if (process.argv.includes('--watch')) {
-  let previousPromise: Promise<URL> | undefined;
-  const update = async () => {
-    await previousPromise;
-    // eslint-disable-next-line require-atomic-updates
-    previousPromise = generate();
+  let timerId = setTimeout(noop);
+  const update = () => {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      generate().catch(onError);
+    }, 100);
   };
   const onChange = (filePath: string) => {
     if (filePath.endsWith(storySuffix)) {
       storyFiles.add(filePath);
-      update().catch(onError);
+      update();
     }
   };
   const onUnlink = (filePath: string) => {
     if (filePath.endsWith(storySuffix)) {
       storyFiles.delete(filePath);
-      update().catch(onError);
+      update();
     }
   };
-  watch(fileURLToPath(srcDir), { ignoreInitial: true })
+  watch(fileURLToPath(srcDir), { ignoreInitial: false })
     .on('add', onChange)
     .on('change', onChange)
     .on('unlink', onUnlink);
