@@ -1,0 +1,47 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  border-block-end: solid var(--gj1px) var(--gjGray4);
+}
+
+.board {
+  align-self: stretch;
+  justify-self: stretch;
+  background-color: var(--gjGray1);
+}
+
+.info {
+  display: grid;
+  grid-auto-flow: row;
+  align-content: end;
+  padding: 1em;
+  border-inline-start: solid var(--gj1px) var(--gjGray4);
+}
+
+.cell {
+  & > rect {
+    fill: var(--gjGray3);
+    cursor: pointer;
+  }
+
+  & > text {
+    font-size: 0.18px;
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+
+    &.buffer {
+      font-size: 0.12px;
+      font-weight: 600;
+    }
+  }
+}
+
+.handle {
+  fill: var(--gjGray4);
+  pointer-events: auto;
+
+  &.active {
+    fill: var(--gjYellow3);
+  }
+}

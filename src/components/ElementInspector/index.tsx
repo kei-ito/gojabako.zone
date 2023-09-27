@@ -1,6 +1,7 @@
 'use client';
 import type { ChangeEvent } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { IconClass } from '../../util/classnames.mts';
 import { isClient } from '../../util/env.mts';
 import { noop } from '../../util/noop.mts';
 import * as style from './style.module.scss';
@@ -64,7 +65,7 @@ const BaseWidthSelector = ({ parent }: BaseWidthSelectorProps) => {
   );
   return (
     <>
-      <label className="material-symbols-rounded" htmlFor="BaseWidthSelector">
+      <label className={IconClass} htmlFor="BaseWidthSelector">
         width
       </label>
       <select id="BaseWidthSelector" onChange={onChange} value={baseWidth}>

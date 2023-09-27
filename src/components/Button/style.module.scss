@@ -3,6 +3,7 @@
   align-items: center;
   justify-items: center;
   min-inline-size: 4em;
+  min-block-size: 2em;
   padding-block: 0.3em;
   padding-inline: 0.8em;
   border-radius: 0.3em;
@@ -11,6 +12,17 @@
   font-weight: 600;
   line-height: 1.2;
   text-align: start;
+
+  &.icon {
+    grid-template-columns: auto 1fr;
+    padding-inline-start: 0.6em;
+    column-gap: 0.3em;
+
+    & > .icon {
+      font-size: 150%;
+      line-height: 0;
+    }
+  }
 
   &.primary {
     background-color: var(--gjBlue5);
