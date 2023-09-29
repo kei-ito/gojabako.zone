@@ -1,12 +1,15 @@
 .container {
-  z-index: 1;
+  z-index: 9999;
   position: sticky;
   display: grid;
-  grid-template-columns: var(--gjBaseWidth);
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: 1fr;
   justify-content: center;
+  column-gap: 0.5em;
   inset-block-start: 0;
   inset-inline: 0;
   block-size: var(--gjHeaderHeight);
+  padding-inline: calc(50% - var(--gjBaseWidth) / 2);
   background-color: hsl(0deg 0% 100% / 80%);
   backdrop-filter: blur(2px);
   font-weight: 500;
@@ -17,45 +20,39 @@
     --gjBaseWidth: calc(100% - 2em);
   }
 
-  & > div {
+  & > * {
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    grid-template-rows: 1fr;
-    column-gap: 0.5em;
+    grid-auto-flow: column;
+    align-items: center;
+  }
 
-    & > * {
+  & > a {
+    text-decoration: none;
+    color: inherit;
+
+    & > span {
+      padding-block-start: var(--gj1px);
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &[href='/'] {
+      grid-column: 1/2;
       display: grid;
-      grid-auto-flow: column;
+      grid-template-columns: auto auto;
+      column-gap: 0.4em;
       align-items: center;
     }
 
-    & > a {
-      text-decoration: none;
-      color: inherit;
-
-      & > span {
-        padding-block-start: var(--gj1px);
-      }
-
-      &:hover {
-        text-decoration: underline;
-      }
-
-      &[href='/'] {
-        grid-column: 1/2;
-        display: grid;
-        grid-template-columns: 2em auto;
-        column-gap: 0.4em;
-        align-items: center;
-      }
-
-      &[href='/author'] {
-        grid-column: -2/-1;
-      }
+    &[href='/author'] {
+      grid-column: -2/-1;
     }
   }
 }
 
 .logo {
+  inline-size: 2em;
   margin-inline: 0;
 }

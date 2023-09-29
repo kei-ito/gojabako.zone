@@ -5,6 +5,11 @@ import { getPageData } from '../util/node/getPageData.mts';
 import { walkFiles } from '../util/node/walkFiles.mts';
 import type { PageData } from '../util/type.mts';
 
+if (process.env.CI) {
+  console.info('build/pageList.mts: skipped');
+  process.exit();
+}
+
 const listPageFiles = async function* (): AsyncGenerator<URL> {
   let count = 0;
   for await (const file of walkFiles(appDir)) {

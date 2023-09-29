@@ -30,7 +30,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
           crossOrigin={''}
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&family=Ubuntu+Mono&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap"
           rel="stylesheet"
         />
         <link

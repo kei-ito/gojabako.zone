@@ -119,7 +119,6 @@
     }
 
     table {
-      min-inline-size: 20em;
       border-collapse: collapse;
     }
 
@@ -215,8 +214,10 @@
       display: flex;
       flex-direction: row;
       align-items: flex-end;
+      block-size: 0;
       font-size: 80%;
       line-height: 1.25em;
+      overflow: visible;
 
       & > * {
         margin-inline-start: 0.5em;
@@ -233,8 +234,7 @@
     }
 
     figure {
-      margin-block-end: 1em;
-      overflow: auto;
+      margin-block: 1em;
       inline-size: unset;
 
       & > * {
@@ -243,7 +243,9 @@
       }
 
       &.caption {
-        margin-block-start: 1em;
+        & > figcaption {
+          block-size: unset;
+        }
       }
 
       &[data-type='table'] {
@@ -333,6 +335,7 @@
           line-height: 1.4;
           background-color: var(--gjColorBackground);
           overflow-x: auto;
+          white-space: pre;
 
           & > .hljs-ln {
             --gjColorText: var(--gjGray4);
