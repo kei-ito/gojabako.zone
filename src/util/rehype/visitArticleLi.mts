@@ -1,6 +1,6 @@
 import { isString } from '@nlib/typing';
 import { EXIT, SKIP } from 'unist-util-visit';
-import { ClassIcon } from '../classnames.mts';
+import { IconClass } from '../classnames.mts';
 import type { VFileLike } from '../unified.mts';
 import { addClass } from './className.mts';
 import {
@@ -28,7 +28,7 @@ export const visitArticleLi =
         a.children.splice(
           0,
           a.children.length,
-          createHastElement('span', { className: [ClassIcon] }, 'arrow_insert'),
+          createHastElement('span', { className: [IconClass] }, 'arrow_insert'),
         );
         return EXIT;
       },
