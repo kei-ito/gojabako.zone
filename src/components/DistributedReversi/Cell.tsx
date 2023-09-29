@@ -6,7 +6,7 @@ import { noop } from '../../util/noop.mts';
 import { rcCell, rcSendMessage } from './recoil.mts';
 import * as style from './style.module.scss';
 import { listDRAdjacents, parseDRCoordinate } from './util.mts';
-import type { DRCellState, DRCoordinate } from './util.mts';
+import type { DRCoordinate } from './util.mts';
 
 interface DistributedReversiCellProps {
   id: DRCoordinate;
@@ -24,29 +24,7 @@ export const DistributedReversiCell = ({ id }: DistributedReversiCellProps) => (
 
 const Cell = ({ id }: DistributedReversiCellProps) => {
   const { state, sharedState } = useRecoilValue(rcCell(id)) ?? {};
-  const onClick = useRecoilCallback(
-    ({ set }) =>
-      (event: MouseEvent) => {
-        event.stopPropagation();
-        let nextState: DRCellState = 'initial';
-        set(rcCell(id), (cell) => {
-          if (!cell || cell.state === 'initial') {
-            return cell;
-          }
-          nextState = cell.state + 1;
-          for (const to of listDRAdjacents(id)) {
-            set(rcSendMessage, {
-              from: id,
-              to,
-              type: 'test',
-              state: nextState,
-            });
-          }
-          return { ...cell, state: nextState };
-        });
-      },
-    [id],
-  );
+  const onClick = useOnClick(id);
   const [x, y] = parseDRCoordinate(id);
   const size = 0.9;
   const r = 0.1;
@@ -72,6 +50,29 @@ const Cell = ({ id }: DistributedReversiCellProps) => {
     </>
   );
 };
+
+const useOnClick = (id: DRCoordinate) =>
+  useRecoilCallback(
+    ({ set }) =>
+      (event: MouseEvent) => {
+        event.stopPropagation();
+        set(rcCell(id), (cell) => {
+          if (!cell || cell.sharedState === 'initial') {
+            return cell;
+          }
+          for (const to of listDRAdjacents(id)) {
+            set(rcSendMessage, {
+              from: id,
+              to,
+              type: 'test',
+              state: cell.sharedState,
+            });
+          }
+          return { ...cell, state: cell.sharedState };
+        });
+      },
+    [id],
+  );
 
 interface TxProps extends DistributedReversiCellProps {
   /** 0:R 1:B 2:L 3:T */

@@ -109,6 +109,20 @@ export const rcInitCell = selector<DRCoordinate>({
   },
 });
 
+export const rcAddCell = selector<DRCoordinate>({
+  key: 'rcAddCell',
+  get: () => `0,0`,
+  set: ({ get, set }, coordinate) => {
+    if (coordinate instanceof DefaultValue) {
+      return;
+    }
+    const cell = get(rcCell(coordinate));
+    if (!cell) {
+      set(rcInitCell, coordinate);
+    }
+  },
+});
+
 export const rcSendMessage = selector<
   (DRMessage & { from: DRCoordinate; to: DRCoordinate }) | null
 >({

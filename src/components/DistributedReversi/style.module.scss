@@ -25,9 +25,12 @@
 }
 
 .cell {
+  user-select: none;
+
   & > rect {
     fill: var(--gjGray3);
     cursor: pointer;
+    pointer-events: auto;
   }
 
   & > text {

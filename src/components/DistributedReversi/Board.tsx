@@ -5,8 +5,8 @@ import { noop } from '../../util/noop.mts';
 import { useRect } from '../use/Rect.mts';
 import { DistributedReversiCell } from './Cell';
 import {
+  rcAddCell,
   rcCellList,
-  rcInitCell,
   rcViewBox,
   rcXYWHZ,
   rcZoom,
@@ -58,7 +58,7 @@ const useOnClick = () => {
         const rect = currentTarget.getBoundingClientRect();
         const cx = Math.round(x + (clientX - rect.left) / z);
         const cy = Math.round(y + (clientY - rect.top) / z);
-        set(rcInitCell, `${cx},${cy}` as const);
+        set(rcAddCell, `${cx},${cy}` as const);
       },
     [xywhz],
   );
@@ -133,10 +133,11 @@ const useGrab = (board: HTMLElement | null) => {
     board.addEventListener(
       'pointerdown',
       (down: PointerEvent) => {
-        if (board.dataset.dragging) {
+        const target = down.target as HTMLElement | null;
+        if (!target || board.dataset.dragging) {
           return;
         }
-        board.setPointerCapture(down.pointerId);
+        target.setPointerCapture(down.pointerId);
         abc2.abort();
         abc2 = new AbortController();
         const diff = (e: PointerEvent): [number, number] => [
@@ -155,6 +156,7 @@ const useGrab = (board: HTMLElement | null) => {
           }
         };
         const onUp = (e: PointerEvent) => {
+          target.releasePointerCapture(down.pointerId);
           abc2.abort();
           set(([x, y, w, h, z]) => {
             const d = diff(e);
