@@ -1,52 +1,47 @@
 import { DefaultValue, atom, atomFamily, selector } from 'recoil';
-import { clamp as c } from '../../util/clamp.mts';
+import { clamp } from '../../util/clamp.mts';
 import { parseDRCoordinate } from './util.mts';
 import type { DRCell, DRCoordinate, DRMessage } from './util.mts';
 
-export const zoom = (() => {
-  const logMin = -0.5;
-  const logMax = 1;
-  const logClamp = (value: number) => c(value, logMin, logMax);
-  const min = Math.E ** logMin;
-  const max = Math.E ** logMax;
-  const clamp = (value: number) => c(value, min, max);
-  return { logMin, logMax, logClamp, min, max, clamp };
-})();
+export const zoom = { min: 40, max: 200 };
 
-type XYWHZ = [number, number, number, number, number];
+type XYWHZ =
+  | [number, number, number, number, number, [number, number]]
+  | [number, number, number, number, number];
 
 export const rcXYWHZ = atom<XYWHZ>({
   key: 'rcXYZ',
-  default: [0, 0, 0, 0, 1],
+  default: [0, 0, 0, 0, 100],
 });
 
-export const rcZoom = selector<{ z: number; cx: number; cy: number }>({
+export const rcViewBox = selector<string>({
+  key: 'rcViewBox',
+  get: ({ get }) => {
+    const [x, y, w, h, z, d] = get(rcXYWHZ);
+    const r = (v: number) => v.toFixed(3);
+    if (d) {
+      return `${r(x - d[0] / z)} ${r(y - d[1] / z)} ${r(w)} ${r(h)}`;
+    }
+    return `${r(x)} ${r(y)} ${r(w)} ${r(h)}`;
+  },
+});
+
+export const rcZoom = selector<{ z: number; cx?: number; cy?: number }>({
   key: 'rcZoom',
-  get: ({ get }) => ({ z: get(rcXYWHZ)[4], cx: 0, cy: 0 }),
+  get: ({ get }) => ({ z: get(rcXYWHZ)[4] }),
   set: ({ set }, value) => {
     if (value instanceof DefaultValue) {
       return;
     }
     set(rcXYWHZ, ([x, y, w, h, z]) => {
-      const newZ = zoom.clamp(value.z);
+      const newZ = clamp(value.z, zoom.min, zoom.max);
       const rz = newZ / z;
-      const newW = w * rz;
-      const newH = h * rz;
-      const newX = x - (newW - w) * value.cx;
-      const newY = y - (newH - h) * value.cy;
+      const newW = w / rz;
+      const newH = h / rz;
+      const newX = x - (newW - w) * (value.cx ?? 0.5);
+      const newY = y - (newH - h) * (value.cy ?? 0.5);
       return [newX, newY, newW, newH, newZ] as XYWHZ;
     });
-  },
-});
-
-export const rcZoomLog = selector<number>({
-  key: 'rcZoomLog',
-  get: ({ get }) => Math.log(get(rcXYWHZ)[4]),
-  set: ({ set }, value) => {
-    if (value instanceof DefaultValue) {
-      return;
-    }
-    set(rcZoom, { z: Math.E ** value, cx: 0.5, cy: 0.5 });
   },
 });
 

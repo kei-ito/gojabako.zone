@@ -4,23 +4,28 @@ import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
 import { noop } from '../../util/noop.mts';
 import { useRect } from '../use/Rect.mts';
 import { DistributedReversiCell } from './Cell';
-import { rcCellList, rcInitCell, rcXYWHZ } from './recoil.mts';
+import {
+  rcCellList,
+  rcInitCell,
+  rcViewBox,
+  rcXYWHZ,
+  rcZoom,
+} from './recoil.mts';
 import * as style from './style.module.scss';
 import type { DRCoordinate } from './util.mts';
-
-const baseCellSize = 100;
 
 export const DistributedReversiBoard = () => {
   const [element, setElement] = useState<Element | null>(null);
   useSyncRect(element);
   const onClick = useOnClick();
   useWheel(element as HTMLElement);
-  const [x, y, w, h] = useRecoilValue(rcXYWHZ);
+  useGrab(element as HTMLElement);
+  const viewBox = useRecoilValue(rcViewBox);
   return (
     <svg
       ref={setElement}
       className={style.board}
-      viewBox={`${x} ${y} ${w} ${h}`}
+      viewBox={viewBox}
       onClick={onClick}
     >
       {element && <Cells />}
@@ -28,16 +33,31 @@ export const DistributedReversiBoard = () => {
   );
 };
 
+const Cells = () => {
+  const list = useRecoilValue(rcCellList);
+  return [...listCell(list)];
+};
+
+const listCell = function* (
+  list: Iterable<DRCoordinate>,
+): Generator<ReactNode> {
+  for (const id of list) {
+    yield <DistributedReversiCell key={id} id={id} />;
+  }
+};
+
 const useOnClick = () => {
   const xywhz = useRecoilValue(rcXYWHZ);
   return useRecoilCallback(
     ({ set }) =>
       ({ clientX, clientY, currentTarget }: MouseEvent) => {
+        if ((currentTarget as HTMLElement).dataset.dragging) {
+          return;
+        }
         const [x, y, , , z] = xywhz;
         const rect = currentTarget.getBoundingClientRect();
-        const s = z / baseCellSize;
-        const cx = Math.round(x + (clientX - rect.left) * s);
-        const cy = Math.round(y + (clientY - rect.top) * s);
+        const cx = Math.round(x + (clientX - rect.left) / z);
+        const cy = Math.round(y + (clientY - rect.top) / z);
         set(rcInitCell, `${cx},${cy}` as const);
       },
     [xywhz],
@@ -61,19 +81,11 @@ const useSyncRect = (element: Element | null) => {
           return;
         }
         setXYZ(([x, y, _w, _h, z]) => {
-          const s = z / baseCellSize;
-          return [x - (dx * s) / 2, y - (dy * s) / 2, w * s, h * s, z];
+          return [x - dx / z / 2, y - dy / z / 2, w / z, h / z, z];
         });
       } else {
         setXYZ(([_x, _y, _w, _h, z]) => {
-          const s = z / baseCellSize;
-          return [
-            (rect.width / -2) * s,
-            (rect.height / -2) * s,
-            w * s,
-            h * s,
-            z,
-          ];
+          return [rect.width / -2 / z, rect.height / -2 / z, w / z, h / z, z];
         });
       }
       setLastRect(rect);
@@ -83,39 +95,83 @@ const useSyncRect = (element: Element | null) => {
   );
 };
 
-const useWheel = (element: HTMLElement | null) => {
-  const setXYZ = useSetRecoilState(rcXYWHZ);
+const useWheel = (board: HTMLElement | null) => {
+  const setZoom = useSetRecoilState(rcZoom);
   useEffect(() => {
-    if (!element) {
+    if (!board) {
       return noop;
     }
     const abc = new AbortController();
-    element.addEventListener(
+    board.addEventListener(
       'wheel',
       (event: WheelEvent) => {
         event.preventDefault();
-        setXYZ(([x, y, w, h, z]) => {
-          const s = 0.01 * z;
-          const newX = x + event.deltaX * s;
-          const newY = y + event.deltaY * s;
-          return [newX, newY, w, h, z];
+        setZoom(({ z }) => {
+          const rect = board.getBoundingClientRect();
+          const cx = (event.clientX - rect.left) / rect.width;
+          const cy = (event.clientY - rect.top) / rect.height;
+          const rz = 1 - event.deltaY / 300;
+          return { z: z * rz, cx, cy };
         });
       },
       { passive: false, signal: abc.signal },
     );
     return () => abc.abort();
-  }, [element, setXYZ]);
+  }, [board, setZoom]);
 };
 
-const Cells = () => {
-  const list = useRecoilValue(rcCellList);
-  return [...listCell(list)];
-};
-
-const listCell = function* (
-  list: Iterable<DRCoordinate>,
-): Generator<ReactNode> {
-  for (const id of list) {
-    yield <DistributedReversiCell key={id} id={id} />;
-  }
+// eslint-disable-next-line max-lines-per-function
+const useGrab = (board: HTMLElement | null) => {
+  const set = useSetRecoilState(rcXYWHZ);
+  // eslint-disable-next-line max-lines-per-function
+  useEffect(() => {
+    if (!board) {
+      return noop;
+    }
+    const abc = new AbortController();
+    let abc2 = new AbortController();
+    board.addEventListener(
+      'pointerdown',
+      (down: PointerEvent) => {
+        if (board.dataset.dragging) {
+          return;
+        }
+        board.setPointerCapture(down.pointerId);
+        abc2.abort();
+        abc2 = new AbortController();
+        const diff = (e: PointerEvent): [number, number] => [
+          e.clientX - down.clientX,
+          e.clientY - down.clientY,
+        ];
+        const onMove = (e: PointerEvent) => {
+          if (e.pointerId === down.pointerId) {
+            set(([x, y, w, h, z]) => {
+              const d = diff(e);
+              if (!board.dataset.dragging && 10 < Math.hypot(...d)) {
+                board.dataset.dragging = '1';
+              }
+              return [x, y, w, h, z, d];
+            });
+          }
+        };
+        const onUp = (e: PointerEvent) => {
+          abc2.abort();
+          set(([x, y, w, h, z]) => {
+            const d = diff(e);
+            return [x - d[0] / z, y - d[1] / z, w, h, z];
+          });
+          setTimeout(() => {
+            delete board.dataset.dragging;
+          });
+        };
+        board.addEventListener('pointermove', onMove, { signal: abc2.signal });
+        board.addEventListener('pointerup', onUp, { signal: abc2.signal });
+      },
+      { signal: abc.signal },
+    );
+    return () => {
+      abc.abort();
+      abc2.abort();
+    };
+  }, [board, set]);
 };

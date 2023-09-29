@@ -14,8 +14,14 @@
   display: grid;
   grid-auto-flow: row;
   align-content: end;
+  row-gap: 0.5em;
   padding: 1em;
   border-inline-start: solid var(--gj1px) var(--gjGray4);
+}
+
+.zoom {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
 }
 
 .cell {
