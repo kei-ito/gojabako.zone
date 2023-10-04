@@ -25,8 +25,8 @@ const InitGameButton = () => {
         reset(rcCellList);
         setTimeout(() => {
           const list = new Set<DRCoordinate>();
-          for (let x = -3; x <= 3; x++) {
-            for (let y = -3; y <= 3; y++) {
+          for (let x = -2; x <= 2; x++) {
+            for (let y = -2; y <= 2; y++) {
               const coordinate = `${x},${y}` as const;
               list.add(coordinate);
               set(rcInitCell, coordinate);

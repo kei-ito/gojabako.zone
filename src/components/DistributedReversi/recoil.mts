@@ -48,36 +48,6 @@ export const rcZoom = selector<{ z: number; cx?: number; cy?: number }>({
 export const rcCell = atomFamily<DRCell | null, DRCoordinate>({
   key: 'rcCell',
   default: null,
-  effects: [
-    ({ onSet, setSelf }) => {
-      onSet((cell) => {
-        if (!cell) {
-          return;
-        }
-        const nextCell: DRCell = {
-          ...cell,
-          rxb: [],
-          rxt: [],
-          rxl: [],
-          rxr: [],
-        };
-        for (const d of ['l', 'r', 'b', 't'] as const) {
-          for (const m of cell[`rx${d}` as const]) {
-            if (m.type === 'setShared') {
-              if (m.state === 'initial') {
-                if (nextCell.sharedState === 'initial') {
-                  nextCell.sharedState = 0;
-                }
-              } else {
-                nextCell.sharedState = m.state;
-              }
-            }
-          }
-        }
-        setSelf(nextCell);
-      });
-    },
-  ],
 });
 
 export const rcCellList = atom<Set<DRCoordinate>>({
@@ -93,8 +63,10 @@ export const rcInitCell = selector<DRCoordinate>({
       return;
     }
     set(rcCell(coordinate), {
+      id: coordinate,
       state: 'initial',
       sharedState: 'initial',
+      pending: null,
       rxt: [],
       rxr: [],
       rxb: [],

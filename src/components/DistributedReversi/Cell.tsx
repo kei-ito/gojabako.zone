@@ -1,12 +1,23 @@
 import type { MouseEvent } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  useRecoilCallback,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil';
 import { classnames } from '../../util/classnames.mts';
 import { noop } from '../../util/noop.mts';
 import { rcCell, rcSendMessage } from './recoil.mts';
 import * as style from './style.module.scss';
-import { listDRAdjacents, parseDRCoordinate } from './util.mts';
-import type { DRCoordinate } from './util.mts';
+import {
+  InitialOwnerId,
+  isOnlineCell,
+  listDRAdjacents,
+  nextOwnerId,
+  parseDRCoordinate,
+} from './util.mts';
+import type { DRCell, DRCoordinate, DRMessage } from './util.mts';
 
 interface DistributedReversiCellProps {
   id: DRCoordinate;
@@ -23,7 +34,7 @@ export const DistributedReversiCell = ({ id }: DistributedReversiCellProps) => (
 );
 
 const Cell = ({ id }: DistributedReversiCellProps) => {
-  const { state, sharedState } = useRecoilValue(rcCell(id)) ?? {};
+  const { state, sharedState, pending } = useRecoilValue(rcCell(id)) ?? {};
   const onClick = useOnClick(id);
   const [x, y] = parseDRCoordinate(id);
   const size = 0.9;
@@ -43,6 +54,7 @@ const Cell = ({ id }: DistributedReversiCellProps) => {
       />
       <text x={x} y={y - lineHeight}>
         {state}
+        {pending === null ? null : ` ${pending}?`}
       </text>
       <text x={x} y={y + lineHeight}>
         {sharedState}
@@ -64,11 +76,16 @@ const useOnClick = (id: DRCoordinate) =>
             set(rcSendMessage, {
               from: id,
               to,
-              type: 'test',
+              type: 'press',
+              at: id,
               state: cell.sharedState,
             });
           }
-          return { ...cell, state: cell.sharedState };
+          return {
+            ...cell,
+            state: cell.sharedState,
+            sharedState: nextOwnerId(cell.sharedState),
+          };
         });
       },
     [id],
@@ -85,8 +102,8 @@ const Tx = ({ id, t }: TxProps) => {
   const cell = useRecoilValue(rcCell(id));
   const nextId = useNextId(id, t);
   const send = useSetRecoilState(rcSendMessage);
-  const next = useRecoilValue(rcCell(nextId));
-  const buffer = next ? next[(['rxl', 'rxt', 'rxr', 'rxb'] as const)[t]] : null;
+  const [next, setNextCell] = useRecoilState(rcCell(nextId));
+  const direction = (['rxl', 'rxt', 'rxr', 'rxb'] as const)[t];
   const [cx, cy] = useMemo(() => {
     const r = 0.48;
     const tt = ((t - 0.2) * Math.PI) / 2;
@@ -97,40 +114,69 @@ const Tx = ({ id, t }: TxProps) => {
     if (sent || !next || !cell) {
       return noop;
     }
-    const timerId = setTimeout(
-      () => {
-        send({
-          from: id,
-          to: nextId,
-          type: 'setShared',
-          state: cell.sharedState,
-        });
-        setSent(true);
-      },
-      50 + 100 * Math.random(),
-    );
+    const timerId = setTimeout(() => {
+      send({
+        from: id,
+        to: nextId,
+        type: 'setShared',
+        state: cell.sharedState,
+      });
+      setSent(true);
+    }, getMsWithLag());
     return () => clearTimeout(timerId);
   }, [sent, id, nextId, cell, next, send]);
+  useEffect(() => {
+    if (!next) {
+      return noop;
+    }
+    const timerId = setTimeout(() => {
+      const m = next[direction][0] as DRMessage | undefined;
+      if (!m) {
+        return;
+      }
+      const nextCell: DRCell = { ...next };
+      if (m.type === 'setShared') {
+        if (m.state === 'initial') {
+          if (nextCell.sharedState === 'initial') {
+            nextCell.sharedState = InitialOwnerId;
+          }
+        } else {
+          nextCell.sharedState = m.state;
+        }
+      } else if (m.type === 'press') {
+        nextCell.sharedState = nextOwnerId(m.state);
+        if (nextCell.state !== m.state && isOnlineCell(id, m.at)) {
+          nextCell.pending = m.state;
+        }
+      }
+      nextCell[direction] = next[direction].slice(1);
+      setNextCell(nextCell);
+    }, getMsWithLag());
+    return () => clearTimeout(timerId);
+  }, [next, id, setNextCell, direction]);
   const onClick = useCallback(
     (event: MouseEvent) => {
-      event.stopPropagation();
-      // eslint-disable-next-line no-alert
-      alert(JSON.stringify(buffer));
+      if (next) {
+        event.stopPropagation();
+        // eslint-disable-next-line no-alert
+        alert(JSON.stringify(next[direction]));
+      }
     },
-    [buffer],
+    [next, direction],
   );
-  if (!next || !buffer) {
+  if (!next) {
     return null;
   }
+  const bufferedCount = next[direction].length;
   return (
     <>
       <path
         d={`M${cx.toFixed(3)} ${cy.toFixed(3)}${arrowD[t]}`}
-        className={classnames(style.handle, 0 < buffer.length && style.active)}
+        className={classnames(style.handle, 0 < bufferedCount && style.active)}
         onClick={onClick}
       />
       <text x={cx} y={cy} className={style.buffer}>
-        {buffer.length}
+        {bufferedCount}
       </text>
     </>
   );
@@ -162,3 +208,5 @@ const useNextId = (id: DRCoordinate, t: 0 | 1 | 2 | 3) =>
         return `${x},${y - 1}`;
     }
   }, [id, t]);
+
+const getMsWithLag = () => 300 + 300 * Math.random();

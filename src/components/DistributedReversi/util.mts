@@ -1,16 +1,18 @@
+import type { Nominal } from '@nlib/typing';
+
+export type OwnerId = Nominal<number, 'Owner'>;
 export type DRCoordinate = `${number},${number}`;
-
-export type DRSharedState = number | 'initial';
-
-export type DRCellState = number | 'initial';
-
+export type DRSharedState = OwnerId | 'initial';
+export type DRCellState = OwnerId | 'initial';
 export type DRMessage =
-  | { type: 'setShared'; state: DRSharedState }
-  | { type: 'test'; state: DRCellState };
-
+  | { type: 'ping' }
+  | { type: 'press'; at: DRCoordinate; state: Exclude<DRCellState, 'initial'> }
+  | { type: 'setShared'; state: DRSharedState };
 export interface DRCell {
+  id: DRCoordinate;
   sharedState: DRSharedState;
   state: DRCellState;
+  pending: OwnerId | null;
   rxt: Array<DRMessage>;
   rxr: Array<DRMessage>;
   rxb: Array<DRMessage>;
@@ -30,4 +32,18 @@ export const listDRAdjacents = function* (
   yield `${x},${y - 1}`;
   yield `${x + 1},${y}`;
   yield `${x},${y + 1}`;
+};
+
+export const InitialOwnerId = 0 as OwnerId;
+export const nextOwnerId = (id: OwnerId): OwnerId => (id + 1) as OwnerId;
+
+export const isOnlineCell = (a: DRCoordinate, b: DRCoordinate): boolean => {
+  const aa = parseDRCoordinate(a);
+  const bb = parseDRCoordinate(b);
+  return (
+    aa[0] === bb[0] ||
+    aa[1] === bb[1] ||
+    aa[0] + aa[1] === bb[0] + bb[1] ||
+    aa[0] - aa[1] === bb[0] - bb[1]
+  );
 };
