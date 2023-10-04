@@ -1,7 +1,6 @@
 import { DefaultValue, atom, atomFamily, selector } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
-import { parseDRCoordinate } from './util.mts';
-import type { DRCell, DRCoordinate, DRMessage } from './util.mts';
+import type { DRCell, DRCoordinate } from './util.mts';
 
 export const zoom = { min: 40, max: 200 };
 
@@ -58,12 +57,12 @@ export const rcCellList = atom<Set<DRCoordinate>>({
 export const rcInitCell = selector<DRCoordinate>({
   key: 'rcInitCell',
   get: () => `0,0`,
-  set: ({ set }, coordinate) => {
-    if (coordinate instanceof DefaultValue) {
+  set: ({ set }, id) => {
+    if (id instanceof DefaultValue) {
       return;
     }
-    set(rcCell(coordinate), {
-      id: coordinate,
+    set(rcCell(id), {
+      id,
       state: 'initial',
       sharedState: 'initial',
       pending: null,
@@ -71,12 +70,16 @@ export const rcInitCell = selector<DRCoordinate>({
       rxr: [],
       rxb: [],
       rxl: [],
+      txt: [],
+      txr: [],
+      txb: [],
+      txl: [],
     });
     set(rcCellList, (list) => {
-      if (list.has(coordinate)) {
+      if (list.has(id)) {
         return list;
       }
-      return new Set(list).add(coordinate);
+      return new Set(list).add(id);
     });
   },
 });
@@ -92,37 +95,5 @@ export const rcAddCell = selector<DRCoordinate>({
     if (!cell) {
       set(rcInitCell, coordinate);
     }
-  },
-});
-
-export const rcSendMessage = selector<
-  (DRMessage & { from: DRCoordinate; to: DRCoordinate }) | null
->({
-  key: 'rcSendMessage',
-  get: () => null,
-  set: ({ set }, item) => {
-    if (!item || item instanceof DefaultValue) {
-      return;
-    }
-    const { from, to, ...message } = item;
-    set(rcCell(to), (cell) => {
-      if (cell) {
-        const [x1, y1] = parseDRCoordinate(from);
-        const [x2, y2] = parseDRCoordinate(to);
-        if (x1 < x2) {
-          return { ...cell, rxl: [...cell.rxl, message] };
-        }
-        if (x2 < x1) {
-          return { ...cell, rxr: [...cell.rxr, message] };
-        }
-        if (y1 < y2) {
-          return { ...cell, rxt: [...cell.rxt, message] };
-        }
-        if (y2 < y1) {
-          return { ...cell, rxb: [...cell.rxb, message] };
-        }
-      }
-      return cell;
-    });
   },
 });

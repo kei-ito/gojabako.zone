@@ -1,23 +1,20 @@
 import type { MouseEvent } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  useRecoilCallback,
-  useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-} from 'recoil';
+import { useEffect, useMemo, useState } from 'react';
+import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
 import { classnames } from '../../util/classnames.mts';
-import { noop } from '../../util/noop.mts';
-import { rcCell, rcSendMessage } from './recoil.mts';
+import { useOnClickLog } from '../use/OnClickLog.mts';
+import { rcCell } from './recoil.mts';
 import * as style from './style.module.scss';
+import { useTx } from './useTx.mts';
+import type { DRCoordinate, DRDirection, DRMessageSetShared } from './util.mts';
 import {
-  InitialOwnerId,
-  isOnlineCell,
-  listDRAdjacents,
+  allTxAndCoordinates,
+  getAdjecentId,
   nextOwnerId,
   parseDRCoordinate,
 } from './util.mts';
-import type { DRCell, DRCoordinate, DRMessage } from './util.mts';
+
+const r = 0.44;
 
 interface DistributedReversiCellProps {
   id: DRCoordinate;
@@ -26,10 +23,14 @@ interface DistributedReversiCellProps {
 export const DistributedReversiCell = ({ id }: DistributedReversiCellProps) => (
   <g id={encodeURIComponent(`cell${id}`)} className={style.cell}>
     <Cell id={id} />
-    <Tx id={id} t={0} />
-    <Tx id={id} t={1} />
-    <Tx id={id} t={2} />
-    <Tx id={id} t={3} />
+    <Tx id={id} d="l" />
+    <Tx id={id} d="t" />
+    <Tx id={id} d="r" />
+    <Tx id={id} d="b" />
+    <Rx id={id} d="l" />
+    <Rx id={id} d="t" />
+    <Rx id={id} d="r" />
+    <Rx id={id} d="b" />
   </g>
 );
 
@@ -38,15 +39,16 @@ const Cell = ({ id }: DistributedReversiCellProps) => {
   const onClick = useOnClick(id);
   const [x, y] = parseDRCoordinate(id);
   const size = 0.9;
-  const r = 0.1;
+  const round = 0.1;
   const lineHeight = 0.12;
+  useTx(id);
   return (
     <>
       <rect
         x={x - size / 2}
         y={y - size / 2}
-        rx={r}
-        ry={r}
+        rx={round}
+        ry={round}
         width={size}
         height={size}
         data-state={state}
@@ -69,22 +71,21 @@ const useOnClick = (id: DRCoordinate) =>
       (event: MouseEvent) => {
         event.stopPropagation();
         set(rcCell(id), (cell) => {
-          if (!cell || cell.sharedState === 'initial') {
+          const sharedState = cell?.sharedState;
+          if (!cell || !sharedState || sharedState === 'initial') {
             return cell;
           }
-          for (const to of listDRAdjacents(id)) {
-            set(rcSendMessage, {
-              from: id,
-              to,
-              type: 'press',
-              at: id,
-              state: cell.sharedState,
-            });
+          cell = { ...cell };
+          for (const [d, to] of allTxAndCoordinates(id)) {
+            cell[d] = [
+              ...cell[d],
+              { type: 'press', from: id, to, at: id, state: sharedState },
+            ];
           }
           return {
             ...cell,
-            state: cell.sharedState,
-            sharedState: nextOwnerId(cell.sharedState),
+            state: sharedState,
+            sharedState: nextOwnerId(sharedState),
           };
         });
       },
@@ -92,86 +93,44 @@ const useOnClick = (id: DRCoordinate) =>
   );
 
 interface TxProps extends DistributedReversiCellProps {
-  /** 0:R 1:B 2:L 3:T */
-  t: 0 | 1 | 2 | 3;
+  d: DRDirection;
 }
 
-// eslint-disable-next-line max-lines-per-function
-const Tx = ({ id, t }: TxProps) => {
+const Tx = ({ id, d }: TxProps) => {
   const [sent, setSent] = useState(false);
-  const cell = useRecoilValue(rcCell(id));
-  const nextId = useNextId(id, t);
-  const send = useSetRecoilState(rcSendMessage);
-  const [next, setNextCell] = useRecoilState(rcCell(nextId));
-  const direction = (['rxl', 'rxt', 'rxr', 'rxb'] as const)[t];
-  const [cx, cy] = useMemo(() => {
-    const r = 0.48;
-    const tt = ((t - 0.2) * Math.PI) / 2;
-    const [x, y] = parseDRCoordinate(id);
-    return [x + r * Math.cos(tt), y + r * Math.sin(tt)];
-  }, [id, t]);
+  const [cell, setCell] = useRecoilState(rcCell(id));
   useEffect(() => {
-    if (sent || !next || !cell) {
-      return noop;
-    }
-    const timerId = setTimeout(() => {
-      send({
-        from: id,
-        to: nextId,
-        type: 'setShared',
-        state: cell.sharedState,
+    if (!sent) {
+      setCell((c) => {
+        if (!c) {
+          return c;
+        }
+        const msg: DRMessageSetShared = {
+          type: 'setShared',
+          from: id,
+          to: getAdjecentId(id, d),
+          state: c.sharedState,
+        };
+        const k = `tx${d}` as const;
+        return { ...c, [k]: [...c[k], msg] };
       });
       setSent(true);
-    }, getMsWithLag());
-    return () => clearTimeout(timerId);
-  }, [sent, id, nextId, cell, next, send]);
-  useEffect(() => {
-    if (!next) {
-      return noop;
     }
-    const timerId = setTimeout(() => {
-      const m = next[direction][0] as DRMessage | undefined;
-      if (!m) {
-        return;
-      }
-      const nextCell: DRCell = { ...next };
-      if (m.type === 'setShared') {
-        if (m.state === 'initial') {
-          if (nextCell.sharedState === 'initial') {
-            nextCell.sharedState = InitialOwnerId;
-          }
-        } else {
-          nextCell.sharedState = m.state;
-        }
-      } else if (m.type === 'press') {
-        nextCell.sharedState = nextOwnerId(m.state);
-        if (nextCell.state !== m.state && isOnlineCell(id, m.at)) {
-          nextCell.pending = m.state;
-        }
-      }
-      nextCell[direction] = next[direction].slice(1);
-      setNextCell(nextCell);
-    }, getMsWithLag());
-    return () => clearTimeout(timerId);
-  }, [next, id, setNextCell, direction]);
-  const onClick = useCallback(
-    (event: MouseEvent) => {
-      if (next) {
-        event.stopPropagation();
-        // eslint-disable-next-line no-alert
-        alert(JSON.stringify(next[direction]));
-      }
-    },
-    [next, direction],
-  );
-  if (!next) {
+  }, [sent, id, setCell, d]);
+  const [cx, cy] = useMemo(() => {
+    const tt = ((getT(d) - 0.2) * Math.PI) / 2;
+    const [x, y] = parseDRCoordinate(id);
+    return [x + r * Math.cos(tt), y + r * Math.sin(tt)];
+  }, [id, d]);
+  const onClick = useOnClickLog(cell?.[`tx${d}`]);
+  if (!cell) {
     return null;
   }
-  const bufferedCount = next[direction].length;
+  const bufferedCount = cell[`tx${d}`].length;
   return (
     <>
       <path
-        d={`M${cx.toFixed(3)} ${cy.toFixed(3)}${arrowD[t]}`}
+        d={`M${cx.toFixed(3)} ${cy.toFixed(3)}${arrowD[getT(d)]}`}
         className={classnames(style.handle, 0 < bufferedCount && style.active)}
         onClick={onClick}
       />
@@ -182,31 +141,38 @@ const Tx = ({ id, t }: TxProps) => {
   );
 };
 
-const arrowD = ((a: number, b = a * 1.73) => ({
-  /** R */
-  0: `m${a / -2} 0v${a}l${b} ${-a}l${-b} ${-a}z`,
-  /** B */
-  1: `m0 ${a / -2}h${-a}l${a} ${b}l${a} ${-b}z`,
-  /** L */
-  2: `m${a / 2} 0v${a}l${-b} ${-a}l${b} ${-a}z`,
-  /** T */
-  3: `m0 ${a / 2}h${-a}l${a} ${-b}l${a} ${b}z`,
-}))(0.1);
-
-const useNextId = (id: DRCoordinate, t: 0 | 1 | 2 | 3) =>
-  useMemo<DRCoordinate>(() => {
+const Rx = ({ id, d }: TxProps) => {
+  const cell = useRecoilValue(rcCell(id));
+  const [cx, cy] = useMemo(() => {
+    const tt = ((getT(d) + 0.2) * Math.PI) / 2;
     const [x, y] = parseDRCoordinate(id);
-    switch (t) {
-      case 0:
-        return `${x + 1},${y}`;
-      case 1:
-        return `${x},${y + 1}`;
-      case 2:
-        return `${x - 1},${y}`;
-      case 3:
-      default:
-        return `${x},${y - 1}`;
-    }
-  }, [id, t]);
+    return [x + r * Math.cos(tt), y + r * Math.sin(tt)];
+  }, [id, d]);
+  const onClick = useOnClickLog(cell?.[`rx${d}`]);
+  if (!cell) {
+    return null;
+  }
+  const bufferedCount = cell[`rx${d}`].length;
+  return (
+    <>
+      <path
+        d={`M${cx.toFixed(3)} ${cy.toFixed(3)}${arrowD[getT(d, 2)]}`}
+        className={classnames(style.handle, 0 < bufferedCount && style.active)}
+        onClick={onClick}
+      />
+      <text x={cx} y={cy} className={style.buffer}>
+        {bufferedCount}
+      </text>
+    </>
+  );
+};
 
-const getMsWithLag = () => 300 + 300 * Math.random();
+const getT = (d: DRDirection, offset = 0): 0 | 1 | 2 | 3 =>
+  ((({ r: 0, b: 1, l: 2, t: 3 })[d] + offset) % 4) as 0 | 1 | 2 | 3;
+
+const arrowD = ((a: number, b = a / 1.8, c = a / 4) => ({
+  0: `m${a / -2.25} 0l${-c} ${b}h${a}l${c} ${-b}l${-c} ${-b}h${-a}z`,
+  1: `m0 ${a / -2.25}l${-b} ${-c}v${a}l${b} ${c}l${b} ${-c}v${-a}z`,
+  2: `m${a / 2.25} 0l${c} ${b}h${-a}l${-c} ${-b}l${c} ${-b}h${a}z`,
+  3: `m0 ${a / 2.25}l${-b} ${c}v${-a}l${b} ${-c}l${b} ${c}v${a}z`,
+}))(0.15);

@@ -23,17 +23,16 @@ const InitGameButton = () => {
           set(rcCell(id), null);
         }
         reset(rcCellList);
-        setTimeout(() => {
-          const list = new Set<DRCoordinate>();
-          for (let x = -2; x <= 2; x++) {
-            for (let y = -2; y <= 2; y++) {
-              const coordinate = `${x},${y}` as const;
-              list.add(coordinate);
-              set(rcInitCell, coordinate);
-            }
+        const list = new Set<DRCoordinate>();
+        const range = 1;
+        for (let x = -range; x <= range; x++) {
+          for (let y = -range; y <= range; y++) {
+            const coordinate = `${x},${y}` as const;
+            list.add(coordinate);
+            set(rcInitCell, coordinate);
           }
-          set(rcCellList, list);
-        }, 100);
+        }
+        setTimeout(() => set(rcCellList, list), 50);
       },
     [],
   );
