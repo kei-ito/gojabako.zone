@@ -1,20 +1,38 @@
+import type { ReactNode } from 'react';
 import { DefaultValue, atom, atomFamily, selector } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
-import type { DRCell, DRCoordinate } from './util.mts';
+import type { DRCell, DRCoordinate, DRDirection, DRMessage } from './util.mts';
 
 export const zoom = { min: 40, max: 200 };
+
+export const rcTooltip = atom<ReactNode>({ key: 'Tooltip', default: null });
+export const rcPointerPosition = atom<[number, number]>({
+  key: 'PointerPosition',
+  default: [0, 0],
+  effects: [
+    ({ setSelf }) => {
+      const abc = new AbortController();
+      addEventListener('pointermove', (e) => setSelf([e.clientX, e.clientY]), {
+        signal: abc.signal,
+      });
+      return () => abc.abort();
+    },
+  ],
+});
+export const rcTxDelayMs = atom<number>({ key: 'TxDelayMs', default: 300 });
+export const rcRxDelayMs = atom<number>({ key: 'RxDelayMs', default: 300 });
 
 type XYWHZ =
   | [number, number, number, number, number, [number, number]]
   | [number, number, number, number, number];
 
 export const rcXYWHZ = atom<XYWHZ>({
-  key: 'rcXYZ',
+  key: 'XYZ',
   default: [0, 0, 0, 0, 100],
 });
 
 export const rcViewBox = selector<string>({
-  key: 'rcViewBox',
+  key: 'ViewBox',
   get: ({ get }) => {
     const [x, y, w, h, z, d] = get(rcXYWHZ);
     const r = (v: number) => v.toFixed(3);
@@ -26,7 +44,7 @@ export const rcViewBox = selector<string>({
 });
 
 export const rcZoom = selector<{ z: number; cx?: number; cy?: number }>({
-  key: 'rcZoom',
+  key: 'Zoom',
   get: ({ get }) => ({ z: get(rcXYWHZ)[4] }),
   set: ({ set }, value) => {
     if (value instanceof DefaultValue) {
@@ -45,17 +63,22 @@ export const rcZoom = selector<{ z: number; cx?: number; cy?: number }>({
 });
 
 export const rcCell = atomFamily<DRCell | null, DRCoordinate>({
-  key: 'rcCell',
+  key: 'Cell',
   default: null,
 });
 
+export const rcMessageBuffer = atomFamily<
+  Array<DRMessage>,
+  `${DRCoordinate},${'rx' | 'tx'}${DRDirection}`
+>({ key: 'MessageBuffer', default: [] });
+
 export const rcCellList = atom<Set<DRCoordinate>>({
-  key: 'rcCellList',
+  key: 'CellList',
   default: new Set(),
 });
 
 export const rcInitCell = selector<DRCoordinate>({
-  key: 'rcInitCell',
+  key: 'InitCell',
   get: () => `0,0`,
   set: ({ set }, id) => {
     if (id instanceof DefaultValue) {
@@ -66,14 +89,6 @@ export const rcInitCell = selector<DRCoordinate>({
       state: 'initial',
       sharedState: 'initial',
       pending: null,
-      rxt: [],
-      rxr: [],
-      rxb: [],
-      rxl: [],
-      txt: [],
-      txr: [],
-      txb: [],
-      txl: [],
     });
     set(rcCellList, (list) => {
       if (list.has(id)) {
@@ -85,7 +100,7 @@ export const rcInitCell = selector<DRCoordinate>({
 });
 
 export const rcAddCell = selector<DRCoordinate>({
-  key: 'rcAddCell',
+  key: 'AddCell',
   get: () => `0,0`,
   set: ({ get, set }, coordinate) => {
     if (coordinate instanceof DefaultValue) {

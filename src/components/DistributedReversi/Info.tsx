@@ -1,9 +1,19 @@
+import type { ChangeEvent } from 'react';
 import { useCallback, useEffect } from 'react';
 import { useRecoilCallback, useRecoilState } from 'recoil';
+import { clamp } from '../../util/clamp.mts';
 import { SecondaryButton } from '../Button';
 import { useOnClickFullScreen } from '../use/OnClickFullScreen.mts';
 import { ZoomSlider } from '../ZoomSlider';
-import { rcCell, rcCellList, rcInitCell, rcZoom, zoom } from './recoil.mts';
+import {
+  rcCell,
+  rcCellList,
+  rcInitCell,
+  rcRxDelayMs,
+  rcTxDelayMs,
+  rcZoom,
+  zoom,
+} from './recoil.mts';
 import * as style from './style.module.scss';
 import type { DRCoordinate } from './util.mts';
 
@@ -11,6 +21,8 @@ export const DistributedReversiInfo = () => (
   <nav className={style.info}>
     <InitGameButton />
     <ZoomControl />
+    <TxDelayControl />
+    <RxDelayControl />
     <FullScreenButton />
   </nav>
 );
@@ -54,6 +66,42 @@ const ZoomControl = () => {
       max={zoom.max}
       onChangeValue={onChangeValue}
     />
+  );
+};
+
+const TxDelayControl = () => {
+  const [ms, setMs] = useRecoilState(rcTxDelayMs);
+  const onChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setMs(clamp(Math.round(Number(event.currentTarget.value)), 0, 5000));
+    },
+    [setMs],
+  );
+  const id = 'TxDelayMs';
+  return (
+    <section className={style.number}>
+      <label htmlFor={id}>送信遅延</label>
+      <input id={id} type="number" step={10} value={ms} onChange={onChange} />
+      <span>ms</span>
+    </section>
+  );
+};
+
+const RxDelayControl = () => {
+  const [ms, setMs] = useRecoilState(rcRxDelayMs);
+  const onChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setMs(clamp(Math.round(Number(event.currentTarget.value)), 0, 5000));
+    },
+    [setMs],
+  );
+  const id = 'RxDelayMs';
+  return (
+    <section className={style.number}>
+      <label htmlFor={id}>受信遅延</label>
+      <input id={id} type="number" step={10} value={ms} onChange={onChange} />
+      <span>ms</span>
+    </section>
   );
 };
 

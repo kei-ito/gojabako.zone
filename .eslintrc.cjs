@@ -16,6 +16,13 @@ module.exports = {
         patterns: ['**/*.mjs'],
       },
     ],
+    'react-hooks/exhaustive-deps': [
+      'error',
+      {
+        additionalHooks:
+          '(useRecoilCallback|useRecoilTransaction_UNSTABLE|useKeyboardEventHandler)',
+      },
+    ],
   },
   overrides: [
     {

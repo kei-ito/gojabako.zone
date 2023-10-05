@@ -24,17 +24,9 @@ export interface DRCell {
   sharedState: DRSharedState;
   state: DRCellState;
   pending: OwnerId | null;
-  rxt: Array<DRMessage>;
-  rxr: Array<DRMessage>;
-  rxb: Array<DRMessage>;
-  rxl: Array<DRMessage>;
-  txt: Array<DRMessage>;
-  txr: Array<DRMessage>;
-  txb: Array<DRMessage>;
-  txl: Array<DRMessage>;
 }
 export type DRDirection = 'b' | 'l' | 'r' | 't';
-export const getAdjecentId = (
+export const getAdjacentId = (
   id: DRCoordinate,
   d: DRDirection,
 ): DRCoordinate => {
@@ -81,22 +73,4 @@ export const isOnlineCell = (a: DRCoordinate, b: DRCoordinate): boolean => {
     aa[0] + aa[1] === bb[0] + bb[1] ||
     aa[0] - aa[1] === bb[0] - bb[1]
   );
-};
-export const getMsWithLag = () => 150 + 50 * Math.random();
-export const pickMessage = (
-  cell: DRCell,
-  type: 'rx' | 'tx',
-): [DRDirection, DRMessage, Array<DRMessage>] | null => {
-  let longest: [DRDirection, Array<DRMessage>] | null = null;
-  for (const d of DRDirections) {
-    const buffer = cell[`${type}${d}`];
-    if (!longest || longest[1].length < buffer.length) {
-      longest = [d, buffer];
-    }
-  }
-  if (longest) {
-    const [d, [msg, ...buffer]] = longest;
-    return [d, msg, buffer];
-  }
-  return null;
 };

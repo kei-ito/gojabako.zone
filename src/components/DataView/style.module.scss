@@ -73,12 +73,14 @@
   & > * {
     border-block-end: var(--gjBorder);
 
-    &.first {
-      border-block-start: var(--gjBorder);
-    }
-
     &.last {
       border-block-end: none;
+    }
+  }
+
+  &:not([data-depth='0']) {
+    & > .first {
+      border-block-start: var(--gjBorder);
     }
   }
 

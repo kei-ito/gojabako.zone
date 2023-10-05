@@ -1,51 +1,56 @@
 import { useEffect } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { noop } from '../../util/noop.mts';
-import { rcCell } from './recoil.mts';
-import type { DRCell, DRCoordinate, DRDirection, DRMessage } from './util.mts';
-import {
-  InitialOwnerId,
-  getMsWithLag,
-  isOnlineCell,
-  nextOwnerId,
-  pickMessage,
-} from './util.mts';
+import { rcCell, rcMessageBuffer, rcRxDelayMs } from './recoil.mts';
+import type { DRCoordinate, DRDirection } from './util.mts';
+import { InitialOwnerId, isOnlineCell, nextOwnerId } from './util.mts';
 
-export const useRx = (id: DRCoordinate) => {
+export const useRx = (id: DRCoordinate, d: DRDirection) => {
   const receive = useRecoilCallback(
-    ({ set }) =>
-      (d: DRDirection, msg: DRMessage, buffer: Array<DRMessage>) => {
-        set(rcCell(id), (c) => {
-          if (!c) {
-            return c;
-          }
-          const next: DRCell = { ...c, [`rx${d}`]: buffer };
-          if (msg.type === 'setShared') {
-            if (msg.state === 'initial') {
-              if (next.sharedState === 'initial') {
-                next.sharedState = InitialOwnerId;
+    ({ set, snapshot }) =>
+      () => {
+        const buf = snapshot
+          .getLoadable(rcMessageBuffer(`${id},rx${d}`))
+          .getValue()
+          .slice();
+        const msg = buf.shift();
+        set(rcMessageBuffer(`${id},rx${d}`), buf);
+        if (msg) {
+          set(rcCell(id), (old) => {
+            if (!old) {
+              return old;
+            }
+            const c = { ...old };
+            if (msg.type === 'setShared') {
+              if (msg.state === 'initial') {
+                if (c.sharedState === 'initial') {
+                  c.sharedState = InitialOwnerId;
+                }
+              } else {
+                c.sharedState = msg.state;
               }
-            } else {
-              next.sharedState = msg.state;
+            } else if (msg.type === 'press') {
+              c.sharedState = nextOwnerId(msg.state);
+              if (c.state !== msg.state && isOnlineCell(id, msg.at)) {
+                c.pending = msg.state;
+              }
             }
-          } else if (msg.type === 'press') {
-            next.sharedState = nextOwnerId(msg.state);
-            if (next.state !== msg.state && isOnlineCell(id, msg.at)) {
-              next.pending = msg.state;
-            }
-          }
-          return next;
-        });
+            return c;
+          });
+        }
       },
-    [id],
+    [d, id],
   );
-  const cell = useRecoilValue(rcCell(id));
+  const buffer = useRecoilValue(rcMessageBuffer(`${id},rx${d}`));
+  const rxDelayMs = useRecoilValue(rcRxDelayMs);
   useEffect(() => {
-    const tuple = cell && pickMessage(cell, 'rx');
-    if (!cell || !tuple) {
-      return noop;
+    if (0 < buffer.length) {
+      const timerId = setTimeout(
+        receive,
+        rxDelayMs * (0.95 + 0.1 * Math.random()),
+      );
+      return () => clearTimeout(timerId);
     }
-    const timerId = setTimeout(() => receive(...tuple), getMsWithLag());
-    return () => clearTimeout(timerId);
-  }, [cell, id, receive]);
+    return noop;
+  }, [buffer, receive, rxDelayMs]);
 };
