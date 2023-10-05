@@ -22,7 +22,12 @@ export interface DRMessagePress extends DRMessageBase<'press'> {
 export interface DRMessageSetShared extends DRMessageBase<'setShared'> {
   state: DRSharedState;
 }
-export type DRMessage = DRMessagePing | DRMessagePress | DRMessageSetShared;
+export interface DRMessageMap {
+  ping: DRMessagePing;
+  press: DRMessagePress;
+  setShared: DRMessageSetShared;
+}
+export type DRMessage = DRMessageMap[keyof DRMessageMap];
 
 export interface DRCell {
   id: DRCoordinate;
