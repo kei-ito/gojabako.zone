@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { rcCell, rcMessageBuffer } from './recoil.mts';
-import type { DRCoordinate, DRDirection, DRMessageSetShared } from './util.mts';
+import { rcCell, rcSend } from './recoil.mts';
+import type { DRCoordinate, DRDirection } from './util.mts';
 import { getAdjacentId } from './util.mts';
 
 export const useOnConnection = (id: DRCoordinate, d: DRDirection) => {
@@ -12,13 +12,12 @@ export const useOnConnection = (id: DRCoordinate, d: DRDirection) => {
       () => {
         const cell = snapshot.getLoadable(rcCell(id)).getValue();
         if (cell) {
-          const msg: DRMessageSetShared = {
-            type: 'setShared',
+          set(rcSend(id), {
+            type: 'connect',
             from: id,
             to: getAdjacentId(id, d),
             state: cell.sharedState,
-          };
-          set(rcMessageBuffer(`${id},tx${d}`), (buffer) => [...buffer, msg]);
+          });
         }
       },
     [id, d],

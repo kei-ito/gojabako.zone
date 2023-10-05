@@ -1,8 +1,8 @@
 import type { MouseEvent } from 'react';
 import { useRecoilCallback } from 'recoil';
-import { rcLog, rcCell, rcMessageBuffer } from './recoil.mts';
-import type { DRCoordinate, DRMessagePress } from './util.mts';
-import { allTxAndCoordinates, nextOwnerId } from './util.mts';
+import { rcCell, rcLog, rcSend } from './recoil.mts';
+import type { DRCoordinate } from './util.mts';
+import { nextOwnerId } from './util.mts';
 
 export const useOnClickCell = (id: DRCoordinate) =>
   useRecoilCallback(
@@ -22,16 +22,12 @@ export const useOnClickCell = (id: DRCoordinate) =>
             return oldCell;
           }
           const cell = { ...oldCell };
-          for (const [d, to] of allTxAndCoordinates(id)) {
-            const msg: DRMessagePress = {
-              type: 'press',
-              from: id,
-              to,
-              at: id,
-              state: sharedState,
-            };
-            set(rcMessageBuffer(`${id},${d}`), (buffer) => [...buffer, msg]);
-          }
+          set(rcSend(id), {
+            from: id,
+            to: 'queen',
+            type: 'press' as const,
+            state: sharedState,
+          });
           return {
             ...cell,
             state: sharedState,

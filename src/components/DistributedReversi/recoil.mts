@@ -1,4 +1,6 @@
+import { isNonNegativeSafeInteger } from '@nlib/typing';
 import type { ReactNode } from 'react';
+import type { GetRecoilValue, SetRecoilState } from 'recoil';
 import {
   DefaultValue,
   atom,
@@ -11,9 +13,20 @@ import {
   syncSearchParamsBoolean,
   syncSearchParamsNumber,
 } from '../../util/recoil/syncSearchParams.mts';
+import { sign } from '../../util/sign.mts';
+import {
+  DRDiagonalDirections,
+  DRDirections,
+  getAdjacentId,
+  isDRCoordinate,
+  isDRDiagonalDirection,
+  isDRDirection,
+  parseDRCoordinate,
+} from './util.mts';
 import type {
   DRCell,
   DRCoordinate,
+  DRDiagonalDirection,
   DRDirection,
   DREventLog,
   DREventLogViewOptions,
@@ -131,10 +144,151 @@ export const rcCell = atomFamily<DRCell | null, DRCoordinate>({
   default: null,
 });
 
-export const rcMessageBuffer = atomFamily<
+export const rcDirectedRxBuffer = atomFamily<
   Array<DRMessage>,
-  `${DRCoordinate},${'rx' | 'tx'}${DRDirection}`
->({ key: 'MessageBuffer', default: [] });
+  `${DRCoordinate},${DRDirection}`
+>({ key: 'DirectedRxBuffer', default: [] });
+export const rcReceive = selectorFamily<
+  DRMessage | null,
+  `${DRCoordinate},${DRDirection}`
+>({
+  key: 'Receive',
+  get: () => () => null,
+  set:
+    (id) =>
+    ({ set }, msg) => {
+      if (!msg || msg instanceof DefaultValue) {
+        return;
+      }
+      set(rcDirectedRxBuffer(id), (buffer) => [...buffer, msg]);
+    },
+});
+
+export const rcDirectedTxBuffer = atomFamily<
+  Array<DRMessage>,
+  `${DRCoordinate},${DRDirection}`
+>({ key: 'DirectedTxBuffer', default: [] });
+const rcPushToDirectedTxBuffer = selectorFamily<
+  DRMessage | null,
+  `${DRCoordinate},${DRDirection}`
+>({
+  key: 'PushToDirectedTxBuffer',
+  get: () => () => null,
+  set:
+    (id) =>
+    ({ set }, msg) => {
+      if (!msg || msg instanceof DefaultValue) {
+        return;
+      }
+      set(rcDirectedTxBuffer(id), (buffer) => [...buffer, msg]);
+    },
+});
+
+type BufferStates = Record<DRDirection, number | null>;
+export const rcBufferStates = selectorFamily<BufferStates, DRCoordinate>({
+  key: 'BufferStates',
+  get:
+    (id) =>
+    ({ get }) => {
+      const states: BufferStates = { e: null, n: null, w: null, s: null };
+      for (const d of DRDirections) {
+        const cell = get(rcCell(getAdjacentId(id, d)));
+        if (cell) {
+          states[d] = get(rcDirectedTxBuffer(`${id},${d}`)).length;
+        }
+      }
+      return states;
+    },
+});
+
+export const rcSend = selectorFamily<DRMessage | null, DRCoordinate>({
+  key: 'TxBuffer',
+  get: () => () => null,
+  set:
+    (id) =>
+    ({ set, get }, msg) => {
+      if (!msg || msg instanceof DefaultValue) {
+        return;
+      }
+      const { to } = msg;
+      const { diagonal, rook, bishop } = sendUtils(set, get, id, msg);
+      if (id === msg.from) {
+        if (to === 'all') {
+          for (const d of DRDirections) {
+            set(rcPushToDirectedTxBuffer(`${id},${d}`), msg);
+          }
+        } else if (to === 'rook') {
+          rook();
+        } else if (to === 'bishop') {
+          bishop();
+        } else if (to === 'queen') {
+          rook();
+          bishop();
+        }
+      } else if (isDRDirection(to)) {
+        set(rcPushToDirectedTxBuffer(`${id},${to}`), msg);
+      } else if (isDRDiagonalDirection(to)) {
+        diagonal(to);
+      } else if (isDRCoordinate(to)) {
+        const r0 = parseDRCoordinate(id);
+        const r1 = parseDRCoordinate(to);
+        const dy = sign(r1[1] - r0[1], 'n', 'c', 's');
+        const dx = sign(r1[0] - r0[0], 'w', 'c', 'e');
+        if (dy === 'c') {
+          if (dx !== 'c') {
+            set(rcPushToDirectedTxBuffer(`${id},${dx}`), msg);
+          }
+        } else if (dx === 'c') {
+          set(rcPushToDirectedTxBuffer(`${id},${dy}`), msg);
+        } else {
+          diagonal(`${dy}${dx}`);
+        }
+      } else if (to === 'all') {
+        /** TODO: ここを書く */
+      }
+    },
+});
+
+const sendUtils = (
+  set: SetRecoilState,
+  get: GetRecoilValue,
+  id: DRCoordinate,
+  msg: DRMessage,
+) => {
+  const diagonal = (
+    dd: DRDiagonalDirection,
+    states = get(rcBufferStates(id)),
+  ) => {
+    const dList = [...dd] as Array<DRDirection>;
+    let minD: DRDirection | null = null;
+    let minCount = Infinity;
+    for (let i = dList.length; --i; ) {
+      const d = dList[i];
+      const count = states[d];
+      if (isNonNegativeSafeInteger(count)) {
+        if (count < minCount) {
+          minCount = count;
+          minD = d;
+        }
+      }
+    }
+    if (minD !== null) {
+      states[minD] = minCount + 1;
+      set(rcPushToDirectedTxBuffer(`${id},${minD}`), { ...msg, to: dd });
+    }
+  };
+  const rook = () => {
+    for (const d of DRDirections) {
+      set(rcPushToDirectedTxBuffer(`${id},${d}`), { ...msg, to: d });
+    }
+  };
+  const bishop = (states = get(rcBufferStates(id))) => {
+    for (const dd of DRDiagonalDirections) {
+      diagonal(dd, states);
+    }
+  };
+  return { diagonal, rook, bishop };
+};
 
 export const rcCellList = atom<Set<DRCoordinate>>({
   key: 'CellList',

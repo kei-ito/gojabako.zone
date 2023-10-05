@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { classnames } from '../../util/classnames.mts';
-import { rcCell, rcMessageBuffer } from './recoil.mts';
+import { rcCell, rcDirectedRxBuffer, rcDirectedTxBuffer } from './recoil.mts';
 import * as style from './style.module.scss';
 import { useOnClickCell } from './useOnClickCell.mts';
 import { useOnConnection } from './useOnConnection.mts';
@@ -9,7 +9,7 @@ import { useRx } from './useRx.mts';
 import { useTooltip } from './useTooltip';
 import { useTx } from './useTx.mts';
 import type { DRCell, DRCoordinate, DRDirection } from './util.mts';
-import { parseDRCoordinate } from './util.mts';
+import { DRDirections, parseDRCoordinate } from './util.mts';
 
 const r = 0.44;
 
@@ -20,14 +20,12 @@ interface DistributedReversiCellProps {
 export const DistributedReversiCell = ({ id }: DistributedReversiCellProps) => (
   <g id={encodeURIComponent(`cell${id}`)} className={style.cell}>
     <Cell id={id} />
-    <Tx id={id} d="l" />
-    <Tx id={id} d="t" />
-    <Tx id={id} d="r" />
-    <Tx id={id} d="b" />
-    <Rx id={id} d="l" />
-    <Rx id={id} d="t" />
-    <Rx id={id} d="r" />
-    <Rx id={id} d="b" />
+    {DRDirections.map((d) => (
+      <Fragment key={d}>
+        <Tx id={id} d={d} />
+        <Rx id={id} d={d} />
+      </Fragment>
+    ))}
   </g>
 );
 
@@ -68,7 +66,7 @@ interface TxProps extends DistributedReversiCellProps {
 const Tx = ({ id, d }: TxProps) => {
   useTx(id, d);
   useOnConnection(id, d);
-  const buffer = useRecoilValue(rcMessageBuffer(`${id},tx${d}`));
+  const buffer = useRecoilValue(rcDirectedTxBuffer(`${id},${d}`));
   const [cx, cy] = useMemo(() => {
     const tt = ((getT(d) - 0.2) * Math.PI) / 2;
     const [x, y] = parseDRCoordinate(id);
@@ -95,7 +93,7 @@ const Tx = ({ id, d }: TxProps) => {
 
 const Rx = ({ id, d }: TxProps) => {
   useRx(id, d);
-  const buffer = useRecoilValue(rcMessageBuffer(`${id},rx${d}`));
+  const buffer = useRecoilValue(rcDirectedRxBuffer(`${id},${d}`));
   const [cx, cy] = useMemo(() => {
     const tt = ((getT(d) + 0.2) * Math.PI) / 2;
     const [x, y] = parseDRCoordinate(id);
@@ -121,7 +119,7 @@ const Rx = ({ id, d }: TxProps) => {
 };
 
 const getT = (d: DRDirection, offset = 0): 0 | 1 | 2 | 3 =>
-  ((({ r: 0, b: 1, l: 2, t: 3 })[d] + offset) % 4) as 0 | 1 | 2 | 3;
+  ((({ e: 0, s: 1, w: 2, n: 3 })[d] + offset) % 4) as 0 | 1 | 2 | 3;
 
 const arrowD = ((a: number, b = a / 1.8, c = a / 4) => ({
   0: `m${a / -2.25} 0l${-c} ${b}h${a}l${c} ${-b}l${-c} ${-b}h${-a}z`,

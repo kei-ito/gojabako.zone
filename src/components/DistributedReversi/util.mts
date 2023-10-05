@@ -12,12 +12,21 @@ export type DRCellState = OwnerId | 'initial';
 export interface DRMessageBase<T extends string> {
   type: T;
   from: DRCoordinate;
-  to: DRCoordinate;
+  to:
+    | DRCoordinate
+    | DRDiagonalDirection
+    | DRDirection
+    | 'all'
+    | 'bishop'
+    | 'queen'
+    | 'rook';
 }
 export interface DRMessagePing extends DRMessageBase<'ping'> {}
 export interface DRMessagePress extends DRMessageBase<'press'> {
-  at: DRCoordinate;
   state: Exclude<DRCellState, 'initial'>;
+}
+export interface DRMessageConnect extends DRMessageBase<'connect'> {
+  state: DRSharedState;
 }
 export interface DRMessageSetShared extends DRMessageBase<'setShared'> {
   state: DRSharedState;
@@ -25,6 +34,7 @@ export interface DRMessageSetShared extends DRMessageBase<'setShared'> {
 export interface DRMessageMap {
   ping: DRMessagePing;
   press: DRMessagePress;
+  connect: DRMessageConnect;
   setShared: DRMessageSetShared;
 }
 export type DRMessage = DRMessageMap[keyof DRMessageMap];
@@ -35,38 +45,36 @@ export interface DRCell {
   state: DRCellState;
   pending: OwnerId | null;
 }
-export type DRDirection = 'b' | 'l' | 'r' | 't';
+export const DRDirections = ['e', 'n', 'w', 's'] as const;
+export type DRDirection = (typeof DRDirections)[number];
+export const isDRDirection = createTypeChecker<DRDirection>(
+  'DRDirection',
+  (input: unknown): input is DRDirection =>
+    DRDirections.includes(input as DRDirection),
+);
+export const DRDiagonalDirections = ['ne', 'nw', 'sw', 'se'] as const;
+export type DRDiagonalDirection = (typeof DRDiagonalDirections)[number];
+export const isDRDiagonalDirection = createTypeChecker<DRDiagonalDirection>(
+  'DRDiagonalDirection',
+  (input: unknown): input is DRDiagonalDirection =>
+    DRDiagonalDirections.includes(input as DRDiagonalDirection),
+);
 export const getAdjacentId = (
   id: DRCoordinate,
   d: DRDirection,
 ): DRCoordinate => {
   const [x, y] = parseDRCoordinate(id);
   switch (d) {
-    case 'r':
+    case 'w':
       return `${x + 1},${y}`;
-    case 'b':
+    case 's':
       return `${x},${y + 1}`;
-    case 'l':
+    case 'e':
       return `${x - 1},${y}`;
-    case 't':
+    case 'n':
     default:
       return `${x},${y - 1}`;
   }
-};
-export const DRDirections = ['l', 't', 'r', 'b'] as const;
-export const allRxAndCoordinates = function* (id: DRCoordinate) {
-  const [x, y] = parseDRCoordinate(id);
-  yield ['rxl', `${x - 1},${y}`] as const;
-  yield ['rxt', `${x},${y + 1}`] as const;
-  yield ['rxr', `${x + 1},${y}`] as const;
-  yield ['rxb', `${x},${y - 1}`] as const;
-};
-export const allTxAndCoordinates = function* (id: DRCoordinate) {
-  const [x, y] = parseDRCoordinate(id);
-  yield ['txl', `${x - 1},${y}`] as const;
-  yield ['txt', `${x},${y + 1}`] as const;
-  yield ['txr', `${x + 1},${y}`] as const;
-  yield ['txb', `${x},${y - 1}`] as const;
 };
 export const parseDRCoordinate = (id: DRCoordinate): [number, number] => {
   const [x, y] = id.split(',', 2);

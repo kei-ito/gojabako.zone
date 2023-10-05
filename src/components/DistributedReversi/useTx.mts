@@ -1,34 +1,37 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { noop } from '../../util/noop.mts';
-import { rcCell, rcMessageBuffer, rcTxDelayMs } from './recoil.mts';
+import {
+  rcCell,
+  rcDirectedTxBuffer,
+  rcReceive,
+  rcTxDelayMs,
+} from './recoil.mts';
 import type { DRCoordinate, DRDirection } from './util.mts';
 import { getAdjacentId } from './util.mts';
 
 export const useTx = (id: DRCoordinate, d: DRDirection) => {
+  const tx = useMemo(() => rcDirectedTxBuffer(`${id},${d}`), [id, d]);
   const send = useRecoilCallback(
     ({ set, snapshot }) =>
       () => {
         const adjacentId = getAdjacentId(id, d);
-        const buf = snapshot
-          .getLoadable(rcMessageBuffer(`${id},tx${d}`))
-          .getValue()
-          .slice();
+        const buf = snapshot.getLoadable(tx).getValue().slice();
         const msg = buf.shift();
-        set(rcMessageBuffer(`${id},tx${d}`), buf);
+        set(tx, buf);
         if (msg) {
           const adjacentCell = snapshot
             .getLoadable(rcCell(adjacentId))
             .getValue();
           if (adjacentCell) {
             const dd = getAdjacentDirection(d);
-            set(rcMessageBuffer(`${adjacentId},rx${dd}`), (rx) => [...rx, msg]);
+            set(rcReceive(`${adjacentId},${dd}`), msg);
           }
         }
       },
-    [id, d],
+    [id, d, tx],
   );
-  const buffer = useRecoilValue(rcMessageBuffer(`${id},tx${d}`));
+  const buffer = useRecoilValue(tx);
   const txDelayMs = useRecoilValue(rcTxDelayMs);
   useEffect(() => {
     if (0 < buffer.length) {
@@ -44,14 +47,14 @@ export const useTx = (id: DRCoordinate, d: DRDirection) => {
 
 const getAdjacentDirection = (d: DRDirection): DRDirection => {
   switch (d) {
-    case 'r':
-      return 'l';
-    case 'b':
-      return 't';
-    case 'l':
-      return 'r';
-    case 't':
+    case 'w':
+      return 'e';
+    case 'e':
+      return 'w';
+    case 'n':
+      return 's';
+    case 's':
     default:
-      return 'b';
+      return 'n';
   }
 };
