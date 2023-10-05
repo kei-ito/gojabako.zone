@@ -52,7 +52,7 @@ const Cell = ({ id }: DistributedReversiCellProps) => {
       />
       <text x={x} y={y - lineHeight}>
         {cell.state}
-        {cell.pending === null ? null : ` ${cell.pending}?`}
+        {cell.pending !== null && ` → ${cell.pending}`}
       </text>
       <text x={x} y={y + lineHeight}>
         {cell.sharedState}

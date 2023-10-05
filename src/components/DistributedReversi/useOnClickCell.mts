@@ -1,6 +1,6 @@
 import type { MouseEvent } from 'react';
 import { useRecoilCallback } from 'recoil';
-import { rcAddLog, rcCell, rcMessageBuffer } from './recoil.mts';
+import { rcLog, rcCell, rcMessageBuffer } from './recoil.mts';
 import type { DRCoordinate, DRMessagePress } from './util.mts';
 import { allTxAndCoordinates, nextOwnerId } from './util.mts';
 
@@ -9,10 +9,16 @@ export const useOnClickCell = (id: DRCoordinate) =>
     ({ set }) =>
       (event: MouseEvent) => {
         event.stopPropagation();
-        set(rcAddLog, `click: ${id}`);
+        const logger = rcLog([id, 'onClick']);
+        set(logger, '');
         set(rcCell(id), (oldCell) => {
-          const sharedState = oldCell?.sharedState;
-          if (!oldCell || !sharedState || sharedState === 'initial') {
+          if (!oldCell) {
+            set(logger, 'noCell');
+            return oldCell;
+          }
+          const { sharedState } = oldCell;
+          if (sharedState === 'initial') {
+            set(logger, `sharedState:${sharedState}`);
             return oldCell;
           }
           const cell = { ...oldCell };

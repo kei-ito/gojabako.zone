@@ -3,6 +3,12 @@
   grid-template-columns: 1fr auto;
   border-block-end: solid var(--gj1px) var(--gjGray4);
   overflow: hidden;
+  background-color: var(--gjGray0);
+
+  /* stylelint-disable-next-line unit-allowed-list */
+  @media (width < 500px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .board {
@@ -13,19 +19,24 @@
 
 .info {
   display: grid;
+  grid-template-columns: 1fr;
   grid-auto-flow: row;
   align-content: end;
+  column-gap: 1em;
   row-gap: 0.5em;
   padding: 1em;
   border-inline-start: solid var(--gj1px) var(--gjGray4);
 
   & > .number {
     display: grid;
-    grid-template-columns: auto 5em auto;
+    grid-template-columns: 1fr 5em auto;
     column-gap: 0.5em;
+    align-items: center;
 
     & > input {
       text-align: end;
+      border-style: solid;
+      border-radius: 0.3em;
     }
   }
 
@@ -33,6 +44,7 @@
     display: grid;
     grid-template-columns: 1fr auto;
     column-gap: 0.5em;
+    align-items: center;
   }
 }
 
@@ -51,7 +63,7 @@
   }
 
   & > text {
-    font-size: 0.18px;
+    font-size: 0.17px;
     text-anchor: middle;
     dominant-baseline: central;
     pointer-events: none;
@@ -97,11 +109,30 @@ path.buffer {
 }
 
 .log {
-  block-size: 20em;
+  min-block-size: 8em;
+  display: grid;
+  grid-template-columns: auto auto auto 1fr;
+  column-gap: 0.5em;
+  align-content: start;
+  justify-items: center;
   padding: 1em;
   overflow: auto;
   border-block-end: solid var(--gj1px) var(--gjGray4);
-  font-family: var(--gjFontMonospace);
-  font-weight: 700;
+  font-size: 85%;
+  font-weight: 500;
   line-height: 1.2;
+
+  & > select {
+    grid-row: 1 / 2;
+    margin-block-end: 0.2em;
+  }
+
+  & > time {
+    justify-self: end;
+    color: var(--gjGray5);
+  }
+
+  & > .message {
+    justify-self: start;
+  }
 }

@@ -3,15 +3,19 @@
   --gjHeight: 24px;
   --gjKnobHeight: 22px;
   --gjKnobWidth: 32px;
+  --gjMargin: 1px;
   --gjColorOn: #1fb917;
   width: var(--gjWidth);
   height: var(--gjHeight);
   border-radius: calc(var(--gjHeight) / 2);
-  box-shadow:
-    0 0 0 1.25px var(--gjGray6) inset,
-    0 0 2px 1.25px rgb(0 0 0 / 50%) inset;
+  box-shadow: 0 0 2px 0.5px rgb(0 0 0 / 50%) inset;
   outline: 0;
   overflow: hidden;
+  background-image: linear-gradient(0deg, var(--gjColorOn), var(--gjColorOn));
+  background-size: 0 100%;
+  background-position: left center;
+  transition-property: background-size;
+  transition-duration: 200ms;
 
   &::before {
     content: '';
@@ -38,7 +42,7 @@
     position: absolute;
     display: grid;
     place-content: center;
-    left: var(--gj1px);
+    left: var(--gjMargin);
     top: calc(var(--gjHeight) / 2 - var(--gjKnobHeight) / 2);
     width: var(--gjKnobWidth);
     height: var(--gjKnobHeight);
@@ -52,14 +56,14 @@
     font-weight: 600;
     box-shadow: 0 0 2px rgb(0 0 0 / 50%);
   }
-  background-image: linear-gradient(0deg, var(--gjColorOn), var(--gjColorOn));
-  background-size: 50% 100%;
-  background-position: left center;
 
   &[data-state='1'] {
+    background-size: 50% 100%;
+    transition-duration: 0ms;
+
     &::after {
       content: 'ON';
-      left: calc(var(--gjWidth) - var(--gjKnobWidth) - var(--gj1px));
+      left: calc(var(--gjWidth) - var(--gjKnobWidth) - var(--gjMargin));
     }
   }
 

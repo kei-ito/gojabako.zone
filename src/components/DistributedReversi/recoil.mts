@@ -1,11 +1,24 @@
 import type { ReactNode } from 'react';
-import { DefaultValue, atom, atomFamily, selector } from 'recoil';
+import {
+  DefaultValue,
+  atom,
+  atomFamily,
+  selector,
+  selectorFamily,
+} from 'recoil';
 import { clamp } from '../../util/clamp.mts';
 import {
   syncSearchParamsBoolean,
   syncSearchParamsNumber,
 } from '../../util/recoil/syncSearchParams.mts';
-import type { DRCell, DRCoordinate, DRDirection, DRMessage } from './util.mts';
+import type {
+  DRCell,
+  DRCoordinate,
+  DRDirection,
+  DREventLog,
+  DREventLogViewOptions,
+  DRMessage,
+} from './util.mts';
 
 export const zoom = { min: 40, max: 200 };
 
@@ -35,28 +48,42 @@ export const rcShowLog = atom<boolean>({
   key: 'ShowLog',
   effects: [...syncSearchParamsBoolean('log', true)],
 });
-
-interface LogItem {
-  id: string;
-  date: Date;
-  data: string;
-}
-export const rcLog = atom<Array<LogItem>>({
-  key: 'Log',
-  default: [],
+export const rcLogViewerOptions = atom<DREventLogViewOptions>({
+  key: 'LogViewerOptions',
+  default: { time: 'diff', id: null, namespace: null },
 });
-export const rcAddLog = selector<string>({
+
+export const rcLogBuffer = atom<Array<DREventLog>>({
+  key: 'LogBuffer',
+  default: [],
+  effects: [
+    ({ onSet, setSelf, getLoadable }) => {
+      const setInitialLog = (list: Array<DREventLog>) => {
+        if (0 < list.length) {
+          return;
+        }
+        const time = performance.now();
+        const message = new Date().toISOString();
+        setSelf([{ id: '0,0', time, namespace: 'game', message }]);
+      };
+      onSet(setInitialLog);
+      setInitialLog(getLoadable(rcLogBuffer).getValue());
+    },
+  ],
+});
+export const rcLog = selectorFamily<string, [DRCoordinate, string]>({
   key: 'PushLog',
-  get: () => '',
-  set: ({ set }, data) => {
-    if (data instanceof DefaultValue) {
-      return;
-    }
-    set(rcLog, (log) => [
-      { id: `${log.length}`.padStart(4, '0'), date: new Date(), data },
-      ...log,
-    ]);
-  },
+  get: () => () => '',
+  set:
+    ([id, namespace]) =>
+    ({ set }, message) => {
+      if (message instanceof DefaultValue) {
+        return;
+      }
+      const time = performance.now();
+      const item: DREventLog = { id, time, namespace, message };
+      set(rcLogBuffer, (list) => [...list, item]);
+    },
 });
 
 type XYWHZ =
@@ -65,7 +92,7 @@ type XYWHZ =
 
 export const rcXYWHZ = atom<XYWHZ>({
   key: 'XYZ',
-  default: [0, 0, 0, 0, 100],
+  default: [0, 0, 0, 0, 80],
 });
 
 export const rcViewBox = selector<string>({
@@ -145,7 +172,6 @@ export const rcAddCell = selector<DRCoordinate>({
     }
     const cell = get(rcCell(coordinate));
     if (!cell) {
-      set(rcAddLog, `add: ${coordinate}`);
       set(rcInitCell, coordinate);
     }
   },

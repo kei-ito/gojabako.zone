@@ -4,12 +4,13 @@ import { useRecoilCallback, useRecoilState } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
 import { SecondaryButton } from '../Button';
 import { Toggle } from '../Toggle';
-import { useOnClickFullScreen } from '../use/OnClickFullScreen.mts';
+import { useFullScreen } from '../use/FullScreen.mts';
 import { ZoomSlider } from '../ZoomSlider';
 import {
   rcCell,
   rcCellList,
   rcInitCell,
+  rcLogBuffer,
   rcRxDelayMs,
   rcShowLog,
   rcTxDelayMs,
@@ -39,7 +40,7 @@ const InitGameButton = () => {
         }
         reset(rcCellList);
         const list = new Set<DRCoordinate>();
-        const range = 1;
+        const range = 2;
         for (let x = -range; x <= range; x++) {
           for (let y = -range; y <= range; y++) {
             const coordinate = `${x},${y}` as const;
@@ -47,6 +48,7 @@ const InitGameButton = () => {
             set(rcInitCell, coordinate);
           }
         }
+        reset(rcLogBuffer);
         setTimeout(() => set(rcCellList, list), 50);
       },
     [],
@@ -121,10 +123,12 @@ const LogToggle = () => {
 };
 
 const FullScreenButton = () => {
-  const onClick = useOnClickFullScreen(`.${style.container}`);
+  const [state, toggle] = useFullScreen(`.${style.container}`);
+  const id = 'FullScreen';
   return (
-    <SecondaryButton icon="fullscreen" onClick={onClick}>
-      フルスクリーン
-    </SecondaryButton>
+    <section className={style.toggle}>
+      <label htmlFor={id}>フルスクリーン</label>
+      <Toggle id={id} state={state} onClick={toggle} />
+    </section>
   );
 };

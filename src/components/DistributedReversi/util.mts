@@ -1,7 +1,12 @@
+import { createTypeChecker } from '@nlib/typing';
 import type { Nominal } from '@nlib/typing';
 
 export type OwnerId = Nominal<number, 'Owner'>;
 export type DRCoordinate = `${number},${number}`;
+export const isDRCoordinate = createTypeChecker<DRCoordinate>(
+  'DRCoordinate',
+  /^\d+,\d+$/,
+);
 export type DRSharedState = OwnerId | 'initial';
 export type DRCellState = OwnerId | 'initial';
 export interface DRMessageBase<T extends string> {
@@ -74,3 +79,14 @@ export const isOnlineCell = (a: DRCoordinate, b: DRCoordinate): boolean => {
     aa[0] - aa[1] === bb[0] - bb[1]
   );
 };
+export interface DREventLog {
+  id: DRCoordinate;
+  time: number;
+  namespace: string;
+  message: string;
+}
+export interface DREventLogViewOptions {
+  time: 'diff' | 'time';
+  id: DRCoordinate | null;
+  namespace: string | null;
+}
