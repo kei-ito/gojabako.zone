@@ -3,6 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { useRecoilCallback, useRecoilState } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
 import { SecondaryButton } from '../Button';
+import { Toggle } from '../Toggle';
 import { useOnClickFullScreen } from '../use/OnClickFullScreen.mts';
 import { ZoomSlider } from '../ZoomSlider';
 import {
@@ -10,6 +11,7 @@ import {
   rcCellList,
   rcInitCell,
   rcRxDelayMs,
+  rcShowLog,
   rcTxDelayMs,
   rcZoom,
   zoom,
@@ -24,6 +26,7 @@ export const DistributedReversiInfo = () => (
     <TxDelayControl />
     <RxDelayControl />
     <FullScreenButton />
+    <LogToggle />
   </nav>
 );
 
@@ -101,6 +104,18 @@ const RxDelayControl = () => {
       <label htmlFor={id}>受信遅延</label>
       <input id={id} type="number" step={10} value={ms} onChange={onChange} />
       <span>ms</span>
+    </section>
+  );
+};
+
+const LogToggle = () => {
+  const [showLog, setShowLog] = useRecoilState(rcShowLog);
+  const onClick = useCallback(() => setShowLog((b) => !b), [setShowLog]);
+  const id = 'ShowLog';
+  return (
+    <section className={style.toggle}>
+      <label htmlFor={id}>ログを表示する</label>
+      <Toggle id={id} state={showLog} onClick={onClick} />
     </section>
   );
 };

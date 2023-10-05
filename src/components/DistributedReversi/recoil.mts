@@ -1,6 +1,10 @@
 import type { ReactNode } from 'react';
 import { DefaultValue, atom, atomFamily, selector } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
+import {
+  syncSearchParamsBoolean,
+  syncSearchParamsNumber,
+} from '../../util/recoil/syncSearchParams.mts';
 import type { DRCell, DRCoordinate, DRDirection, DRMessage } from './util.mts';
 
 export const zoom = { min: 40, max: 200 };
@@ -19,8 +23,41 @@ export const rcPointerPosition = atom<[number, number]>({
     },
   ],
 });
-export const rcTxDelayMs = atom<number>({ key: 'TxDelayMs', default: 300 });
-export const rcRxDelayMs = atom<number>({ key: 'RxDelayMs', default: 300 });
+export const rcTxDelayMs = atom<number>({
+  key: 'TxDelayMs',
+  effects: [...syncSearchParamsNumber('txd', 300)],
+});
+export const rcRxDelayMs = atom<number>({
+  key: 'RxDelayMs',
+  effects: [...syncSearchParamsNumber('rxd', 300)],
+});
+export const rcShowLog = atom<boolean>({
+  key: 'ShowLog',
+  effects: [...syncSearchParamsBoolean('log', true)],
+});
+
+interface LogItem {
+  id: string;
+  date: Date;
+  data: string;
+}
+export const rcLog = atom<Array<LogItem>>({
+  key: 'Log',
+  default: [],
+});
+export const rcAddLog = selector<string>({
+  key: 'PushLog',
+  get: () => '',
+  set: ({ set }, data) => {
+    if (data instanceof DefaultValue) {
+      return;
+    }
+    set(rcLog, (log) => [
+      { id: `${log.length}`.padStart(4, '0'), date: new Date(), data },
+      ...log,
+    ]);
+  },
+});
 
 type XYWHZ =
   | [number, number, number, number, number, [number, number]]
@@ -108,6 +145,7 @@ export const rcAddCell = selector<DRCoordinate>({
     }
     const cell = get(rcCell(coordinate));
     if (!cell) {
+      set(rcAddLog, `add: ${coordinate}`);
       set(rcInitCell, coordinate);
     }
   },

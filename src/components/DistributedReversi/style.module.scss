@@ -23,11 +23,16 @@
     display: grid;
     grid-template-columns: auto 5em auto;
     column-gap: 0.5em;
-    inline-size: 100%;
 
     & > input {
       text-align: end;
     }
+  }
+
+  & > .toggle {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 0.5em;
   }
 }
 
@@ -89,4 +94,14 @@ path.buffer {
   line-height: 1.2;
   white-space: pre;
   pointer-events: none;
+}
+
+.log {
+  block-size: 20em;
+  padding: 1em;
+  overflow: auto;
+  border-block-end: solid var(--gj1px) var(--gjGray4);
+  font-family: var(--gjFontMonospace);
+  font-weight: 700;
+  line-height: 1.2;
 }

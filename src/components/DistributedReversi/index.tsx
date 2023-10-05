@@ -6,7 +6,7 @@ import { classnames } from '../../util/classnames.mts';
 import { useRect } from '../use/Rect.mts';
 import { DistributedReversiBoard } from './Board';
 import { DistributedReversiInfo } from './Info';
-import { rcPointerPosition, rcTooltip } from './recoil.mts';
+import { rcLog, rcPointerPosition, rcShowLog, rcTooltip } from './recoil.mts';
 import * as style from './style.module.scss';
 
 export const DistributedReversi = (props: HTMLAttributes<HTMLElement>) => {
@@ -20,6 +20,7 @@ export const DistributedReversi = (props: HTMLAttributes<HTMLElement>) => {
         <DistributedReversiInfo />
         <Tooltip />
       </section>
+      <Log />
     </RecoilRoot>
   );
 };
@@ -41,5 +42,25 @@ const Tooltip = () => {
     >
       {message}
     </div>
+  );
+};
+
+const Log = () => {
+  const showLog = useRecoilValue(rcShowLog);
+  const log = useRecoilValue(rcLog);
+  if (!showLog) {
+    return null;
+  }
+  return (
+    <section className={style.log}>
+      {log.map(({ id, date, data }) => (
+        <div key={id}>
+          {`${date.getHours()}`.padStart(2, '0')}:
+          {`${date.getMinutes()}`.padStart(2, '0')}:
+          {`${date.getSeconds()}`.padStart(2, '0')}.
+          {`${date.getMilliseconds()}`.padStart(3, '0')} {data}
+        </div>
+      ))}
+    </section>
   );
 };

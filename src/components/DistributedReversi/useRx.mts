@@ -16,26 +16,26 @@ export const useRx = (id: DRCoordinate, d: DRDirection) => {
         const msg = buf.shift();
         set(rcMessageBuffer(`${id},rx${d}`), buf);
         if (msg) {
-          set(rcCell(id), (old) => {
-            if (!old) {
-              return old;
+          set(rcCell(id), (oldCell) => {
+            if (!oldCell) {
+              return oldCell;
             }
-            const c = { ...old };
+            const cell = { ...oldCell };
             if (msg.type === 'setShared') {
               if (msg.state === 'initial') {
-                if (c.sharedState === 'initial') {
-                  c.sharedState = InitialOwnerId;
+                if (cell.sharedState === 'initial') {
+                  cell.sharedState = InitialOwnerId;
                 }
               } else {
-                c.sharedState = msg.state;
+                cell.sharedState = msg.state;
               }
             } else if (msg.type === 'press') {
-              c.sharedState = nextOwnerId(msg.state);
-              if (c.state !== msg.state && isOnlineCell(id, msg.at)) {
-                c.pending = msg.state;
+              cell.sharedState = nextOwnerId(msg.state);
+              if (cell.state !== msg.state && isOnlineCell(id, msg.at)) {
+                cell.pending = msg.state;
               }
             }
-            return c;
+            return cell;
           });
         }
       },

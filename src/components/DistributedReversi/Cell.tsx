@@ -1,25 +1,15 @@
-import type { MouseEvent } from 'react';
 import { useMemo } from 'react';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { classnames } from '../../util/classnames.mts';
-import { useOnClickLog } from '../use/OnClickLog.mts';
 import { rcCell, rcMessageBuffer } from './recoil.mts';
 import * as style from './style.module.scss';
+import { useOnClickCell } from './useOnClickCell.mts';
 import { useOnConnection } from './useOnConnection.mts';
 import { useRx } from './useRx.mts';
 import { useTooltip } from './useTooltip';
 import { useTx } from './useTx.mts';
-import type {
-  DRCell,
-  DRCoordinate,
-  DRDirection,
-  DRMessagePress,
-} from './util.mts';
-import {
-  allTxAndCoordinates,
-  nextOwnerId,
-  parseDRCoordinate,
-} from './util.mts';
+import type { DRCell, DRCoordinate, DRDirection } from './util.mts';
+import { parseDRCoordinate } from './util.mts';
 
 const r = 0.44;
 
@@ -43,7 +33,6 @@ export const DistributedReversiCell = ({ id }: DistributedReversiCellProps) => (
 
 const Cell = ({ id }: DistributedReversiCellProps) => {
   const cell: Partial<DRCell> = useRecoilValue(rcCell(id)) ?? {};
-  const onClick = useOnClick(id);
   const [x, y] = parseDRCoordinate(id);
   const size = 0.9;
   const round = 0.1;
@@ -58,7 +47,7 @@ const Cell = ({ id }: DistributedReversiCellProps) => {
         width={size}
         height={size}
         data-state={cell.state}
-        onClick={onClick}
+        onClick={useOnClickCell(id)}
         {...useTooltip(id, cell)}
       />
       <text x={x} y={y - lineHeight}>
@@ -71,37 +60,6 @@ const Cell = ({ id }: DistributedReversiCellProps) => {
     </>
   );
 };
-
-const useOnClick = (id: DRCoordinate) =>
-  useRecoilCallback(
-    ({ set }) =>
-      (event: MouseEvent) => {
-        event.stopPropagation();
-        set(rcCell(id), (cell) => {
-          const sharedState = cell?.sharedState;
-          if (!cell || !sharedState || sharedState === 'initial') {
-            return cell;
-          }
-          cell = { ...cell };
-          for (const [d, to] of allTxAndCoordinates(id)) {
-            const msg: DRMessagePress = {
-              type: 'press',
-              from: id,
-              to,
-              at: id,
-              state: sharedState,
-            };
-            set(rcMessageBuffer(`${id},${d}`), (buffer) => [...buffer, msg]);
-          }
-          return {
-            ...cell,
-            state: sharedState,
-            sharedState: nextOwnerId(sharedState),
-          };
-        });
-      },
-    [id],
-  );
 
 interface TxProps extends DistributedReversiCellProps {
   d: DRDirection;
@@ -116,7 +74,6 @@ const Tx = ({ id, d }: TxProps) => {
     const [x, y] = parseDRCoordinate(id);
     return [x + r * Math.cos(tt), y + r * Math.sin(tt)];
   }, [id, d]);
-  const onClick = useOnClickLog(buffer);
   const bufferedCount = buffer.length;
   return (
     <>
@@ -127,7 +84,6 @@ const Tx = ({ id, d }: TxProps) => {
           style.tx,
           0 < bufferedCount && style.active,
         )}
-        onClick={onClick}
         {...useTooltip(`Tx${d}:${id}`, 0 < buffer.length ? buffer : null)}
       />
       <text x={cx} y={cy} className={style.buffer}>
@@ -145,7 +101,6 @@ const Rx = ({ id, d }: TxProps) => {
     const [x, y] = parseDRCoordinate(id);
     return [x + r * Math.cos(tt), y + r * Math.sin(tt)];
   }, [id, d]);
-  const onClick = useOnClickLog(buffer);
   const bufferedCount = buffer.length;
   return (
     <>
@@ -156,7 +111,6 @@ const Rx = ({ id, d }: TxProps) => {
           style.rx,
           0 < bufferedCount && style.active,
         )}
-        onClick={onClick}
         {...useTooltip(`Rx${d}:${id}`, 0 < buffer.length ? buffer : null)}
       />
       <text x={cx} y={cy} className={style.buffer}>

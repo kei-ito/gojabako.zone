@@ -96,6 +96,11 @@
   }
 }
 
+button,
+label {
+  cursor: pointer;
+}
+
 a {
   color: var(--gjBlue8);
   text-decoration: underline;
