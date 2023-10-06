@@ -9,14 +9,18 @@ import type {
   DRMessage,
   DRMessageMap,
 } from './util.mts';
-import { InitialOwnerId, isOnlineCell, nextOwnerId } from './util.mts';
+import {
+  InitialOwnerId,
+  isDRDiagonalDirection,
+  isDRDirection,
+  nextOwnerId,
+} from './util.mts';
 
-type Handler<T extends DRMessage> = (cell: DRCell, msg: T) => DRCell;
-type Handlers = {
-  [K in keyof DRMessageMap]: Handler<DRMessageMap[K]>;
+type Receiver<T extends DRMessage> = (cell: DRCell, msg: T) => DRCell;
+type Receivers = {
+  [K in keyof DRMessageMap]: Receiver<DRMessageMap[K]>;
 };
-
-const handlers: Handlers = {
+const receivers: Receivers = {
   ping: (cell) => cell,
   connect: (cell, msg) => {
     if (msg.state === 'initial') {
@@ -29,10 +33,12 @@ const handlers: Handlers = {
     return cell;
   },
   press: (cell, msg) => {
-    const from = cell.id;
     const next = { ...cell, sharedState: nextOwnerId(msg.state) };
-    if (cell.state !== msg.state && isOnlineCell(from, msg.from)) {
-      next.pending = msg.state;
+    if (cell.state !== msg.state) {
+      const [dx, dy] = msg.d;
+      if (dx === 0 || dy === 0 || Math.abs(dx) === Math.abs(dy)) {
+        next.pending = msg.state;
+      }
     }
     return next;
   },
@@ -50,17 +56,20 @@ export const useRx = (id: DRCoordinate, d: DRDirection) => {
         if (!msg) {
           return;
         }
-        set(rcCell(id), (cell) => {
-          if (!cell) {
-            return cell;
-          }
-          /** TODO: ここの条件を修正（nsew,allに対応する） */
-          if (id !== msg.to) {
-            set(rcSend(id), msg);
-            return cell;
-          }
-          return (handlers[msg.type] as Handler<DRMessage>)(cell, msg);
-        });
+        const cell = snapshot.getLoadable(rcCell(id)).getValue();
+        if (!cell) {
+          return;
+        }
+        /** 転送処理 */
+        const { mode } = msg;
+        if (!isDRDirection(mode) && !isDRDiagonalDirection(mode)) {
+          set(rcSend(id), msg);
+        }
+        /** 受信処理 */
+        set(
+          rcCell(id),
+          (receivers[msg.type] as Receiver<DRMessage>)(cell, msg),
+        );
       },
     [id, rx],
   );

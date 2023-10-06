@@ -12,12 +12,8 @@ export const useOnConnection = (id: DRCoordinate, d: DRDirection) => {
       () => {
         const cell = snapshot.getLoadable(rcCell(id)).getValue();
         if (cell) {
-          set(rcSend(id), {
-            type: 'connect',
-            from: id,
-            to: getAdjacentId(id, d),
-            state: cell.sharedState,
-          });
+          const state = cell.sharedState;
+          set(rcSend(id), { type: 'connect', d: [0, 0], mode: d, state });
         }
       },
     [id, d],

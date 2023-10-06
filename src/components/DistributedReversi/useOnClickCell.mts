@@ -9,7 +9,7 @@ export const useOnClickCell = (id: DRCoordinate) =>
     ({ set }) =>
       (event: MouseEvent) => {
         event.stopPropagation();
-        const logger = rcLog([id, 'onClick']);
+        const logger = rcLog({ id, namespace: 'onClick' });
         set(logger, '');
         set(rcCell(id), (oldCell) => {
           if (!oldCell) {
@@ -23,8 +23,8 @@ export const useOnClickCell = (id: DRCoordinate) =>
           }
           const cell = { ...oldCell };
           set(rcSend(id), {
-            from: id,
-            to: 'queen',
+            d: [0, 0],
+            mode: 'queen',
             type: 'press' as const,
             state: sharedState,
           });

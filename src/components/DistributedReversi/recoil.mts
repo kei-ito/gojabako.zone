@@ -1,6 +1,5 @@
-import { isNonNegativeSafeInteger } from '@nlib/typing';
 import type { ReactNode } from 'react';
-import type { GetRecoilValue, SetRecoilState } from 'recoil';
+import type { GetRecoilValue, ResetRecoilState, SetRecoilState } from 'recoil';
 import {
   DefaultValue,
   atom,
@@ -13,16 +12,7 @@ import {
   syncSearchParamsBoolean,
   syncSearchParamsNumber,
 } from '../../util/recoil/syncSearchParams.mts';
-import { sign } from '../../util/sign.mts';
-import {
-  DRDiagonalDirections,
-  DRDirections,
-  getAdjacentId,
-  isDRCoordinate,
-  isDRDiagonalDirection,
-  isDRDirection,
-  parseDRCoordinate,
-} from './util.mts';
+import { vAdd } from '../../util/vector.mts';
 import type {
   DRCell,
   DRCoordinate,
@@ -32,6 +22,22 @@ import type {
   DREventLogViewOptions,
   DRMessage,
 } from './util.mts';
+import {
+  DRAdjacentRxDirection,
+  DRAdjacentStep,
+  DRDiagonalDirections,
+  DRDirections,
+  getAdjacentId,
+  getMessageDirection,
+  isDRDiagonalDirection,
+  isDRDirection,
+} from './util.mts';
+
+interface RecoilSetterArg {
+  get: GetRecoilValue;
+  set: SetRecoilState;
+  reset: ResetRecoilState;
+}
 
 export const zoom = { min: 40, max: 200 };
 
@@ -84,11 +90,14 @@ export const rcLogBuffer = atom<Array<DREventLog>>({
     },
   ],
 });
-export const rcLog = selectorFamily<string, [DRCoordinate, string]>({
+export const rcLog = selectorFamily<
+  string,
+  { id: DRCoordinate; namespace: string }
+>({
   key: 'PushLog',
   get: () => () => '',
   set:
-    ([id, namespace]) =>
+    ({ id, namespace }) =>
     ({ set }, message) => {
       if (message instanceof DefaultValue) {
         return;
@@ -148,41 +157,11 @@ export const rcDirectedRxBuffer = atomFamily<
   Array<DRMessage>,
   `${DRCoordinate},${DRDirection}`
 >({ key: 'DirectedRxBuffer', default: [] });
-export const rcReceive = selectorFamily<
-  DRMessage | null,
-  `${DRCoordinate},${DRDirection}`
->({
-  key: 'Receive',
-  get: () => () => null,
-  set:
-    (id) =>
-    ({ set }, msg) => {
-      if (!msg || msg instanceof DefaultValue) {
-        return;
-      }
-      set(rcDirectedRxBuffer(id), (buffer) => [...buffer, msg]);
-    },
-});
 
 export const rcDirectedTxBuffer = atomFamily<
   Array<DRMessage>,
   `${DRCoordinate},${DRDirection}`
 >({ key: 'DirectedTxBuffer', default: [] });
-const rcPushToDirectedTxBuffer = selectorFamily<
-  DRMessage | null,
-  `${DRCoordinate},${DRDirection}`
->({
-  key: 'PushToDirectedTxBuffer',
-  get: () => () => null,
-  set:
-    (id) =>
-    ({ set }, msg) => {
-      if (!msg || msg instanceof DefaultValue) {
-        return;
-      }
-      set(rcDirectedTxBuffer(id), (buffer) => [...buffer, msg]);
-    },
-});
 
 type BufferStates = Record<DRDirection, number | null>;
 export const rcBufferStates = selectorFamily<BufferStates, DRCoordinate>({
@@ -204,91 +183,108 @@ export const rcBufferStates = selectorFamily<BufferStates, DRCoordinate>({
 export const rcSend = selectorFamily<DRMessage | null, DRCoordinate>({
   key: 'TxBuffer',
   get: () => () => null,
-  set:
-    (id) =>
-    ({ set, get }, msg) => {
-      if (!msg || msg instanceof DefaultValue) {
-        return;
-      }
-      const { to } = msg;
-      const { diagonal, rook, bishop } = sendUtils(set, get, id, msg);
-      if (id === msg.from) {
-        if (to === 'all') {
+  set: (id) => (args, msg) => {
+    if (!msg || msg instanceof DefaultValue) {
+      return;
+    }
+    const { mode } = msg;
+    if (isDRDirection(mode)) {
+      sendD(args, id, mode, msg);
+    } else if (isDRDiagonalDirection(mode)) {
+      sendDD(args, id, mode, msg);
+    } else if (mode === 'spread') {
+      const [dx, dy] = getMessageDirection(msg.d);
+      if (dy === 'c') {
+        if (dx === 'c') {
           for (const d of DRDirections) {
-            set(rcPushToDirectedTxBuffer(`${id},${d}`), msg);
+            sendD(args, id, d, msg);
           }
-        } else if (to === 'rook') {
-          rook();
-        } else if (to === 'bishop') {
-          bishop();
-        } else if (to === 'queen') {
-          rook();
-          bishop();
-        }
-      } else if (isDRDirection(to)) {
-        set(rcPushToDirectedTxBuffer(`${id},${to}`), msg);
-      } else if (isDRDiagonalDirection(to)) {
-        diagonal(to);
-      } else if (isDRCoordinate(to)) {
-        const r0 = parseDRCoordinate(id);
-        const r1 = parseDRCoordinate(to);
-        const dy = sign(r1[1] - r0[1], 'n', 'c', 's');
-        const dx = sign(r1[0] - r0[0], 'w', 'c', 'e');
-        if (dy === 'c') {
-          if (dx !== 'c') {
-            set(rcPushToDirectedTxBuffer(`${id},${dx}`), msg);
-          }
-        } else if (dx === 'c') {
-          set(rcPushToDirectedTxBuffer(`${id},${dy}`), msg);
         } else {
-          diagonal(`${dy}${dx}`);
+          sendD(args, id, 'n', msg);
+          sendD(args, id, 's', msg);
         }
-      } else if (to === 'all') {
-        /** TODO: ここを書く */
+      } else {
+        sendD(args, id, dy, msg);
       }
-    },
+    } else {
+      const rook = () => DRDirections.forEach((d) => sendD(args, id, d, msg));
+      const bishop = () =>
+        DRDiagonalDirections.forEach((dd) => sendDD(args, id, dd, msg));
+      const queen = () => {
+        rook();
+        bishop();
+      };
+      ({ rook, bishop, queen })[mode]();
+    }
+  },
 });
 
-const sendUtils = (
-  set: SetRecoilState,
-  get: GetRecoilValue,
+const sendD = (
+  { get, set }: RecoilSetterArg,
   id: DRCoordinate,
+  d: DRDirection,
   msg: DRMessage,
 ) => {
-  const diagonal = (
-    dd: DRDiagonalDirection,
-    states = get(rcBufferStates(id)),
-  ) => {
-    const dList = [...dd] as Array<DRDirection>;
-    let minD: DRDirection | null = null;
-    let minCount = Infinity;
-    for (let i = dList.length; --i; ) {
-      const d = dList[i];
-      const count = states[d];
-      if (isNonNegativeSafeInteger(count)) {
-        if (count < minCount) {
-          minCount = count;
-          minD = d;
-        }
+  const adjacentId = getAdjacentId(id, d);
+  const adjacentCell = get(rcCell(adjacentId));
+  if (adjacentCell) {
+    set(rcDirectedTxBuffer(`${id},${d}`), (buffer) => [...buffer, msg]);
+  }
+};
+
+const sendDD = (
+  { get, set }: RecoilSetterArg,
+  id: DRCoordinate,
+  dd: DRDiagonalDirection,
+  msg: DRMessage,
+) => {
+  let min: [number, DRDirection] | null = null;
+  for (const d of dd as Iterable<DRDirection>) {
+    const adjacentId = getAdjacentId(id, d);
+    const adjacentCell = get(rcCell(adjacentId));
+    if (adjacentCell) {
+      const count = get(rcDirectedTxBuffer(`${id},${d}`)).length;
+      if (!min || count < min[0]) {
+        min = [count, d];
       }
     }
-    if (minD !== null) {
-      states[minD] = minCount + 1;
-      set(rcPushToDirectedTxBuffer(`${id},${minD}`), { ...msg, to: dd });
-    }
-  };
-  const rook = () => {
-    for (const d of DRDirections) {
-      set(rcPushToDirectedTxBuffer(`${id},${d}`), { ...msg, to: d });
-    }
-  };
-  const bishop = (states = get(rcBufferStates(id))) => {
-    for (const dd of DRDiagonalDirections) {
-      diagonal(dd, states);
-    }
-  };
-  return { diagonal, rook, bishop };
+  }
+  if (min) {
+    // sendD()でよいですが存在チェックが済んでいるので直接set()します
+    set(rcDirectedTxBuffer(`${id},${min[1]}`), (buffer) => [...buffer, msg]);
+  }
 };
+
+export const rcTransmitMessage = selector<{
+  id: DRCoordinate;
+  d: DRDirection;
+} | null>({
+  key: 'TransmitMessage',
+  get: () => null,
+  set: ({ get, set }, data) => {
+    if (!data || data instanceof DefaultValue) {
+      return;
+    }
+    const { id, d } = data;
+    const tx = rcDirectedTxBuffer(`${id},${d}`);
+    const buf = get(tx).slice();
+    const msg = buf.shift();
+    set(tx, buf);
+    if (!msg) {
+      return;
+    }
+    const aId = getAdjacentId(id, d);
+    if (!get(rcCell(aId))) {
+      return;
+    }
+    const ad = DRAdjacentRxDirection[d];
+    set(rcLog({ id, namespace: 'tx' }), `${ad} ${JSON.stringify(msg)}`);
+    set(rcDirectedRxBuffer(`${aId},${ad}`), (buffer) => [
+      ...buffer,
+      { ...msg, d: vAdd(msg.d, DRAdjacentStep[d]) },
+    ]);
+  },
+});
 
 export const rcCellList = atom<Set<DRCoordinate>>({
   key: 'CellList',
@@ -303,7 +299,6 @@ export const rcInitCell = selector<DRCoordinate>({
       return;
     }
     set(rcCell(id), {
-      id,
       state: 'initial',
       sharedState: 'initial',
       pending: null,

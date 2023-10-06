@@ -40,7 +40,7 @@ const InitGameButton = () => {
         }
         reset(rcCellList);
         const list = new Set<DRCoordinate>();
-        const range = 2;
+        const range = 1;
         for (let x = -range; x <= range; x++) {
           for (let y = -range; y <= range; y++) {
             const coordinate = `${x},${y}` as const;
