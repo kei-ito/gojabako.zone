@@ -16,7 +16,7 @@ import {
   rcTxDelayMs,
   rcZoom,
   zoom,
-} from './recoil.mts';
+} from './recoil.app.mts';
 import * as style from './style.module.scss';
 import type { DRCoordinate } from './util.mts';
 
@@ -40,7 +40,7 @@ const InitGameButton = () => {
         }
         reset(rcCellList);
         const list = new Set<DRCoordinate>();
-        const range = 1;
+        const range = 2;
         for (let x = -range; x <= range; x++) {
           for (let y = -range; y <= range; y++) {
             const coordinate = `${x},${y}` as const;

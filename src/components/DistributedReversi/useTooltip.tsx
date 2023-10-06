@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useRecoilCallback } from 'recoil';
 import { DataView } from '../DataView';
-import { rcTooltip } from './recoil.mts';
+import { rcTooltip } from './recoil.app.mts';
 
 export const useTooltip = (message: ReactNode, data?: unknown) => {
   const onPointerEnter = useRecoilCallback(

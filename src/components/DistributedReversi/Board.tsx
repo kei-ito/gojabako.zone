@@ -10,7 +10,7 @@ import {
   rcViewBox,
   rcXYWHZ,
   rcZoom,
-} from './recoil.mts';
+} from './recoil.app.mts';
 import * as style from './style.module.scss';
 import type { DRCoordinate } from './util.mts';
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useRect } from '../use/Rect.mts';
-import { rcPointerPosition, rcTooltip } from './recoil.mts';
+import { rcPointerPosition, rcTooltip } from './recoil.app.mts';
 import * as style from './style.module.scss';
 
 export const DistributedReversiTooltip = () => {

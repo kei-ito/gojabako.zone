@@ -1,7 +1,8 @@
 import { useEffect, useMemo } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { noop } from '../../util/noop.mts';
-import { rcCell, rcDirectedRxBuffer, rcRxDelayMs, rcSend } from './recoil.mts';
+import { rcCell, rcDirectedRxBuffer, rcRxDelayMs } from './recoil.app.mts';
+import { rcSend } from './recoil.send.mts';
 import type {
   DRCell,
   DRCoordinate,

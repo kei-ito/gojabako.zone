@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import type { GetRecoilValue, ResetRecoilState, SetRecoilState } from 'recoil';
 import {
   DefaultValue,
   atom,
@@ -12,32 +11,14 @@ import {
   syncSearchParamsBoolean,
   syncSearchParamsNumber,
 } from '../../util/recoil/syncSearchParams.mts';
-import { vAdd } from '../../util/vector.mts';
 import type {
   DRCell,
   DRCoordinate,
-  DRDiagonalDirection,
   DRDirection,
   DREventLog,
   DREventLogViewOptions,
   DRMessage,
 } from './util.mts';
-import {
-  DRAdjacentRxDirection,
-  DRAdjacentStep,
-  DRDiagonalDirections,
-  DRDirections,
-  getAdjacentId,
-  getMessageDirection,
-  isDRDiagonalDirection,
-  isDRDirection,
-} from './util.mts';
-
-interface RecoilSetterArg {
-  get: GetRecoilValue;
-  set: SetRecoilState;
-  reset: ResetRecoilState;
-}
 
 export const zoom = { min: 40, max: 200 };
 
@@ -162,129 +143,6 @@ export const rcDirectedTxBuffer = atomFamily<
   Array<DRMessage>,
   `${DRCoordinate},${DRDirection}`
 >({ key: 'DirectedTxBuffer', default: [] });
-
-type BufferStates = Record<DRDirection, number | null>;
-export const rcBufferStates = selectorFamily<BufferStates, DRCoordinate>({
-  key: 'BufferStates',
-  get:
-    (id) =>
-    ({ get }) => {
-      const states: BufferStates = { e: null, n: null, w: null, s: null };
-      for (const d of DRDirections) {
-        const cell = get(rcCell(getAdjacentId(id, d)));
-        if (cell) {
-          states[d] = get(rcDirectedTxBuffer(`${id},${d}`)).length;
-        }
-      }
-      return states;
-    },
-});
-
-export const rcSend = selectorFamily<DRMessage | null, DRCoordinate>({
-  key: 'TxBuffer',
-  get: () => () => null,
-  set: (id) => (args, msg) => {
-    if (!msg || msg instanceof DefaultValue) {
-      return;
-    }
-    const { mode } = msg;
-    if (isDRDirection(mode)) {
-      sendD(args, id, mode, msg);
-    } else if (isDRDiagonalDirection(mode)) {
-      sendDD(args, id, mode, msg);
-    } else if (mode === 'spread') {
-      const [dx, dy] = getMessageDirection(msg.d);
-      if (dy === 'c') {
-        if (dx === 'c') {
-          for (const d of DRDirections) {
-            sendD(args, id, d, msg);
-          }
-        } else {
-          sendD(args, id, 'n', msg);
-          sendD(args, id, 's', msg);
-        }
-      } else {
-        sendD(args, id, dy, msg);
-      }
-    } else {
-      const rook = () => DRDirections.forEach((d) => sendD(args, id, d, msg));
-      const bishop = () =>
-        DRDiagonalDirections.forEach((dd) => sendDD(args, id, dd, msg));
-      const queen = () => {
-        rook();
-        bishop();
-      };
-      ({ rook, bishop, queen })[mode]();
-    }
-  },
-});
-
-const sendD = (
-  { get, set }: RecoilSetterArg,
-  id: DRCoordinate,
-  d: DRDirection,
-  msg: DRMessage,
-) => {
-  const adjacentId = getAdjacentId(id, d);
-  const adjacentCell = get(rcCell(adjacentId));
-  if (adjacentCell) {
-    set(rcDirectedTxBuffer(`${id},${d}`), (buffer) => [...buffer, msg]);
-  }
-};
-
-const sendDD = (
-  { get, set }: RecoilSetterArg,
-  id: DRCoordinate,
-  dd: DRDiagonalDirection,
-  msg: DRMessage,
-) => {
-  let min: [number, DRDirection] | null = null;
-  for (const d of dd as Iterable<DRDirection>) {
-    const adjacentId = getAdjacentId(id, d);
-    const adjacentCell = get(rcCell(adjacentId));
-    if (adjacentCell) {
-      const count = get(rcDirectedTxBuffer(`${id},${d}`)).length;
-      if (!min || count < min[0]) {
-        min = [count, d];
-      }
-    }
-  }
-  if (min) {
-    // sendD()でよいですが存在チェックが済んでいるので直接set()します
-    set(rcDirectedTxBuffer(`${id},${min[1]}`), (buffer) => [...buffer, msg]);
-  }
-};
-
-export const rcTransmitMessage = selector<{
-  id: DRCoordinate;
-  d: DRDirection;
-} | null>({
-  key: 'TransmitMessage',
-  get: () => null,
-  set: ({ get, set }, data) => {
-    if (!data || data instanceof DefaultValue) {
-      return;
-    }
-    const { id, d } = data;
-    const tx = rcDirectedTxBuffer(`${id},${d}`);
-    const buf = get(tx).slice();
-    const msg = buf.shift();
-    set(tx, buf);
-    if (!msg) {
-      return;
-    }
-    const aId = getAdjacentId(id, d);
-    if (!get(rcCell(aId))) {
-      return;
-    }
-    const ad = DRAdjacentRxDirection[d];
-    set(rcLog({ id, namespace: 'tx' }), `${ad} ${JSON.stringify(msg)}`);
-    set(rcDirectedRxBuffer(`${aId},${ad}`), (buffer) => [
-      ...buffer,
-      { ...msg, d: vAdd(msg.d, DRAdjacentStep[d]) },
-    ]);
-  },
-});
 
 export const rcCellList = atom<Set<DRCoordinate>>({
   key: 'CellList',

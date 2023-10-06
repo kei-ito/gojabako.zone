@@ -1,11 +1,8 @@
 import { useEffect, useMemo } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { noop } from '../../util/noop.mts';
-import {
-  rcDirectedTxBuffer,
-  rcTransmitMessage,
-  rcTxDelayMs,
-} from './recoil.mts';
+import { rcDirectedTxBuffer, rcTxDelayMs } from './recoil.app.mts';
+import { rcTransmitMessage } from './recoil.transmit.mts';
 import type { DRCoordinate, DRDirection } from './util.mts';
 
 export const useTx = (id: DRCoordinate, d: DRDirection) => {

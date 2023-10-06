@@ -1,6 +1,7 @@
 import type { MouseEvent } from 'react';
 import { useRecoilCallback } from 'recoil';
-import { rcCell, rcLog, rcSend } from './recoil.mts';
+import { rcCell, rcLog } from './recoil.app.mts';
+import { rcSend } from './recoil.send.mts';
 import type { DRCoordinate } from './util.mts';
 import { nextOwnerId } from './util.mts';
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { rcCell, rcSend } from './recoil.mts';
+import { rcCell } from './recoil.app.mts';
+import { rcSend } from './recoil.send.mts';
 import type { DRCoordinate, DRDirection } from './util.mts';
 import { getAdjacentId } from './util.mts';
 

@@ -2,7 +2,7 @@ import type { ChangeEvent, ReactNode } from 'react';
 import { useCallback } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { Select } from '../Select';
-import { rcLogBuffer, rcLogViewerOptions, rcShowLog } from './recoil.mts';
+import { rcLogBuffer, rcLogViewerOptions, rcShowLog } from './recoil.app.mts';
 import * as style from './style.module.scss';
 import type {
   DRCoordinate,

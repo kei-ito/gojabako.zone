@@ -1,7 +1,11 @@
 import { Fragment, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { classnames } from '../../util/classnames.mts';
-import { rcCell, rcDirectedRxBuffer, rcDirectedTxBuffer } from './recoil.mts';
+import {
+  rcCell,
+  rcDirectedRxBuffer,
+  rcDirectedTxBuffer,
+} from './recoil.app.mts';
 import * as style from './style.module.scss';
 import { useOnClickCell } from './useOnClickCell.mts';
 import { useOnConnection } from './useOnConnection.mts';
