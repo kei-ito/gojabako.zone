@@ -2,7 +2,13 @@ import { isSafeInteger } from '@nlib/typing';
 import { writerFamily } from '../../util/recoil/selector.mts';
 import { rcCell, rcDirectedRxBuffer } from './recoil.app.mts';
 import { rcForward } from './recoil.send.mts';
-import type { DRBufferId, DRCell, DRMessage, DRMessageMap } from './util.mts';
+import type {
+  DRBufferId,
+  DRCell,
+  DRCellId,
+  DRMessage,
+  DRMessageMap,
+} from './util.mts';
 import {
   DRInitialState,
   InitialOwnerId,
@@ -12,12 +18,12 @@ import {
 } from './util.mts';
 
 const getReceived = (() => {
-  const cache = new Map<DRBufferId, Set<string>>();
-  return (bufferId: DRBufferId) => {
-    let cached = cache.get(bufferId);
+  const cache = new Map<DRCellId, Set<string>>();
+  return (cellId: DRCellId) => {
+    let cached = cache.get(cellId);
     if (!cached) {
       cached = new Set();
-      cache.set(bufferId, cached);
+      cache.set(cellId, cached);
     }
     return cached;
   };
@@ -31,12 +37,15 @@ export const rcReceive = writerFamily<undefined, DRBufferId>({
       const buf = get(rcDirectedRxBuffer(bufferId)).slice();
       const msg = buf.shift();
       set(rcDirectedRxBuffer(bufferId), buf);
-      const received = getReceived(bufferId);
-      if (!msg || received.has(msg.deduplicationId)) {
+      if (!msg) {
+        return;
+      }
+      const [cellId, from] = parseDRBufferId(bufferId);
+      const received = getReceived(cellId);
+      if (received.has(msg.deduplicationId)) {
         return;
       }
       received.add(msg.deduplicationId);
-      const [cellId, from] = parseDRBufferId(bufferId);
       const cell = get(rcCell(cellId));
       if (!cell) {
         return;
