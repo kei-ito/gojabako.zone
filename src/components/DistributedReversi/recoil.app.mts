@@ -1,22 +1,10 @@
 import type { ReactNode } from 'react';
 import { DefaultValue, atom, atomFamily, selector } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
-import { writer, writerFamily } from '../../util/recoil/selector.mts';
-import {
-  syncSearchParamsBoolean,
-  syncSearchParamsNumber,
-} from '../../util/recoil/syncSearchParams.mts';
-import { DRInitialState } from './util.mts';
-import type {
-  DRBufferId,
-  DRCell,
-  DRCellId,
-  DREventLog,
-  DREventLogViewOptions,
-  DRMessage,
-} from './util.mts';
-
-export const zoom = { min: 40, max: 200 };
+import { writer } from '../../util/recoil/selector.mts';
+import { syncSearchParamsNumber } from '../../util/recoil/syncSearchParams.mts';
+import type { DRBufferId, DRCell, DRCellId, DRMessage } from './util.mts';
+import { DRInitialState, zoom } from './util.mts';
 
 export const rcTooltip = atom<ReactNode>({ key: 'Tooltip', default: null });
 export const rcPointerPosition = atom<[number, number]>({
@@ -40,51 +28,9 @@ export const rcRxDelayMs = atom<number>({
   key: 'RxDelayMs',
   effects: [...syncSearchParamsNumber('rxd', 300)],
 });
-export const rcShowLog = atom<boolean>({
-  key: 'ShowLog',
-  effects: [...syncSearchParamsBoolean('log', true)],
-});
-export const rcLogViewerOptions = atom<DREventLogViewOptions>({
-  key: 'LogViewerOptions',
-  default: { time: 'diff', cellId: null, namespace: null },
-});
-
-export const rcLogBuffer = atom<Array<DREventLog>>({
-  key: 'LogBuffer',
-  default: [],
-  effects: [
-    ({ onSet, setSelf, getLoadable }) => {
-      const setInitialLog = (list: Array<DREventLog>) => {
-        if (0 < list.length) {
-          return;
-        }
-        const time = performance.now();
-        const message = new Date().toISOString();
-        setSelf([{ cellId: '0,0', time, namespace: 'game', message }]);
-      };
-      onSet(setInitialLog);
-      setInitialLog(getLoadable(rcLogBuffer).getValue());
-    },
-  ],
-});
-export const rcLog = writerFamily<
-  string,
-  { cellId: DRCellId; namespace: string }
->({
-  key: 'PushLog',
-  set:
-    ({ cellId, namespace }) =>
-    ({ set }, message) => {
-      const time = performance.now();
-      const item: DREventLog = { cellId, time, namespace, message };
-      set(rcLogBuffer, (list) => [...list, item]);
-    },
-});
-
 type XYWHZ =
   | [number, number, number, number, number, [number, number]]
   | [number, number, number, number, number];
-
 export const rcXYWHZ = atom<XYWHZ>({
   key: 'XYZ',
   default: [0, 0, 0, 0, 80],

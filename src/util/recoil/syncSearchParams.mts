@@ -1,10 +1,14 @@
 import { isFiniteNumber } from '@nlib/typing';
 import type { AtomEffect } from 'recoil';
+import { isServer } from '../env.mts';
 
 export const syncSearchParamsBoolean = function* (
   key: string,
   defaultValue: boolean,
 ): Generator<AtomEffect<boolean>> {
+  if (isServer) {
+    return;
+  }
   yield ({ setSelf }) => {
     const url = new URL(location.href);
     const value = url.searchParams.get(key);
@@ -35,6 +39,9 @@ export const syncSearchParamsNumber = function* (
   key: string,
   defaultValue: number,
 ): Generator<AtomEffect<number>> {
+  if (isServer) {
+    return;
+  }
   yield ({ setSelf }) => {
     const url = new URL(location.href);
     const param = url.searchParams.get(key);

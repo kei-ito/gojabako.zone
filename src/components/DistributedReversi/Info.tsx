@@ -1,3 +1,4 @@
+'use client';
 import type { ChangeEvent } from 'react';
 import { useCallback, useEffect } from 'react';
 import { useRecoilCallback, useRecoilState } from 'recoil';
@@ -10,14 +11,12 @@ import {
   rcCell,
   rcCellList,
   rcInitCell,
-  rcLogBuffer,
   rcRxDelayMs,
-  rcShowLog,
   rcTxDelayMs,
   rcZoom,
-  zoom,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
+import { zoom } from './util.mts';
 import type { DRCellId } from './util.mts';
 
 export const DistributedReversiInfo = () => (
@@ -27,7 +26,6 @@ export const DistributedReversiInfo = () => (
     <TxDelayControl />
     <RxDelayControl />
     <FullScreenButton />
-    <LogToggle />
   </nav>
 );
 
@@ -48,7 +46,6 @@ const InitGameButton = () => {
             set(rcInitCell, cellId);
           }
         }
-        reset(rcLogBuffer);
         setTimeout(() => set(rcCellList, list), 50);
       },
     [],
@@ -106,18 +103,6 @@ const RxDelayControl = () => {
       <label htmlFor={id}>受信遅延</label>
       <input id={id} type="number" step={10} value={ms} onChange={onChange} />
       <span>ms</span>
-    </section>
-  );
-};
-
-const LogToggle = () => {
-  const [showLog, setShowLog] = useRecoilState(rcShowLog);
-  const onClick = useCallback(() => setShowLog((b) => !b), [setShowLog]);
-  const id = 'ShowLog';
-  return (
-    <section className={style.toggle}>
-      <label htmlFor={id}>ログを表示する</label>
-      <Toggle id={id} state={showLog} onClick={onClick} />
     </section>
   );
 };

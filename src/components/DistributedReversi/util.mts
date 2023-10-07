@@ -2,6 +2,7 @@ import type { Nominal } from '@nlib/typing';
 import { createTypeChecker, isNonNegativeSafeInteger } from '@nlib/typing';
 import { sign } from '../../util/sign.mts';
 
+export const zoom = { min: 40, max: 200 };
 export type OwnerId = Nominal<number, 'Owner'>;
 export const isOwnerId = createTypeChecker<OwnerId>(
   'OwnerId',
@@ -14,7 +15,6 @@ export type DRInitialStateType = Nominal<'N', 'DRState'>;
 export const DRInitialState = 'N' as DRInitialStateType;
 export type DRSharedState = DRInitialStateType | OwnerId;
 export type DRCellState = DRInitialStateType | OwnerId;
-
 export interface DRCell {
   sharedState: DRSharedState;
   state: DRCellState;
@@ -66,15 +66,21 @@ export const parseDRBufferId = (
   ];
 };
 export interface DRMessageBase<T extends string> {
-  type: T;
+  deduplicationId: string;
   /**
    * このメッセージが移動した距離です。この値はセル間を移動する際（TxからRxに移る際）に変更さ
    * れます。Txバッファに追加しただけでは変更されません。
    */
   d: [number, number];
+  type: T;
   ttl?: number;
   mode: DRDiagonalDirection | DRDirection | 'spread';
 }
+let deduplicationIdCounter = 0;
+export const generateMessageProps = () => ({
+  deduplicationId: (++deduplicationIdCounter).toString(36),
+  d: [0, 0] as [number, number],
+});
 export interface DRMessagePing extends DRMessageBase<'ping'> {}
 export interface DRMessagePress extends DRMessageBase<'press'> {
   state: Exclude<DRCellState, DRInitialStateType>;

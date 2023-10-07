@@ -4,7 +4,6 @@ import {
   rcCell,
   rcDirectedRxBuffer,
   rcDirectedTxBuffer,
-  rcLog,
 } from './recoil.app.mts';
 import type { DRCellId, DRDirection } from './util.mts';
 import {
@@ -36,7 +35,6 @@ export const rcTransmitMessage = writer<{
     if (rMsg.ttl) {
       rMsg.ttl -= 1;
     }
-    set(rcLog({ cellId, namespace: 'tx' }), `${ad} ${JSON.stringify(rMsg)}`);
     set(rcDirectedRxBuffer(`${aId},${ad}`), (buffer) => [...buffer, rMsg]);
   },
 });

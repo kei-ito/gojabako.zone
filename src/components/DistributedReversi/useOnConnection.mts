@@ -3,7 +3,7 @@ import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { rcCell } from './recoil.app.mts';
 import { rcSend } from './recoil.send.mts';
 import type { DRCellId, DRDirection } from './util.mts';
-import { getAdjacentId } from './util.mts';
+import { getAdjacentId, generateMessageProps } from './util.mts';
 
 export const useOnConnection = (cellId: DRCellId, d: DRDirection) => {
   const [sent, setSent] = useState(false);
@@ -15,8 +15,8 @@ export const useOnConnection = (cellId: DRCellId, d: DRDirection) => {
         if (cell) {
           const state = cell.sharedState;
           set(rcSend(cellId), {
+            ...generateMessageProps(),
             type: 'connect',
-            d: [0, 0],
             mode: d,
             state,
             ttl: 1,
