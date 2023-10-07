@@ -13,6 +13,7 @@ import {
   getAdjacentId,
   isDRDiagonalDirection,
   isDRDirection,
+  toDRBufferId,
 } from './util.mts';
 
 interface RecoilSetterArg {
@@ -65,7 +66,10 @@ const sendD = (
   const adjacentId = getAdjacentId(cellId, d);
   const adjacentCell = get(rcCell(adjacentId));
   if (adjacentCell) {
-    set(rcDirectedTxBuffer(`${cellId},${d}`), (buffer) => [...buffer, msg]);
+    set(rcDirectedTxBuffer(toDRBufferId(cellId, d)), (buffer) => [
+      ...buffer,
+      msg,
+    ]);
   }
 };
 
@@ -95,7 +99,7 @@ const sendToIdleBuffer = (
   const counts: Partial<Record<DRDirection, number>> = {};
   for (const d of dd as Iterable<DRDirection>) {
     if (!(d in counts) && get(rcCell(getAdjacentId(cellId, d)))) {
-      counts[d] = get(rcDirectedTxBuffer(`${cellId},${d}`)).length;
+      counts[d] = get(rcDirectedTxBuffer(toDRBufferId(cellId, d))).length;
     }
   }
   let min: [number, DRDirection] | null = null;
@@ -107,7 +111,7 @@ const sendToIdleBuffer = (
   }
   if (min) {
     // sendD()でよいですが存在チェックが済んでいるので直接set()します
-    set(rcDirectedTxBuffer(`${cellId},${min[1]}`), (buffer) => [
+    set(rcDirectedTxBuffer(toDRBufferId(cellId, min[1])), (buffer) => [
       ...buffer,
       msg,
     ]);

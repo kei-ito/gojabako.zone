@@ -13,13 +13,10 @@ import { useRx } from './useRx.mts';
 import { useTooltip } from './useTooltip';
 import { useTx } from './useTx.mts';
 import type { DRCell, DRCellId, DRDirection } from './util.mts';
-import { DRDirections, parseDRCellId } from './util.mts';
+import { DRDirections, toDRBufferId } from './util.mts';
 
 const r = 0.44;
-const toSVGCoodinate = (cellId: DRCellId) => {
-  const [x, y] = parseDRCellId(cellId);
-  return [x, -y] as const;
-};
+const toSVGCoodinate = (cellId: DRCellId) => [cellId[0], -cellId[1]] as const;
 
 interface DistributedReversiCellProps {
   cellId: DRCellId;
@@ -74,14 +71,14 @@ const Cell = ({ cellId }: DistributedReversiCellProps) => {
   );
 };
 
-interface TxProps extends DistributedReversiCellProps {
+interface TxRxProps extends DistributedReversiCellProps {
   d: DRDirection;
 }
 
-const Tx = ({ cellId, d }: TxProps) => {
-  useTx(cellId, d);
+const Tx = ({ cellId, d }: TxRxProps) => {
+  useTx(toDRBufferId(cellId, d));
   useOnConnection(cellId, d);
-  const buffer = useRecoilValue(rcDirectedTxBuffer(`${cellId},${d}`));
+  const buffer = useRecoilValue(rcDirectedTxBuffer(toDRBufferId(cellId, d)));
   const [cx, cy] = useMemo(() => {
     const tt = ((getT(d) - 0.2) * Math.PI) / 2;
     const [x, y] = toSVGCoodinate(cellId);
@@ -106,9 +103,9 @@ const Tx = ({ cellId, d }: TxProps) => {
   );
 };
 
-const Rx = ({ cellId, d }: TxProps) => {
-  useRx(cellId, d);
-  const buffer = useRecoilValue(rcDirectedRxBuffer(`${cellId},${d}`));
+const Rx = ({ cellId, d }: TxRxProps) => {
+  useRx(toDRBufferId(cellId, d));
+  const buffer = useRecoilValue(rcDirectedRxBuffer(toDRBufferId(cellId, d)));
   const [cx, cy] = useMemo(() => {
     const tt = ((getT(d) + 0.2) * Math.PI) / 2;
     const [x, y] = toSVGCoodinate(cellId);

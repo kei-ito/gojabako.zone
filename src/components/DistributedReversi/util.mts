@@ -9,8 +9,19 @@ export const isOwnerId = createTypeChecker<OwnerId>(
   (input: unknown): input is OwnerId => isNonNegativeSafeInteger(input),
 );
 /** この値は描画用で、実機では使えないことに注意します */
-export type DRCellId = `${number},${number}`;
-export const isDRCellId = createTypeChecker<DRCellId>('DRCellId', /^\d+,\d+$/);
+export type DRCellId = Nominal<[number, number], 'DRCellId'>;
+export const toDRCellId = (() => {
+  const cache = new Map<string, DRCellId>();
+  return (x: number, y: number) => {
+    const key = `${x},${y}`;
+    let cached = cache.get(key);
+    if (!cached) {
+      cached = [x, y] as DRCellId;
+      cache.set(key, cached);
+    }
+    return cached;
+  };
+})();
 export type DRInitialStateType = Nominal<'N', 'DRState'>;
 export const DRInitialState = 'N' as DRInitialStateType;
 export type DRSharedState = DRInitialStateType | OwnerId;
@@ -46,27 +57,25 @@ export const DRAdjacentStep: Record<DRDirection, [number, number]> = {
   w: [-1, 0],
   s: [0, -1],
 };
-export const parseDRCellId = (cellId: DRCellId): [number, number] => {
-  const [x, y] = cellId.split(',', 2);
-  return [Number.parseInt(x, 10), Number.parseInt(y, 10)];
-};
 export const getAdjacentId = (cellId: DRCellId, d: DRDirection): DRCellId => {
-  const r = parseDRCellId(cellId);
-  const dr = DRAdjacentStep[d];
-  return `${r[0] + dr[0]},${r[1] + dr[1]}`;
+  const step = DRAdjacentStep[d];
+  return toDRCellId(cellId[0] + step[0], cellId[1] + step[1]);
 };
-export type DRBufferId = `${DRCellId},${DRDirection}`;
-export const parseDRBufferId = (
-  bufferId: DRBufferId,
-): [DRCellId, DRDirection] => {
-  const lastCommaIndex = bufferId.lastIndexOf(',');
-  return [
-    bufferId.slice(0, lastCommaIndex) as DRCellId,
-    bufferId.slice(lastCommaIndex + 1) as DRDirection,
-  ];
-};
+export type DRBufferId = Nominal<[DRCellId, DRDirection], 'DRBufferId'>;
+export const toDRBufferId = (() => {
+  const cache = new Map<string, DRBufferId>();
+  return (cellId: DRCellId, d: DRDirection) => {
+    const key = `${cellId[0]},${cellId[1]},${d}`;
+    let cached = cache.get(key);
+    if (!cached) {
+      cached = [cellId, d] as DRBufferId;
+      cache.set(key, cached);
+    }
+    return cached;
+  };
+})();
 export interface DRMessageBase<T extends string> {
-  deduplicationId: string;
+  id: string;
   /**
    * このメッセージが移動した距離です。この値はセル間を移動する際（TxからRxに移る際）に変更さ
    * れます。Txバッファに追加しただけでは変更されません。
@@ -78,7 +87,7 @@ export interface DRMessageBase<T extends string> {
 }
 let deduplicationIdCounter = 0;
 export const generateMessageProps = () => ({
-  deduplicationId: (++deduplicationIdCounter).toString(36),
+  id: (++deduplicationIdCounter).toString(36),
   d: [0, 0] as [number, number],
 });
 export interface DRMessagePing extends DRMessageBase<'ping'> {}

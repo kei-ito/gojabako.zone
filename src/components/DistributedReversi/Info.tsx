@@ -16,7 +16,7 @@ import {
   rcZoom,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
-import { zoom } from './util.mts';
+import { toDRCellId, zoom } from './util.mts';
 import type { DRCellId } from './util.mts';
 
 export const DistributedReversiInfo = () => (
@@ -41,7 +41,7 @@ const InitGameButton = () => {
         const range = 2;
         for (let x = -range; x <= range; x++) {
           for (let y = -range; y <= range; y++) {
-            const cellId = `${x},${y}` as const;
+            const cellId = toDRCellId(x, y);
             list.add(cellId);
             set(rcInitCell, cellId);
           }

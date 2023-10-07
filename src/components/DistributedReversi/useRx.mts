@@ -19,12 +19,11 @@ import {
   InitialOwnerId,
   isOpenableDRMessage,
   nextOwnerId,
-  parseDRBufferId,
 } from './util.mts';
 
-export const useRx = (cellId: DRCellId, d: DRDirection) => {
-  const receive = useSetRecoilState(rcReceive(`${cellId},${d}`));
-  const buffer = useRecoilValue(rcDirectedRxBuffer(`${cellId},${d}`));
+export const useRx = (bufferId: DRBufferId) => {
+  const receive = useSetRecoilState(rcReceive(bufferId));
+  const buffer = useRecoilValue(rcDirectedRxBuffer(bufferId));
   const rxDelayMs = useRecoilValue(rcRxDelayMs);
   useEffect(() => {
     if (0 < buffer.length) {
@@ -60,12 +59,12 @@ const rcReceive = writerFamily<undefined, DRBufferId>({
     if (!msg) {
       return;
     }
-    const [cellId, from] = parseDRBufferId(bufferId);
+    const [cellId, from] = bufferId;
     const received = getReceived(cellId);
-    if (received.has(msg.deduplicationId)) {
+    if (received.has(msg.id)) {
       return;
     }
-    received.add(msg.deduplicationId);
+    received.add(msg.id);
     const cell = get(rcCell(cellId));
     if (!cell) {
       return;

@@ -41,7 +41,7 @@ const Cells = () => {
 
 const listCell = function* (list: Iterable<DRCellId>): Generator<ReactNode> {
   for (const cellId of list) {
-    yield <DistributedReversiCell key={cellId} cellId={cellId} />;
+    yield <DistributedReversiCell key={cellId.join(',')} cellId={cellId} />;
   }
 };
 
@@ -57,7 +57,7 @@ const useOnClick = () => {
         const rect = currentTarget.getBoundingClientRect();
         const cx = Math.round(x + (clientX - rect.left) / z);
         const cy = -Math.round(y + (clientY - rect.top) / z);
-        set(rcAddCell, `${cx},${cy}` as const);
+        set(rcAddCell, [cx, cy] as DRCellId);
       },
     [xywhz],
   );
