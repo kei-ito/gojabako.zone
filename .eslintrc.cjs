@@ -5,6 +5,7 @@ module.exports = {
   extends: ['next/core-web-vitals', '@nlib/eslint-config'],
   ignorePatterns: ['next-env.d.ts', 'cli/**', 'old-src/**'],
   rules: {
+    'no-restricted-globals': ['error', 'location'],
     'import/no-relative-parent-imports': 'off',
     '@typescript-eslint/no-restricted-imports': [
       'error',

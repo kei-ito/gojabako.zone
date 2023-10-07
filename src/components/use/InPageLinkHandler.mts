@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
 import { useHash } from './Hash.mts';
 
 export const useInPageLinkHandler = () => {
@@ -12,7 +13,7 @@ export const useInPageLinkHandler = () => {
         if (!a) {
           return;
         }
-        const currentPageUrl = new URL(location.href);
+        const currentPageUrl = getCurrentUrl();
         currentPageUrl.hash = '';
         const hrefUrl = new URL(a.href, currentPageUrl);
         if (hrefUrl.href.startsWith(currentPageUrl.href)) {

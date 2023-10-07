@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
 import { minmax } from '../../util/minmax.mts';
 import { noop } from '../../util/noop.mts';
 import {
@@ -60,12 +61,12 @@ const calculateHash = (
   mode: { add: boolean; expand: boolean },
 ): string => {
   const [requestedCodeId, requestedLineId] = parseHash(requestedHash);
-  const [currentCodeId, currentLineId] = parseHash(location.hash);
+  const [currentCodeId, currentLineId] = parseHash(getCurrentUrl().hash);
   if (requestedCodeId !== currentCodeId) {
     return requestedHash;
   }
   if (requestedLineId === currentLineId) {
-    const reset = new URL(location.href);
+    const reset = getCurrentUrl();
     reset.hash = '';
     return reset.hash;
   }
