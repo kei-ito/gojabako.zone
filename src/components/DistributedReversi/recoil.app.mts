@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { DefaultValue, atom, atomFamily, selector } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
+import { clientEffects } from '../../util/recoil/effect.mts';
 import { writer } from '../../util/recoil/selector.mts';
 import { syncSearchParamsNumber } from '../../util/recoil/syncSearchParams.mts';
 import type { DRBufferId, DRCell, DRCellId, DRMessage } from './util.mts';
@@ -10,23 +11,21 @@ export const rcTooltip = atom<ReactNode>({ key: 'Tooltip', default: null });
 export const rcPointerPosition = atom<[number, number]>({
   key: 'PointerPosition',
   default: [0, 0],
-  effects: [
-    ({ setSelf }) => {
-      const abc = new AbortController();
-      addEventListener('pointermove', (e) => setSelf([e.clientX, e.clientY]), {
-        signal: abc.signal,
-      });
-      return () => abc.abort();
-    },
-  ],
+  effects: clientEffects(({ setSelf }) => {
+    const abc = new AbortController();
+    addEventListener('pointermove', (e) => setSelf([e.clientX, e.clientY]), {
+      signal: abc.signal,
+    });
+    return () => abc.abort();
+  }),
 });
 export const rcTxDelayMs = atom<number>({
   key: 'TxDelayMs',
-  effects: [...syncSearchParamsNumber('txd', 300)],
+  effects: clientEffects(...syncSearchParamsNumber('txd', 300)),
 });
 export const rcRxDelayMs = atom<number>({
   key: 'RxDelayMs',
-  effects: [...syncSearchParamsNumber('rxd', 300)],
+  effects: clientEffects(...syncSearchParamsNumber('rxd', 300)),
 });
 type XYWHZ =
   | [number, number, number, number, number, [number, number]]
