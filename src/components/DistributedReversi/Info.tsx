@@ -1,4 +1,3 @@
-'use client';
 import type { ChangeEvent } from 'react';
 import { useCallback, useEffect } from 'react';
 import { useRecoilCallback, useRecoilState } from 'recoil';
@@ -16,8 +15,8 @@ import {
   rcZoom,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
-import { toDRCellId, zoom } from './util.mts';
 import type { DRCellId } from './util.mts';
+import { toDRCellId, zoom } from './util.mts';
 
 export const DistributedReversiInfo = () => (
   <nav className={style.info}>

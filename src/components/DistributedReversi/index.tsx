@@ -9,15 +9,15 @@ import { DistributedReversiTooltip } from './Tooltip';
 
 export const DistributedReversi = (props: HTMLAttributes<HTMLElement>) => {
   return (
-    <RecoilRoot>
-      <section
-        {...props}
-        className={classnames(style.container, props.className)}
-      >
+    <section
+      {...props}
+      className={classnames(style.container, props.className)}
+    >
+      <RecoilRoot>
         <DistributedReversiBoard />
         <DistributedReversiInfo />
         <DistributedReversiTooltip />
-      </section>
-    </RecoilRoot>
+      </RecoilRoot>
+    </section>
   );
 };

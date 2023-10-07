@@ -1,4 +1,3 @@
-'use client';
 import { isString } from '@nlib/typing';
 import { useCallback, useEffect, useState } from 'react';
 import { isClient } from '../../util/env.mts';
