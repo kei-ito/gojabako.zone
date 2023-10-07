@@ -1,20 +1,16 @@
 import type { ReactNode } from 'react';
-import {
-  DefaultValue,
-  atom,
-  atomFamily,
-  selector,
-  selectorFamily,
-} from 'recoil';
+import { DefaultValue, atom, atomFamily, selector } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
+import { writer, writerFamily } from '../../util/recoil/selector.mts';
 import {
   syncSearchParamsBoolean,
   syncSearchParamsNumber,
 } from '../../util/recoil/syncSearchParams.mts';
+import { DRInitialState } from './util.mts';
 import type {
+  DRBufferId,
   DRCell,
-  DRCoordinate,
-  DRDirection,
+  DRCellId,
   DREventLog,
   DREventLogViewOptions,
   DRMessage,
@@ -50,7 +46,7 @@ export const rcShowLog = atom<boolean>({
 });
 export const rcLogViewerOptions = atom<DREventLogViewOptions>({
   key: 'LogViewerOptions',
-  default: { time: 'diff', id: null, namespace: null },
+  default: { time: 'diff', cellId: null, namespace: null },
 });
 
 export const rcLogBuffer = atom<Array<DREventLog>>({
@@ -64,27 +60,23 @@ export const rcLogBuffer = atom<Array<DREventLog>>({
         }
         const time = performance.now();
         const message = new Date().toISOString();
-        setSelf([{ id: '0,0', time, namespace: 'game', message }]);
+        setSelf([{ cellId: '0,0', time, namespace: 'game', message }]);
       };
       onSet(setInitialLog);
       setInitialLog(getLoadable(rcLogBuffer).getValue());
     },
   ],
 });
-export const rcLog = selectorFamily<
+export const rcLog = writerFamily<
   string,
-  { id: DRCoordinate; namespace: string }
+  { cellId: DRCellId; namespace: string }
 >({
   key: 'PushLog',
-  get: () => () => '',
   set:
-    ({ id, namespace }) =>
+    ({ cellId, namespace }) =>
     ({ set }, message) => {
-      if (message instanceof DefaultValue) {
-        return;
-      }
       const time = performance.now();
-      const item: DREventLog = { id, time, namespace, message };
+      const item: DREventLog = { cellId, time, namespace, message };
       set(rcLogBuffer, (list) => [...list, item]);
     },
 });
@@ -129,57 +121,49 @@ export const rcZoom = selector<{ z: number; cx?: number; cy?: number }>({
   },
 });
 
-export const rcCell = atomFamily<DRCell | null, DRCoordinate>({
+export const rcCell = atomFamily<DRCell | null, DRCellId>({
   key: 'Cell',
   default: null,
 });
 
-export const rcDirectedRxBuffer = atomFamily<
-  Array<DRMessage>,
-  `${DRCoordinate},${DRDirection}`
->({ key: 'DirectedRxBuffer', default: [] });
+export const rcDirectedRxBuffer = atomFamily<Array<DRMessage>, DRBufferId>({
+  key: 'DirectedRxBuffer',
+  default: [],
+});
 
-export const rcDirectedTxBuffer = atomFamily<
-  Array<DRMessage>,
-  `${DRCoordinate},${DRDirection}`
->({ key: 'DirectedTxBuffer', default: [] });
+export const rcDirectedTxBuffer = atomFamily<Array<DRMessage>, DRBufferId>({
+  key: 'DirectedTxBuffer',
+  default: [],
+});
 
-export const rcCellList = atom<Set<DRCoordinate>>({
+export const rcCellList = atom<Set<DRCellId>>({
   key: 'CellList',
   default: new Set(),
 });
 
-export const rcInitCell = selector<DRCoordinate>({
+export const rcInitCell = writer<DRCellId>({
   key: 'InitCell',
-  get: () => `0,0`,
-  set: ({ set }, id) => {
-    if (id instanceof DefaultValue) {
-      return;
-    }
-    set(rcCell(id), {
-      state: 'initial',
-      sharedState: 'initial',
+  set: ({ set }, cellId) => {
+    set(rcCell(cellId), {
+      state: DRInitialState,
+      sharedState: DRInitialState,
       pending: null,
     });
     set(rcCellList, (list) => {
-      if (list.has(id)) {
+      if (list.has(cellId)) {
         return list;
       }
-      return new Set(list).add(id);
+      return new Set(list).add(cellId);
     });
   },
 });
 
-export const rcAddCell = selector<DRCoordinate>({
+export const rcAddCell = writer<DRCellId>({
   key: 'AddCell',
-  get: () => `0,0`,
-  set: ({ get, set }, coordinate) => {
-    if (coordinate instanceof DefaultValue) {
-      return;
-    }
-    const cell = get(rcCell(coordinate));
+  set: ({ get, set }, cellId) => {
+    const cell = get(rcCell(cellId));
     if (!cell) {
-      set(rcInitCell, coordinate);
+      set(rcInitCell, cellId);
     }
   },
 });

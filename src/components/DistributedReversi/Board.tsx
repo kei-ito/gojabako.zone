@@ -12,7 +12,7 @@ import {
   rcZoom,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
-import type { DRCoordinate } from './util.mts';
+import type { DRCellId } from './util.mts';
 
 export const DistributedReversiBoard = () => {
   const [element, setElement] = useState<Element | null>(null);
@@ -38,11 +38,9 @@ const Cells = () => {
   return [...listCell(list)];
 };
 
-const listCell = function* (
-  list: Iterable<DRCoordinate>,
-): Generator<ReactNode> {
-  for (const id of list) {
-    yield <DistributedReversiCell key={id} id={id} />;
+const listCell = function* (list: Iterable<DRCellId>): Generator<ReactNode> {
+  for (const cellId of list) {
+    yield <DistributedReversiCell key={cellId} cellId={cellId} />;
   }
 };
 
@@ -57,7 +55,7 @@ const useOnClick = () => {
         const [x, y, , , z] = xywhz;
         const rect = currentTarget.getBoundingClientRect();
         const cx = Math.round(x + (clientX - rect.left) / z);
-        const cy = Math.round(y + (clientY - rect.top) / z);
+        const cy = -Math.round(y + (clientY - rect.top) / z);
         set(rcAddCell, `${cx},${cy}` as const);
       },
     [xywhz],

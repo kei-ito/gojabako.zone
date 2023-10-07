@@ -9,6 +9,8 @@
   }
 
   & > button {
+    font-size: 150%;
+
     &[value='-'] {
       cursor: zoom-out;
     }

@@ -1,4 +1,4 @@
-import { DefaultValue, selector } from 'recoil';
+import { writer } from '../../util/recoil/selector.mts';
 import { vAdd } from '../../util/vector.mts';
 import {
   rcCell,
@@ -6,40 +6,37 @@ import {
   rcDirectedTxBuffer,
   rcLog,
 } from './recoil.app.mts';
-import type { DRCoordinate, DRDirection } from './util.mts';
+import type { DRCellId, DRDirection } from './util.mts';
 import {
   DRAdjacentRxDirection,
   DRAdjacentStep,
   getAdjacentId,
 } from './util.mts';
 
-export const rcTransmitMessage = selector<{
-  id: DRCoordinate;
+export const rcTransmitMessage = writer<{
+  cellId: DRCellId;
   d: DRDirection;
-} | null>({
+}>({
   key: 'TransmitMessage',
-  get: () => null,
   set: ({ get, set }, data) => {
-    if (!data || data instanceof DefaultValue) {
-      return;
-    }
-    const { id, d } = data;
-    const tx = rcDirectedTxBuffer(`${id},${d}`);
+    const { cellId, d } = data;
+    const tx = rcDirectedTxBuffer(`${cellId},${d}`);
     const buf = get(tx).slice();
-    const msg = buf.shift();
+    const tMsg = buf.shift();
     set(tx, buf);
-    if (!msg) {
+    if (!tMsg) {
       return;
     }
-    const aId = getAdjacentId(id, d);
+    const aId = getAdjacentId(cellId, d);
     if (!get(rcCell(aId))) {
       return;
     }
     const ad = DRAdjacentRxDirection[d];
-    set(rcLog({ id, namespace: 'tx' }), `${ad} ${JSON.stringify(msg)}`);
-    set(rcDirectedRxBuffer(`${aId},${ad}`), (buffer) => [
-      ...buffer,
-      { ...msg, d: vAdd(msg.d, DRAdjacentStep[d]) },
-    ]);
+    const rMsg = { ...tMsg, d: vAdd(tMsg.d, DRAdjacentStep[d]) };
+    if (rMsg.ttl) {
+      rMsg.ttl -= 1;
+    }
+    set(rcLog({ cellId, namespace: 'tx' }), `${ad} ${JSON.stringify(rMsg)}`);
+    set(rcDirectedRxBuffer(`${aId},${ad}`), (buffer) => [...buffer, rMsg]);
   },
 });

@@ -18,7 +18,7 @@ import {
   zoom,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
-import type { DRCoordinate } from './util.mts';
+import type { DRCellId } from './util.mts';
 
 export const DistributedReversiInfo = () => (
   <nav className={style.info}>
@@ -35,17 +35,17 @@ const InitGameButton = () => {
   const initCells = useRecoilCallback(
     ({ set, reset, snapshot }) =>
       () => {
-        for (const id of snapshot.getLoadable(rcCellList).getValue()) {
-          set(rcCell(id), null);
+        for (const cellId of snapshot.getLoadable(rcCellList).getValue()) {
+          set(rcCell(cellId), null);
         }
         reset(rcCellList);
-        const list = new Set<DRCoordinate>();
+        const list = new Set<DRCellId>();
         const range = 2;
         for (let x = -range; x <= range; x++) {
           for (let y = -range; y <= range; y++) {
-            const coordinate = `${x},${y}` as const;
-            list.add(coordinate);
-            set(rcInitCell, coordinate);
+            const cellId = `${x},${y}` as const;
+            list.add(cellId);
+            set(rcInitCell, cellId);
           }
         }
         reset(rcLogBuffer);

@@ -2,39 +2,36 @@ import type { MouseEvent } from 'react';
 import { useRecoilCallback } from 'recoil';
 import { rcCell, rcLog } from './recoil.app.mts';
 import { rcSend } from './recoil.send.mts';
-import type { DRCoordinate } from './util.mts';
-import { nextOwnerId } from './util.mts';
+import type { DRCellId } from './util.mts';
+import { isOwnerId, nextOwnerId } from './util.mts';
 
-export const useOnClickCell = (id: DRCoordinate) =>
+export const useOnClickCell = (cellId: DRCellId) =>
   useRecoilCallback(
     ({ set }) =>
       (event: MouseEvent) => {
         event.stopPropagation();
-        const logger = rcLog({ id, namespace: 'onClick' });
+        const logger = rcLog({ cellId, namespace: 'onClick' });
         set(logger, '');
-        set(rcCell(id), (oldCell) => {
+        set(rcCell(cellId), (oldCell) => {
           if (!oldCell) {
             set(logger, 'noCell');
             return oldCell;
           }
-          const { sharedState } = oldCell;
-          if (sharedState === 'initial') {
-            set(logger, `sharedState:${sharedState}`);
+          const { sharedState: state } = oldCell;
+          if (isOwnerId(state)) {
+            const cell = { ...oldCell };
+            set(rcSend(cellId), {
+              d: [0, 0],
+              mode: 'spread',
+              type: 'press',
+              state,
+            });
+            return { ...cell, state, sharedState: nextOwnerId(state) };
+          } else {
+            set(logger, `sharedState:${state}`);
             return oldCell;
           }
-          const cell = { ...oldCell };
-          set(rcSend(id), {
-            d: [0, 0],
-            mode: 'queen',
-            type: 'press' as const,
-            state: sharedState,
-          });
-          return {
-            ...cell,
-            state: sharedState,
-            sharedState: nextOwnerId(sharedState),
-          };
         });
       },
-    [id],
+    [cellId],
   );

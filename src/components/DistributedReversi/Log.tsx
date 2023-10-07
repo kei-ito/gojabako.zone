@@ -4,11 +4,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { Select } from '../Select';
 import { rcLogBuffer, rcLogViewerOptions, rcShowLog } from './recoil.app.mts';
 import * as style from './style.module.scss';
-import type {
-  DRCoordinate,
-  DREventLog,
-  DREventLogViewOptions,
-} from './util.mts';
+import type { DRCellId, DREventLog, DREventLogViewOptions } from './util.mts';
 
 export const DistributedReversiLog = () => {
   const showLog = useRecoilValue(rcShowLog);
@@ -34,7 +30,7 @@ const listEventElements = function* (
   }
   const epochMs = Date.parse(first.message);
   const firstMs = first.time;
-  const ids = new Set<DRCoordinate>();
+  const ids = new Set<DRCellId>();
   const namespaces = new Set<string>();
   let l = 1;
   for (let i = list.length; i--; ) {
@@ -49,10 +45,10 @@ const listEventElements = function* (
         {timeFormat === 'diff' && `+${elapsedMs.toFixed(3)}ms`}
       </time>
     );
-    ids.add(e.id);
+    ids.add(e.cellId);
     yield (
       <span key={i + 0.2} style={s}>
-        {e.id}
+        {e.cellId}
       </span>
     );
     namespaces.add(e.namespace);

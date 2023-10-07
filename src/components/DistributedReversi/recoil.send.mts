@@ -1,17 +1,16 @@
+import { isSafeInteger } from '@nlib/typing';
 import type { GetRecoilValue, ResetRecoilState, SetRecoilState } from 'recoil';
-import { DefaultValue, selectorFamily } from 'recoil';
+import { writerFamily } from '../../util/recoil/selector.mts';
 import { rcCell, rcDirectedTxBuffer } from './recoil.app.mts';
 import type {
-  DRCoordinate,
+  DRCellId,
   DRDiagonalDirection,
   DRDirection,
   DRMessage,
 } from './util.mts';
 import {
-  DRDiagonalDirections,
   DRDirections,
   getAdjacentId,
-  getMessageDirection,
   isDRDiagonalDirection,
   isDRDirection,
 } from './util.mts';
@@ -22,91 +21,114 @@ interface RecoilSetterArg {
   reset: ResetRecoilState;
 }
 
-export const rcSend = selectorFamily<DRMessage | null, DRCoordinate>({
+export const rcSend = writerFamily<DRMessage, DRCellId>({
   key: 'Send',
-  get: () => () => null,
-  set: (id) => (args, msg) => {
-    if (!msg || msg instanceof DefaultValue) {
-      return;
-    }
+  set: (cellId) => (args, msg) => {
     const { mode } = msg;
     if (isDRDirection(mode)) {
-      sendD(args, id, msg, [mode]);
+      sendD(args, cellId, msg, mode);
     } else if (isDRDiagonalDirection(mode)) {
-      sendDD(args, id, msg, [mode]);
+      sendDD(args, cellId, msg, mode);
     } else {
-      const [dx, dy] = getMessageDirection(msg.d);
-      if (mode === 'spread') {
-        if (dy === 'c') {
-          sendD(args, id, msg, dx === 'c' ? DRDirections : ['n', 's']);
-        } else {
-          sendD(args, id, msg, [dy]);
-        }
-      } else {
-        const rook = () => {
-          if (dx === 'c') {
-            sendD(args, id, msg, dy === 'c' ? DRDirections : [dy]);
-          } else if (dy === 'c') {
-            sendD(args, id, msg, [dx]);
-          }
-        };
-        const bishop = () => {
-          if (dx === 'c' && dy === 'c') {
-            sendDD(args, id, msg, DRDiagonalDirections);
-          }
-        };
-        const queen = () => {
-          rook();
-          bishop();
-        };
-        ({ rook, bishop, queen })[mode]();
-      }
+      spread(args, cellId, msg);
     }
   },
 });
 
+interface ForwardProps {
+  from: DRDirection;
+  msg: DRMessage;
+}
+
+export const rcForward = writerFamily<ForwardProps, DRCellId>({
+  key: 'Forward',
+  set:
+    (cellId) =>
+    (args, { from, msg }) => {
+      const { mode } = msg;
+      if (isDRDirection(mode)) {
+        sendD(args, cellId, msg, mode);
+      } else if (isDRDiagonalDirection(mode)) {
+        sendDD(args, cellId, msg, mode);
+      } else {
+        spread(args, cellId, msg, from);
+      }
+    },
+});
+
 const sendD = (
   { get, set }: RecoilSetterArg,
-  id: DRCoordinate,
+  cellId: DRCellId,
   msg: DRMessage,
-  list: Iterable<DRDirection>,
+  d: DRDirection,
 ) => {
-  for (const d of list) {
-    const adjacentId = getAdjacentId(id, d);
-    const adjacentCell = get(rcCell(adjacentId));
-    if (adjacentCell) {
-      set(rcDirectedTxBuffer(`${id},${d}`), (buffer) => [
-        ...buffer,
-        { ...msg },
-      ]);
-    }
+  const adjacentId = getAdjacentId(cellId, d);
+  const adjacentCell = get(rcCell(adjacentId));
+  if (adjacentCell) {
+    set(rcDirectedTxBuffer(`${cellId},${d}`), (buffer) => [...buffer, msg]);
   }
 };
 
 const sendDD = (
-  { get, set }: RecoilSetterArg,
-  id: DRCoordinate,
+  args: RecoilSetterArg,
+  cellId: DRCellId,
   msg: DRMessage,
-  list: Iterable<DRDiagonalDirection>,
+  dd: DRDiagonalDirection,
 ) => {
-  for (const dd of list) {
-    let min: [number, DRDirection] | null = null;
-    for (const d of dd as Iterable<DRDirection>) {
-      const adjacentId = getAdjacentId(id, d);
-      const adjacentCell = get(rcCell(adjacentId));
-      if (adjacentCell) {
-        const count = get(rcDirectedTxBuffer(`${id},${d}`)).length;
-        if (!min || count < min[0]) {
-          min = [count, d];
-        }
-      }
+  const dx = Math.abs(msg.d[0]);
+  const dy = Math.abs(msg.d[1]);
+  if (dy < dx) {
+    sendD(args, cellId, msg, dd[0] as DRDirection);
+  } else if (dx < dy) {
+    sendD(args, cellId, msg, dd[1] as DRDirection);
+  } else {
+    sendToIdleBuffer(args, cellId, msg, dd);
+  }
+};
+
+const sendToIdleBuffer = (
+  { get, set }: RecoilSetterArg,
+  cellId: DRCellId,
+  msg: DRMessage,
+  dd: DRDiagonalDirection,
+) => {
+  const counts: Partial<Record<DRDirection, number>> = {};
+  for (const d of dd as Iterable<DRDirection>) {
+    if (!(d in counts) && get(rcCell(getAdjacentId(cellId, d)))) {
+      counts[d] = get(rcDirectedTxBuffer(`${cellId},${d}`)).length;
     }
-    if (min) {
-      // sendD()でよいですが存在チェックが済んでいるので直接set()します
-      set(rcDirectedTxBuffer(`${id},${min[1]}`), (buffer) => [
-        ...buffer,
-        { ...msg, mode: dd },
-      ]);
+  }
+  let min: [number, DRDirection] | null = null;
+  for (const d of dd as Iterable<DRDirection>) {
+    const count = counts[d];
+    if (isSafeInteger(count) && (!min || count < min[0])) {
+      min = [count, d];
     }
+  }
+  if (min) {
+    // sendD()でよいですが存在チェックが済んでいるので直接set()します
+    set(rcDirectedTxBuffer(`${cellId},${min[1]}`), (buffer) => [
+      ...buffer,
+      msg,
+    ]);
+    counts[min[1]] = min[0] + 1;
+  }
+};
+
+/**
+ * TODO: 重複排除
+ */
+const spread = (
+  args: RecoilSetterArg,
+  cellId: DRCellId,
+  msg: DRMessage,
+  ...exclude: Array<DRDirection>
+) => {
+  const directions = new Set(DRDirections);
+  for (const d of exclude) {
+    directions.delete(d);
+  }
+  for (const d of directions) {
+    sendD(args, cellId, msg, d);
   }
 };

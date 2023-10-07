@@ -1,6 +1,6 @@
 import { Fragment, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
-import { classnames } from '../../util/classnames.mts';
+import { IconClass, classnames } from '../../util/classnames.mts';
 import {
   rcCell,
   rcDirectedRxBuffer,
@@ -12,30 +12,36 @@ import { useOnConnection } from './useOnConnection.mts';
 import { useRx } from './useRx.mts';
 import { useTooltip } from './useTooltip';
 import { useTx } from './useTx.mts';
-import type { DRCell, DRCoordinate, DRDirection } from './util.mts';
-import { DRDirections, parseDRCoordinate } from './util.mts';
+import type { DRCell, DRCellId, DRDirection } from './util.mts';
+import { DRDirections, parseDRCellId } from './util.mts';
 
 const r = 0.44;
+const toSVGCoodinate = (cellId: DRCellId) => {
+  const [x, y] = parseDRCellId(cellId);
+  return [x, -y] as const;
+};
 
 interface DistributedReversiCellProps {
-  id: DRCoordinate;
+  cellId: DRCellId;
 }
 
-export const DistributedReversiCell = ({ id }: DistributedReversiCellProps) => (
-  <g id={encodeURIComponent(`cell${id}`)} className={style.cell}>
-    <Cell id={id} />
+export const DistributedReversiCell = ({
+  cellId,
+}: DistributedReversiCellProps) => (
+  <g id={encodeURIComponent(`cell${cellId}`)} className={style.cell}>
+    <Cell cellId={cellId} />
     {DRDirections.map((d) => (
       <Fragment key={d}>
-        <Tx id={id} d={d} />
-        <Rx id={id} d={d} />
+        <Tx cellId={cellId} d={d} />
+        <Rx cellId={cellId} d={d} />
       </Fragment>
     ))}
   </g>
 );
 
-const Cell = ({ id }: DistributedReversiCellProps) => {
-  const cell: Partial<DRCell> = useRecoilValue(rcCell(id)) ?? {};
-  const [x, y] = parseDRCoordinate(id);
+const Cell = ({ cellId }: DistributedReversiCellProps) => {
+  const cell: Partial<DRCell> = useRecoilValue(rcCell(cellId)) ?? {};
+  const [x, y] = toSVGCoodinate(cellId);
   const size = 0.9;
   const round = 0.1;
   const lineHeight = 0.12;
@@ -49,12 +55,17 @@ const Cell = ({ id }: DistributedReversiCellProps) => {
         width={size}
         height={size}
         data-state={cell.state}
-        onClick={useOnClickCell(id)}
-        {...useTooltip(id, cell)}
+        onClick={useOnClickCell(cellId)}
+        {...useTooltip(cellId, cell)}
       />
       <text x={x} y={y - lineHeight}>
         {cell.state}
-        {cell.pending !== null && ` → ${cell.pending}`}
+        {cell.pending !== null && (
+          <>
+            <tspan className={IconClass}>double_arrow</tspan>
+            {cell.pending}
+          </>
+        )}
       </text>
       <text x={x} y={y + lineHeight}>
         {cell.sharedState}
@@ -67,15 +78,15 @@ interface TxProps extends DistributedReversiCellProps {
   d: DRDirection;
 }
 
-const Tx = ({ id, d }: TxProps) => {
-  useTx(id, d);
-  useOnConnection(id, d);
-  const buffer = useRecoilValue(rcDirectedTxBuffer(`${id},${d}`));
+const Tx = ({ cellId, d }: TxProps) => {
+  useTx(cellId, d);
+  useOnConnection(cellId, d);
+  const buffer = useRecoilValue(rcDirectedTxBuffer(`${cellId},${d}`));
   const [cx, cy] = useMemo(() => {
     const tt = ((getT(d) - 0.2) * Math.PI) / 2;
-    const [x, y] = parseDRCoordinate(id);
+    const [x, y] = toSVGCoodinate(cellId);
     return [x + r * Math.cos(tt), y + r * Math.sin(tt)];
-  }, [id, d]);
+  }, [cellId, d]);
   const bufferedCount = buffer.length;
   return (
     <>
@@ -86,7 +97,7 @@ const Tx = ({ id, d }: TxProps) => {
           style.tx,
           0 < bufferedCount && style.active,
         )}
-        {...useTooltip(`Tx${d}:${id}`, 0 < buffer.length ? buffer : null)}
+        {...useTooltip(`Tx${d}:${cellId}`, 0 < buffer.length ? buffer : null)}
       />
       <text x={cx} y={cy} className={style.buffer}>
         {bufferedCount}
@@ -95,14 +106,14 @@ const Tx = ({ id, d }: TxProps) => {
   );
 };
 
-const Rx = ({ id, d }: TxProps) => {
-  useRx(id, d);
-  const buffer = useRecoilValue(rcDirectedRxBuffer(`${id},${d}`));
+const Rx = ({ cellId, d }: TxProps) => {
+  useRx(cellId, d);
+  const buffer = useRecoilValue(rcDirectedRxBuffer(`${cellId},${d}`));
   const [cx, cy] = useMemo(() => {
     const tt = ((getT(d) + 0.2) * Math.PI) / 2;
-    const [x, y] = parseDRCoordinate(id);
+    const [x, y] = toSVGCoodinate(cellId);
     return [x + r * Math.cos(tt), y + r * Math.sin(tt)];
-  }, [id, d]);
+  }, [cellId, d]);
   const bufferedCount = buffer.length;
   return (
     <>
@@ -113,7 +124,7 @@ const Rx = ({ id, d }: TxProps) => {
           style.rx,
           0 < bufferedCount && style.active,
         )}
-        {...useTooltip(`Rx${d}:${id}`, 0 < buffer.length ? buffer : null)}
+        {...useTooltip(`Rx${d}:${cellId}`, 0 < buffer.length ? buffer : null)}
       />
       <text x={cx} y={cy} className={style.buffer}>
         {bufferedCount}
