@@ -1,14 +1,26 @@
 import type { PageData } from './type.mts';
 export const pageList: Array<PageData> = [
   {
+    title: ['分散', '型', 'リバー', 'シ'],
+    description: 'マス目同士の通信でゲームが進行するリバーシです。',
+    keywords: [],
+    publishedAt: '2023-09-27T01:49:32.000Z',
+    updatedAt: '2023-09-27T01:49:32.000Z',
+    commits: 1,
+    path: '/app/d-reversi',
+    iri: 'gjbkz://gojabako.zone/app/d-reversi',
+    group: 'app',
+    filePath: 'src/app/app/d-reversi/page.tsx',
+  },
+  {
     title: ['Components'],
     description: 'このサイトを構成する部品の動作確認ページです。',
     publishedAt: '2023-09-22T13:31:12.000Z',
     updatedAt: '2023-09-25T02:46:25.000Z',
     commits: 3,
-    path: '/app/components/',
-    iri: 'gjbkz://gojabako.zone/app/components/',
-    group: 'app/components',
+    path: '/app/components',
+    iri: 'gjbkz://gojabako.zone/app/components',
+    group: 'app',
     filePath: 'src/app/app/components/[[...path]]/page.tsx',
   },
   {

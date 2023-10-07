@@ -152,7 +152,7 @@ interface KVViewProps {
 
 const KVView = ({ type, items, depth }: KVViewProps) => (
   <dl className={style.kv} data-depth={`${depth}`}>
-    <span className={style.type}>{type}</span>
+    {0 < depth && <span className={style.type}>{type}</span>}
     {[...items].map(([k, v], index, { length }) => {
       const first = index === 0;
       const last = index === length - 1;

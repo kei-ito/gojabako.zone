@@ -14,8 +14,9 @@ knownTitles.set('/', 'Home');
 export const getPageData = async (file: URL): Promise<PageData> => {
   let pagePath = file.pathname.slice(appDir.pathname.length - 1);
   pagePath = pagePath.replace(/\/page\.\w+$/, '');
-  pagePath = pagePath.replace(/\([^/]+\)\//, '') || '/';
-  pagePath = pagePath.replace(/\[\[\.\.\..*$/, '');
+  pagePath = pagePath.replace(/\([^/]+\)\//, '');
+  pagePath = pagePath.replace(/\/\[+[^\]]*\]+/, '');
+  pagePath = pagePath || '/';
   const [history, metadata, tokenizer] = await Promise.all([
     getCommits(file),
     getMetadata(file),

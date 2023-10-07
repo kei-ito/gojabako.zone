@@ -14,7 +14,7 @@
   line-height: 1.4;
   color: var(--gjGray0);
   background-color: var(--gjGray5);
-  border-radius: 0.2em;
+  border-radius: 0.3em;
 }
 
 .value {
@@ -73,12 +73,14 @@
   & > * {
     border-block-end: var(--gjBorder);
 
-    &.first {
-      border-block-start: var(--gjBorder);
-    }
-
     &.last {
       border-block-end: none;
+    }
+  }
+
+  &:not([data-depth='0']) {
+    & > .first {
+      border-block-start: var(--gjBorder);
     }
   }
 

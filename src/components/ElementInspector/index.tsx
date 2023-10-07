@@ -1,7 +1,9 @@
 'use client';
 import type { ChangeEvent } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { IconClass } from '../../util/classnames.mts';
 import { isClient } from '../../util/env.mts';
+import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
 import { noop } from '../../util/noop.mts';
 import { Select } from '../Select';
 import * as style from './style.module.scss';
@@ -34,13 +36,13 @@ interface BaseWidthSelectorProps {
 const BaseWidthSelector = ({ parent }: BaseWidthSelectorProps) => {
   const [baseWidth, setBaseWidth] = useState(getInitialBaseWidth());
   useEffect(() => {
-    const url = new URL(location.href);
+    const url = getCurrentUrl();
     if (baseWidth === 'default') {
       url.searchParams.delete('w');
     } else {
       url.searchParams.set('w', `${baseWidth}`);
     }
-    if (location.href !== url.href) {
+    if (getCurrentUrl().href !== url.href) {
       history.replaceState(null, '', url);
     }
   }, [baseWidth]);
@@ -65,7 +67,7 @@ const BaseWidthSelector = ({ parent }: BaseWidthSelectorProps) => {
   );
   return (
     <>
-      <label className="material-symbols-rounded" htmlFor="BaseWidthSelector">
+      <label className={IconClass} htmlFor="BaseWidthSelector">
         width
       </label>
       <Select id="BaseWidthSelector" onChange={onChange} value={baseWidth}>
@@ -82,5 +84,5 @@ const getInitialBaseWidth = () => {
   if (!isClient) {
     return 'default';
   }
-  return new URLSearchParams(location.search).get('w') ?? 'default';
+  return getCurrentUrl().searchParams.get('w') ?? 'default';
 };

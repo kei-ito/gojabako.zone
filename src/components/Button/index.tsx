@@ -3,18 +3,32 @@ import type {
   HTMLAttributes,
   PropsWithChildren,
 } from 'react';
-import { classnames } from '../../util/classnames.mts';
+import { IconClass, classnames } from '../../util/classnames.mts';
 import * as style from './style.module.scss';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   state?: 'active' | 'focus' | 'hover';
+  icon?: string;
 }
 
-const Button = ({ state, ...props }: PropsWithChildren<ButtonProps>) => (
+const Button = ({
+  state,
+  icon,
+  children,
+  ...props
+}: PropsWithChildren<ButtonProps>) => (
   <button
     {...props}
-    className={classnames(style.button, state && style[state], props.className)}
-  />
+    className={classnames(
+      style.button,
+      icon && style.icon,
+      state && style[state],
+      props.className,
+    )}
+  >
+    {icon && <span className={classnames(IconClass, style.icon)}>{icon}</span>}
+    <span>{children}</span>
+  </button>
 );
 
 export const PrimaryButton = (props: PropsWithChildren<ButtonProps>) => (

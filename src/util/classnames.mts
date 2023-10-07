@@ -17,4 +17,4 @@ const list = function* (entries: Array<ClassNameEntry>): Generator<string> {
   }
 };
 
-export const ClassIcon = 'material-symbols-rounded';
+export const IconClass = 'material-symbols-rounded';

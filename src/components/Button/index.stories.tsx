@@ -16,15 +16,15 @@ export const Default: StoryObj = {
         columns={buttons}
         rows={
           {
-            default: undefined,
-            hover: 'hover',
-            active: 'active',
-            focus: 'focus',
+            default: {},
+            hover: { state: 'hover' },
+            active: { state: 'active' },
+            focus: { state: 'focus' },
+            icon1: { icon: 'download' },
+            icon2: { icon: 'downloading' },
           } as const
         }
-        render={({ column: Button, row }) => (
-          <Button state={row}>Button</Button>
-        )}
+        render={({ column: Button, row }) => <Button {...row}>Button</Button>}
       />
       <StoryElement.Table
         title="children"

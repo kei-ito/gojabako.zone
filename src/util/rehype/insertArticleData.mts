@@ -14,15 +14,17 @@ interface RootLike extends Omit<Root, 'children'> {
 
 export const insertArticleData = (root: RootLike, file: VFileLike) => {
   const page = getPageFromFileUrl(pathToFileURL(file.path));
-  setOpenGraphMetadata(root, page);
-  root.children.unshift(
-    createHastElement(
-      'header',
-      {},
-      createHastElement('h1', {}, page.title.join('')),
-      createHastElement('div', {}, ...listMetaElements(page)),
-    ),
-  );
+  if (page) {
+    setOpenGraphMetadata(root, page);
+    root.children.unshift(
+      createHastElement(
+        'header',
+        {},
+        createHastElement('h1', {}, page.title.join('')),
+        createHastElement('div', {}, ...listMetaElements(page)),
+      ),
+    );
+  }
 };
 
 const listMetaElements = function* (
