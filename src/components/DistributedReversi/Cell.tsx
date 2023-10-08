@@ -42,7 +42,7 @@ const Cell = ({ cellId }: CellProps) => {
   const [x, y] = toSVGCoodinate(cellId);
   const size = 0.9;
   const onClick = useOnPressCell(cellId);
-  const tooltipProps = useTooltip(cellId, cell);
+  const tooltipProps = useTooltip(cellId.join(','), cell);
   return (
     cell && (
       <>
@@ -107,7 +107,6 @@ const Tx = ({ cellId, d }: TxRxProps) => {
           style.tx,
           0 < bufferedCount && style.active,
         )}
-        {...useTooltip(`Tx${d}:${cellId}`, 0 < buffer.length ? buffer : null)}
       />
       <text x={cx} y={cy} className={style.buffer}>
         {bufferedCount}
@@ -134,7 +133,6 @@ const Rx = ({ cellId, d }: TxRxProps) => {
           style.rx,
           0 < bufferedCount && style.active,
         )}
-        {...useTooltip(`Rx${d}:${cellId}`, 0 < buffer.length ? buffer : null)}
       />
       <text x={cx} y={cy} className={style.buffer}>
         {bufferedCount}

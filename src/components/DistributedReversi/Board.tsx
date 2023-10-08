@@ -1,30 +1,49 @@
 import type { MouseEvent, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
-import { noop } from '../../util/noop.mts';
+import { writer } from '../../util/recoil/selector.mts';
 import { useRect } from '../use/Rect.mts';
 import { DistributedReversiCell } from './Cell';
-import { rcAddCell, rcCellList, rcViewBox, rcXYWHZ } from './recoil.app.mts';
+import type { XYWHZ } from './recoil.app.mts';
+import {
+  rcAddCell,
+  rcCellList,
+  rcDragging,
+  rcViewBox,
+  rcXYWHZ,
+} from './recoil.app.mts';
 import * as style from './style.module.scss';
 import type { DRCellId } from './util.mts';
 
 export const DistributedReversiBoard = () => {
   const [element, setElement] = useState<Element | null>(null);
   useSyncRect(element);
-  const onClick = useOnClick();
   useGrab(element as HTMLElement);
-  const viewBox = useRecoilValue(rcViewBox);
   return (
     <svg
       ref={setElement}
       className={style.board}
-      viewBox={viewBox}
-      onClick={onClick}
+      viewBox={useRecoilValue(rcViewBox)}
+      onClick={useSetRecoilState(rcOnClickBoard)}
     >
       {element && <Cells />}
     </svg>
   );
 };
+
+const rcOnClickBoard = writer<MouseEvent>({
+  key: 'OnClickBoard',
+  set: ({ get, set }, { clientX, clientY, currentTarget }) => {
+    if (get(rcDragging)) {
+      return;
+    }
+    const [x, y, , , z] = get(rcXYWHZ);
+    const rect = currentTarget.getBoundingClientRect();
+    const cx = Math.round(x + (clientX - rect.left) / z);
+    const cy = -Math.round(y + (clientY - rect.top) / z);
+    set(rcAddCell, [cx, cy] as DRCellId);
+  },
+});
 
 const Cells = () => {
   const list = useRecoilValue(rcCellList);
@@ -35,24 +54,6 @@ const listCell = function* (list: Iterable<DRCellId>): Generator<ReactNode> {
   for (const cellId of list) {
     yield <DistributedReversiCell key={cellId.join(',')} cellId={cellId} />;
   }
-};
-
-const useOnClick = () => {
-  const xywhz = useRecoilValue(rcXYWHZ);
-  return useRecoilCallback(
-    ({ set }) =>
-      ({ clientX, clientY, currentTarget }: MouseEvent) => {
-        if ((currentTarget as HTMLElement).dataset.dragging) {
-          return;
-        }
-        const [x, y, , , z] = xywhz;
-        const rect = currentTarget.getBoundingClientRect();
-        const cx = Math.round(x + (clientX - rect.left) / z);
-        const cy = -Math.round(y + (clientY - rect.top) / z);
-        set(rcAddCell, [cx, cy] as DRCellId);
-      },
-    [xywhz],
-  );
 };
 
 const useSyncRect = (element: Element | null) => {
@@ -111,60 +112,46 @@ const useSyncRect = (element: Element | null) => {
 //   }, [board, setZoom]);
 // };
 
-// eslint-disable-next-line max-lines-per-function
 const useGrab = (board: HTMLElement | null) => {
-  const set = useSetRecoilState(rcXYWHZ);
-  // eslint-disable-next-line max-lines-per-function
+  const onPointerDown = useOnPointerDown();
   useEffect(() => {
-    if (!board) {
-      return noop;
-    }
     const abc = new AbortController();
-    let abc2 = new AbortController();
-    board.addEventListener(
-      'pointerdown',
-      (down: PointerEvent) => {
-        const target = down.target as HTMLElement | null;
-        if (!target || board.dataset.dragging) {
-          return;
-        }
-        target.setPointerCapture(down.pointerId);
-        abc2.abort();
-        abc2 = new AbortController();
-        const diff = (e: PointerEvent): [number, number] => [
-          e.clientX - down.clientX,
-          e.clientY - down.clientY,
-        ];
-        const onMove = (e: PointerEvent) => {
-          if (e.pointerId === down.pointerId) {
-            set(([x, y, w, h, z]) => {
-              const d = diff(e);
-              if (!board.dataset.dragging && 10 < Math.hypot(...d)) {
-                board.dataset.dragging = '1';
-              }
-              return [x, y, w, h, z, d];
-            });
-          }
-        };
-        const onUp = (e: PointerEvent) => {
-          target.releasePointerCapture(down.pointerId);
-          abc2.abort();
-          set(([x, y, w, h, z]) => {
-            const d = diff(e);
-            return [x - d[0] / z, y - d[1] / z, w, h, z];
-          });
-          setTimeout(() => {
-            delete board.dataset.dragging;
-          });
-        };
-        board.addEventListener('pointermove', onMove, { signal: abc2.signal });
-        board.addEventListener('pointerup', onUp, { signal: abc2.signal });
-      },
-      { signal: abc.signal },
-    );
-    return () => {
-      abc.abort();
-      abc2.abort();
-    };
-  }, [board, set]);
+    board?.addEventListener('pointerdown', onPointerDown, {
+      signal: abc.signal,
+    });
+    return () => abc.abort();
+  }, [board, onPointerDown]);
 };
+
+const useOnPointerDown = () =>
+  useRecoilCallback(({ set, snapshot }) => (e0: PointerEvent) => {
+    if (snapshot.getLoadable(rcDragging).getValue()) {
+      return;
+    }
+    const target = e0.target as HTMLElement;
+    target.setPointerCapture(e0.pointerId);
+    const abc = new AbortController();
+    const diff = (e: PointerEvent): [number, number] => [
+      e.clientX - e0.clientX,
+      e.clientY - e0.clientY,
+    ];
+    const anchor = snapshot.getLoadable(rcXYWHZ).getValue();
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerId === e0.pointerId) {
+        set(rcDragging, true);
+        const newXYWHZ: XYWHZ = [...anchor];
+        newXYWHZ[5] = diff(e);
+        set(rcXYWHZ, newXYWHZ);
+      }
+    };
+    const onUp = (e: PointerEvent) => {
+      target.releasePointerCapture(e0.pointerId);
+      abc.abort();
+      const [x, y, w, h, z] = anchor;
+      const d = diff(e);
+      set(rcXYWHZ, [x - d[0] / z, y - d[1] / z, w, h, z]);
+      setTimeout(() => set(rcDragging, false), 50);
+    };
+    target.addEventListener('pointermove', onMove, { signal: abc.signal });
+    target.addEventListener('pointerup', onUp, { signal: abc.signal });
+  });

@@ -25,6 +25,7 @@ export const rcPointerPosition = atom<[number, number]>({
     },
   ],
 });
+export const rcDragging = atom<boolean>({ key: 'Dragging', default: false });
 export const rcTxDelayMs = atom<number>({
   key: 'TxDelayMs',
   default: 300,
@@ -35,7 +36,7 @@ export const rcRxDelayMs = atom<number>({
   default: 300,
   effects: [...syncSearchParamsNumber('rxd', 80)],
 });
-type XYWHZ =
+export type XYWHZ =
   | [number, number, number, number, number, [number, number]]
   | [number, number, number, number, number];
 export const rcXYWHZ = atom<XYWHZ>({
