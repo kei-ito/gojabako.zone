@@ -5,7 +5,7 @@ import { isClient } from '../../util/env.mts';
 import { writer } from '../../util/recoil/selector.mts';
 import { syncSearchParamsNumber } from '../../util/recoil/syncSearchParams.mts';
 import type { DRBufferId, DRCell, DRCellId, DRMessage } from './util.mts';
-import { DRInitialState, zoom } from './util.mts';
+import { DRInitialState, InitialDRPlayerId, zoom } from './util.mts';
 
 export const rcTooltip = atom<ReactNode>({ key: 'Tooltip', default: null });
 export const rcPointerPosition = atom<[number, number]>({
@@ -98,10 +98,9 @@ export const rcInitCell = writer<DRCellId>({
   key: 'InitCell',
   set: ({ set }, cellId) => {
     set(rcCell(cellId), {
-      state: DRInitialState,
-      gameState: DRInitialState,
-      playerCount: 2,
       pending: null,
+      state: DRInitialState,
+      shared: { gameState: InitialDRPlayerId, playerCount: 2 },
     });
     set(rcCellList, (list) => {
       if (list.has(cellId)) {

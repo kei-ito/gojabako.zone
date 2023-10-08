@@ -14,12 +14,7 @@ import type {
   DRMessage,
   DRMessageMap,
 } from './util.mts';
-import {
-  DRInitialState,
-  InitialDRPlayerId,
-  isOpenableDRMessage,
-  nextDRPlayerId,
-} from './util.mts';
+import { isOpenableDRMessage, nextDRPlayerId } from './util.mts';
 
 export const useRx = (bufferId: DRBufferId) => {
   const receive = useSetRecoilState(rcReceive(bufferId));
@@ -99,13 +94,7 @@ type Receivers = {
 const receivers: Receivers = {
   ping: noop,
   connect: ({ set }, cellId, cell, { payload }) => {
-    if (payload.gameState === DRInitialState) {
-      if (cell.gameState === DRInitialState) {
-        set(rcCell(cellId), { ...cell, gameState: InitialDRPlayerId });
-      }
-    } else {
-      set(rcCell(cellId), { ...cell, gameState: payload.gameState });
-    }
+    set(rcCell(cellId), { ...cell, shared: payload });
   },
   press: ({ set }, cellId, cell, { d, payload }) => {
     set(rcCell(cellId), () => {
@@ -120,6 +109,6 @@ const receivers: Receivers = {
     });
   },
   setShared: ({ set }, cellId, cell, { payload }) => {
-    set(rcCell(cellId), { ...cell, ...payload });
+    set(rcCell(cellId), { ...cell, shared: payload });
   },
 };

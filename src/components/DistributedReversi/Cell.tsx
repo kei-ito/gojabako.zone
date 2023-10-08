@@ -42,32 +42,36 @@ const Cell = ({ cellId }: CellProps) => {
   const size = 0.9;
   const round = 0.1;
   const lineHeight = 0.12;
+  const onClick = useOnPressCell(cellId);
+  const tooltipProps = useTooltip(cellId, cell);
   return (
-    <>
-      <rect
-        x={x - size / 2}
-        y={y - size / 2}
-        rx={round}
-        ry={round}
-        width={size}
-        height={size}
-        data-state={cell?.state}
-        onClick={useOnPressCell(cellId)}
-        {...useTooltip(cellId, cell)}
-      />
-      <text x={x} y={y - lineHeight}>
-        {cell?.state ?? 'Error'}
-        {cell?.pending !== null && (
-          <>
-            <tspan className={IconClass}>double_arrow</tspan>
-            {cell?.pending}
-          </>
-        )}
-      </text>
-      <text x={x} y={y + lineHeight}>
-        {cell?.gameState}/{cell?.playerCount}
-      </text>
-    </>
+    cell && (
+      <>
+        <rect
+          x={x - size / 2}
+          y={y - size / 2}
+          rx={round}
+          ry={round}
+          width={size}
+          height={size}
+          data-state={cell.state}
+          onClick={onClick}
+          {...tooltipProps}
+        />
+        <text x={x} y={y - lineHeight}>
+          {cell.state}
+          {cell.pending !== null && (
+            <>
+              <tspan className={IconClass}>double_arrow</tspan>
+              {cell.pending}
+            </>
+          )}
+        </text>
+        <text x={x} y={y + lineHeight}>
+          {cell.shared.gameState}/{cell.shared.playerCount}
+        </text>
+      </>
+    )
   );
 };
 

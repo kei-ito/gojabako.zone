@@ -1,11 +1,11 @@
-import { useCallback } from 'react';
 import type { MouseEvent } from 'react';
+import { useCallback } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { writer } from '../../util/recoil/selector.mts';
 import { rcCell } from './recoil.app.mts';
 import { rcSend } from './recoil.send.mts';
 import type { DRCellId } from './util.mts';
-import { generateMessageProps, isDRPlayerId, nextDRPlayerId } from './util.mts';
+import { generateMessageProps, nextDRPlayerId } from './util.mts';
 
 export const useOnPressCell = (cellId: DRCellId) => {
   const press = useSetRecoilState(rcPressCell);
@@ -25,19 +25,20 @@ const rcPressCell = writer<DRCellId>({
     if (!cell) {
       return;
     }
-    const state = cell.gameState;
-    if (isDRPlayerId(state)) {
-      set(rcSend(cellId), {
-        ...generateMessageProps(),
-        mode: 'spread',
-        type: 'press',
-        payload: { state },
-      });
-      set(rcCell(cellId), {
-        ...cell,
-        state,
-        gameState: nextDRPlayerId(state),
-      });
-    }
+    const { gameState } = cell.shared;
+    set(rcSend(cellId), {
+      ...generateMessageProps(),
+      mode: 'spread',
+      type: 'press',
+      payload: { state: gameState },
+    });
+    set(rcCell(cellId), {
+      ...cell,
+      state: gameState,
+      shared: {
+        ...cell.shared,
+        gameState: nextDRPlayerId(gameState),
+      },
+    });
   },
 });

@@ -25,13 +25,14 @@ export const toDRCellId = (() => {
 export type DRInitialStateType = Nominal<'N', 'DRState'>;
 export const DRInitialState = 'N' as DRInitialStateType;
 export type DRCellState = DRInitialStateType | DRPlayerId;
-interface GameProps {
-  gameState: DRCellState;
+export interface DRSharedProps {
+  gameState: DRPlayerId;
   playerCount: number;
 }
-export interface DRCell extends GameProps {
+export interface DRCell {
   state: DRCellState;
   pending: DRPlayerId | null;
+  shared: DRSharedProps;
 }
 export const DRDirections = ['e', 'n', 'w', 's'] as const;
 export type DRDirection = (typeof DRDirections)[number];
@@ -96,8 +97,8 @@ export const generateMessageProps = () => ({
 export interface DRMessageMap {
   ping: DRMessageType<'ping', void>;
   press: DRMessageType<'press', { state: DRPlayerId }>;
-  connect: DRMessageType<'connect', GameProps>;
-  setShared: DRMessageType<'setShared', GameProps>;
+  connect: DRMessageType<'connect', DRSharedProps>;
+  setShared: DRMessageType<'setShared', DRSharedProps>;
 }
 export type DRMessage = DRMessageMap[keyof DRMessageMap];
 export const isOpenableDRMessage = ({ mode, d: [dx, dy] }: DRMessage) => {
