@@ -31,7 +31,7 @@ const rcPressCell = writer<DRCellId>({
         ...generateMessageProps(),
         mode: 'spread',
         type: 'press',
-        state,
+        payload: { state },
       });
       set(rcCell(cellId), {
         ...cell,

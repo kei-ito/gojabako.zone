@@ -28,8 +28,10 @@ const rcOnConnection = writer<{ cellId: DRCellId; d: DRDirection }>({
         type: 'connect',
         mode: d,
         ttl: 1,
-        gameState: cell.gameState,
-        playerCount: cell.playerCount,
+        payload: {
+          gameState: cell.gameState,
+          playerCount: cell.playerCount,
+        },
       });
     }
   },

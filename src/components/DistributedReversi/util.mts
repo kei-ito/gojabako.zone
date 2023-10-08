@@ -76,7 +76,7 @@ export const toDRBufferId = (() => {
     return cached;
   };
 })();
-export interface DRMessageBase<T extends string> {
+interface DRMessageType<T extends string, P> {
   id: string;
   /**
    * このメッセージが移動した距離です。この値はセル間を移動する際（TxからRxに移る際）に変更さ
@@ -86,25 +86,18 @@ export interface DRMessageBase<T extends string> {
   type: T;
   ttl?: number;
   mode: DRDiagonalDirection | DRDirection | 'spread';
+  payload: P;
 }
 let deduplicationIdCounter = 0;
 export const generateMessageProps = () => ({
   id: (++deduplicationIdCounter).toString(36),
   d: [0, 0] as [number, number],
 });
-export interface DRMessagePing extends DRMessageBase<'ping'> {}
-export interface DRMessagePress extends DRMessageBase<'press'> {
-  state: Exclude<DRCellState, DRInitialStateType>;
-}
-export interface DRMessageConnect extends DRMessageBase<'connect'>, GameProps {}
-export interface DRMessageSetShared
-  extends DRMessageBase<'setShared'>,
-    GameProps {}
 export interface DRMessageMap {
-  ping: DRMessagePing;
-  press: DRMessagePress;
-  connect: DRMessageConnect;
-  setShared: DRMessageSetShared;
+  ping: DRMessageType<'ping', void>;
+  press: DRMessageType<'press', { state: DRPlayerId }>;
+  connect: DRMessageType<'connect', GameProps>;
+  setShared: DRMessageType<'setShared', GameProps>;
 }
 export type DRMessage = DRMessageMap[keyof DRMessageMap];
 export const isOpenableDRMessage = ({ mode, d: [dx, dy] }: DRMessage) => {

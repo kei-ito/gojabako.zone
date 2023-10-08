@@ -98,28 +98,28 @@ type Receivers = {
 };
 const receivers: Receivers = {
   ping: noop,
-  connect: ({ set }, cellId, cell, msg) => {
-    if (msg.gameState === DRInitialState) {
+  connect: ({ set }, cellId, cell, { payload }) => {
+    if (payload.gameState === DRInitialState) {
       if (cell.gameState === DRInitialState) {
         set(rcCell(cellId), { ...cell, gameState: InitialDRPlayerId });
       }
     } else {
-      set(rcCell(cellId), { ...cell, gameState: msg.gameState });
+      set(rcCell(cellId), { ...cell, gameState: payload.gameState });
     }
   },
-  press: ({ set }, cellId, cell, msg) => {
+  press: ({ set }, cellId, cell, { d, payload }) => {
     set(rcCell(cellId), () => {
-      const next = { ...cell, sharedState: nextDRPlayerId(msg.state) };
-      if (cell.state !== msg.state) {
-        const [dx, dy] = msg.d;
+      const next = { ...cell, sharedState: nextDRPlayerId(payload.state) };
+      if (cell.state !== payload.state) {
+        const [dx, dy] = d;
         if (dx === 0 || dy === 0 || Math.abs(dx) === Math.abs(dy)) {
-          next.pending = msg.state;
+          next.pending = payload.state;
         }
       }
       return next;
     });
   },
-  setShared: ({ set }, cellId, cell, msg) => {
-    set(rcCell(cellId), { ...cell, gameState: msg.gameState });
+  setShared: ({ set }, cellId, cell, { payload }) => {
+    set(rcCell(cellId), { ...cell, ...payload });
   },
 };
