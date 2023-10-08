@@ -7,37 +7,37 @@ import {
   rcDirectedTxBuffer,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
-import { useOnClickCell } from './useOnClickCell.mts';
 import { useOnConnection } from './useOnConnection.mts';
+import { useOnPressCell } from './useOnPressCell.mts';
 import { useRx } from './useRx.mts';
 import { useTooltip } from './useTooltip';
 import { useTx } from './useTx.mts';
-import type { DRCell, DRCellId, DRDirection } from './util.mts';
+import type { DRCellId, DRDirection } from './util.mts';
 import { DRDirections, toDRBufferId } from './util.mts';
 
 const r = 0.44;
 const toSVGCoodinate = (cellId: DRCellId) => [cellId[0], -cellId[1]] as const;
 
-interface DistributedReversiCellProps {
+interface CellProps {
   cellId: DRCellId;
 }
 
-export const DistributedReversiCell = ({
-  cellId,
-}: DistributedReversiCellProps) => (
-  <g id={encodeURIComponent(`cell${cellId}`)} className={style.cell}>
-    <Cell cellId={cellId} />
-    {DRDirections.map((d) => (
-      <Fragment key={d}>
-        <Tx cellId={cellId} d={d} />
-        <Rx cellId={cellId} d={d} />
-      </Fragment>
-    ))}
-  </g>
-);
+export const DistributedReversiCell = ({ cellId }: CellProps) => {
+  return (
+    <g id={encodeURIComponent(`cell${cellId}`)} className={style.cell}>
+      <Cell cellId={cellId} />
+      {DRDirections.map((d) => (
+        <Fragment key={d}>
+          <Tx cellId={cellId} d={d} />
+          <Rx cellId={cellId} d={d} />
+        </Fragment>
+      ))}
+    </g>
+  );
+};
 
-const Cell = ({ cellId }: DistributedReversiCellProps) => {
-  const cell: Partial<DRCell> = useRecoilValue(rcCell(cellId)) ?? {};
+const Cell = ({ cellId }: CellProps) => {
+  const cell = useRecoilValue(rcCell(cellId));
   const [x, y] = toSVGCoodinate(cellId);
   const size = 0.9;
   const round = 0.1;
@@ -51,27 +51,28 @@ const Cell = ({ cellId }: DistributedReversiCellProps) => {
         ry={round}
         width={size}
         height={size}
-        data-state={cell.state}
-        onClick={useOnClickCell(cellId)}
+        data-state={cell?.state}
+        onClick={useOnPressCell(cellId)}
         {...useTooltip(cellId, cell)}
       />
       <text x={x} y={y - lineHeight}>
-        {cell.state}
-        {cell.pending !== null && (
+        {cell?.state ?? 'Error'}
+        {cell?.pending !== null && (
           <>
             <tspan className={IconClass}>double_arrow</tspan>
-            {cell.pending}
+            {cell?.pending}
           </>
         )}
       </text>
       <text x={x} y={y + lineHeight}>
-        {cell.sharedState}
+        {cell?.gameState}/{cell?.playerCount}
       </text>
     </>
   );
 };
 
-interface TxRxProps extends DistributedReversiCellProps {
+interface TxRxProps {
+  cellId: DRCellId;
   d: DRDirection;
 }
 

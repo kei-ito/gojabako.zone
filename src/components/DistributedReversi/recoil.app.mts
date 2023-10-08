@@ -99,7 +99,8 @@ export const rcInitCell = writer<DRCellId>({
   set: ({ set }, cellId) => {
     set(rcCell(cellId), {
       state: DRInitialState,
-      sharedState: DRInitialState,
+      gameState: DRInitialState,
+      playerCount: 2,
       pending: null,
     });
     set(rcCellList, (list) => {

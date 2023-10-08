@@ -99,16 +99,13 @@ type Receivers = {
 const receivers: Receivers = {
   ping: noop,
   connect: ({ set }, cellId, cell, msg) => {
-    set(rcCell(cellId), () => {
-      if (msg.state === DRInitialState) {
-        if (cell.sharedState === DRInitialState) {
-          return { ...cell, sharedState: InitialDRPlayerId };
-        }
-      } else {
-        return { ...cell, sharedState: msg.state };
+    if (msg.gameState === DRInitialState) {
+      if (cell.gameState === DRInitialState) {
+        set(rcCell(cellId), { ...cell, gameState: InitialDRPlayerId });
       }
-      return cell;
-    });
+    } else {
+      set(rcCell(cellId), { ...cell, gameState: msg.gameState });
+    }
   },
   press: ({ set }, cellId, cell, msg) => {
     set(rcCell(cellId), () => {
@@ -123,6 +120,6 @@ const receivers: Receivers = {
     });
   },
   setShared: ({ set }, cellId, cell, msg) => {
-    set(rcCell(cellId), { ...cell, sharedState: msg.state });
+    set(rcCell(cellId), { ...cell, gameState: msg.gameState });
   },
 };

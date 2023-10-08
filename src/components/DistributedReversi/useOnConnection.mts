@@ -23,13 +23,13 @@ const rcOnConnection = writer<{ cellId: DRCellId; d: DRDirection }>({
   set: ({ get, set }, { cellId, d }) => {
     const cell = get(rcCell(cellId));
     if (cell) {
-      const state = cell.sharedState;
       set(rcSend(cellId), {
         ...generateMessageProps(),
         type: 'connect',
         mode: d,
-        state,
         ttl: 1,
+        gameState: cell.gameState,
+        playerCount: cell.playerCount,
       });
     }
   },

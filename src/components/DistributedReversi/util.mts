@@ -24,10 +24,12 @@ export const toDRCellId = (() => {
 })();
 export type DRInitialStateType = Nominal<'N', 'DRState'>;
 export const DRInitialState = 'N' as DRInitialStateType;
-export type DRSharedState = DRInitialStateType | DRPlayerId;
 export type DRCellState = DRInitialStateType | DRPlayerId;
-export interface DRCell {
-  sharedState: DRSharedState;
+interface GameProps {
+  gameState: DRCellState;
+  playerCount: number;
+}
+export interface DRCell extends GameProps {
   state: DRCellState;
   pending: DRPlayerId | null;
 }
@@ -94,12 +96,10 @@ export interface DRMessagePing extends DRMessageBase<'ping'> {}
 export interface DRMessagePress extends DRMessageBase<'press'> {
   state: Exclude<DRCellState, DRInitialStateType>;
 }
-export interface DRMessageConnect extends DRMessageBase<'connect'> {
-  state: DRSharedState;
-}
-export interface DRMessageSetShared extends DRMessageBase<'setShared'> {
-  state: DRSharedState;
-}
+export interface DRMessageConnect extends DRMessageBase<'connect'>, GameProps {}
+export interface DRMessageSetShared
+  extends DRMessageBase<'setShared'>,
+    GameProps {}
 export interface DRMessageMap {
   ping: DRMessagePing;
   press: DRMessagePress;
