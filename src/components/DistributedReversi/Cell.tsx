@@ -11,7 +11,6 @@ import * as style from './style.module.scss';
 import { useOnConnection } from './useOnConnection.mts';
 import { useOnPressCell } from './useOnPressCell.mts';
 import { useRx } from './useRx.mts';
-import { useTooltip } from './useTooltip';
 import { useTx } from './useTx.mts';
 import type { DRCell, DRCellId, DRDirection } from './util.mts';
 import { DRDirections, isDRPlayerId, toDRBufferId } from './util.mts';
@@ -42,7 +41,6 @@ const Cell = ({ cellId }: CellProps) => {
   const [x, y] = toSVGCoodinate(cellId);
   const size = 0.9;
   const onClick = useOnPressCell(cellId);
-  const tooltipProps = useTooltip(cellId.join(','), cell);
   return (
     cell && (
       <>
@@ -54,7 +52,6 @@ const Cell = ({ cellId }: CellProps) => {
           data-state={cell.state}
           onClick={onClick}
           style={getRectStyle(cell)}
-          {...tooltipProps}
         />
         <text x={x} y={y}>
           {cell.state}

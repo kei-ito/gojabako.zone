@@ -125,7 +125,7 @@ const useGrab = (board: HTMLElement | null) => {
 
 const useOnPointerDown = () =>
   useRecoilCallback(({ set, snapshot }) => (e0: PointerEvent) => {
-    if (snapshot.getLoadable(rcDragging).getValue()) {
+    if (e0.button !== 0 || snapshot.getLoadable(rcDragging).getValue()) {
       return;
     }
     const target = e0.target as HTMLElement;
@@ -138,7 +138,7 @@ const useOnPointerDown = () =>
     const anchor = snapshot.getLoadable(rcXYWHZ).getValue();
     const onMove = (e: PointerEvent) => {
       if (e.pointerId === e0.pointerId) {
-        set(rcDragging, true);
+        set(rcDragging, abc);
         const newXYWHZ: XYWHZ = [...anchor];
         newXYWHZ[5] = diff(e);
         set(rcXYWHZ, newXYWHZ);
@@ -150,7 +150,7 @@ const useOnPointerDown = () =>
       const [x, y, w, h, z] = anchor;
       const d = diff(e);
       set(rcXYWHZ, [x - d[0] / z, y - d[1] / z, w, h, z]);
-      setTimeout(() => set(rcDragging, false), 50);
+      setTimeout(() => set(rcDragging, null), 50);
     };
     target.addEventListener('pointermove', onMove, { signal: abc.signal });
     target.addEventListener('pointerup', onUp, { signal: abc.signal });

@@ -25,7 +25,10 @@ export const rcPointerPosition = atom<[number, number]>({
     },
   ],
 });
-export const rcDragging = atom<boolean>({ key: 'Dragging', default: false });
+export const rcDragging = atom<AbortController | null>({
+  key: 'Dragging',
+  default: null,
+});
 export const rcTxDelayMs = atom<number>({
   key: 'TxDelayMs',
   default: 300,
