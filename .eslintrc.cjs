@@ -48,7 +48,7 @@ module.exports = {
       },
     },
     {
-      files: ['src/cli/*', 'src/components/DistributedReversi/**'],
+      files: ['src/cli/*'],
       rules: {
         'no-console': 'off',
       },

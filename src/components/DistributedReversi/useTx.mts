@@ -53,7 +53,6 @@ const rcTransmitMessage = writer<DRBufferId>({
     if (rMsg.ttl) {
       rMsg.ttl -= 1;
     }
-    console.info(`rx: ${JSON.stringify(rMsg)}`);
     set(rcDirectedRxBuffer(toDRBufferId(aId, ad)), (buffer) => [
       ...buffer,
       rMsg,
