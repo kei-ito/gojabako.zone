@@ -4,13 +4,7 @@ import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
 import { noop } from '../../util/noop.mts';
 import { useRect } from '../use/Rect.mts';
 import { DistributedReversiCell } from './Cell';
-import {
-  rcAddCell,
-  rcCellList,
-  rcViewBox,
-  rcXYWHZ,
-  rcZoom,
-} from './recoil.app.mts';
+import { rcAddCell, rcCellList, rcViewBox, rcXYWHZ } from './recoil.app.mts';
 import * as style from './style.module.scss';
 import type { DRCellId } from './util.mts';
 
@@ -18,7 +12,6 @@ export const DistributedReversiBoard = () => {
   const [element, setElement] = useState<Element | null>(null);
   useSyncRect(element);
   const onClick = useOnClick();
-  useWheel(element as HTMLElement);
   useGrab(element as HTMLElement);
   const viewBox = useRecoilValue(rcViewBox);
   return (
@@ -93,30 +86,30 @@ const useSyncRect = (element: Element | null) => {
   );
 };
 
-const useWheel = (board: HTMLElement | null) => {
-  const setZoom = useSetRecoilState(rcZoom);
-  useEffect(() => {
-    if (!board) {
-      return noop;
-    }
-    const abc = new AbortController();
-    board.addEventListener(
-      'wheel',
-      (event: WheelEvent) => {
-        event.preventDefault();
-        setZoom(({ z }) => {
-          const rect = board.getBoundingClientRect();
-          const cx = (event.clientX - rect.left) / rect.width;
-          const cy = (event.clientY - rect.top) / rect.height;
-          const rz = 1 - event.deltaY / 300;
-          return { z: z * rz, cx, cy };
-        });
-      },
-      { passive: false, signal: abc.signal },
-    );
-    return () => abc.abort();
-  }, [board, setZoom]);
-};
+// const useWheel = (board: HTMLElement | null) => {
+//   const setZoom = useSetRecoilState(rcZoom);
+//   useEffect(() => {
+//     if (!board) {
+//       return noop;
+//     }
+//     const abc = new AbortController();
+//     board.addEventListener(
+//       'wheel',
+//       (event: WheelEvent) => {
+//         event.preventDefault();
+//         setZoom(({ z }) => {
+//           const rect = board.getBoundingClientRect();
+//           const cx = (event.clientX - rect.left) / rect.width;
+//           const cy = (event.clientY - rect.top) / rect.height;
+//           const rz = 1 - event.deltaY / 300;
+//           return { z: z * rz, cx, cy };
+//         });
+//       },
+//       { passive: false, signal: abc.signal },
+//     );
+//     return () => abc.abort();
+//   }, [board, setZoom]);
+// };
 
 // eslint-disable-next-line max-lines-per-function
 const useGrab = (board: HTMLElement | null) => {
