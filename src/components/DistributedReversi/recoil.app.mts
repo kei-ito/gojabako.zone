@@ -5,7 +5,7 @@ import { isClient } from '../../util/env.mts';
 import { writer } from '../../util/recoil/selector.mts';
 import { syncSearchParamsNumber } from '../../util/recoil/syncSearchParams.mts';
 import type { DRBufferId, DRCell, DRCellId, DRMessage } from './util.mts';
-import { DRInitialState, zoom } from './util.mts';
+import { DRInitialState, InitialDRPlayerId, zoom } from './util.mts';
 
 export const rcTooltip = atom<ReactNode>({ key: 'Tooltip', default: null });
 export const rcPointerPosition = atom<[number, number]>({
@@ -28,12 +28,12 @@ export const rcPointerPosition = atom<[number, number]>({
 export const rcTxDelayMs = atom<number>({
   key: 'TxDelayMs',
   default: 300,
-  effects: [...syncSearchParamsNumber('txd', 300)],
+  effects: [...syncSearchParamsNumber('txd', 80)],
 });
 export const rcRxDelayMs = atom<number>({
   key: 'RxDelayMs',
   default: 300,
-  effects: [...syncSearchParamsNumber('rxd', 300)],
+  effects: [...syncSearchParamsNumber('rxd', 80)],
 });
 type XYWHZ =
   | [number, number, number, number, number, [number, number]]
@@ -98,9 +98,9 @@ export const rcInitCell = writer<DRCellId>({
   key: 'InitCell',
   set: ({ set }, cellId) => {
     set(rcCell(cellId), {
-      state: DRInitialState,
-      sharedState: DRInitialState,
       pending: null,
+      state: DRInitialState,
+      shared: { state: InitialDRPlayerId, playerCount: 2 },
     });
     set(rcCellList, (list) => {
       if (list.has(cellId)) {

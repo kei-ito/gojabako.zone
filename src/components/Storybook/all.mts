@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 import type { StoryObj } from '@storybook/react';
 import * as g1 from '../Button/index.stories';
 import * as g2 from '../CryptoKey/index.stories';
@@ -7,6 +8,7 @@ import * as g5 from '../Select/index.stories';
 import * as g6 from '../StoryElement/index.stories';
 import * as g7 from '../Toggle/index.stories';
 import * as g8 from '../ZoomSlider/index.stories';
+import * as g9 from '../debug/hwb/index.stories';
 type Stories = Record<string, StoryObj>;
 export const storyGroups = new Map<string, Stories>();
 storyGroups.set('Button', g1 as Stories);
@@ -17,3 +19,4 @@ storyGroups.set('Select', g5 as Stories);
 storyGroups.set('StoryElement', g6 as Stories);
 storyGroups.set('Toggle', g7 as Stories);
 storyGroups.set('ZoomSlider', g8 as Stories);
+storyGroups.set('debug/hwb', g9 as Stories);

@@ -1,12 +1,11 @@
 import type { Nominal } from '@nlib/typing';
 import { createTypeChecker, isNonNegativeSafeInteger } from '@nlib/typing';
-import { sign } from '../../util/sign.mts';
 
 export const zoom = { min: 40, max: 200 };
-export type OwnerId = Nominal<number, 'Owner'>;
-export const isOwnerId = createTypeChecker<OwnerId>(
-  'OwnerId',
-  (input: unknown): input is OwnerId => isNonNegativeSafeInteger(input),
+export type DRPlayerId = Nominal<number, 'DRPlayerId'>;
+export const isDRPlayerId = createTypeChecker<DRPlayerId>(
+  'DRPlayerId',
+  (input: unknown): input is DRPlayerId => isNonNegativeSafeInteger(input),
 );
 /** この値は描画用で、実機では使えないことに注意します */
 export type DRCellId = Nominal<[number, number], 'DRCellId'>;
@@ -24,12 +23,15 @@ export const toDRCellId = (() => {
 })();
 export type DRInitialStateType = Nominal<'N', 'DRState'>;
 export const DRInitialState = 'N' as DRInitialStateType;
-export type DRSharedState = DRInitialStateType | OwnerId;
-export type DRCellState = DRInitialStateType | OwnerId;
+export type DRCellState = DRInitialStateType | DRPlayerId;
+export interface DRSharedState {
+  state: DRPlayerId;
+  playerCount: number;
+}
 export interface DRCell {
-  sharedState: DRSharedState;
   state: DRCellState;
-  pending: OwnerId | null;
+  pending: DRPlayerId | null;
+  shared: DRSharedState;
 }
 export const DRDirections = ['e', 'n', 'w', 's'] as const;
 export type DRDirection = (typeof DRDirections)[number];
@@ -74,7 +76,8 @@ export const toDRBufferId = (() => {
     return cached;
   };
 })();
-export interface DRMessageBase<T extends string> {
+type DRMessageMode = DRDiagonalDirection | DRDirection | 'spread';
+interface DRMessageType<T extends string, P> {
   id: string;
   /**
    * このメッセージが移動した距離です。この値はセル間を移動する際（TxからRxに移る際）に変更さ
@@ -83,30 +86,23 @@ export interface DRMessageBase<T extends string> {
   d: [number, number];
   type: T;
   ttl?: number;
-  mode: DRDiagonalDirection | DRDirection | 'spread';
-}
-let deduplicationIdCounter = 0;
-export const generateMessageProps = () => ({
-  id: (++deduplicationIdCounter).toString(36),
-  d: [0, 0] as [number, number],
-});
-export interface DRMessagePing extends DRMessageBase<'ping'> {}
-export interface DRMessagePress extends DRMessageBase<'press'> {
-  state: Exclude<DRCellState, DRInitialStateType>;
-}
-export interface DRMessageConnect extends DRMessageBase<'connect'> {
-  state: DRSharedState;
-}
-export interface DRMessageSetShared extends DRMessageBase<'setShared'> {
-  state: DRSharedState;
+  mode: DRMessageMode;
+  payload: P;
 }
 export interface DRMessageMap {
-  ping: DRMessagePing;
-  press: DRMessagePress;
-  connect: DRMessageConnect;
-  setShared: DRMessageSetShared;
+  ping: DRMessageType<'ping', null>;
+  press: DRMessageType<'press', DRSharedState>;
+  connect: DRMessageType<'connect', DRSharedState>;
+  setShared: DRMessageType<'setShared', DRSharedState>;
 }
 export type DRMessage = DRMessageMap[keyof DRMessageMap];
+export const generateMessageProps = (() => {
+  let deduplicationIdCounter = 0;
+  return () => ({
+    id: (++deduplicationIdCounter).toString(36),
+    d: [0, 0] as [number, number],
+  });
+})();
 export const isOpenableDRMessage = ({ mode, d: [dx, dy] }: DRMessage) => {
   switch (mode) {
     case 'e':
@@ -130,23 +126,13 @@ export const isOpenableDRMessage = ({ mode, d: [dx, dy] }: DRMessage) => {
       return true;
   }
 };
-export const getMessageDirection = (
-  d: DRMessage['d'],
-): ['c' | 'n' | 's', 'c' | 'e' | 'w'] => [
-  sign(d[0], 'n', 'c', 's'),
-  sign(d[1], 'w', 'c', 'e'),
-];
-export const InitialOwnerId = 0 as OwnerId;
-export const nextOwnerId = (ownerId: OwnerId): OwnerId =>
-  (ownerId + 1) as OwnerId;
-export interface DREventLog {
-  cellId: DRCellId;
-  time: number;
-  namespace: string;
-  message: string;
-}
-export interface DREventLogViewOptions {
-  time: 'diff' | 'time';
-  cellId: DRCellId | null;
-  namespace: string | null;
-}
+export const InitialDRPlayerId = 0 as DRPlayerId;
+export const stepDRSharedState = ({
+  state,
+  playerCount,
+  ...others
+}: DRSharedState): DRSharedState => ({
+  ...others,
+  state: ((state + 1) % playerCount) as DRPlayerId,
+  playerCount,
+});

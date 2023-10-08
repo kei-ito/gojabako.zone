@@ -1,3 +1,4 @@
+import type { Story } from '@storybook/react';
 import { StoryElement } from '../StoryElement';
 import { storyGroups } from './all.mts';
 import { StorybookNav } from './Nav';
@@ -8,10 +9,6 @@ interface StorybookProps {
 }
 
 export const Storybook = ({ path }: StorybookProps) => {
-  path = path.slice();
-  if (path.length === 1) {
-    path.push('Default');
-  }
   const story = getStory(path);
   return (
     <div className={style.container}>
@@ -27,9 +24,14 @@ export const Storybook = ({ path }: StorybookProps) => {
 };
 
 const getStory = (path: Array<string>) => {
-  const group = storyGroups.get(path.slice(0, -1).join('/'));
-  if (!group) {
-    return null;
+  const group = storyGroups.get(path.join('/'));
+  if (group) {
+    for (const name of [path[path.length - 1], 'Default']) {
+      const story = group[name] as Story | undefined;
+      if (story) {
+        return story;
+      }
+    }
   }
-  return group[path[path.length - 1]];
+  return null;
 };

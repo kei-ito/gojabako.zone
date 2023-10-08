@@ -1,0 +1,24 @@
+.table {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--gj1px);
+  row-gap: var(--gj1px);
+  font-size: 80%;
+  font-weight: 700;
+  overflow: auto;
+
+  & > * {
+    padding-inline: 0.5em;
+    padding-block: 0.2em;
+    white-space: nowrap;
+    background-color: var(--gjColor);
+  }
+}
+
+.light {
+  color: var(--gjGray1);
+}
+
+.dark {
+  color: var(--gjGray9);
+}

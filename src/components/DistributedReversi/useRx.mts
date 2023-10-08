@@ -14,12 +14,7 @@ import type {
   DRMessage,
   DRMessageMap,
 } from './util.mts';
-import {
-  DRInitialState,
-  InitialOwnerId,
-  isOpenableDRMessage,
-  nextOwnerId,
-} from './util.mts';
+import { isOpenableDRMessage, stepDRSharedState } from './util.mts';
 
 export const useRx = (bufferId: DRBufferId) => {
   const receive = useSetRecoilState(rcReceive(bufferId));
@@ -98,31 +93,25 @@ type Receivers = {
 };
 const receivers: Receivers = {
   ping: noop,
-  connect: ({ set }, cellId, cell, msg) => {
-    set(rcCell(cellId), () => {
-      if (msg.state === DRInitialState) {
-        if (cell.sharedState === DRInitialState) {
-          return { ...cell, sharedState: InitialOwnerId };
-        }
-      } else {
-        return { ...cell, sharedState: msg.state };
-      }
-      return cell;
-    });
+  connect: ({ set }, cellId, cell, { payload }) => {
+    set(rcCell(cellId), { ...cell, shared: payload });
   },
-  press: ({ set }, cellId, cell, msg) => {
+  press: ({ set }, cellId, cell, { d, payload }) => {
     set(rcCell(cellId), () => {
-      const next = { ...cell, sharedState: nextOwnerId(msg.state) };
-      if (cell.state !== msg.state) {
-        const [dx, dy] = msg.d;
+      const next: DRCell = {
+        ...cell,
+        shared: stepDRSharedState(payload),
+      };
+      if (cell.state !== payload.state) {
+        const [dx, dy] = d;
         if (dx === 0 || dy === 0 || Math.abs(dx) === Math.abs(dy)) {
-          next.pending = msg.state;
+          next.pending = payload.state;
         }
       }
       return next;
     });
   },
-  setShared: ({ set }, cellId, cell, msg) => {
-    set(rcCell(cellId), { ...cell, sharedState: msg.state });
+  setShared: ({ set }, cellId, cell, { payload }) => {
+    set(rcCell(cellId), { ...cell, shared: payload });
   },
 };

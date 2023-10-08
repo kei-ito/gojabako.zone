@@ -60,13 +60,16 @@
     fill: var(--gjGray3);
     cursor: pointer;
     pointer-events: auto;
+    stroke-width: 0.1;
+    paint-order: stroke fill;
   }
 
   & > text {
-    font-size: 0.17px;
+    font-size: 0.26px;
     text-anchor: middle;
     dominant-baseline: central;
     pointer-events: none;
+    font-weight: 700;
 
     & > tspan {
       font-size: 120%;
@@ -110,34 +113,4 @@ path.buffer {
   line-height: 1.2;
   white-space: pre;
   pointer-events: none;
-}
-
-.log {
-  min-block-size: 8em;
-  display: grid;
-  grid-template-columns: auto auto auto 1fr;
-  column-gap: 0.5em;
-  align-content: start;
-  justify-items: center;
-  padding: 1em;
-  overflow: auto;
-  border-block-end: solid var(--gj1px) var(--gjGray4);
-  font-family: var(--gjFontMonospace);
-  font-size: 85%;
-  font-weight: 500;
-  line-height: 1.2;
-
-  & > select {
-    grid-row: 1 / 2;
-    margin-block-end: 0.2em;
-  }
-
-  & > time {
-    justify-self: end;
-    color: var(--gjGray5);
-  }
-
-  & > .message {
-    justify-self: start;
-  }
 }

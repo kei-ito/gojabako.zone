@@ -16,30 +16,20 @@ export const StorybookNav = ({ currentPath = '' }: StorybookNavProps) => (
 const listItems = function* (currentPath: string): Generator<ReactNode> {
   for (const [group, stories] of storyGroups) {
     const groupPath = group.split('_').join('/');
-    let active = currentPath.startsWith(groupPath);
-    const storyNames = new Set<string>(keys(stories));
-    storyNames.delete('Default');
-    yield (
-      <Link
-        href={`/app/components/${groupPath}`}
-        className={classnames(active && style.active)}
-      >
-        {groupPath}
-      </Link>
-    );
-    if (active) {
-      for (const name of storyNames) {
-        const storyPath = `${groupPath}/${name}`;
-        active = currentPath === storyPath;
-        yield (
-          <Link
-            href={`/app/components/${groupPath}/${name}`}
-            className={classnames(active && style.active)}
-          >
-            {name}
-          </Link>
-        );
+    for (const name of keys(stories)) {
+      let storyPath = groupPath;
+      if (name !== 'Default') {
+        storyPath += `/${name}`;
       }
+      const active = currentPath === storyPath;
+      yield (
+        <Link
+          href={`/app/components/${storyPath}`}
+          className={classnames(active && style.active)}
+        >
+          {storyPath}
+        </Link>
+      );
     }
   }
 };

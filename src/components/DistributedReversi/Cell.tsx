@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { Fragment, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { IconClass, classnames } from '../../util/classnames.mts';
@@ -7,71 +8,83 @@ import {
   rcDirectedTxBuffer,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
-import { useOnClickCell } from './useOnClickCell.mts';
 import { useOnConnection } from './useOnConnection.mts';
+import { useOnPressCell } from './useOnPressCell.mts';
 import { useRx } from './useRx.mts';
 import { useTooltip } from './useTooltip';
 import { useTx } from './useTx.mts';
 import type { DRCell, DRCellId, DRDirection } from './util.mts';
-import { DRDirections, toDRBufferId } from './util.mts';
+import { DRDirections, isDRPlayerId, toDRBufferId } from './util.mts';
 
 const r = 0.44;
 const toSVGCoodinate = (cellId: DRCellId) => [cellId[0], -cellId[1]] as const;
 
-interface DistributedReversiCellProps {
+interface CellProps {
   cellId: DRCellId;
 }
 
-export const DistributedReversiCell = ({
-  cellId,
-}: DistributedReversiCellProps) => (
-  <g id={encodeURIComponent(`cell${cellId}`)} className={style.cell}>
-    <Cell cellId={cellId} />
-    {DRDirections.map((d) => (
-      <Fragment key={d}>
-        <Tx cellId={cellId} d={d} />
-        <Rx cellId={cellId} d={d} />
-      </Fragment>
-    ))}
-  </g>
-);
-
-const Cell = ({ cellId }: DistributedReversiCellProps) => {
-  const cell: Partial<DRCell> = useRecoilValue(rcCell(cellId)) ?? {};
-  const [x, y] = toSVGCoodinate(cellId);
-  const size = 0.9;
-  const round = 0.1;
-  const lineHeight = 0.12;
+export const DistributedReversiCell = ({ cellId }: CellProps) => {
   return (
-    <>
-      <rect
-        x={x - size / 2}
-        y={y - size / 2}
-        rx={round}
-        ry={round}
-        width={size}
-        height={size}
-        data-state={cell.state}
-        onClick={useOnClickCell(cellId)}
-        {...useTooltip(cellId, cell)}
-      />
-      <text x={x} y={y - lineHeight}>
-        {cell.state}
-        {cell.pending !== null && (
-          <>
-            <tspan className={IconClass}>double_arrow</tspan>
-            {cell.pending}
-          </>
-        )}
-      </text>
-      <text x={x} y={y + lineHeight}>
-        {cell.sharedState}
-      </text>
-    </>
+    <g id={encodeURIComponent(`cell${cellId}`)} className={style.cell}>
+      <Cell cellId={cellId} />
+      {DRDirections.map((d) => (
+        <Fragment key={d}>
+          <Tx cellId={cellId} d={d} />
+          <Rx cellId={cellId} d={d} />
+        </Fragment>
+      ))}
+    </g>
   );
 };
 
-interface TxRxProps extends DistributedReversiCellProps {
+const Cell = ({ cellId }: CellProps) => {
+  const cell = useRecoilValue(rcCell(cellId));
+  const [x, y] = toSVGCoodinate(cellId);
+  const size = 0.9;
+  const onClick = useOnPressCell(cellId);
+  const tooltipProps = useTooltip(cellId, cell);
+  return (
+    cell && (
+      <>
+        <rect
+          x={x - size / 2}
+          y={y - size / 2}
+          width={size}
+          height={size}
+          data-state={cell.state}
+          onClick={onClick}
+          style={getRectStyle(cell)}
+          {...tooltipProps}
+        />
+        <text x={x} y={y}>
+          {cell.state}
+          {cell.pending !== null && (
+            <>
+              <tspan className={IconClass}>double_arrow</tspan>
+              {cell.pending}
+            </>
+          )}
+        </text>
+      </>
+    )
+  );
+};
+
+const getRectStyle = ({ state, shared }: DRCell) => {
+  const props: CSSProperties = {};
+  {
+    const hue = Math.floor((360 * shared.state) / shared.playerCount);
+    props.stroke = `hwb(${hue} 0% 25%)`;
+  }
+  if (isDRPlayerId(state)) {
+    const hue = (360 * state) / shared.playerCount;
+    props.fill = `hwb(${hue} 75% 0%)`;
+  }
+  return props;
+};
+
+interface TxRxProps {
+  cellId: DRCellId;
   d: DRDirection;
 }
 
