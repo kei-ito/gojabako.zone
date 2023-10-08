@@ -100,7 +100,7 @@ export const rcInitCell = writer<DRCellId>({
     set(rcCell(cellId), {
       pending: null,
       state: DRInitialState,
-      shared: { gameState: InitialDRPlayerId, playerCount: 2 },
+      shared: { state: InitialDRPlayerId, playerCount: 2 },
     });
     set(rcCellList, (list) => {
       if (list.has(cellId)) {

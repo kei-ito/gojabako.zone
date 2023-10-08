@@ -26,7 +26,7 @@ export type DRInitialStateType = Nominal<'N', 'DRState'>;
 export const DRInitialState = 'N' as DRInitialStateType;
 export type DRCellState = DRInitialStateType | DRPlayerId;
 export interface DRSharedProps {
-  gameState: DRPlayerId;
+  state: DRPlayerId;
   playerCount: number;
 }
 export interface DRCell {

@@ -33,10 +33,10 @@ const rcPressCell = writer<DRCellId>({
     });
     set(rcCell(cellId), {
       ...cell,
-      state: cell.shared.gameState,
+      state: cell.shared.state,
       shared: {
         ...cell.shared,
-        gameState: nextDRPlayerId(cell.shared.gameState),
+        state: nextDRPlayerId(cell.shared.state),
       },
     });
   },

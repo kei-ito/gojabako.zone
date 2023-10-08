@@ -68,7 +68,7 @@ const Cell = ({ cellId }: CellProps) => {
           )}
         </text>
         <text x={x} y={y + lineHeight}>
-          {cell.shared.gameState}/{cell.shared.playerCount}
+          {cell.shared.state}/{cell.shared.playerCount}
         </text>
       </>
     )
