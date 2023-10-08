@@ -3,7 +3,7 @@ import { useRecoilCallback } from 'recoil';
 import { rcCell } from './recoil.app.mts';
 import { rcSend } from './recoil.send.mts';
 import type { DRCellId } from './util.mts';
-import { isOwnerId, nextOwnerId, generateMessageProps } from './util.mts';
+import { isDRPlayerId, nextDRPlayerId, generateMessageProps } from './util.mts';
 
 export const useOnClickCell = (cellId: DRCellId) =>
   useRecoilCallback(
@@ -15,7 +15,7 @@ export const useOnClickCell = (cellId: DRCellId) =>
             return oldCell;
           }
           const { sharedState: state } = oldCell;
-          if (isOwnerId(state)) {
+          if (isDRPlayerId(state)) {
             const cell = { ...oldCell };
             set(rcSend(cellId), {
               ...generateMessageProps(),
@@ -23,7 +23,7 @@ export const useOnClickCell = (cellId: DRCellId) =>
               type: 'press',
               state,
             });
-            return { ...cell, state, sharedState: nextOwnerId(state) };
+            return { ...cell, state, sharedState: nextDRPlayerId(state) };
           } else {
             return oldCell;
           }

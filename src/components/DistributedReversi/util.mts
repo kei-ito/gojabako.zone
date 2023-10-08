@@ -3,10 +3,10 @@ import { createTypeChecker, isNonNegativeSafeInteger } from '@nlib/typing';
 import { sign } from '../../util/sign.mts';
 
 export const zoom = { min: 40, max: 200 };
-export type OwnerId = Nominal<number, 'Owner'>;
-export const isOwnerId = createTypeChecker<OwnerId>(
-  'OwnerId',
-  (input: unknown): input is OwnerId => isNonNegativeSafeInteger(input),
+export type DRPlayerId = Nominal<number, 'Owner'>;
+export const isDRPlayerId = createTypeChecker<DRPlayerId>(
+  'DRPlayerId',
+  (input: unknown): input is DRPlayerId => isNonNegativeSafeInteger(input),
 );
 /** この値は描画用で、実機では使えないことに注意します */
 export type DRCellId = Nominal<[number, number], 'DRCellId'>;
@@ -24,12 +24,12 @@ export const toDRCellId = (() => {
 })();
 export type DRInitialStateType = Nominal<'N', 'DRState'>;
 export const DRInitialState = 'N' as DRInitialStateType;
-export type DRSharedState = DRInitialStateType | OwnerId;
-export type DRCellState = DRInitialStateType | OwnerId;
+export type DRSharedState = DRInitialStateType | DRPlayerId;
+export type DRCellState = DRInitialStateType | DRPlayerId;
 export interface DRCell {
   sharedState: DRSharedState;
   state: DRCellState;
-  pending: OwnerId | null;
+  pending: DRPlayerId | null;
 }
 export const DRDirections = ['e', 'n', 'w', 's'] as const;
 export type DRDirection = (typeof DRDirections)[number];
@@ -136,9 +136,9 @@ export const getMessageDirection = (
   sign(d[0], 'n', 'c', 's'),
   sign(d[1], 'w', 'c', 'e'),
 ];
-export const InitialOwnerId = 0 as OwnerId;
-export const nextOwnerId = (ownerId: OwnerId): OwnerId =>
-  (ownerId + 1) as OwnerId;
+export const InitialDRPlayerId = 0 as DRPlayerId;
+export const nextDRPlayerId = (ownerId: DRPlayerId): DRPlayerId =>
+  (ownerId + 1) as DRPlayerId;
 export interface DREventLog {
   cellId: DRCellId;
   time: number;

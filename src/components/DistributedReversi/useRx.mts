@@ -16,9 +16,9 @@ import type {
 } from './util.mts';
 import {
   DRInitialState,
-  InitialOwnerId,
+  InitialDRPlayerId,
   isOpenableDRMessage,
-  nextOwnerId,
+  nextDRPlayerId,
 } from './util.mts';
 
 export const useRx = (bufferId: DRBufferId) => {
@@ -102,7 +102,7 @@ const receivers: Receivers = {
     set(rcCell(cellId), () => {
       if (msg.state === DRInitialState) {
         if (cell.sharedState === DRInitialState) {
-          return { ...cell, sharedState: InitialOwnerId };
+          return { ...cell, sharedState: InitialDRPlayerId };
         }
       } else {
         return { ...cell, sharedState: msg.state };
@@ -112,7 +112,7 @@ const receivers: Receivers = {
   },
   press: ({ set }, cellId, cell, msg) => {
     set(rcCell(cellId), () => {
-      const next = { ...cell, sharedState: nextOwnerId(msg.state) };
+      const next = { ...cell, sharedState: nextDRPlayerId(msg.state) };
       if (cell.state !== msg.state) {
         const [dx, dy] = msg.d;
         if (dx === 0 || dy === 0 || Math.abs(dx) === Math.abs(dy)) {
