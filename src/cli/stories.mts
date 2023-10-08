@@ -2,7 +2,7 @@ import * as console from 'node:console';
 import { writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { watch } from 'chokidar';
-import { componentsDir, rootDir, srcDir } from '../util/node/directories.mts';
+import { componentsDir, rootDir } from '../util/node/directories.mts';
 import { formatCode } from '../util/node/formatCode.mts';
 import { walkFiles } from '../util/node/walkFiles.mts';
 import { noop } from '../util/noop.mts';
@@ -17,10 +17,11 @@ const onError = (error: unknown) => {
 };
 
 const generate = async () => {
-  let code = "import type { StoryObj } from '@storybook/react';";
+  let code = '/* eslint-disable import/order */\n';
+  code += "import type { StoryObj } from '@storybook/react';";
   let count = 0;
   const groupNames = new Map<string, string>();
-  for (const filePath of [...storyFiles].sort((a, b) => a.localeCompare(b))) {
+  for (const filePath of [...storyFiles].sort((a, b) => (a < b ? -1 : 1))) {
     const relativePath = filePath.slice(componentsDirPath.length);
     const name = `g${++count}`;
     groupNames.set(relativePath.slice(0, -storySuffix.length), name);
@@ -57,7 +58,7 @@ if (process.argv.includes('--watch')) {
       update();
     }
   };
-  watch(fileURLToPath(srcDir), { ignoreInitial: false })
+  watch(fileURLToPath(componentsDir), { ignoreInitial: false })
     .on('add', onChange)
     .on('change', onChange)
     .on('unlink', onUnlink);
