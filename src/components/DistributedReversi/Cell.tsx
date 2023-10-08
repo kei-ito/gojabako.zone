@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { Fragment, useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import { IconClass, classnames } from '../../util/classnames.mts';
@@ -12,8 +13,8 @@ import { useOnPressCell } from './useOnPressCell.mts';
 import { useRx } from './useRx.mts';
 import { useTooltip } from './useTooltip';
 import { useTx } from './useTx.mts';
-import type { DRCellId, DRDirection } from './util.mts';
-import { DRDirections, toDRBufferId } from './util.mts';
+import type { DRCell, DRCellId, DRDirection } from './util.mts';
+import { DRDirections, isDRPlayerId, toDRBufferId } from './util.mts';
 
 const r = 0.44;
 const toSVGCoodinate = (cellId: DRCellId) => [cellId[0], -cellId[1]] as const;
@@ -40,8 +41,6 @@ const Cell = ({ cellId }: CellProps) => {
   const cell = useRecoilValue(rcCell(cellId));
   const [x, y] = toSVGCoodinate(cellId);
   const size = 0.9;
-  const round = 0.1;
-  const lineHeight = 0.12;
   const onClick = useOnPressCell(cellId);
   const tooltipProps = useTooltip(cellId, cell);
   return (
@@ -50,15 +49,14 @@ const Cell = ({ cellId }: CellProps) => {
         <rect
           x={x - size / 2}
           y={y - size / 2}
-          rx={round}
-          ry={round}
           width={size}
           height={size}
           data-state={cell.state}
           onClick={onClick}
+          style={getRectStyle(cell)}
           {...tooltipProps}
         />
-        <text x={x} y={y - lineHeight}>
+        <text x={x} y={y}>
           {cell.state}
           {cell.pending !== null && (
             <>
@@ -67,12 +65,22 @@ const Cell = ({ cellId }: CellProps) => {
             </>
           )}
         </text>
-        <text x={x} y={y + lineHeight}>
-          {cell.shared.state}/{cell.shared.playerCount}
-        </text>
       </>
     )
   );
+};
+
+const getRectStyle = ({ state, shared }: DRCell) => {
+  const props: CSSProperties = {};
+  {
+    const hue = Math.floor((360 * shared.state) / shared.playerCount);
+    props.stroke = `hwb(${hue} 0% 25%)`;
+  }
+  if (isDRPlayerId(state)) {
+    const hue = (360 * state) / shared.playerCount;
+    props.fill = `hwb(${hue} 75% 0%)`;
+  }
+  return props;
 };
 
 interface TxRxProps {

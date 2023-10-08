@@ -28,12 +28,12 @@ export const rcPointerPosition = atom<[number, number]>({
 export const rcTxDelayMs = atom<number>({
   key: 'TxDelayMs',
   default: 300,
-  effects: [...syncSearchParamsNumber('txd', 300)],
+  effects: [...syncSearchParamsNumber('txd', 80)],
 });
 export const rcRxDelayMs = atom<number>({
   key: 'RxDelayMs',
   default: 300,
-  effects: [...syncSearchParamsNumber('rxd', 300)],
+  effects: [...syncSearchParamsNumber('rxd', 80)],
 });
 type XYWHZ =
   | [number, number, number, number, number, [number, number]]
