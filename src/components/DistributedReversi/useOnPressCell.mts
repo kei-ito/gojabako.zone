@@ -5,7 +5,7 @@ import { writer } from '../../util/recoil/selector.mts';
 import { rcCell } from './recoil.app.mts';
 import { rcSend } from './recoil.send.mts';
 import type { DRCellId } from './util.mts';
-import { generateMessageProps, nextDRPlayerId } from './util.mts';
+import { generateMessageProps, stepDRSharedState } from './util.mts';
 
 export const useOnPressCell = (cellId: DRCellId) => {
   const press = useSetRecoilState(rcPressCell);
@@ -34,10 +34,7 @@ const rcPressCell = writer<DRCellId>({
     set(rcCell(cellId), {
       ...cell,
       state: cell.shared.state,
-      shared: {
-        ...cell.shared,
-        state: nextDRPlayerId(cell.shared.state),
-      },
+      shared: stepDRSharedState(cell.shared),
     });
   },
 });

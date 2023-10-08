@@ -14,7 +14,7 @@ import type {
   DRMessage,
   DRMessageMap,
 } from './util.mts';
-import { isOpenableDRMessage, nextDRPlayerId } from './util.mts';
+import { isOpenableDRMessage, stepDRSharedState } from './util.mts';
 
 export const useRx = (bufferId: DRBufferId) => {
   const receive = useSetRecoilState(rcReceive(bufferId));
@@ -100,7 +100,7 @@ const receivers: Receivers = {
     set(rcCell(cellId), () => {
       const next: DRCell = {
         ...cell,
-        shared: { ...payload, state: nextDRPlayerId(payload.state) },
+        shared: stepDRSharedState(payload),
       };
       if (cell.state !== payload.state) {
         const [dx, dy] = d;

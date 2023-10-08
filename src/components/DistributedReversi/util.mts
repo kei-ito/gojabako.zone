@@ -3,7 +3,7 @@ import { createTypeChecker, isNonNegativeSafeInteger } from '@nlib/typing';
 import { sign } from '../../util/sign.mts';
 
 export const zoom = { min: 40, max: 200 };
-export type DRPlayerId = Nominal<number, 'Owner'>;
+export type DRPlayerId = Nominal<number, 'DRPlayerId'>;
 export const isDRPlayerId = createTypeChecker<DRPlayerId>(
   'DRPlayerId',
   (input: unknown): input is DRPlayerId => isNonNegativeSafeInteger(input),
@@ -25,14 +25,14 @@ export const toDRCellId = (() => {
 export type DRInitialStateType = Nominal<'N', 'DRState'>;
 export const DRInitialState = 'N' as DRInitialStateType;
 export type DRCellState = DRInitialStateType | DRPlayerId;
-export interface DRSharedProps {
+export interface DRSharedState {
   state: DRPlayerId;
   playerCount: number;
 }
 export interface DRCell {
   state: DRCellState;
   pending: DRPlayerId | null;
-  shared: DRSharedProps;
+  shared: DRSharedState;
 }
 export const DRDirections = ['e', 'n', 'w', 's'] as const;
 export type DRDirection = (typeof DRDirections)[number];
@@ -96,9 +96,9 @@ export const generateMessageProps = () => ({
 });
 export interface DRMessageMap {
   ping: DRMessageType<'ping', void>;
-  press: DRMessageType<'press', DRSharedProps>;
-  connect: DRMessageType<'connect', DRSharedProps>;
-  setShared: DRMessageType<'setShared', DRSharedProps>;
+  press: DRMessageType<'press', DRSharedState>;
+  connect: DRMessageType<'connect', DRSharedState>;
+  setShared: DRMessageType<'setShared', DRSharedState>;
 }
 export type DRMessage = DRMessageMap[keyof DRMessageMap];
 export const isOpenableDRMessage = ({ mode, d: [dx, dy] }: DRMessage) => {
@@ -131,8 +131,15 @@ export const getMessageDirection = (
   sign(d[1], 'w', 'c', 'e'),
 ];
 export const InitialDRPlayerId = 0 as DRPlayerId;
-export const nextDRPlayerId = (ownerId: DRPlayerId): DRPlayerId =>
-  (ownerId + 1) as DRPlayerId;
+export const stepDRSharedState = ({
+  state,
+  playerCount,
+  ...others
+}: DRSharedState): DRSharedState => ({
+  ...others,
+  state: ((state + 1) % playerCount) as DRPlayerId,
+  playerCount,
+});
 export interface DREventLog {
   cellId: DRCellId;
   time: number;
