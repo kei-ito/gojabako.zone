@@ -1,6 +1,5 @@
 import type { Nominal } from '@nlib/typing';
 import { createTypeChecker, isNonNegativeSafeInteger } from '@nlib/typing';
-import { sign } from '../../util/sign.mts';
 
 export const zoom = { min: 40, max: 200 };
 export type DRPlayerId = Nominal<number, 'DRPlayerId'>;
@@ -77,6 +76,7 @@ export const toDRBufferId = (() => {
     return cached;
   };
 })();
+type DRMessageMode = DRDiagonalDirection | DRDirection | 'spread';
 interface DRMessageType<T extends string, P> {
   id: string;
   /**
@@ -86,21 +86,23 @@ interface DRMessageType<T extends string, P> {
   d: [number, number];
   type: T;
   ttl?: number;
-  mode: DRDiagonalDirection | DRDirection | 'spread';
+  mode: DRMessageMode;
   payload: P;
 }
-let deduplicationIdCounter = 0;
-export const generateMessageProps = () => ({
-  id: (++deduplicationIdCounter).toString(36),
-  d: [0, 0] as [number, number],
-});
 export interface DRMessageMap {
-  ping: DRMessageType<'ping', void>;
+  ping: DRMessageType<'ping', null>;
   press: DRMessageType<'press', DRSharedState>;
   connect: DRMessageType<'connect', DRSharedState>;
   setShared: DRMessageType<'setShared', DRSharedState>;
 }
 export type DRMessage = DRMessageMap[keyof DRMessageMap];
+export const generateMessageProps = (() => {
+  let deduplicationIdCounter = 0;
+  return () => ({
+    id: (++deduplicationIdCounter).toString(36),
+    d: [0, 0] as [number, number],
+  });
+})();
 export const isOpenableDRMessage = ({ mode, d: [dx, dy] }: DRMessage) => {
   switch (mode) {
     case 'e':
@@ -124,12 +126,6 @@ export const isOpenableDRMessage = ({ mode, d: [dx, dy] }: DRMessage) => {
       return true;
   }
 };
-export const getMessageDirection = (
-  d: DRMessage['d'],
-): ['c' | 'n' | 's', 'c' | 'e' | 'w'] => [
-  sign(d[0], 'n', 'c', 's'),
-  sign(d[1], 'w', 'c', 'e'),
-];
 export const InitialDRPlayerId = 0 as DRPlayerId;
 export const stepDRSharedState = ({
   state,
@@ -140,14 +136,3 @@ export const stepDRSharedState = ({
   state: ((state + 1) % playerCount) as DRPlayerId,
   playerCount,
 });
-export interface DREventLog {
-  cellId: DRCellId;
-  time: number;
-  namespace: string;
-  message: string;
-}
-export interface DREventLogViewOptions {
-  time: 'diff' | 'time';
-  cellId: DRCellId | null;
-  namespace: string | null;
-}
