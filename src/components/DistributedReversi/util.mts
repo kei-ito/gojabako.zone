@@ -96,7 +96,7 @@ export const generateMessageProps = () => ({
 });
 export interface DRMessageMap {
   ping: DRMessageType<'ping', void>;
-  press: DRMessageType<'press', { state: DRPlayerId }>;
+  press: DRMessageType<'press', DRSharedProps>;
   connect: DRMessageType<'connect', DRSharedProps>;
   setShared: DRMessageType<'setShared', DRSharedProps>;
 }

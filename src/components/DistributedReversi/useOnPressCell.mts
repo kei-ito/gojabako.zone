@@ -25,19 +25,18 @@ const rcPressCell = writer<DRCellId>({
     if (!cell) {
       return;
     }
-    const { gameState } = cell.shared;
     set(rcSend(cellId), {
       ...generateMessageProps(),
       mode: 'spread',
       type: 'press',
-      payload: { state: gameState },
+      payload: cell.shared,
     });
     set(rcCell(cellId), {
       ...cell,
-      state: gameState,
+      state: cell.shared.gameState,
       shared: {
         ...cell.shared,
-        gameState: nextDRPlayerId(gameState),
+        gameState: nextDRPlayerId(cell.shared.gameState),
       },
     });
   },

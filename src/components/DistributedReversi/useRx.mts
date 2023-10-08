@@ -98,11 +98,14 @@ const receivers: Receivers = {
   },
   press: ({ set }, cellId, cell, { d, payload }) => {
     set(rcCell(cellId), () => {
-      const next = { ...cell, sharedState: nextDRPlayerId(payload.state) };
-      if (cell.state !== payload.state) {
+      const next: DRCell = {
+        ...cell,
+        shared: { ...payload, gameState: nextDRPlayerId(payload.gameState) },
+      };
+      if (cell.state !== payload.gameState) {
         const [dx, dy] = d;
         if (dx === 0 || dy === 0 || Math.abs(dx) === Math.abs(dy)) {
-          next.pending = payload.state;
+          next.pending = payload.gameState;
         }
       }
       return next;
