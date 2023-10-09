@@ -6,6 +6,7 @@ import { DRMessenger } from './Messenger';
 import type { CellSelection } from './recoil.app.mts';
 import {
   rcAddCells,
+  rcDeleteCells,
   rcDevMode,
   rcSelectedCells,
   rcSelectedCoordinates,
@@ -39,12 +40,11 @@ export const DRCellInspector = () => {
   return (
     <>
       <p>{coordinateCount}個の座標を選択中</p>
-      {
-        <AddCellButton
-          coordinates={coordinates}
-          disabled={coordinateCount === cellCount}
-        />
-      }
+      <AddCellButton
+        coordinates={coordinates}
+        disabled={coordinateCount === cellCount}
+      />
+      <DeleteCellButton coordinates={coordinates} />
       <StateSelector {...selection} />
       <SharedStateSelector {...selection} />
       <PlayerCountControl value={selection.maxPlayerCount} />
@@ -67,17 +67,39 @@ const AddCellButton = ({
   disabled?: boolean;
   coordinates: Iterable<DRCellId>;
 }) => {
-  const initCells = useSetRecoilState(rcAddCells);
+  const addCells = useSetRecoilState(rcAddCells);
   return (
     <SecondaryButton
       icon="add"
       onClick={useCallback(
-        () => initCells(coordinates),
-        [initCells, coordinates],
+        () => addCells(coordinates),
+        [addCells, coordinates],
       )}
       disabled={disabled}
     >
       セルを追加
+    </SecondaryButton>
+  );
+};
+
+const DeleteCellButton = ({
+  coordinates,
+  disabled,
+}: {
+  disabled?: boolean;
+  coordinates: Iterable<DRCellId>;
+}) => {
+  const deleteCells = useSetRecoilState(rcDeleteCells);
+  return (
+    <SecondaryButton
+      icon="delete"
+      onClick={useCallback(
+        () => deleteCells(coordinates),
+        [deleteCells, coordinates],
+      )}
+      disabled={disabled}
+    >
+      セルを削除
     </SecondaryButton>
   );
 };

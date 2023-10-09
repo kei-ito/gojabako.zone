@@ -228,6 +228,26 @@ export const rcAddCells = writer<Iterable<DRCellId>>({
   },
 });
 
+export const rcDeleteCells = writer<Iterable<DRCellId>>({
+  key: 'DeleteCells',
+  set: ({ set, reset }, coordinates) => {
+    const deleted = new Set<DRCellId>();
+    for (const cellId of coordinates) {
+      deleted.add(cellId);
+      reset(rcCell(cellId));
+    }
+    if (0 < deleted.size) {
+      set(rcCellList, (current) => {
+        const filtered = new Set([...current]);
+        for (const cellId of deleted) {
+          filtered.delete(cellId);
+        }
+        return filtered;
+      });
+    }
+  },
+});
+
 interface CellUpdates {
   state: DRCellState;
   sharedState: DRPlayerId;
