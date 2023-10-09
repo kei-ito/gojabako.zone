@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { FunctionComponent } from 'react';
 import { DefaultValue, atom, atomFamily, selector } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
 import { isClient } from '../../util/env.mts';
@@ -7,7 +7,10 @@ import { syncSearchParamsNumber } from '../../util/recoil/syncSearchParams.mts';
 import type { DRBufferId, DRCell, DRCellId, DRMessage } from './util.mts';
 import { DRInitialState, InitialDRPlayerId, zoom } from './util.mts';
 
-export const rcTooltip = atom<ReactNode>({ key: 'Tooltip', default: null });
+export const rcFloaterContent = atom<FunctionComponent | null>({
+  key: 'FloaterContent',
+  default: null,
+});
 export const rcPointerPosition = atom<[number, number]>({
   key: 'PointerPosition',
   default: [0, 0],
