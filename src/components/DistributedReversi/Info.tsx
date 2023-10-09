@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react';
 import { useCallback, useEffect } from 'react';
-import { useRecoilCallback, useRecoilState } from 'recoil';
+import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
 import { SecondaryButton } from '../Button';
 import { Toggle } from '../Toggle';
@@ -12,7 +12,7 @@ import {
   rcCellList,
   rcInitCell,
   rcRxDelayMs,
-  rcShowInspector,
+  rcDevMode,
   rcTxDelayMs,
   rcZoom,
 } from './recoil.app.mts';
@@ -20,17 +20,20 @@ import * as style from './style.module.scss';
 import type { DRCellId } from './util.mts';
 import { toDRCellId, zoom } from './util.mts';
 
-export const DistributedReversiInfo = () => (
-  <nav className={style.info}>
-    <DistributedReversiCellInspector />
-    <InitGameButton />
-    <ZoomControl />
-    <TxDelayControl />
-    <RxDelayControl />
-    <FullScreenButton />
-    <InspectorButton />
-  </nav>
-);
+export const DistributedReversiInfo = () => {
+  const devMode = useRecoilValue(rcDevMode);
+  return (
+    <nav className={style.info}>
+      <DistributedReversiCellInspector />
+      <InitGameButton />
+      <ZoomControl />
+      {!devMode && <FullScreenToggle />}
+      {devMode && <TxDelayControl />}
+      {devMode && <RxDelayControl />}
+      <DevModeToggle />
+    </nav>
+  );
+};
 
 const InitGameButton = () => {
   const initCells = useRecoilCallback(
@@ -110,7 +113,7 @@ const RxDelayControl = () => {
   );
 };
 
-const FullScreenButton = () => {
+const FullScreenToggle = () => {
   const [state, toggle] = useFullScreen(`.${style.container}`);
   const id = 'FullScreen';
   return (
@@ -121,14 +124,14 @@ const FullScreenButton = () => {
   );
 };
 
-const InspectorButton = () => {
-  const [state, set] = useRecoilState(rcShowInspector);
-  const toggle = useCallback(() => set((s) => !s), [set]);
+const DevModeToggle = () => {
+  const [devMode, setDevMode] = useRecoilState(rcDevMode);
+  const toggle = useCallback(() => setDevMode((s) => !s), [setDevMode]);
   const id = 'CellInspector';
   return (
     <section className={style.toggle}>
       <label htmlFor={id}>開発モード</label>
-      <Toggle id={id} state={state} onClick={toggle} />
+      <Toggle id={id} state={devMode} onClick={toggle} />
     </section>
   );
 };

@@ -74,10 +74,19 @@ export const rcDragging = atom<AbortController | null>({
   default: null,
 });
 
-export const rcShowInspector = atom<boolean>({
-  key: 'ShowInspector',
+const rcDev = atom<boolean>({
+  key: 'Dev',
   default: false,
   effects: [...syncSearchParamsBoolean('dev', false)],
+});
+
+export const rcDevMode = selector<boolean>({
+  key: 'DevMode',
+  get: ({ get }) => get(rcDev),
+  set: ({ set, reset }, value) => {
+    set(rcDev, value);
+    reset(rcSelectedCells);
+  },
 });
 
 export const rcTxDelayMs = atom<number>({
@@ -166,15 +175,5 @@ export const rcInitCell = writer<DRCellId>({
       }
       return new Set(list).add(cellId);
     });
-  },
-});
-
-export const rcAddCell = writer<DRCellId>({
-  key: 'AddCell',
-  set: ({ get, set }, cellId) => {
-    const cell = get(rcCell(cellId));
-    if (!cell) {
-      set(rcInitCell, cellId);
-    }
   },
 });

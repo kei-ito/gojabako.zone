@@ -13,7 +13,7 @@ import {
   rcPointeredCell,
   rcSelectCell,
   rcSelectedCells,
-  rcShowInspector,
+  rcDevMode,
   rcViewBox,
   rcXYWHZ,
 } from './recoil.app.mts';
@@ -59,7 +59,7 @@ const PointeredCell = () => {
 
 const Cells = () => {
   const cells = useRecoilValue(rcCellList);
-  const inspecting = useRecoilValue(rcShowInspector);
+  const devMode = useRecoilValue(rcDevMode);
   return [
     ...(function* (): Generator<ReactNode> {
       for (const cellId of cells) {
@@ -67,7 +67,7 @@ const Cells = () => {
           <DistributedReversiCell
             key={cellId.join(',')}
             cellId={cellId}
-            debug={inspecting}
+            debug={devMode}
           />
         );
       }
@@ -111,7 +111,7 @@ const rcOnSubClickBoard = writer<MouseEvent>({
   set: ({ get, set }, event) => {
     event.preventDefault();
     document.getSelection()?.removeAllRanges();
-    if (!get(rcShowInspector) || get(rcDragging)) {
+    if (!get(rcDevMode) || get(rcDragging)) {
       return;
     }
     const [x, y, , , z] = get(rcXYWHZ);
@@ -173,7 +173,7 @@ const useSyncRect = (board: Element | null) => {
       setLastRect(rect);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [rect],
+    [rect, setXYZ],
   );
 };
 

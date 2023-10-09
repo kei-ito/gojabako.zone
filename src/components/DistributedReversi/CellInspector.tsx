@@ -1,16 +1,11 @@
-import { useEffect } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { rcSelectedCells, rcShowInspector } from './recoil.app.mts';
+import { useRecoilValue } from 'recoil';
+import { rcDevMode, rcSelectedCells } from './recoil.app.mts';
 import * as style from './style.module.scss';
 
 export const DistributedReversiCellInspector = () => {
-  const active = useRecoilValue(rcShowInspector);
-  const [selectedCells, setSelectedCells] = useRecoilState(rcSelectedCells);
-  useEffect(
-    () => () => setSelectedCells(new Set()),
-    [setSelectedCells, active],
-  );
-  if (!active) {
+  const devMode = useRecoilValue(rcDevMode);
+  const selectedCells = useRecoilValue(rcSelectedCells);
+  if (!devMode) {
     return <div className={style.inspector} />;
   }
   const { size } = selectedCells;
