@@ -9,6 +9,7 @@ import {
   rcAddCell,
   rcCellList,
   rcDragging,
+  rcSelectedCells,
   rcViewBox,
   rcXYWHZ,
 } from './recoil.app.mts';
@@ -19,6 +20,8 @@ export const DistributedReversiBoard = () => {
   const [element, setElement] = useState<Element | null>(null);
   useSyncRect(element);
   useGrab(element as HTMLElement);
+  const cells = useRecoilValue(rcCellList);
+  const selectedCells = useRecoilValue(rcSelectedCells);
   return (
     <svg
       ref={setElement}
@@ -26,7 +29,27 @@ export const DistributedReversiBoard = () => {
       viewBox={useRecoilValue(rcViewBox)}
       onClick={useSetRecoilState(rcOnClickBoard)}
     >
-      {element && <Cells />}
+      {element && [
+        ...(function* (): Generator<ReactNode> {
+          for (const cellId of cells) {
+            yield (
+              <DistributedReversiCell key={cellId.join(',')} cellId={cellId} />
+            );
+          }
+          for (const [x, y] of selectedCells) {
+            yield (
+              <rect
+                key={`selected ${x} ${y}`}
+                className={style.selected}
+                x={x - 0.5}
+                y={-y - 0.5}
+                width="1"
+                height="1"
+              />
+            );
+          }
+        })(),
+      ]}
     </svg>
   );
 };
@@ -44,17 +67,6 @@ const rcOnClickBoard = writer<MouseEvent>({
     set(rcAddCell, [cx, cy] as DRCellId);
   },
 });
-
-const Cells = () => {
-  const list = useRecoilValue(rcCellList);
-  return [...listCell(list)];
-};
-
-const listCell = function* (list: Iterable<DRCellId>): Generator<ReactNode> {
-  for (const cellId of list) {
-    yield <DistributedReversiCell key={cellId.join(',')} cellId={cellId} />;
-  }
-};
 
 const useSyncRect = (element: Element | null) => {
   const [lastRect, setLastRect] = useState<DOMRect | null>(null);

@@ -1,11 +1,12 @@
-import type { CSSProperties } from 'react';
-import { Fragment, useMemo } from 'react';
-import { useRecoilValue } from 'recoil';
+import type { CSSProperties, MouseEvent } from 'react';
+import { Fragment, useCallback, useMemo } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { IconClass, classnames } from '../../util/classnames.mts';
 import {
   rcCell,
   rcDirectedRxBuffer,
   rcDirectedTxBuffer,
+  rcSelectedCells,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
 import { useOnConnection } from './useOnConnection.mts';
@@ -44,6 +45,7 @@ export const DistributedReversiCell = ({ cellId }: CellProps) => {
 const Cell = ({ cellId }: CellProps) => {
   const cell = useRecoilValue(rcCell(cellId));
   const onClick = useOnPressCell(cellId);
+  const onContextMenu = useOnContextMenu(cellId);
   const styles = useRectStyles(cell);
   return (
     cell && (
@@ -68,6 +70,7 @@ const Cell = ({ cellId }: CellProps) => {
           width="0.8"
           height="0.8"
           onClick={onClick}
+          onContextMenu={onContextMenu}
           style={styles.fore}
         />
         <text className={style.cellText} x={0} y={0}>
@@ -102,6 +105,28 @@ const useRectStyles = (cell: DRCell | null) =>
     }
     return { back, fore };
   }, [cell]);
+
+const useOnContextMenu = (cellId: DRCellId) => {
+  const setSelectedCells = useSetRecoilState(rcSelectedCells);
+  return useCallback(
+    (event: MouseEvent) => {
+      event.preventDefault();
+      setSelectedCells((current) => {
+        const newSet = new Set(current);
+        if (newSet.has(cellId)) {
+          newSet.delete(cellId);
+        } else {
+          if (!(event.shiftKey || event.metaKey || event.ctrlKey)) {
+            newSet.clear();
+          }
+          newSet.add(cellId);
+        }
+        return newSet;
+      });
+    },
+    [cellId, setSelectedCells],
+  );
+};
 
 interface TxRxProps {
   cellId: DRCellId;

@@ -124,3 +124,10 @@ path.buffer {
   white-space: pre;
   pointer-events: none;
 }
+
+.selected {
+  fill: none;
+  stroke: var(--gjYellow5);
+  stroke-width: 0.05;
+  pointer-events: none;
+}

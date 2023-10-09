@@ -11,6 +11,10 @@ export const rcFloaterContent = atom<FunctionComponent | null>({
   key: 'FloaterContent',
   default: null,
 });
+export const rcSelectedCells = atom<Set<DRCellId>>({
+  key: 'SelectedCells',
+  default: new Set(),
+});
 export const rcPointerPosition = atom<[number, number]>({
   key: 'PointerPosition',
   default: [0, 0],
