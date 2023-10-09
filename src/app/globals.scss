@@ -1,3 +1,4 @@
+/* stylelint-disable property-no-vendor-prefix */
 *,
 ::before,
 ::after,
@@ -18,10 +19,13 @@
   background-color: unset;
   background-position: center;
   background-repeat: no-repeat;
-  text-size-adjust: none;
   outline-color: var(--gjBlue6);
   outline-width: 0.2em;
   appearance: none;
+  text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
 
   @media (prefers-reduced-motion: reduce) {
     animation-duration: 0.01ms !important;
