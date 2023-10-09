@@ -22,6 +22,7 @@
         "message": "Expected custom property name to be prefixed with 'gj'."
       }
     ],
+    "selector-class-pattern": null,
     "selector-pseudo-class-no-unknown": [
       true,
       {

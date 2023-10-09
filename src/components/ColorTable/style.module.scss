@@ -1,8 +1,9 @@
 .table {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(12, max-content);
   column-gap: var(--gj1px);
   row-gap: var(--gj1px);
+  justify-items: stretch;
   font-size: 80%;
   font-weight: 700;
   overflow: auto;
@@ -10,15 +11,8 @@
   & > * {
     padding-inline: 0.5em;
     padding-block: 0.2em;
-    white-space: nowrap;
     background-color: var(--gjColor);
+    white-space: nowrap;
+    text-align: center;
   }
-}
-
-.light {
-  color: var(--gjGray1);
-}
-
-.dark {
-  color: var(--gjGray9);
 }

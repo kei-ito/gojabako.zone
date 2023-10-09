@@ -1,0 +1,133 @@
+export const metadata = {
+  title: 'CSSの色の見え方',
+  description: 'hsl, hwb, lch, oklch, lab, oklabの見え方を確認できます。',
+};
+
+import {
+  ColorTable,
+  hsl,
+  hwb,
+  lch,
+  oklch,
+  lab,
+  oklab,
+} from '../../../../components/ColorTable';
+import { classnames } from '../../../../util/classnames.mts';
+import * as style from './style.module.scss';
+
+[hsl], [hwb], [lch], [oklch], [lab], [oklab]の色の見え方を確認できます。
+
+[hsl]: https://developer.mozilla.org/docs/Web/CSS/color_value/hsl
+[hwb]: https://developer.mozilla.org/docs/Web/CSS/color_value/hwb
+[lch]: https://developer.mozilla.org/docs/Web/CSS/color_value/lch
+[oklch]: https://developer.mozilla.org/docs/Web/CSS/color_value/oklch
+[lab]: https://developer.mozilla.org/docs/Web/CSS/color_value/lab
+[oklab]: https://developer.mozilla.org/docs/Web/CSS/color_value/oklab
+
+### [hsl]
+
+`color: #ffffff`の場合
+
+<ColorTable fn={hsl.fn} className={classnames(style.table, style.light)} />
+
+`color: #000000`の場合
+
+<ColorTable fn={hsl.fn} className={classnames(style.table, style.dark)} />
+
+`filter: grayscale(100%)`の場合
+
+<ColorTable
+  fn={hsl.fn}
+  className={classnames(style.table, style.notext)}
+  style={{ filter: 'grayscale(100%)' }}
+/>
+
+### [hwb]
+
+`color: #ffffff`の場合
+
+<ColorTable fn={hwb.fn} className={classnames(style.table, style.light)} />
+
+`color: #000000`の場合
+
+<ColorTable fn={hwb.fn} className={classnames(style.table, style.dark)} />
+
+`filter: grayscale(100%)`の場合
+
+<ColorTable
+  fn={hwb.fn}
+  className={classnames(style.table, style.notext)}
+  style={{ filter: 'grayscale(100%)' }}
+/>
+
+### [lch]
+
+`color: #ffffff`の場合
+
+<ColorTable fn={lch.fn} className={classnames(style.table, style.light)} />
+
+`color: #000000`の場合
+
+<ColorTable fn={lch.fn} className={classnames(style.table, style.dark)} />
+
+`filter: grayscale(100%)`の場合
+
+<ColorTable
+  fn={lch.fn}
+  className={classnames(style.table, style.notext)}
+  style={{ filter: 'grayscale(100%)' }}
+/>
+
+### [oklch]
+
+`color: #ffffff`の場合
+
+<ColorTable fn={oklch.fn} className={classnames(style.table, style.light)} />
+
+`color: #000000`の場合
+
+<ColorTable fn={oklch.fn} className={classnames(style.table, style.dark)} />
+
+`filter: grayscale(100%)`の場合
+
+<ColorTable
+  fn={oklch.fn}
+  className={classnames(style.table, style.notext)}
+  style={{ filter: 'grayscale(100%)' }}
+/>
+
+### [lab]
+
+`color: #ffffff`の場合
+
+<ColorTable fn={lab.fn} className={classnames(style.table, style.light)} />
+
+`color: #000000`の場合
+
+<ColorTable fn={lab.fn} className={classnames(style.table, style.dark)} />
+
+`filter: grayscale(100%)`の場合
+
+<ColorTable
+  fn={lab.fn}
+  className={classnames(style.table, style.notext)}
+  style={{ filter: 'grayscale(100%)' }}
+/>
+
+### [oklab]
+
+`color: #ffffff`の場合
+
+<ColorTable fn={oklab.fn} className={classnames(style.table, style.light)} />
+
+`color: #000000`の場合
+
+<ColorTable fn={oklab.fn} className={classnames(style.table, style.dark)} />
+
+`filter: grayscale(100%)`の場合
+
+<ColorTable
+  fn={oklab.fn}
+  className={classnames(style.table, style.notext)}
+  style={{ filter: 'grayscale(100%)' }}
+/>
