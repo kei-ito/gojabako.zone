@@ -26,7 +26,7 @@ interface CellProps {
   debug?: boolean;
 }
 
-export const DistributedReversiCell = ({ cellId, debug }: CellProps) => {
+export const DRCellG = ({ cellId, debug }: CellProps) => {
   return (
     <g
       id={encodeURIComponent(`cell${cellId}`)}

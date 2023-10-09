@@ -8,7 +8,7 @@ import {
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
 
-export const DistributedReversiFloater = () => {
+export const DRFloater = () => {
   const [div, setDiv] = useState<HTMLElement | null>(null);
   const rect = useRect(div?.parentElement);
   const xy = useRecoilValue(rcPointerPosition);

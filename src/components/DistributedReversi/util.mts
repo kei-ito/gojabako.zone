@@ -81,8 +81,8 @@ export const toDRBufferId = (() => {
     return cached;
   };
 })();
-type DRMessageMode = DRDiagonalDirection | DRDirection | 'spread';
-interface DRMessageType<T extends string, P> {
+export type DRMessageMode = DRDiagonalDirection | DRDirection | 'spread';
+interface DRMessageObject<T extends string, P> {
   id: string;
   /**
    * このメッセージが移動した距離です。この値はセル間を移動する際（TxからRxに移る際）に変更さ
@@ -95,11 +95,12 @@ interface DRMessageType<T extends string, P> {
   payload: P;
 }
 export interface DRMessageMap {
-  ping: DRMessageType<'ping', null>;
-  press: DRMessageType<'press', DRSharedState>;
-  connect: DRMessageType<'connect', DRSharedState>;
-  setShared: DRMessageType<'setShared', DRSharedState>;
+  ping: DRMessageObject<'ping', null>;
+  press: DRMessageObject<'press', DRSharedState>;
+  connect: DRMessageObject<'connect', DRSharedState>;
+  setShared: DRMessageObject<'setShared', DRSharedState>;
 }
+export type DRMessageType = keyof DRMessageMap;
 export type DRMessage = DRMessageMap[keyof DRMessageMap];
 export const generateMessageProps = (() => {
   let deduplicationIdCounter = 0;

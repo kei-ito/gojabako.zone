@@ -6,7 +6,14 @@ import {
   syncSearchParamsBoolean,
   syncSearchParamsNumber,
 } from '../../util/recoil/syncSearchParams.mts';
-import type { DRBufferId, DRCell, DRCellId, DRMessage } from './util.mts';
+import type {
+  DRBufferId,
+  DRCell,
+  DRCellId,
+  DRCellState,
+  DRMessage,
+  DRPlayerId,
+} from './util.mts';
 import {
   DRInitialState,
   InitialDRPlayerId,
@@ -19,9 +26,33 @@ export const rcFloaterContent = atom<FunctionComponent | null>({
   default: null,
 });
 
-export const rcSelectedCells = atom<Set<DRCellId>>({
-  key: 'SelectedCells',
+export const rcSelectedCoordinates = atom<Set<DRCellId>>({
+  key: 'SelectedCoordinates',
   default: new Set(),
+});
+
+export interface CellSelection {
+  map: Map<DRCellId, DRCell>;
+  maxPlayerCount: number;
+}
+
+export const rcSelectedCells = selector<CellSelection>({
+  key: 'SelectedCells',
+  get: ({ get }) => {
+    const map = new Map<DRCellId, DRCell>();
+    let maxPlayerCount = 0;
+    for (const cellId of get(rcSelectedCoordinates)) {
+      const cell = get(rcCell(cellId));
+      if (cell) {
+        map.set(cellId, cell);
+        const { playerCount } = cell.shared;
+        if (maxPlayerCount < playerCount) {
+          maxPlayerCount = playerCount;
+        }
+      }
+    }
+    return { map, maxPlayerCount };
+  },
 });
 
 export const rcSelectCell = writer<{
@@ -30,7 +61,7 @@ export const rcSelectCell = writer<{
 }>({
   key: 'SelectCell',
   set: ({ set }, { cellId, mode }) => {
-    set(rcSelectedCells, (current) => {
+    set(rcSelectedCoordinates, (current) => {
       const newSet = new Set(current);
       switch (mode) {
         case 'add':
@@ -85,7 +116,7 @@ export const rcDevMode = selector<boolean>({
   get: ({ get }) => get(rcDev),
   set: ({ set, reset }, value) => {
     set(rcDev, value);
-    reset(rcSelectedCells);
+    reset(rcSelectedCoordinates);
   },
 });
 
@@ -161,19 +192,74 @@ export const rcCellList = atom<Set<DRCellId>>({
   default: new Set(),
 });
 
-export const rcInitCell = writer<DRCellId>({
-  key: 'InitCell',
-  set: ({ set }, cellId) => {
-    set(rcCell(cellId), {
-      pending: null,
-      state: DRInitialState,
-      shared: { state: InitialDRPlayerId, playerCount: 2 },
-    });
-    set(rcCellList, (list) => {
-      if (list.has(cellId)) {
-        return list;
-      }
-      return new Set(list).add(cellId);
-    });
+export const rcInitExistingCells = writer<null>({
+  key: 'InitExistingCells',
+  set: ({ get, set }) => {
+    for (const cellId of get(rcCellList)) {
+      set(rcCell(cellId), {
+        pending: null,
+        state: DRInitialState,
+        shared: { state: InitialDRPlayerId, playerCount: 2 },
+      });
+    }
+  },
+});
+
+export const rcAddCells = writer<Iterable<DRCellId>>({
+  key: 'AddCells',
+  set: ({ set }, coordinates) => {
+    const added = new Set<DRCellId>();
+    for (const cellId of coordinates) {
+      set(rcCell(cellId), (c) => {
+        if (c) {
+          return c;
+        }
+        added.add(cellId);
+        return {
+          pending: null,
+          state: DRInitialState,
+          shared: { state: InitialDRPlayerId, playerCount: 2 },
+        };
+      });
+    }
+    if (0 < added.size) {
+      set(rcCellList, (current) => new Set([...current, ...added]));
+    }
+  },
+});
+
+interface CellUpdates {
+  state: DRCellState;
+  sharedState: DRPlayerId;
+  playerCount: number;
+}
+
+export const rcUpdateSelectedCells = writer<Partial<CellUpdates>>({
+  key: 'UpdateSelectedCells',
+  set: ({ get, set }, updates) => {
+    const cellUpdates: Partial<DRCell> = {};
+    if ('state' in updates) {
+      cellUpdates.state = updates.state;
+    }
+    const sharedUpdates: Partial<DRCell['shared']> = {};
+    if ('sharedState' in updates) {
+      sharedUpdates.state = updates.sharedState;
+    }
+    if ('playerCount' in updates) {
+      sharedUpdates.playerCount = updates.playerCount;
+    }
+    for (const cellId of get(rcSelectedCoordinates)) {
+      set(rcCell(cellId), (cell) => {
+        if (!cell) {
+          return cell;
+        }
+        return {
+          ...cell,
+          pending: null,
+          ...cellUpdates,
+          shared: { ...cell.shared, ...sharedUpdates },
+        };
+      });
+    }
   },
 });

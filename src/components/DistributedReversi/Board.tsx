@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
 import { writer } from '../../util/recoil/selector.mts';
 import { useRect } from '../use/Rect.mts';
-import { DistributedReversiCell } from './Cell';
+import { DRCellG } from './Cell';
 import type { XYWHZ } from './recoil.app.mts';
 import {
   rcCell,
@@ -12,7 +12,7 @@ import {
   rcPointerPosition,
   rcPointeredCell,
   rcSelectCell,
-  rcSelectedCells,
+  rcSelectedCoordinates,
   rcDevMode,
   rcViewBox,
   rcXYWHZ,
@@ -20,7 +20,7 @@ import {
 import * as style from './style.module.scss';
 import { toDRCellId } from './util.mts';
 
-export const DistributedReversiBoard = () => {
+export const DRBoard = () => {
   const [element, setElement] = useState<Element | null>(null);
   useSyncRect(element);
   useSyncPointerPosition(element as HTMLElement);
@@ -35,7 +35,7 @@ export const DistributedReversiBoard = () => {
     >
       <PointeredCell />
       <Cells />
-      <SelectedCells />
+      <SelectedCoordinates />
     </svg>
   );
 };
@@ -64,31 +64,25 @@ const Cells = () => {
     ...(function* (): Generator<ReactNode> {
       for (const cellId of cells) {
         yield (
-          <DistributedReversiCell
-            key={cellId.join(',')}
-            cellId={cellId}
-            debug={devMode}
-          />
+          <DRCellG key={cellId.join(',')} cellId={cellId} debug={devMode} />
         );
       }
     })(),
   ];
 };
 
-const SelectedCells = () => {
-  const selectedCells = useRecoilValue(rcSelectedCells);
+const SelectedCoordinates = () => {
+  const selectedCells = useRecoilValue(rcSelectedCoordinates);
   return [
     ...(function* (): Generator<ReactNode> {
-      const size = 0.9;
       for (const [x, y] of selectedCells) {
         yield (
-          <rect
+          <circle
             key={`selected ${x} ${y}`}
             className={style.selected}
-            x={x - size / 2}
-            y={-y - size / 2}
-            width={size}
-            height={size}
+            cx={x}
+            cy={-y}
+            r="0.5"
           />
         );
       }
@@ -102,7 +96,7 @@ const rcOnClickBoard = writer<MouseEvent>({
     if (get(rcDragging)) {
       return;
     }
-    reset(rcSelectedCells);
+    reset(rcSelectedCoordinates);
   },
 });
 

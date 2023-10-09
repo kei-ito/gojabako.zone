@@ -4,9 +4,9 @@ import type { HTMLAttributes } from 'react';
 import { RecoilRoot } from 'recoil';
 import { classnames } from '../../util/classnames.mts';
 import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
-import { DistributedReversiBoard } from './Board';
-import { DistributedReversiFloater } from './Floater';
-import { DistributedReversiInfo } from './Info';
+import { DRBoard } from './Board';
+import { DRFloater } from './Floater';
+import { DRInfo } from './Info';
 import * as style from './style.module.scss';
 
 export const DistributedReversi = (props: HTMLAttributes<HTMLElement>) => {
@@ -17,9 +17,9 @@ export const DistributedReversi = (props: HTMLAttributes<HTMLElement>) => {
       className={classnames(style.container, props.className)}
     >
       <RecoilRoot>
-        <DistributedReversiBoard />
-        <DistributedReversiInfo />
-        <DistributedReversiFloater />
+        <DRBoard />
+        <DRInfo />
+        <DRFloater />
       </RecoilRoot>
     </section>
   );

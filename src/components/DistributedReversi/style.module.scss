@@ -41,21 +41,47 @@
   padding-block: 0.5em;
   border-inline-start: solid var(--gj1px) var(--gjGray4);
   overflow-y: auto;
+  font-size: 90%;
 
   & > * {
     flex-shrink: 0;
     margin-block: 0.25em;
   }
 
-  & > .inspector {
-    flex-grow: 1;
+  & > hr {
+    background-color: var(--gjGray5);
+    margin-block: 0.5em;
+  }
+
+  & > .spacer {
+    flex: 1 1 0;
+    margin-block: 0;
+  }
+
+  & > section {
+    & > select,
+    & > input {
+      font-weight: 700;
+      line-height: 1.8;
+    }
+  }
+
+  & > .selector {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 0.5em;
+    align-items: center;
   }
 
   & > .number {
     display: grid;
-    grid-template-columns: 1fr 5em auto;
+    grid-template-columns: 1fr 5em;
     column-gap: 0.5em;
     align-items: center;
+
+    & > label {
+      white-space: nowrap;
+    }
 
     & > input {
       text-align: end;
@@ -148,4 +174,16 @@ path.buffer {
   line-height: 1.2;
   white-space: pre;
   pointer-events: none;
+}
+
+.messenger {
+  border-style: solid;
+  border-color: var(--gjGray5);
+  border-radius: 0.3em;
+
+  & > summary {
+    padding-inline: 0.5em;
+    cursor: pointer;
+    user-select: none;
+  }
 }
