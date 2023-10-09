@@ -1,7 +1,11 @@
 import { isSafeInteger } from '@nlib/typing';
 import type { GetRecoilValue, ResetRecoilState, SetRecoilState } from 'recoil';
-import { writerFamily } from '../../util/recoil/selector.mts';
-import { rcCell, rcDirectedTxBuffer } from './recoil.app.mts';
+import { writer, writerFamily } from '../../util/recoil/selector.mts';
+import {
+  rcCell,
+  rcDirectedTxBuffer,
+  rcSelectedCoordinates,
+} from './recoil.app.mts';
 import type {
   DRCellId,
   DRDiagonalDirection,
@@ -63,7 +67,7 @@ const sendD = (
   msg: DRMessage,
   d: DRDirection,
 ) => {
-  const adjacentId = getAdjacentId(cellId, d);
+  const adjacentId = getAdjacentId([cellId, d]);
   const adjacentCell = get(rcCell(adjacentId));
   if (adjacentCell) {
     set(rcDirectedTxBuffer(toDRBufferId(cellId, d)), (buffer) => [
@@ -98,7 +102,7 @@ const sendToIdleBuffer = (
 ) => {
   const counts: Partial<Record<DRDirection, number>> = {};
   for (const d of dd as Iterable<DRDirection>) {
-    if (!(d in counts) && get(rcCell(getAdjacentId(cellId, d)))) {
+    if (!(d in counts) && get(rcCell(getAdjacentId([cellId, d])))) {
       counts[d] = get(rcDirectedTxBuffer(toDRBufferId(cellId, d))).length;
     }
   }
@@ -119,9 +123,6 @@ const sendToIdleBuffer = (
   }
 };
 
-/**
- * TODO: 重複排除
- */
 const spread = (
   args: RecoilSetterArg,
   cellId: DRCellId,
@@ -136,3 +137,15 @@ const spread = (
     sendD(args, cellId, msg, d);
   }
 };
+
+export const rcSendFromSelectedCell = writer<DRMessage>({
+  key: 'SendFromSelectedCell',
+  set: ({ get, set }, msg) => {
+    for (const cellId of get(rcSelectedCoordinates)) {
+      const cell = get(rcCell(cellId));
+      if (cell) {
+        set(rcSend(cellId), msg);
+      }
+    }
+  },
+});

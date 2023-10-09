@@ -5,6 +5,7 @@ import { writer } from '../../util/recoil/selector.mts';
 import { vAdd } from '../../util/vector.mts';
 import {
   rcCell,
+  rcDevMode,
   rcDirectedRxBuffer,
   rcDirectedTxBuffer,
   rcTxDelayMs,
@@ -21,22 +22,20 @@ export const useTx = (bufferId: DRBufferId) => {
   const transmit = useSetRecoilState(rcTransmitMessage);
   const buffer = useRecoilValue(rcDirectedTxBuffer(bufferId));
   const txDelayMs = useRecoilValue(rcTxDelayMs);
+  const debug = useRecoilValue(rcDevMode);
+  const delayMs = debug ? txDelayMs : 0;
   useEffect(() => {
     if (0 < buffer.length) {
-      const timerId = setTimeout(
-        () => transmit(bufferId),
-        txDelayMs * (0.95 + 0.1 * Math.random()),
-      );
+      const timerId = setTimeout(() => transmit(bufferId), delayMs);
       return () => clearTimeout(timerId);
     }
     return noop;
-  }, [buffer, bufferId, transmit, txDelayMs]);
+  }, [buffer, bufferId, transmit, delayMs]);
 };
 
 const rcTransmitMessage = writer<DRBufferId>({
   key: 'TransmitMessage',
   set: ({ get, set }, bufferId) => {
-    const [cellId, d] = bufferId;
     const tx = rcDirectedTxBuffer(bufferId);
     const buf = get(tx).slice();
     const tMsg = buf.shift();
@@ -44,17 +43,17 @@ const rcTransmitMessage = writer<DRBufferId>({
     if (!tMsg) {
       return;
     }
-    const aId = getAdjacentId(cellId, d);
-    if (!get(rcCell(aId))) {
+    const adjacentId = getAdjacentId(bufferId);
+    if (!get(rcCell(adjacentId))) {
       return;
     }
+    const d = bufferId[1];
     const ad = DRAdjacentRxDirection[d];
     const rMsg = { ...tMsg, d: vAdd(tMsg.d, DRAdjacentStep[d]) };
     if (rMsg.ttl) {
       rMsg.ttl -= 1;
     }
-    console.info(`rx: ${JSON.stringify(rMsg)}`);
-    set(rcDirectedRxBuffer(toDRBufferId(aId, ad)), (buffer) => [
+    set(rcDirectedRxBuffer(toDRBufferId(adjacentId, ad)), (buffer) => [
       ...buffer,
       rMsg,
     ]);

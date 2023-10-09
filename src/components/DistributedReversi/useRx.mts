@@ -4,7 +4,12 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { noop } from '../../util/noop.mts';
 import type { RecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { writerFamily } from '../../util/recoil/selector.mts';
-import { rcCell, rcDirectedRxBuffer, rcRxDelayMs } from './recoil.app.mts';
+import {
+  rcCell,
+  rcDevMode,
+  rcDirectedRxBuffer,
+  rcRxDelayMs,
+} from './recoil.app.mts';
 import { rcForward } from './recoil.send.mts';
 import type {
   DRBufferId,
@@ -20,16 +25,15 @@ export const useRx = (bufferId: DRBufferId) => {
   const receive = useSetRecoilState(rcReceive(bufferId));
   const buffer = useRecoilValue(rcDirectedRxBuffer(bufferId));
   const rxDelayMs = useRecoilValue(rcRxDelayMs);
+  const debug = useRecoilValue(rcDevMode);
+  const delayMs = debug ? rxDelayMs : 0;
   useEffect(() => {
     if (0 < buffer.length) {
-      const timerId = setTimeout(
-        receive,
-        rxDelayMs * (0.95 + 0.1 * Math.random()),
-      );
+      const timerId = setTimeout(receive, delayMs);
       return () => clearTimeout(timerId);
     }
     return noop;
-  }, [buffer, receive, rxDelayMs]);
+  }, [buffer, receive, delayMs]);
 };
 
 const getReceived = (() => {

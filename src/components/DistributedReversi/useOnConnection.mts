@@ -3,24 +3,24 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { writer } from '../../util/recoil/selector.mts';
 import { rcCell } from './recoil.app.mts';
 import { rcSend } from './recoil.send.mts';
-import type { DRCellId, DRDirection } from './util.mts';
+import type { DRBufferId } from './util.mts';
 import { generateMessageProps, getAdjacentId } from './util.mts';
 
-export const useOnConnection = (cellId: DRCellId, d: DRDirection) => {
+export const useOnConnection = (bufferId: DRBufferId) => {
   const [sent, setSent] = useState(false);
-  const adjacentCell = useRecoilValue(rcCell(getAdjacentId(cellId, d)));
+  const adjacentCell = useRecoilValue(rcCell(getAdjacentId(bufferId)));
   const onConnection = useSetRecoilState(rcOnConnection);
   useEffect(() => {
     if (adjacentCell && !sent) {
-      onConnection({ cellId, d });
+      onConnection(bufferId);
       setSent(true);
     }
-  }, [adjacentCell, cellId, d, onConnection, sent]);
+  }, [adjacentCell, bufferId, onConnection, sent]);
 };
 
-const rcOnConnection = writer<{ cellId: DRCellId; d: DRDirection }>({
+const rcOnConnection = writer<DRBufferId>({
   key: 'OnConnection',
-  set: ({ get, set }, { cellId, d }) => {
+  set: ({ get, set }, [cellId, d]) => {
     const cell = get(rcCell(cellId));
     if (cell) {
       set(rcSend(cellId), {

@@ -11,7 +11,9 @@ export const isDRPlayerId = createTypeChecker<DRPlayerId>(
 export type DRCellId = Nominal<[number, number], 'DRCellId'>;
 export const toDRCellId = (() => {
   const cache = new Map<string, DRCellId>();
-  return (x: number, y: number) => {
+  return (x1: number, y1: number) => {
+    const x = Math.round(x1);
+    const y = Math.round(y1);
     const key = `${x},${y}`;
     let cached = cache.get(key);
     if (!cached) {
@@ -59,7 +61,10 @@ export const DRAdjacentStep: Record<DRDirection, [number, number]> = {
   w: [-1, 0],
   s: [0, -1],
 };
-export const getAdjacentId = (cellId: DRCellId, d: DRDirection): DRCellId => {
+export const getAdjacentId = ([cellId, d]: [
+  DRCellId,
+  DRDirection,
+]): DRCellId => {
   const step = DRAdjacentStep[d];
   return toDRCellId(cellId[0] + step[0], cellId[1] + step[1]);
 };
@@ -76,8 +81,8 @@ export const toDRBufferId = (() => {
     return cached;
   };
 })();
-type DRMessageMode = DRDiagonalDirection | DRDirection | 'spread';
-interface DRMessageType<T extends string, P> {
+export type DRMessageMode = DRDiagonalDirection | DRDirection | 'spread';
+interface DRMessageObject<T extends string, P> {
   id: string;
   /**
    * このメッセージが移動した距離です。この値はセル間を移動する際（TxからRxに移る際）に変更さ
@@ -90,11 +95,12 @@ interface DRMessageType<T extends string, P> {
   payload: P;
 }
 export interface DRMessageMap {
-  ping: DRMessageType<'ping', null>;
-  press: DRMessageType<'press', DRSharedState>;
-  connect: DRMessageType<'connect', DRSharedState>;
-  setShared: DRMessageType<'setShared', DRSharedState>;
+  ping: DRMessageObject<'ping', null>;
+  press: DRMessageObject<'press', DRSharedState>;
+  connect: DRMessageObject<'connect', DRSharedState>;
+  setShared: DRMessageObject<'setShared', DRSharedState>;
 }
+export type DRMessageType = keyof DRMessageMap;
 export type DRMessage = DRMessageMap[keyof DRMessageMap];
 export const generateMessageProps = (() => {
   let deduplicationIdCounter = 0;

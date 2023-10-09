@@ -1,43 +1,141 @@
-import type { ReactNode } from 'react';
+import type { FunctionComponent } from 'react';
 import { DefaultValue, atom, atomFamily, selector } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
-import { isClient } from '../../util/env.mts';
 import { writer } from '../../util/recoil/selector.mts';
-import { syncSearchParamsNumber } from '../../util/recoil/syncSearchParams.mts';
-import type { DRBufferId, DRCell, DRCellId, DRMessage } from './util.mts';
-import { DRInitialState, InitialDRPlayerId, zoom } from './util.mts';
+import {
+  syncSearchParamsBoolean,
+  syncSearchParamsNumber,
+} from '../../util/recoil/syncSearchParams.mts';
+import type {
+  DRBufferId,
+  DRCell,
+  DRCellId,
+  DRCellState,
+  DRMessage,
+  DRPlayerId,
+} from './util.mts';
+import {
+  DRInitialState,
+  InitialDRPlayerId,
+  toDRCellId,
+  zoom,
+} from './util.mts';
 
-export const rcTooltip = atom<ReactNode>({ key: 'Tooltip', default: null });
-export const rcPointerPosition = atom<[number, number]>({
-  key: 'PointerPosition',
-  default: [0, 0],
-  effects: [
-    ({ setSelf }) => {
-      const abc = new AbortController();
-      if (isClient) {
-        addEventListener(
-          'pointermove',
-          (e) => setSelf([e.clientX, e.clientY]),
-          { signal: abc.signal },
-        );
-      }
-      return () => abc.abort();
-    },
-  ],
+export const rcFloaterContent = atom<FunctionComponent | null>({
+  key: 'FloaterContent',
+  default: null,
 });
+
+export const rcSelectedCoordinates = atom<Set<DRCellId>>({
+  key: 'SelectedCoordinates',
+  default: new Set(),
+});
+
+export interface CellSelection {
+  map: Map<DRCellId, DRCell>;
+  maxPlayerCount: number;
+}
+
+export const rcSelectedCells = selector<CellSelection>({
+  key: 'SelectedCells',
+  get: ({ get }) => {
+    const map = new Map<DRCellId, DRCell>();
+    let maxPlayerCount = 0;
+    for (const cellId of get(rcSelectedCoordinates)) {
+      const cell = get(rcCell(cellId));
+      if (cell) {
+        map.set(cellId, cell);
+        const { playerCount } = cell.shared;
+        if (maxPlayerCount < playerCount) {
+          maxPlayerCount = playerCount;
+        }
+      }
+    }
+    return { map, maxPlayerCount };
+  },
+});
+
+export const rcSelectCell = writer<{
+  cellId: DRCellId;
+  mode: 'add' | 'toggle';
+}>({
+  key: 'SelectCell',
+  set: ({ set }, { cellId, mode }) => {
+    set(rcSelectedCoordinates, (current) => {
+      const newSet = new Set(current);
+      switch (mode) {
+        case 'add':
+          if (current.has(cellId)) {
+            newSet.delete(cellId);
+          } else {
+            newSet.add(cellId);
+          }
+          break;
+        case 'toggle':
+        default:
+          newSet.clear();
+          if (!current.has(cellId)) {
+            newSet.add(cellId);
+          }
+      }
+      return newSet;
+    });
+  },
+});
+
+export const rcPointerPosition = atom<[number, number] | null>({
+  key: 'PointerPosition',
+  default: null,
+});
+
+export const rcPointeredCell = selector<DRCellId | null>({
+  key: 'PointeredCell',
+  get: ({ get }) => {
+    const pointer = get(rcPointerPosition);
+    if (pointer) {
+      const [x0, y0, , , z] = get(rcXYWHZ);
+      return toDRCellId(pointer[0] / z + x0, -pointer[1] / z - y0);
+    }
+    return null;
+  },
+});
+
+export const rcDragging = atom<AbortController | null>({
+  key: 'Dragging',
+  default: null,
+});
+
+const rcDev = atom<boolean>({
+  key: 'Dev',
+  default: false,
+  effects: [...syncSearchParamsBoolean('dev', false)],
+});
+
+export const rcDevMode = selector<boolean>({
+  key: 'DevMode',
+  get: ({ get }) => get(rcDev),
+  set: ({ set, reset }, value) => {
+    set(rcDev, value);
+    reset(rcSelectedCoordinates);
+  },
+});
+
 export const rcTxDelayMs = atom<number>({
   key: 'TxDelayMs',
   default: 300,
   effects: [...syncSearchParamsNumber('txd', 80)],
 });
+
 export const rcRxDelayMs = atom<number>({
   key: 'RxDelayMs',
   default: 300,
   effects: [...syncSearchParamsNumber('rxd', 80)],
 });
-type XYWHZ =
+
+export type XYWHZ =
   | [number, number, number, number, number, [number, number]]
   | [number, number, number, number, number];
+
 export const rcXYWHZ = atom<XYWHZ>({
   key: 'XYZ',
   default: [0, 0, 0, 0, 80],
@@ -94,29 +192,94 @@ export const rcCellList = atom<Set<DRCellId>>({
   default: new Set(),
 });
 
-export const rcInitCell = writer<DRCellId>({
-  key: 'InitCell',
-  set: ({ set }, cellId) => {
-    set(rcCell(cellId), {
-      pending: null,
-      state: DRInitialState,
-      shared: { state: InitialDRPlayerId, playerCount: 2 },
-    });
-    set(rcCellList, (list) => {
-      if (list.has(cellId)) {
-        return list;
-      }
-      return new Set(list).add(cellId);
-    });
+export const rcInitExistingCells = writer<null>({
+  key: 'InitExistingCells',
+  set: ({ get, set }) => {
+    for (const cellId of get(rcCellList)) {
+      set(rcCell(cellId), {
+        pending: null,
+        state: DRInitialState,
+        shared: { state: InitialDRPlayerId, playerCount: 2 },
+      });
+    }
   },
 });
 
-export const rcAddCell = writer<DRCellId>({
-  key: 'AddCell',
-  set: ({ get, set }, cellId) => {
-    const cell = get(rcCell(cellId));
-    if (!cell) {
-      set(rcInitCell, cellId);
+export const rcAddCells = writer<Iterable<DRCellId>>({
+  key: 'AddCells',
+  set: ({ set }, coordinates) => {
+    const added = new Set<DRCellId>();
+    for (const cellId of coordinates) {
+      set(rcCell(cellId), (c) => {
+        if (c) {
+          return c;
+        }
+        added.add(cellId);
+        return {
+          pending: null,
+          state: DRInitialState,
+          shared: { state: InitialDRPlayerId, playerCount: 2 },
+        };
+      });
+    }
+    if (0 < added.size) {
+      set(rcCellList, (current) => new Set([...current, ...added]));
+    }
+  },
+});
+
+export const rcDeleteCells = writer<Iterable<DRCellId>>({
+  key: 'DeleteCells',
+  set: ({ set, reset }, coordinates) => {
+    const deleted = new Set<DRCellId>();
+    for (const cellId of coordinates) {
+      deleted.add(cellId);
+      reset(rcCell(cellId));
+    }
+    if (0 < deleted.size) {
+      set(rcCellList, (current) => {
+        const filtered = new Set([...current]);
+        for (const cellId of deleted) {
+          filtered.delete(cellId);
+        }
+        return filtered;
+      });
+    }
+  },
+});
+
+interface CellUpdates {
+  state: DRCellState;
+  sharedState: DRPlayerId;
+  playerCount: number;
+}
+
+export const rcUpdateSelectedCells = writer<Partial<CellUpdates>>({
+  key: 'UpdateSelectedCells',
+  set: ({ get, set }, updates) => {
+    const cellUpdates: Partial<DRCell> = {};
+    if ('state' in updates) {
+      cellUpdates.state = updates.state;
+    }
+    const sharedUpdates: Partial<DRCell['shared']> = {};
+    if ('sharedState' in updates) {
+      sharedUpdates.state = updates.sharedState;
+    }
+    if ('playerCount' in updates) {
+      sharedUpdates.playerCount = updates.playerCount;
+    }
+    for (const cellId of get(rcSelectedCoordinates)) {
+      set(rcCell(cellId), (cell) => {
+        if (!cell) {
+          return cell;
+        }
+        return {
+          ...cell,
+          pending: null,
+          ...cellUpdates,
+          shared: { ...cell.shared, ...sharedUpdates },
+        };
+      });
     }
   },
 });

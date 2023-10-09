@@ -1,25 +1,33 @@
 import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useRect } from '../use/Rect.mts';
-import { rcPointerPosition, rcTooltip } from './recoil.app.mts';
+import {
+  rcDragging,
+  rcPointerPosition,
+  rcFloaterContent,
+} from './recoil.app.mts';
 import * as style from './style.module.scss';
 
-export const DistributedReversiTooltip = () => {
+export const DRFloater = () => {
   const [div, setDiv] = useState<HTMLElement | null>(null);
   const rect = useRect(div?.parentElement);
   const xy = useRecoilValue(rcPointerPosition);
-  const message = useRecoilValue(rcTooltip);
+  const Content = useRecoilValue(rcFloaterContent);
+  const dragging = useRecoilValue(rcDragging);
+  if (!Content || !xy || dragging) {
+    return null;
+  }
   return (
     <div
       ref={setDiv}
-      className={style.tooltip}
+      className={style.floater}
       style={
-        message && rect
+        rect
           ? { left: xy[0] - rect.left, top: xy[1] - rect.top + 20 }
           : { display: 'none' }
       }
     >
-      {message}
+      <Content />
     </div>
   );
 };

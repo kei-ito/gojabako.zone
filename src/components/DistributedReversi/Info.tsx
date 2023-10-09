@@ -1,57 +1,45 @@
 import type { ChangeEvent } from 'react';
-import { useCallback, useEffect } from 'react';
-import { useRecoilCallback, useRecoilState } from 'recoil';
+import { useCallback } from 'react';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
 import { SecondaryButton } from '../Button';
 import { Toggle } from '../Toggle';
 import { useFullScreen } from '../use/FullScreen.mts';
 import { ZoomSlider } from '../ZoomSlider';
+import { DRCellInspector } from './CellInspector';
 import {
-  rcCell,
-  rcCellList,
-  rcInitCell,
+  rcDevMode,
+  rcInitExistingCells,
   rcRxDelayMs,
   rcTxDelayMs,
   rcZoom,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
-import type { DRCellId } from './util.mts';
-import { toDRCellId, zoom } from './util.mts';
+import { zoom } from './util.mts';
 
-export const DistributedReversiInfo = () => (
-  <nav className={style.info}>
-    <InitGameButton />
-    <ZoomControl />
-    <TxDelayControl />
-    <RxDelayControl />
-    <FullScreenButton />
-  </nav>
-);
+export const DRInfo = () => {
+  const devMode = useRecoilValue(rcDevMode);
+  return (
+    <nav className={style.info}>
+      <DRCellInspector />
+      <div className={style.spacer} />
+      <InitGameButton />
+      <ZoomControl />
+      {!devMode && <FullScreenToggle />}
+      {devMode && <TxDelayControl />}
+      {devMode && <RxDelayControl />}
+      <DevModeToggle />
+    </nav>
+  );
+};
 
 const InitGameButton = () => {
-  const initCells = useRecoilCallback(
-    ({ set, reset, snapshot }) =>
-      () => {
-        for (const cellId of snapshot.getLoadable(rcCellList).getValue()) {
-          set(rcCell(cellId), null);
-        }
-        reset(rcCellList);
-        const list = new Set<DRCellId>();
-        const range = 2;
-        for (let x = -range; x <= range; x++) {
-          for (let y = -range; y <= range; y++) {
-            const cellId = toDRCellId(x, y);
-            list.add(cellId);
-            set(rcInitCell, cellId);
-          }
-        }
-        setTimeout(() => set(rcCellList, list), 50);
-      },
-    [],
-  );
-  useEffect(() => initCells(), [initCells]);
+  const initCells = useSetRecoilState(rcInitExistingCells);
   return (
-    <SecondaryButton icon="refresh" onClick={initCells}>
+    <SecondaryButton
+      icon="refresh"
+      onClick={useCallback(() => initCells(null), [initCells])}
+    >
       はじめから
     </SecondaryButton>
   );
@@ -81,9 +69,8 @@ const TxDelayControl = () => {
   const id = 'TxDelayMs';
   return (
     <section className={style.number}>
-      <label htmlFor={id}>送信遅延</label>
+      <label htmlFor={id}>送信遅延 [ms]</label>
       <input id={id} type="number" step={10} value={ms} onChange={onChange} />
-      <span>ms</span>
     </section>
   );
 };
@@ -99,20 +86,31 @@ const RxDelayControl = () => {
   const id = 'RxDelayMs';
   return (
     <section className={style.number}>
-      <label htmlFor={id}>受信遅延</label>
+      <label htmlFor={id}>受信遅延 [ms]</label>
       <input id={id} type="number" step={10} value={ms} onChange={onChange} />
-      <span>ms</span>
     </section>
   );
 };
 
-const FullScreenButton = () => {
+const FullScreenToggle = () => {
   const [state, toggle] = useFullScreen(`.${style.container}`);
   const id = 'FullScreen';
   return (
     <section className={style.toggle}>
       <label htmlFor={id}>フルスクリーン</label>
       <Toggle id={id} state={state} onClick={toggle} />
+    </section>
+  );
+};
+
+const DevModeToggle = () => {
+  const [devMode, setDevMode] = useRecoilState(rcDevMode);
+  const toggle = useCallback(() => setDevMode((s) => !s), [setDevMode]);
+  const id = 'CellInspector';
+  return (
+    <section className={style.toggle}>
+      <label htmlFor={id}>開発モード</label>
+      <Toggle id={id} state={devMode} onClick={toggle} />
     </section>
   );
 };
