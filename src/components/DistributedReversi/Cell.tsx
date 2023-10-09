@@ -13,10 +13,12 @@ import { useOnPressCell } from './useOnPressCell.mts';
 import { useRx } from './useRx.mts';
 import { useTx } from './useTx.mts';
 import type { DRCell, DRCellId, DRDirection } from './util.mts';
-import { DRDirections, isDRPlayerId, toDRBufferId } from './util.mts';
-
-const r = 0.44;
-const toSVGCoodinate = (cellId: DRCellId) => [cellId[0], -cellId[1]] as const;
+import {
+  DRDirections,
+  DRInitialState,
+  isDRPlayerId,
+  toDRBufferId,
+} from './util.mts';
 
 interface CellProps {
   cellId: DRCellId;
@@ -24,7 +26,10 @@ interface CellProps {
 
 export const DistributedReversiCell = ({ cellId }: CellProps) => {
   return (
-    <g id={encodeURIComponent(`cell${cellId}`)} className={style.cell}>
+    <g
+      id={encodeURIComponent(`cell${cellId}`)}
+      transform={`translate(${cellId[0]},${-cellId[1]})`}
+    >
       <Cell cellId={cellId} />
       {DRDirections.map((d) => (
         <Fragment key={d}>
@@ -38,22 +43,34 @@ export const DistributedReversiCell = ({ cellId }: CellProps) => {
 
 const Cell = ({ cellId }: CellProps) => {
   const cell = useRecoilValue(rcCell(cellId));
-  const [x, y] = toSVGCoodinate(cellId);
-  const size = 0.9;
   const onClick = useOnPressCell(cellId);
+  const styles = useRectStyles(cell);
   return (
     cell && (
       <>
         <rect
-          x={x - size / 2}
-          y={y - size / 2}
-          width={size}
-          height={size}
-          data-state={cell.state}
-          onClick={onClick}
-          style={getRectStyle(cell)}
+          className={style.cellBackground}
+          x="-0.5"
+          y="-0.5"
+          width="1"
+          height="1"
+          style={styles.back}
         />
-        <text x={x} y={y}>
+        <rect
+          className={classnames(
+            style.cell,
+            cell.state === DRInitialState && style.initial,
+          )}
+          x="-0.4"
+          y="-0.4"
+          rx="0.1"
+          ry="0.1"
+          width="0.8"
+          height="0.8"
+          onClick={onClick}
+          style={styles.fore}
+        />
+        <text className={style.cellText} x={0} y={0}>
           {cell.state}
           {cell.pending !== null && (
             <>
@@ -67,18 +84,24 @@ const Cell = ({ cellId }: CellProps) => {
   );
 };
 
-const getRectStyle = ({ state, shared }: DRCell) => {
-  const props: CSSProperties = {};
-  {
-    const hue = Math.floor((360 * shared.state) / shared.playerCount);
-    props.stroke = `hwb(${hue} 0% 25%)`;
-  }
-  if (isDRPlayerId(state)) {
-    const hue = (360 * state) / shared.playerCount;
-    props.fill = `hwb(${hue} 75% 0%)`;
-  }
-  return props;
-};
+const useRectStyles = (cell: DRCell | null) =>
+  useMemo(() => {
+    const back: CSSProperties = {};
+    const fore: CSSProperties = {};
+    const hue = (t: number) => Math.round(360 * t) % 360;
+    if (cell) {
+      const { state, shared } = cell;
+      {
+        const h = hue(shared.state / shared.playerCount);
+        back.fill = back.stroke = `oklch(100% 0.15 ${h})`;
+      }
+      if (isDRPlayerId(state)) {
+        const h = hue(state / shared.playerCount);
+        fore.stroke = fore.fill = `oklch(80% 0.15 ${h})`;
+      }
+    }
+    return { back, fore };
+  }, [cell]);
 
 interface TxRxProps {
   cellId: DRCellId;
@@ -89,54 +112,49 @@ const Tx = ({ cellId, d }: TxRxProps) => {
   useTx(toDRBufferId(cellId, d));
   useOnConnection(cellId, d);
   const buffer = useRecoilValue(rcDirectedTxBuffer(toDRBufferId(cellId, d)));
-  const [cx, cy] = useMemo(() => {
-    const tt = ((getT(d) - 0.2) * Math.PI) / 2;
-    const [x, y] = toSVGCoodinate(cellId);
-    return [x + r * Math.cos(tt), y + r * Math.sin(tt)];
-  }, [cellId, d]);
+  const [cx, cy] = useArrowPosition(d, -0.2);
   const bufferedCount = buffer.length;
   return (
-    <>
-      <path
-        d={`M${cx.toFixed(3)} ${cy.toFixed(3)}${arrowD[getT(d)]}`}
-        className={classnames(
-          style.buffer,
-          style.tx,
-          0 < bufferedCount && style.active,
-        )}
-      />
-      <text x={cx} y={cy} className={style.buffer}>
-        {bufferedCount}
-      </text>
-    </>
+    0 < bufferedCount && (
+      <>
+        <path
+          d={`M${cx.toFixed(3)} ${cy.toFixed(3)}${arrowD[getT(d)]}`}
+          className={classnames(style.buffer, style.tx)}
+        />
+        <text x={cx} y={cy} className={style.buffer}>
+          {bufferedCount}
+        </text>
+      </>
+    )
   );
 };
 
 const Rx = ({ cellId, d }: TxRxProps) => {
   useRx(toDRBufferId(cellId, d));
   const buffer = useRecoilValue(rcDirectedRxBuffer(toDRBufferId(cellId, d)));
-  const [cx, cy] = useMemo(() => {
-    const tt = ((getT(d) + 0.2) * Math.PI) / 2;
-    const [x, y] = toSVGCoodinate(cellId);
-    return [x + r * Math.cos(tt), y + r * Math.sin(tt)];
-  }, [cellId, d]);
+  const [cx, cy] = useArrowPosition(d, 0.2);
   const bufferedCount = buffer.length;
   return (
-    <>
-      <path
-        d={`M${cx.toFixed(3)} ${cy.toFixed(3)}${arrowD[getT(d, 2)]}`}
-        className={classnames(
-          style.buffer,
-          style.rx,
-          0 < bufferedCount && style.active,
-        )}
-      />
-      <text x={cx} y={cy} className={style.buffer}>
-        {bufferedCount}
-      </text>
-    </>
+    0 < bufferedCount && (
+      <>
+        <path
+          d={`M${cx.toFixed(3)} ${cy.toFixed(3)}${arrowD[getT(d, 2)]}`}
+          className={classnames(style.buffer, style.rx)}
+        />
+        <text x={cx} y={cy} className={style.buffer}>
+          {bufferedCount}
+        </text>
+      </>
+    )
   );
 };
+
+const useArrowPosition = (d: DRDirection, offset: number) =>
+  useMemo(() => {
+    const r = 0.44;
+    const tt = ((getT(d) + offset) * Math.PI) / 2;
+    return [r * Math.cos(tt), r * Math.sin(tt)];
+  }, [d, offset]);
 
 const getT = (d: DRDirection, offset = 0): 0 | 1 | 2 | 3 =>
   ((({ e: 0, s: 1, w: 2, n: 3 })[d] + offset) % 4) as 0 | 1 | 2 | 3;

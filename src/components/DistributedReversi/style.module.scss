@@ -15,6 +15,7 @@
   align-self: stretch;
   justify-self: stretch;
   background-color: var(--gjGray1);
+  paint-order: stroke fill;
 }
 
 .info {
@@ -54,46 +55,55 @@
 }
 
 .cell {
+  cursor: pointer;
+  pointer-events: auto;
+  stroke-width: 0.1;
   user-select: none;
 
-  & > rect {
+  &.initial {
     fill: var(--gjGray3);
-    cursor: pointer;
-    pointer-events: auto;
-    stroke-width: 0.1;
-    paint-order: stroke fill;
-  }
+    stroke: var(--gjGray4);
 
-  & > text {
-    font-size: 0.26px;
-    text-anchor: middle;
-    dominant-baseline: central;
-    pointer-events: none;
-    font-weight: 700;
-
-    & > tspan {
-      font-size: 120%;
+    &:hover {
+      fill: var(--gjGray4);
+      stroke: var(--gjGray5);
     }
+  }
+}
+
+.cellBackground {
+  stroke-width: 0.01;
+}
+
+.cellText {
+  font-size: 0.26px;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+  font-weight: 700;
+
+  & > tspan {
+    font-size: 120%;
   }
 }
 
 text.buffer {
   font-size: 0.12px;
-  font-weight: 600;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
 }
 
 path.buffer {
-  fill: var(--gjGray4);
+  fill: var(--gjGray2);
   pointer-events: auto;
 
-  &.active {
-    &.tx {
-      fill: var(--gjYellow3);
-    }
+  &.tx {
+    fill: var(--gjYellow3);
+  }
 
-    &.rx {
-      fill: var(--gjGreen5);
-    }
+  &.rx {
+    fill: var(--gjGreen5);
   }
 }
 

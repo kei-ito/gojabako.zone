@@ -35,6 +35,17 @@ export const pageList: Array<PageData> = [
     filePath: 'src/app/app/mdx/page.mdx',
   },
   {
+    title: ['CSSの', '色の', '見え', '方'],
+    description: 'hsl, hwb, lch, oklch, lab, oklabの見え方を確認できます。',
+    publishedAt: '2023-10-09T04:52:55.000Z',
+    updatedAt: '2023-10-09T04:52:55.000Z',
+    commits: 1,
+    path: '/2023/css-colors',
+    iri: 'gjbkz://gojabako.zone/2023/css-colors',
+    group: '2023',
+    filePath: 'src/app/(blog)/2023/css-colors/page.mdx',
+  },
+  {
     title: ['Next.js', ' ', '13に', 'しました'],
     publishedAt: '2023-09-22T06:09:19.000Z',
     updatedAt: '2023-09-27T04:26:40.000Z',
