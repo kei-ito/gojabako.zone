@@ -37,8 +37,8 @@ export const pageList: Array<PageData> = [
   {
     title: ['CSSの', '色の', '見え', '方'],
     description: 'hsl, hwb, lch, oklch, lab, oklabの見え方を確認できます。',
-    publishedAt: '2023-10-09T04:52:55.000Z',
-    updatedAt: '2023-10-09T04:52:55.000Z',
+    publishedAt: '2023-10-09T15:07:41.000Z',
+    updatedAt: '2023-10-09T15:07:41.000Z',
     commits: 1,
     path: '/2023/css-colors',
     iri: 'gjbkz://gojabako.zone/2023/css-colors',
