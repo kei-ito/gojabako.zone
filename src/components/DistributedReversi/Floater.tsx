@@ -14,7 +14,7 @@ export const DistributedReversiFloater = () => {
   const xy = useRecoilValue(rcPointerPosition);
   const Content = useRecoilValue(rcFloaterContent);
   const dragging = useRecoilValue(rcDragging);
-  if (!Content || dragging) {
+  if (!Content || !xy || dragging) {
     return null;
   }
   return (

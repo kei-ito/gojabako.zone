@@ -6,71 +6,149 @@ import { useRect } from '../use/Rect.mts';
 import { DistributedReversiCell } from './Cell';
 import type { XYWHZ } from './recoil.app.mts';
 import {
-  rcAddCell,
+  rcCell,
   rcCellList,
   rcDragging,
+  rcPointerPosition,
+  rcPointeredCell,
+  rcSelectCell,
   rcSelectedCells,
+  rcShowInspector,
   rcViewBox,
   rcXYWHZ,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
-import type { DRCellId } from './util.mts';
+import { toDRCellId } from './util.mts';
 
 export const DistributedReversiBoard = () => {
   const [element, setElement] = useState<Element | null>(null);
   useSyncRect(element);
+  useSyncPointerPosition(element as HTMLElement);
   useGrab(element as HTMLElement);
-  const cells = useRecoilValue(rcCellList);
-  const selectedCells = useRecoilValue(rcSelectedCells);
   return (
     <svg
       ref={setElement}
       className={style.board}
       viewBox={useRecoilValue(rcViewBox)}
       onClick={useSetRecoilState(rcOnClickBoard)}
+      onContextMenu={useSetRecoilState(rcOnSubClickBoard)}
     >
-      {element && [
-        ...(function* (): Generator<ReactNode> {
-          for (const cellId of cells) {
-            yield (
-              <DistributedReversiCell key={cellId.join(',')} cellId={cellId} />
-            );
-          }
-          for (const [x, y] of selectedCells) {
-            yield (
-              <rect
-                key={`selected ${x} ${y}`}
-                className={style.selected}
-                x={x - 0.5}
-                y={-y - 0.5}
-                width="1"
-                height="1"
-              />
-            );
-          }
-        })(),
-      ]}
+      <PointeredCell />
+      <Cells />
+      <SelectedCells />
     </svg>
   );
 };
 
+const PointeredCell = () => {
+  const pointeredCell = useRecoilValue(rcPointeredCell);
+  const dragging = useRecoilValue(rcDragging);
+  if (!pointeredCell || dragging) {
+    return null;
+  }
+  return (
+    <rect
+      className={style.pointered}
+      x={pointeredCell[0] - 0.5}
+      y={-pointeredCell[1] - 0.5}
+      width="1"
+      height="1"
+    />
+  );
+};
+
+const Cells = () => {
+  const cells = useRecoilValue(rcCellList);
+  const inspecting = useRecoilValue(rcShowInspector);
+  return [
+    ...(function* (): Generator<ReactNode> {
+      for (const cellId of cells) {
+        yield (
+          <DistributedReversiCell
+            key={cellId.join(',')}
+            cellId={cellId}
+            debug={inspecting}
+          />
+        );
+      }
+    })(),
+  ];
+};
+
+const SelectedCells = () => {
+  const selectedCells = useRecoilValue(rcSelectedCells);
+  return [
+    ...(function* (): Generator<ReactNode> {
+      const size = 0.9;
+      for (const [x, y] of selectedCells) {
+        yield (
+          <rect
+            key={`selected ${x} ${y}`}
+            className={style.selected}
+            x={x - size / 2}
+            y={-y - size / 2}
+            width={size}
+            height={size}
+          />
+        );
+      }
+    })(),
+  ];
+};
+
 const rcOnClickBoard = writer<MouseEvent>({
   key: 'OnClickBoard',
-  set: ({ get, set }, { clientX, clientY, currentTarget }) => {
+  set: ({ get, reset }) => {
     if (get(rcDragging)) {
       return;
     }
-    const [x, y, , , z] = get(rcXYWHZ);
-    const rect = currentTarget.getBoundingClientRect();
-    const cx = Math.round(x + (clientX - rect.left) / z);
-    const cy = -Math.round(y + (clientY - rect.top) / z);
-    set(rcAddCell, [cx, cy] as DRCellId);
+    reset(rcSelectedCells);
   },
 });
 
-const useSyncRect = (element: Element | null) => {
+const rcOnSubClickBoard = writer<MouseEvent>({
+  key: 'OnSubClickBoard',
+  set: ({ get, set }, event) => {
+    event.preventDefault();
+    document.getSelection()?.removeAllRanges();
+    if (!get(rcShowInspector) || get(rcDragging)) {
+      return;
+    }
+    const [x, y, , , z] = get(rcXYWHZ);
+    const rect = event.currentTarget.getBoundingClientRect();
+    const cx = Math.round(x + (event.clientX - rect.left) / z);
+    const cy = -Math.round(y + (event.clientY - rect.top) / z);
+    const cellId = toDRCellId(cx, cy);
+    const cell = get(rcCell(cellId));
+    if (cell) {
+      return;
+    }
+    const alt = event.shiftKey || event.metaKey || event.ctrlKey;
+    set(rcSelectCell, { cellId, mode: alt ? 'add' : 'toggle' } as const);
+  },
+});
+
+const useSyncPointerPosition = (board: HTMLElement | null) => {
+  const setPosition = useSetRecoilState(rcPointerPosition);
+  useEffect(() => {
+    const abc = new AbortController();
+    if (board) {
+      board.addEventListener(
+        'pointermove',
+        (e) => setPosition([e.offsetX, e.offsetY]),
+        { signal: abc.signal },
+      );
+      board.addEventListener('pointerleave', () => setPosition(null), {
+        signal: abc.signal,
+      });
+    }
+    return () => abc.abort();
+  }, [board, setPosition]);
+};
+
+const useSyncRect = (board: Element | null) => {
   const [lastRect, setLastRect] = useState<DOMRect | null>(null);
-  const rect = useRect(element);
+  const rect = useRect(board);
   const setXYZ = useSetRecoilState(rcXYWHZ);
   useEffect(
     () => {

@@ -20,6 +20,7 @@ export const Default: StoryObj = {
             hover: { state: 'hover' },
             active: { state: 'active' },
             focus: { state: 'focus' },
+            disabled: { disabled: true },
             icon1: { icon: 'download' },
             icon2: { icon: 'downloading' },
           } as const

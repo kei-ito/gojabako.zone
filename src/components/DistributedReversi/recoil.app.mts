@@ -1,54 +1,101 @@
 import type { FunctionComponent } from 'react';
 import { DefaultValue, atom, atomFamily, selector } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
-import { isClient } from '../../util/env.mts';
 import { writer } from '../../util/recoil/selector.mts';
-import { syncSearchParamsNumber } from '../../util/recoil/syncSearchParams.mts';
+import {
+  syncSearchParamsBoolean,
+  syncSearchParamsNumber,
+} from '../../util/recoil/syncSearchParams.mts';
 import type { DRBufferId, DRCell, DRCellId, DRMessage } from './util.mts';
-import { DRInitialState, InitialDRPlayerId, zoom } from './util.mts';
+import {
+  DRInitialState,
+  InitialDRPlayerId,
+  toDRCellId,
+  zoom,
+} from './util.mts';
 
 export const rcFloaterContent = atom<FunctionComponent | null>({
   key: 'FloaterContent',
   default: null,
 });
+
 export const rcSelectedCells = atom<Set<DRCellId>>({
   key: 'SelectedCells',
   default: new Set(),
 });
-export const rcPointerPosition = atom<[number, number]>({
-  key: 'PointerPosition',
-  default: [0, 0],
-  effects: [
-    ({ setSelf }) => {
-      const abc = new AbortController();
-      if (isClient) {
-        addEventListener(
-          'pointermove',
-          (e) => setSelf([e.clientX, e.clientY]),
-          { signal: abc.signal },
-        );
+
+export const rcSelectCell = writer<{
+  cellId: DRCellId;
+  mode: 'add' | 'toggle';
+}>({
+  key: 'SelectCell',
+  set: ({ set }, { cellId, mode }) => {
+    set(rcSelectedCells, (current) => {
+      const newSet = new Set(current);
+      switch (mode) {
+        case 'add':
+          if (current.has(cellId)) {
+            newSet.delete(cellId);
+          } else {
+            newSet.add(cellId);
+          }
+          break;
+        case 'toggle':
+        default:
+          newSet.clear();
+          if (!current.has(cellId)) {
+            newSet.add(cellId);
+          }
       }
-      return () => abc.abort();
-    },
-  ],
+      return newSet;
+    });
+  },
 });
+
+export const rcPointerPosition = atom<[number, number] | null>({
+  key: 'PointerPosition',
+  default: null,
+});
+
+export const rcPointeredCell = selector<DRCellId | null>({
+  key: 'PointeredCell',
+  get: ({ get }) => {
+    const pointer = get(rcPointerPosition);
+    if (pointer) {
+      const [x0, y0, , , z] = get(rcXYWHZ);
+      return toDRCellId(pointer[0] / z + x0, -pointer[1] / z - y0);
+    }
+    return null;
+  },
+});
+
 export const rcDragging = atom<AbortController | null>({
   key: 'Dragging',
   default: null,
 });
+
+export const rcShowInspector = atom<boolean>({
+  key: 'ShowInspector',
+  default: false,
+  effects: [...syncSearchParamsBoolean('dev', false)],
+});
+
 export const rcTxDelayMs = atom<number>({
   key: 'TxDelayMs',
   default: 300,
   effects: [...syncSearchParamsNumber('txd', 80)],
 });
+
 export const rcRxDelayMs = atom<number>({
   key: 'RxDelayMs',
   default: 300,
   effects: [...syncSearchParamsNumber('rxd', 80)],
 });
+
 export type XYWHZ =
   | [number, number, number, number, number, [number, number]]
   | [number, number, number, number, number];
+
 export const rcXYWHZ = atom<XYWHZ>({
   key: 'XYZ',
   default: [0, 0, 0, 0, 80],

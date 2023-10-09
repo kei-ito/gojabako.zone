@@ -6,11 +6,13 @@ import { SecondaryButton } from '../Button';
 import { Toggle } from '../Toggle';
 import { useFullScreen } from '../use/FullScreen.mts';
 import { ZoomSlider } from '../ZoomSlider';
+import { DistributedReversiCellInspector } from './CellInspector';
 import {
   rcCell,
   rcCellList,
   rcInitCell,
   rcRxDelayMs,
+  rcShowInspector,
   rcTxDelayMs,
   rcZoom,
 } from './recoil.app.mts';
@@ -20,11 +22,13 @@ import { toDRCellId, zoom } from './util.mts';
 
 export const DistributedReversiInfo = () => (
   <nav className={style.info}>
+    <DistributedReversiCellInspector />
     <InitGameButton />
     <ZoomControl />
     <TxDelayControl />
     <RxDelayControl />
     <FullScreenButton />
+    <InspectorButton />
   </nav>
 );
 
@@ -112,6 +116,18 @@ const FullScreenButton = () => {
   return (
     <section className={style.toggle}>
       <label htmlFor={id}>フルスクリーン</label>
+      <Toggle id={id} state={state} onClick={toggle} />
+    </section>
+  );
+};
+
+const InspectorButton = () => {
+  const [state, set] = useRecoilState(rcShowInspector);
+  const toggle = useCallback(() => set((s) => !s), [set]);
+  const id = 'CellInspector';
+  return (
+    <section className={style.toggle}>
+      <label htmlFor={id}>開発モード</label>
       <Toggle id={id} state={state} onClick={toggle} />
     </section>
   );

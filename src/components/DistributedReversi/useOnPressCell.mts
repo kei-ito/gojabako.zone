@@ -1,4 +1,3 @@
-import type { MouseEvent } from 'react';
 import { useCallback } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { writer } from '../../util/recoil/selector.mts';
@@ -9,13 +8,7 @@ import { generateMessageProps, stepDRSharedState } from './util.mts';
 
 export const useOnPressCell = (cellId: DRCellId) => {
   const press = useSetRecoilState(rcPressCell);
-  return useCallback(
-    (event: MouseEvent) => {
-      event.stopPropagation();
-      press(cellId);
-    },
-    [cellId, press],
-  );
+  return useCallback(() => press(cellId), [cellId, press]);
 };
 
 const rcPressCell = writer<DRCellId>({

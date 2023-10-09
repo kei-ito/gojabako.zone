@@ -36,7 +36,6 @@ export const useTx = (bufferId: DRBufferId) => {
 const rcTransmitMessage = writer<DRBufferId>({
   key: 'TransmitMessage',
   set: ({ get, set }, bufferId) => {
-    const [cellId, d] = bufferId;
     const tx = rcDirectedTxBuffer(bufferId);
     const buf = get(tx).slice();
     const tMsg = buf.shift();
@@ -44,16 +43,17 @@ const rcTransmitMessage = writer<DRBufferId>({
     if (!tMsg) {
       return;
     }
-    const aId = getAdjacentId(cellId, d);
-    if (!get(rcCell(aId))) {
+    const adjacentId = getAdjacentId(bufferId);
+    if (!get(rcCell(adjacentId))) {
       return;
     }
+    const d = bufferId[1];
     const ad = DRAdjacentRxDirection[d];
     const rMsg = { ...tMsg, d: vAdd(tMsg.d, DRAdjacentStep[d]) };
     if (rMsg.ttl) {
       rMsg.ttl -= 1;
     }
-    set(rcDirectedRxBuffer(toDRBufferId(aId, ad)), (buffer) => [
+    set(rcDirectedRxBuffer(toDRBufferId(adjacentId, ad)), (buffer) => [
       ...buffer,
       rMsg,
     ]);

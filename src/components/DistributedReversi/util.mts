@@ -11,7 +11,9 @@ export const isDRPlayerId = createTypeChecker<DRPlayerId>(
 export type DRCellId = Nominal<[number, number], 'DRCellId'>;
 export const toDRCellId = (() => {
   const cache = new Map<string, DRCellId>();
-  return (x: number, y: number) => {
+  return (x1: number, y1: number) => {
+    const x = Math.round(x1);
+    const y = Math.round(y1);
     const key = `${x},${y}`;
     let cached = cache.get(key);
     if (!cached) {
@@ -59,7 +61,10 @@ export const DRAdjacentStep: Record<DRDirection, [number, number]> = {
   w: [-1, 0],
   s: [0, -1],
 };
-export const getAdjacentId = (cellId: DRCellId, d: DRDirection): DRCellId => {
+export const getAdjacentId = ([cellId, d]: [
+  DRCellId,
+  DRDirection,
+]): DRCellId => {
   const step = DRAdjacentStep[d];
   return toDRCellId(cellId[0] + step[0], cellId[1] + step[1]);
 };

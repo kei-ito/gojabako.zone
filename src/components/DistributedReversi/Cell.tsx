@@ -6,14 +6,14 @@ import {
   rcCell,
   rcDirectedRxBuffer,
   rcDirectedTxBuffer,
-  rcSelectedCells,
+  rcSelectCell,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
 import { useOnConnection } from './useOnConnection.mts';
 import { useOnPressCell } from './useOnPressCell.mts';
 import { useRx } from './useRx.mts';
 import { useTx } from './useTx.mts';
-import type { DRCell, DRCellId, DRDirection } from './util.mts';
+import type { DRBufferId, DRCell, DRCellId, DRDirection } from './util.mts';
 import {
   DRDirections,
   DRInitialState,
@@ -23,26 +23,30 @@ import {
 
 interface CellProps {
   cellId: DRCellId;
+  debug?: boolean;
 }
 
-export const DistributedReversiCell = ({ cellId }: CellProps) => {
+export const DistributedReversiCell = ({ cellId, debug }: CellProps) => {
   return (
     <g
       id={encodeURIComponent(`cell${cellId}`)}
       transform={`translate(${cellId[0]},${-cellId[1]})`}
     >
-      <Cell cellId={cellId} />
-      {DRDirections.map((d) => (
-        <Fragment key={d}>
-          <Tx cellId={cellId} d={d} />
-          <Rx cellId={cellId} d={d} />
-        </Fragment>
-      ))}
+      <Cell cellId={cellId} debug={debug} />
+      {DRDirections.map((d) => {
+        const bufferId = toDRBufferId(cellId, d);
+        return (
+          <Fragment key={d}>
+            <Tx bufferId={bufferId} debug={debug} />
+            <Rx bufferId={bufferId} debug={debug} />
+          </Fragment>
+        );
+      })}
     </g>
   );
 };
 
-const Cell = ({ cellId }: CellProps) => {
+const Cell = ({ cellId, debug }: CellProps) => {
   const cell = useRecoilValue(rcCell(cellId));
   const onClick = useOnPressCell(cellId);
   const onContextMenu = useOnContextMenu(cellId);
@@ -73,15 +77,17 @@ const Cell = ({ cellId }: CellProps) => {
           onContextMenu={onContextMenu}
           style={styles.fore}
         />
-        <text className={style.cellText} x={0} y={0}>
-          {cell.state}
-          {cell.pending !== null && (
-            <>
-              <tspan className={IconClass}>double_arrow</tspan>
-              {cell.pending}
-            </>
-          )}
-        </text>
+        {debug && (
+          <text className={style.cellText} x={0} y={0}>
+            {cell.state}
+            {cell.pending !== null && (
+              <>
+                <tspan className={IconClass}>double_arrow</tspan>
+                {cell.pending}
+              </>
+            )}
+          </text>
+        )}
       </>
     )
   );
@@ -107,45 +113,42 @@ const useRectStyles = (cell: DRCell | null) =>
   }, [cell]);
 
 const useOnContextMenu = (cellId: DRCellId) => {
-  const setSelectedCells = useSetRecoilState(rcSelectedCells);
+  const selectCell = useSetRecoilState(rcSelectCell);
   return useCallback(
     (event: MouseEvent) => {
       event.preventDefault();
-      setSelectedCells((current) => {
-        const newSet = new Set(current);
-        if (newSet.has(cellId)) {
-          newSet.delete(cellId);
-        } else {
-          if (!(event.shiftKey || event.metaKey || event.ctrlKey)) {
-            newSet.clear();
-          }
-          newSet.add(cellId);
-        }
-        return newSet;
-      });
+      const alt = event.shiftKey || event.metaKey || event.ctrlKey;
+      selectCell({ cellId, mode: alt ? 'add' : 'toggle' });
     },
-    [cellId, setSelectedCells],
+    [cellId, selectCell],
   );
 };
 
 interface TxRxProps {
-  cellId: DRCellId;
-  d: DRDirection;
+  bufferId: DRBufferId;
+  debug?: boolean;
 }
 
-const Tx = ({ cellId, d }: TxRxProps) => {
-  useTx(toDRBufferId(cellId, d));
-  useOnConnection(cellId, d);
-  const buffer = useRecoilValue(rcDirectedTxBuffer(toDRBufferId(cellId, d)));
+const Tx = ({ bufferId, debug }: TxRxProps) => {
+  useTx(bufferId);
+  useOnConnection(bufferId);
+  const d = bufferId[1];
+  const buffer = useRecoilValue(rcDirectedTxBuffer(bufferId));
   const [cx, cy] = useArrowPosition(d, -0.2);
   const bufferedCount = buffer.length;
   return (
+    debug &&
     0 < bufferedCount && (
       <>
         <path
           d={`M${cx.toFixed(3)} ${cy.toFixed(3)}${arrowD[getT(d)]}`}
-          className={classnames(style.buffer, style.tx)}
+          className={classnames(
+            style.buffer,
+            style.tx,
+            0 < bufferedCount && style.active,
+          )}
         />
+
         <text x={cx} y={cy} className={style.buffer}>
           {bufferedCount}
         </text>
@@ -154,17 +157,23 @@ const Tx = ({ cellId, d }: TxRxProps) => {
   );
 };
 
-const Rx = ({ cellId, d }: TxRxProps) => {
-  useRx(toDRBufferId(cellId, d));
-  const buffer = useRecoilValue(rcDirectedRxBuffer(toDRBufferId(cellId, d)));
+const Rx = ({ bufferId, debug }: TxRxProps) => {
+  useRx(bufferId);
+  const d = bufferId[1];
+  const buffer = useRecoilValue(rcDirectedRxBuffer(bufferId));
   const [cx, cy] = useArrowPosition(d, 0.2);
   const bufferedCount = buffer.length;
   return (
+    debug &&
     0 < bufferedCount && (
       <>
         <path
           d={`M${cx.toFixed(3)} ${cy.toFixed(3)}${arrowD[getT(d, 2)]}`}
-          className={classnames(style.buffer, style.rx)}
+          className={classnames(
+            style.buffer,
+            style.rx,
+            0 < bufferedCount && style.active,
+          )}
         />
         <text x={cx} y={cy} className={style.buffer}>
           {bufferedCount}
@@ -176,7 +185,7 @@ const Rx = ({ cellId, d }: TxRxProps) => {
 
 const useArrowPosition = (d: DRDirection, offset: number) =>
   useMemo(() => {
-    const r = 0.44;
+    const r = 0.43;
     const tt = ((getT(d) + offset) * Math.PI) / 2;
     return [r * Math.cos(tt), r * Math.sin(tt)];
   }, [d, offset]);

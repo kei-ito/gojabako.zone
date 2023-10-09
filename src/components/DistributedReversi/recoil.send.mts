@@ -63,7 +63,7 @@ const sendD = (
   msg: DRMessage,
   d: DRDirection,
 ) => {
-  const adjacentId = getAdjacentId(cellId, d);
+  const adjacentId = getAdjacentId([cellId, d]);
   const adjacentCell = get(rcCell(adjacentId));
   if (adjacentCell) {
     set(rcDirectedTxBuffer(toDRBufferId(cellId, d)), (buffer) => [
@@ -98,7 +98,7 @@ const sendToIdleBuffer = (
 ) => {
   const counts: Partial<Record<DRDirection, number>> = {};
   for (const d of dd as Iterable<DRDirection>) {
-    if (!(d in counts) && get(rcCell(getAdjacentId(cellId, d)))) {
+    if (!(d in counts) && get(rcCell(getAdjacentId([cellId, d])))) {
       counts[d] = get(rcDirectedTxBuffer(toDRBufferId(cellId, d))).length;
     }
   }
