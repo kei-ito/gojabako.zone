@@ -29,7 +29,9 @@ export default function Page() {
 
 const listRecentPages = function* (limit: number) {
   let count = 0;
-  for (const page of pageList) {
+  for (const page of pageList.sort(
+    (a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt),
+  )) {
     yield (
       <li key={page.path}>
         <PageLink page={page} />
