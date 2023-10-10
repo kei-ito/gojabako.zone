@@ -1,20 +1,33 @@
-import type { CSSProperties, MouseEvent } from 'react';
-import { Fragment, useCallback, useMemo } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import type { MouseEvent } from 'react';
+import { Fragment, useMemo } from 'react';
+import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { IconClass, classnames } from '../../util/classnames.mts';
-import { rcCell, rcRxBuffer, rcSelectCell, rcTxBuffer } from './recoil.app.mts';
+import {
+  rcCell,
+  rcRxBuffer,
+  rcSelectedCoordinates,
+  rcTxBuffer,
+  selectCoordinates,
+} from './recoil.app.mts';
 import * as style from './style.module.scss';
 import { useOnConnection } from './useOnConnection.mts';
 import { useOnPressCell } from './useOnPressCell.mts';
 import { useRx } from './useRx.mts';
 import { useTx } from './useTx.mts';
-import type { DRBufferId, DRCell, DRCellId, DRDirection } from './util.mts';
+import type {
+  DRBufferId,
+  DRCellId,
+  DRCellState,
+  DRDirection,
+} from './util.mts';
 import {
   DRDirections,
   DRInitialState,
   isDRPlayerId,
   toDRBufferId,
 } from './util.mts';
+
+const hue = (t: number) => Math.round(360 * t) % 360;
 
 interface CellProps {
   cellId: DRCellId;
@@ -43,34 +56,14 @@ export const DRCellG = ({ cellId, debug }: CellProps) => {
 
 const Cell = ({ cellId, debug }: CellProps) => {
   const cell = useRecoilValue(rcCell(cellId));
-  const onClick = useOnPressCell(cellId);
-  const onContextMenu = useOnContextMenu(cellId);
-  const styles = useRectStyles(cell);
   return (
     cell && (
       <>
-        <rect
-          className={style.cellBackground}
-          x="-0.5"
-          y="-0.5"
-          width="1"
-          height="1"
-          style={styles.back}
-        />
-        <rect
-          className={classnames(
-            style.cell,
-            cell.state === DRInitialState && style.initial,
-          )}
-          x="-0.4"
-          y="-0.4"
-          rx="0.1"
-          ry="0.1"
-          width="0.8"
-          height="0.8"
-          onClick={onClick}
-          onContextMenu={onContextMenu}
-          style={styles.fore}
+        <BackRect hue={hue(cell.shared.state / cell.shared.playerCount)} />
+        <ForeRect
+          cellId={cellId}
+          state={cell.state}
+          playerCount={cell.shared.playerCount}
         />
         {debug && (
           <text className={style.cellText} x={0} y={0}>
@@ -88,34 +81,59 @@ const Cell = ({ cellId, debug }: CellProps) => {
   );
 };
 
-const useRectStyles = (cell: DRCell | null) =>
-  useMemo(() => {
-    const back: CSSProperties = {};
-    const fore: CSSProperties = {};
-    const hue = (t: number) => Math.round(360 * t) % 360;
-    if (cell) {
-      const { state, shared } = cell;
-      {
-        const h = hue(shared.state / shared.playerCount);
-        back.fill = back.stroke = `oklch(100% 0.15 ${h})`;
-      }
-      if (isDRPlayerId(state)) {
-        const h = hue(state / shared.playerCount);
-        fore.stroke = fore.fill = `oklch(80% 0.15 ${h})`;
-      }
-    }
-    return { back, fore };
-  }, [cell]);
+const BackRect = (props: { hue: number }) => {
+  const color = `oklch(100% 0.15 ${props.hue})`;
+  return (
+    <rect
+      className={style.cellBackground}
+      x="-0.5"
+      y="-0.5"
+      width="1"
+      height="1"
+      style={{ fill: color, stroke: color }}
+    />
+  );
+};
 
-const useOnContextMenu = (cellId: DRCellId) => {
-  const selectCell = useSetRecoilState(rcSelectCell);
-  return useCallback(
-    (event: MouseEvent) => {
-      event.preventDefault();
-      const alt = event.shiftKey || event.metaKey || event.ctrlKey;
-      selectCell({ cellId, mode: alt ? 'add' : 'toggle' });
-    },
-    [cellId, selectCell],
+const ForeRect = ({
+  cellId,
+  state,
+  playerCount,
+}: {
+  cellId: DRCellId;
+  state: DRCellState;
+  playerCount: number;
+}) => {
+  const initial = state === DRInitialState;
+  let color = '';
+  if (isDRPlayerId(state)) {
+    const h = hue(state / playerCount);
+    color = `oklch(80% 0.15 ${h})`;
+  }
+  return (
+    <rect
+      className={classnames(style.cell, initial && style.initial)}
+      x="-0.4"
+      y="-0.4"
+      rx="0.1"
+      ry="0.1"
+      width="0.8"
+      height="0.8"
+      onClick={useOnPressCell(cellId)}
+      onContextMenu={useRecoilCallback(
+        ({ set }) =>
+          (event: MouseEvent) => {
+            event.preventDefault();
+            const alt = event.shiftKey || event.metaKey || event.ctrlKey;
+            set(
+              rcSelectedCoordinates,
+              selectCoordinates(cellId, alt ? 'add' : 'toggle'),
+            );
+          },
+        [cellId],
+      )}
+      style={color ? { fill: color, stroke: color } : undefined}
+    />
   );
 };
 

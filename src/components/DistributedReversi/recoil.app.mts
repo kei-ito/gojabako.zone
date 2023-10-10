@@ -1,25 +1,12 @@
 import type { FunctionComponent } from 'react';
 import { DefaultValue, atom, atomFamily, selector } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
-import { writer } from '../../util/recoil/selector.mts';
 import {
   syncSearchParamsBoolean,
   syncSearchParamsNumber,
 } from '../../util/recoil/syncSearchParams.mts';
-import type {
-  DRBufferId,
-  DRCell,
-  DRCellId,
-  DRCellState,
-  DRMessage,
-  DRPlayerId,
-} from './util.mts';
-import {
-  DRInitialState,
-  InitialDRPlayerId,
-  toDRCellId,
-  zoom,
-} from './util.mts';
+import type { DRBufferId, DRCell, DRCellId, DRMessage } from './util.mts';
+import { toDRCellId, zoom } from './util.mts';
 
 export const rcFloaterContent = atom<FunctionComponent | null>({
   key: 'FloaterContent',
@@ -30,6 +17,27 @@ export const rcSelectedCoordinates = atom<Set<DRCellId>>({
   key: 'SelectedCoordinates',
   default: new Set(),
 });
+
+export const selectCoordinates =
+  (cellId: DRCellId, mode: 'add' | 'toggle') => (currentSet: Set<DRCellId>) => {
+    const newSet = new Set(currentSet);
+    switch (mode) {
+      case 'add':
+        if (currentSet.has(cellId)) {
+          newSet.delete(cellId);
+        } else {
+          newSet.add(cellId);
+        }
+        break;
+      case 'toggle':
+      default:
+        newSet.clear();
+        if (!currentSet.has(cellId)) {
+          newSet.add(cellId);
+        }
+    }
+    return newSet;
+  };
 
 export interface CellSelection {
   map: Map<DRCellId, DRCell>;
@@ -52,34 +60,6 @@ export const rcSelectedCells = selector<CellSelection>({
       }
     }
     return { map, maxPlayerCount };
-  },
-});
-
-export const rcSelectCell = writer<{
-  cellId: DRCellId;
-  mode: 'add' | 'toggle';
-}>({
-  key: 'SelectCell',
-  set: ({ set }, { cellId, mode }) => {
-    set(rcSelectedCoordinates, (current) => {
-      const newSet = new Set(current);
-      switch (mode) {
-        case 'add':
-          if (current.has(cellId)) {
-            newSet.delete(cellId);
-          } else {
-            newSet.add(cellId);
-          }
-          break;
-        case 'toggle':
-        default:
-          newSet.clear();
-          if (!current.has(cellId)) {
-            newSet.add(cellId);
-          }
-      }
-      return newSet;
-    });
   },
 });
 
@@ -190,96 +170,4 @@ export const rcRxBuffer = atomFamily<Array<DRMessage>, DRBufferId>({
 export const rcCellList = atom<Set<DRCellId>>({
   key: 'CellList',
   default: new Set(),
-});
-
-export const rcInitExistingCells = writer<null>({
-  key: 'InitExistingCells',
-  set: ({ get, set }) => {
-    for (const cellId of get(rcCellList)) {
-      set(rcCell(cellId), {
-        pending: null,
-        state: DRInitialState,
-        shared: { state: InitialDRPlayerId, playerCount: 2 },
-      });
-    }
-  },
-});
-
-export const rcAddCells = writer<Iterable<DRCellId>>({
-  key: 'AddCells',
-  set: ({ set }, coordinates) => {
-    const added = new Set<DRCellId>();
-    for (const cellId of coordinates) {
-      set(rcCell(cellId), (c) => {
-        if (c) {
-          return c;
-        }
-        added.add(cellId);
-        return {
-          pending: null,
-          state: DRInitialState,
-          shared: { state: InitialDRPlayerId, playerCount: 2 },
-        };
-      });
-    }
-    if (0 < added.size) {
-      set(rcCellList, (current) => new Set([...current, ...added]));
-    }
-  },
-});
-
-export const rcDeleteCells = writer<Iterable<DRCellId>>({
-  key: 'DeleteCells',
-  set: ({ set, reset }, coordinates) => {
-    const deleted = new Set<DRCellId>();
-    for (const cellId of coordinates) {
-      deleted.add(cellId);
-      reset(rcCell(cellId));
-    }
-    if (0 < deleted.size) {
-      set(rcCellList, (current) => {
-        const filtered = new Set([...current]);
-        for (const cellId of deleted) {
-          filtered.delete(cellId);
-        }
-        return filtered;
-      });
-    }
-  },
-});
-
-interface CellUpdates {
-  state: DRCellState;
-  sharedState: DRPlayerId;
-  playerCount: number;
-}
-
-export const rcUpdateSelectedCells = writer<Partial<CellUpdates>>({
-  key: 'UpdateSelectedCells',
-  set: ({ get, set }, updates) => {
-    const cellUpdates: Partial<DRCell> = {};
-    if ('state' in updates) {
-      cellUpdates.state = updates.state;
-    }
-    const sharedUpdates: Partial<DRCell['shared']> = {};
-    if ('sharedState' in updates) {
-      sharedUpdates.state = updates.sharedState;
-    }
-    if ('playerCount' in updates) {
-      sharedUpdates.playerCount = updates.playerCount;
-    }
-    for (const cellId of get(rcSelectedCoordinates)) {
-      set(rcCell(cellId), (cell) => {
-        if (!cell) {
-          return cell;
-        }
-        return {
-          ...cell,
-          pending: null,
-          ...cellUpdates,
-          shared: { ...cell.shared, ...sharedUpdates },
-        };
-      });
-    }
-  },
 });

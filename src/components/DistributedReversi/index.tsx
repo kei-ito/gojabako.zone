@@ -9,10 +9,10 @@ import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
 import { DRBoard } from './Board';
 import { DRFloater } from './Floater';
 import { DRInfo } from './Info';
-import { rcAddCells } from './recoil.app.mts';
+import { rcCell, rcCellList } from './recoil.app.mts';
 import * as style from './style.module.scss';
 import type { DRCellId } from './util.mts';
-import { toDRCellId } from './util.mts';
+import { DRInitialState, InitialDRPlayerId, toDRCellId } from './util.mts';
 
 export const DistributedReversi = (props: HTMLAttributes<HTMLElement>) => {
   getCurrentUrl.defaultSearchParams = useSearchParams();
@@ -33,11 +33,17 @@ export const DistributedReversi = (props: HTMLAttributes<HTMLElement>) => {
 const useInit = () =>
   useCallback(({ set }: MutableSnapshot) => {
     const size = 2;
-    const coordinates: Array<DRCellId> = [];
+    const coordinates = new Set<DRCellId>();
     for (let x = -size; x <= size; x++) {
       for (let y = -size; y <= size; y++) {
-        coordinates.push(toDRCellId(x, y));
+        const cellId = toDRCellId(x, y);
+        set(rcCell(cellId), {
+          pending: null,
+          state: DRInitialState,
+          shared: { state: InitialDRPlayerId, playerCount: 2 },
+        });
+        coordinates.add(cellId);
       }
     }
-    set(rcAddCells, coordinates);
+    set(rcCellList, coordinates);
   }, []);

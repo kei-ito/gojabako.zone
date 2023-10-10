@@ -1,21 +1,21 @@
 import type { ChangeEvent } from 'react';
 import { useCallback, useMemo } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilCallback, useRecoilValue } from 'recoil';
+import { toSelectorOpts } from '../../util/recoil/selector.mts';
 import { SecondaryButton } from '../Button';
 import { DRMessenger } from './Messenger';
 import type { CellSelection } from './recoil.app.mts';
 import {
-  rcAddCells,
-  rcDeleteCells,
+  rcCell,
+  rcCellList,
   rcDevMode,
   rcSelectedCells,
   rcSelectedCoordinates,
-  rcUpdateSelectedCells,
 } from './recoil.app.mts';
 import { DRSelector } from './Selector';
 import * as style from './style.module.scss';
-import type { DRCellId } from './util.mts';
-import { DRInitialState, isDRPlayerId } from './util.mts';
+import type { DRCell, DRCellId, DRCellState, DRPlayerId } from './util.mts';
+import { DRInitialState, InitialDRPlayerId, isDRPlayerId } from './util.mts';
 
 export const DRCellInspector = () => {
   const devMode = useRecoilValue(rcDevMode);
@@ -66,21 +66,37 @@ const AddCellButton = ({
 }: {
   disabled?: boolean;
   coordinates: Iterable<DRCellId>;
-}) => {
-  const addCells = useSetRecoilState(rcAddCells);
-  return (
-    <SecondaryButton
-      icon="add"
-      onClick={useCallback(
-        () => addCells(coordinates),
-        [addCells, coordinates],
-      )}
-      disabled={disabled}
-    >
-      セルを追加
-    </SecondaryButton>
-  );
-};
+}) => (
+  <SecondaryButton
+    icon="add"
+    disabled={disabled}
+    onClick={useRecoilCallback(
+      ({ set }) =>
+        () => {
+          const added = new Set<DRCellId>();
+          for (const cellId of coordinates) {
+            set(rcCell(cellId), (c) => {
+              if (c) {
+                return c;
+              }
+              added.add(cellId);
+              return {
+                pending: null,
+                state: DRInitialState,
+                shared: { state: InitialDRPlayerId, playerCount: 2 },
+              };
+            });
+          }
+          if (0 < added.size) {
+            set(rcCellList, (current) => new Set([...current, ...added]));
+          }
+        },
+      [coordinates],
+    )}
+  >
+    セルを追加
+  </SecondaryButton>
+);
 
 const DeleteCellButton = ({
   coordinates,
@@ -88,24 +104,37 @@ const DeleteCellButton = ({
 }: {
   disabled?: boolean;
   coordinates: Iterable<DRCellId>;
-}) => {
-  const deleteCells = useSetRecoilState(rcDeleteCells);
-  return (
-    <SecondaryButton
-      icon="delete"
-      onClick={useCallback(
-        () => deleteCells(coordinates),
-        [deleteCells, coordinates],
-      )}
-      disabled={disabled}
-    >
-      セルを削除
-    </SecondaryButton>
-  );
-};
+}) => (
+  <SecondaryButton
+    icon="delete"
+    disabled={disabled}
+    onClick={useRecoilCallback(
+      ({ set, reset }) =>
+        () => {
+          const deleted = new Set<DRCellId>();
+          for (const cellId of coordinates) {
+            deleted.add(cellId);
+            reset(rcCell(cellId));
+          }
+          if (0 < deleted.size) {
+            set(rcCellList, (current) => {
+              const filtered = new Set([...current]);
+              for (const cellId of deleted) {
+                filtered.delete(cellId);
+              }
+              return filtered;
+            });
+          }
+        },
+      [coordinates],
+    )}
+  >
+    セルを削除
+  </SecondaryButton>
+);
 
 const StateSelector = ({ maxPlayerCount }: CellSelection) => {
-  const update = useSetRecoilState(rcUpdateSelectedCells);
+  const update = useUpdateSelectedCells();
   const onChange = useCallback(
     (value: string) => {
       if (value === DRInitialState) {
@@ -143,7 +172,7 @@ const StateSelector = ({ maxPlayerCount }: CellSelection) => {
 };
 
 const SharedStateSelector = ({ maxPlayerCount }: CellSelection) => {
-  const update = useSetRecoilState(rcUpdateSelectedCells);
+  const update = useUpdateSelectedCells();
   const onChange = useCallback(
     (value: string) => {
       const sharedState = value && Number(value);
@@ -176,7 +205,7 @@ const SharedStateSelector = ({ maxPlayerCount }: CellSelection) => {
 };
 
 const PlayerCountControl = ({ value }: { value: number }) => {
-  const update = useSetRecoilState(rcUpdateSelectedCells);
+  const update = useUpdateSelectedCells();
   const onChange = useCallback(
     ({ currentTarget }: ChangeEvent<HTMLInputElement>) => {
       let playerCount = Number(currentTarget.value);
@@ -195,3 +224,41 @@ const PlayerCountControl = ({ value }: { value: number }) => {
     </section>
   );
 };
+
+interface CellUpdates {
+  state?: DRCellState;
+  sharedState?: DRPlayerId;
+  playerCount?: number;
+}
+
+const useUpdateSelectedCells = () =>
+  useRecoilCallback(
+    (cbi) => (updates: CellUpdates) => {
+      const { get, set } = toSelectorOpts(cbi);
+      const cellUpdates: Partial<DRCell> = {};
+      if ('state' in updates) {
+        cellUpdates.state = updates.state;
+      }
+      const sharedUpdates: Partial<DRCell['shared']> = {};
+      if ('sharedState' in updates) {
+        sharedUpdates.state = updates.sharedState;
+      }
+      if ('playerCount' in updates) {
+        sharedUpdates.playerCount = updates.playerCount;
+      }
+      for (const cellId of get(rcSelectedCoordinates)) {
+        set(rcCell(cellId), (cell) => {
+          if (!cell) {
+            return cell;
+          }
+          return {
+            ...cell,
+            pending: null,
+            ...cellUpdates,
+            shared: { ...cell.shared, ...sharedUpdates },
+          };
+        });
+      }
+    },
+    [],
+  );
