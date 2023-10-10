@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { toSelectorOpts } from '../../util/recoil/selector.mts';
+import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { rcCell } from './recoil.app.mts';
 import { sendDRMessage } from './recoil.send.mts';
 import type { DRBufferId } from './util.mts';
@@ -11,11 +11,11 @@ export const useOnConnection = (bufferId: DRBufferId) => {
   const adjacentCell = useRecoilValue(rcCell(getAdjacentId(bufferId)));
   const onConnection = useRecoilCallback(
     (cbi) => () => {
-      const args = toSelectorOpts(cbi);
-      const { get } = args;
+      const rso = toRecoilSelectorOpts(cbi);
+      const { get } = rso;
       const cell = get(rcCell(bufferId[0]));
       if (cell) {
-        sendDRMessage(args, bufferId[0], {
+        sendDRMessage(rso, bufferId[0], {
           ...generateMessageProps(),
           type: 'connect',
           mode: bufferId[1],

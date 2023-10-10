@@ -1,7 +1,7 @@
 import type { MouseEvent, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
-import { toSelectorOpts } from '../../util/recoil/selector.mts';
+import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { useRect } from '../use/Rect.mts';
 import { DRCellG } from './Cell';
 import type { XYWHZ } from './recoil.app.mts';
@@ -43,7 +43,7 @@ export const DRBoard = () => {
 const useOnClick = () =>
   useRecoilCallback(
     (cbi) => () => {
-      const { get, reset } = toSelectorOpts(cbi);
+      const { get, reset } = toRecoilSelectorOpts(cbi);
       if (get(rcDragging)) {
         return;
       }
@@ -57,7 +57,7 @@ const useOnContextMenu = () =>
     (cbi) => (event: MouseEvent) => {
       event.preventDefault();
       document.getSelection()?.removeAllRanges();
-      const { get, set } = toSelectorOpts(cbi);
+      const { get, set } = toRecoilSelectorOpts(cbi);
       if (!get(rcDevMode) || get(rcDragging)) {
         return;
       }

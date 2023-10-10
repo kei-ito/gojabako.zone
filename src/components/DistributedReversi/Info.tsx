@@ -2,7 +2,7 @@ import type { ChangeEvent } from 'react';
 import { useCallback } from 'react';
 import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
-import { toSelectorOpts } from '../../util/recoil/selector.mts';
+import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { SecondaryButton } from '../Button';
 import { Toggle } from '../Toggle';
 import { useFullScreen } from '../use/FullScreen.mts';
@@ -40,7 +40,7 @@ const InitGameButton = () => (
     icon="refresh"
     onClick={useRecoilCallback(
       (cbi) => () => {
-        const { get, set } = toSelectorOpts(cbi);
+        const { get, set } = toRecoilSelectorOpts(cbi);
         for (const cellId of get(rcCellList)) {
           set(rcCell(cellId), (cell) => ({
             shared: { state: InitialDRPlayerId, playerCount: 2 },

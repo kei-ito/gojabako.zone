@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react';
 import { useCallback, useMemo } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { toSelectorOpts } from '../../util/recoil/selector.mts';
+import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { SecondaryButton } from '../Button';
 import { DRMessenger } from './Messenger';
 import type { CellSelection } from './recoil.app.mts';
@@ -73,13 +73,11 @@ const AddCellButton = ({
     onClick={useRecoilCallback(
       ({ set }) =>
         () => {
-          const added = new Set<DRCellId>();
           for (const cellId of coordinates) {
             set(rcCell(cellId), (c) => {
               if (c) {
                 return c;
               }
-              added.add(cellId);
               return {
                 pending: null,
                 state: DRInitialState,
@@ -87,9 +85,7 @@ const AddCellButton = ({
               };
             });
           }
-          if (0 < added.size) {
-            set(rcCellList, (current) => new Set([...current, ...added]));
-          }
+          set(rcCellList, (current) => new Set([...current, ...coordinates]));
         },
       [coordinates],
     )}
@@ -234,7 +230,7 @@ interface CellUpdates {
 const useUpdateSelectedCells = () =>
   useRecoilCallback(
     (cbi) => (updates: CellUpdates) => {
-      const { get, set } = toSelectorOpts(cbi);
+      const { get, set } = toRecoilSelectorOpts(cbi);
       const cellUpdates: Partial<DRCell> = {};
       if ('state' in updates) {
         cellUpdates.state = updates.state;

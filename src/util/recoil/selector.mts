@@ -6,7 +6,7 @@ export interface RecoilSelectorOpts {
   reset: <T>(recoilVal: RecoilState<T>) => void;
 }
 
-export const toSelectorOpts = ({
+export const toRecoilSelectorOpts = ({
   set,
   reset,
   snapshot,

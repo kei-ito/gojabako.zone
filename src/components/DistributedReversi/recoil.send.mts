@@ -16,36 +16,37 @@ import {
 } from './util.mts';
 
 export const sendDRMessage = (
-  args: RecoilSelectorOpts,
+  rso: RecoilSelectorOpts,
   cellId: DRCellId,
   msg: DRMessage,
 ) => {
   const { mode } = msg;
   if (isDRDirection(mode)) {
-    sendD(args, cellId, msg, mode);
+    sendD(rso, cellId, msg, mode);
   } else if (isDRDiagonalDirection(mode)) {
-    sendDD(args, cellId, msg, mode);
+    sendDD(rso, cellId, msg, mode);
   } else {
-    spread(args, cellId, msg);
+    spread(rso, cellId, msg);
   }
 };
 
+/** @returns {boolean} 転送できればtrueを返します。 */
 export const forwardDRMessage = (
-  args: RecoilSelectorOpts,
+  rso: RecoilSelectorOpts,
   cellId: DRCellId,
   msg: DRMessage,
   from: DRDirection,
-) => {
+): boolean => {
   const { mode, ttl } = msg;
   if (isSafeInteger(ttl) && !(0 < ttl)) {
-    return;
+    return false;
   }
   if (isDRDirection(mode)) {
-    sendD(args, cellId, msg, mode);
+    return sendD(rso, cellId, msg, mode);
   } else if (isDRDiagonalDirection(mode)) {
-    sendDD(args, cellId, msg, mode);
+    return sendDD(rso, cellId, msg, mode);
   } else {
-    spread(args, cellId, msg, from);
+    return spread(rso, cellId, msg, from);
   }
 };
 
@@ -54,28 +55,30 @@ const sendD = (
   cellId: DRCellId,
   msg: DRMessage,
   d: DRDirection,
-) => {
+): boolean => {
   const adjacentId = getAdjacentId([cellId, d]);
   const adjacentCell = get(rcCell(adjacentId));
   if (adjacentCell) {
     set(rcTxBuffer(toDRBufferId(cellId, d)), (b) => [...b, msg]);
+    return true;
   }
+  return false;
 };
 
 const sendDD = (
-  args: RecoilSelectorOpts,
+  rso: RecoilSelectorOpts,
   cellId: DRCellId,
   msg: DRMessage,
   dd: DRDiagonalDirection,
-) => {
+): boolean => {
   const dx = Math.abs(msg.d[0]);
   const dy = Math.abs(msg.d[1]);
   if (dy < dx) {
-    sendD(args, cellId, msg, dd[0] as DRDirection);
+    return sendD(rso, cellId, msg, dd[0] as DRDirection);
   } else if (dx < dy) {
-    sendD(args, cellId, msg, dd[1] as DRDirection);
+    return sendD(rso, cellId, msg, dd[1] as DRDirection);
   } else {
-    sendToIdleBuffer(args, cellId, msg, dd);
+    return sendToIdleBuffer(rso, cellId, msg, dd);
   }
 };
 
@@ -84,7 +87,7 @@ const sendToIdleBuffer = (
   cellId: DRCellId,
   msg: DRMessage,
   dd: DRDiagonalDirection,
-) => {
+): boolean => {
   const counts: Partial<Record<DRDirection, number>> = {};
   for (const d of dd as Iterable<DRDirection>) {
     if (!(d in counts) && get(rcCell(getAdjacentId([cellId, d])))) {
@@ -102,20 +105,26 @@ const sendToIdleBuffer = (
     // sendD()でよいですが存在チェックが済んでいるので直接set()します
     set(rcTxBuffer(toDRBufferId(cellId, min[1])), (b) => [...b, msg]);
     counts[min[1]] = min[0] + 1;
+    return true;
   }
+  return false;
 };
 
 const spread = (
-  args: RecoilSelectorOpts,
+  rso: RecoilSelectorOpts,
   cellId: DRCellId,
   msg: DRMessage,
   ...exclude: Array<DRDirection>
-) => {
+): boolean => {
   const directions = new Set(DRDirections);
   for (const d of exclude) {
     directions.delete(d);
   }
+  let sent = false;
   for (const d of directions) {
-    sendD(args, cellId, msg, d);
+    if (sendD(rso, cellId, msg, d)) {
+      sent = true;
+    }
   }
+  return sent;
 };

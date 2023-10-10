@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRecoilCallback } from 'recoil';
-import { toSelectorOpts } from '../../util/recoil/selector.mts';
+import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { SecondaryButton } from '../Button';
 import { rcCell, rcSelectedCoordinates } from './recoil.app.mts';
 import { sendDRMessage } from './recoil.send.mts';
@@ -42,7 +42,7 @@ export const DRMessenger = () => {
         send({ ...generateMessageProps(), type, mode, payload: null });
         break;
       case 'reversi2':
-        send({ ...generateMessageProps(), type, mode, payload: true });
+        send({ ...generateMessageProps(), type, mode, payload: null });
         break;
       default:
         send({ ...generateMessageProps(), type, mode, payload: sharedState });
@@ -70,11 +70,11 @@ export const DRMessenger = () => {
 const useSendFromSelectedCells = () =>
   useRecoilCallback(
     (cbi) => (msg: DRMessage) => {
-      const args = toSelectorOpts(cbi);
-      for (const cellId of args.get(rcSelectedCoordinates)) {
-        const cell = args.get(rcCell(cellId));
+      const rso = toRecoilSelectorOpts(cbi);
+      for (const cellId of rso.get(rcSelectedCoordinates)) {
+        const cell = rso.get(rcCell(cellId));
         if (cell) {
-          sendDRMessage(args, cellId, msg);
+          sendDRMessage(rso, cellId, msg);
         }
       }
     },

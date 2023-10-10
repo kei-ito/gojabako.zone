@@ -49,7 +49,7 @@ export const isDRDiagonalDirection = createTypeChecker<DRDiagonalDirection>(
   (input: unknown): input is DRDiagonalDirection =>
     DRDiagonalDirections.includes(input as DRDiagonalDirection),
 );
-export const DRAdjacentRxDirection: Record<DRDirection, DRDirection> = {
+export const OppositeDRDirection: Record<DRDirection, DRDirection> = {
   e: 'w',
   n: 's',
   w: 'e',
@@ -97,7 +97,7 @@ interface DRMessageObject<T extends string, P> {
 export interface DRMessageMap {
   ping: DRMessageObject<'ping', null>;
   reversi1: DRMessageObject<'reversi1', DRSharedState>;
-  reversi2: DRMessageObject<'reversi2', boolean>;
+  reversi2: DRMessageObject<'reversi2', DRPlayerId | null>;
   connect: DRMessageObject<'connect', DRSharedState>;
   setShared: DRMessageObject<'setShared', DRSharedState>;
 }

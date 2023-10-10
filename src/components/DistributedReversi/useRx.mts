@@ -2,19 +2,20 @@ import { useEffect } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { noop } from '../../util/noop.mts';
 import type { RecoilSelectorOpts } from '../../util/recoil/selector.mts';
-import { toSelectorOpts } from '../../util/recoil/selector.mts';
+import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { rcCell, rcDevMode, rcRxBuffer, rcRxDelayMs } from './recoil.app.mts';
-import { forwardDRMessage } from './recoil.send.mts';
+import { forwardDRMessage, sendDRMessage } from './recoil.send.mts';
 import type {
   DRBufferId,
   DRCell,
   DRCellId,
+  DRDiagonalDirection,
   DRDirection,
   DRMessage,
   DRMessageMap,
   DRMessageType,
 } from './util.mts';
-import { isOpenableDRMessage } from './util.mts';
+import { generateMessageProps, isOpenableDRMessage } from './util.mts';
 
 export const useRx = (bufferId: DRBufferId) => {
   const receive = useReceive(bufferId);
@@ -46,8 +47,8 @@ const getReceived = (() => {
 const useReceive = (bufferId: DRBufferId) =>
   useRecoilCallback(
     (cbi) => (buffer: Array<DRMessage>) => {
-      const arg = toSelectorOpts(cbi);
-      const { set, get } = arg;
+      const rso = toRecoilSelectorOpts(cbi);
+      const { set, get } = rso;
       const buf = buffer.slice();
       const msg = buf.shift();
       set(rcRxBuffer(bufferId), buf);
@@ -66,11 +67,18 @@ const useReceive = (bufferId: DRBufferId) =>
       }
       if (isOpenableDRMessage(msg)) {
         const receiver = receivers[msg.type] as Receiver<DRMessage>;
-        if (!receiver(arg, cellId, cell, msg, from)) {
+        if (!receiver(rso, cellId, cell, msg, from)) {
           return;
         }
       }
-      forwardDRMessage(arg, cellId, msg, from);
+      if (!forwardDRMessage(rso, cellId, msg, from)) {
+        const terminator = terminators[msg.type] as
+          | Receiver<DRMessage>
+          | undefined;
+        if (terminator) {
+          terminator(rso, cellId, cell, msg, from);
+        }
+      }
     },
     [bufferId],
   );
@@ -85,31 +93,74 @@ type Receiver<T extends DRMessage> = (
   msg: T,
   from: DRDirection,
 ) => boolean;
-type Receivers = {
-  [K in DRMessageType]: Receiver<DRMessageMap[K]>;
-};
-const receivers: Receivers = {
+const receivers: { [K in DRMessageType]: Receiver<DRMessageMap[K]> } = {
   ping: () => false,
   connect: ({ set }, cellId, cell, { payload }) => {
     set(rcCell(cellId), { ...cell, shared: payload });
     return false;
   },
-  reversi1: ({ set }, cellId, cell, msg) => {
+  reversi1: (rso, cellId, cell, msg) => {
     const { payload } = msg;
     if (cell.state === payload.state) {
-      /** TODO: Write handler */
+      const mode = getAnswerDirection(msg.d);
+      if (mode) {
+        sendDRMessage(rso, cellId, {
+          ...generateMessageProps(),
+          type: 'reversi2',
+          mode,
+          payload: payload.state,
+        });
+      }
     } else {
-      set(rcCell(cellId), { ...cell, pending: payload.state });
+      rso.set(rcCell(cellId), { ...cell, pending: payload.state });
       return true;
     }
     return false;
   },
-  reversi2: () => {
-    /** TODO: Write handler */
-    return false;
+  reversi2: ({ set }, cellId, cell, msg) => {
+    set(rcCell(cellId), {
+      ...cell,
+      state: msg.payload ?? cell.state,
+      pending: null,
+    });
+    return true;
   },
   setShared: ({ set }, cellId, cell, msg) => {
     set(rcCell(cellId), { ...cell, shared: msg.payload });
     return true;
   },
+};
+
+const terminators: { [K in DRMessageType]?: Receiver<DRMessageMap[K]> } = {
+  reversi1: (rso, cellId, cell, msg) => {
+    const mode = getAnswerDirection(msg.d);
+    if (mode) {
+      sendDRMessage(rso, cellId, {
+        ...generateMessageProps(),
+        type: 'reversi2',
+        mode,
+        payload: null,
+      });
+      rso.set(rcCell(cellId), { ...cell, pending: null });
+    }
+    return false;
+  },
+};
+
+const getAnswerDirection = ([dx, dy]: [number, number]):
+  | DRDiagonalDirection
+  | DRDirection
+  | null => {
+  const v = dy < 0 ? 'n' : 's';
+  const h = dx < 0 ? 'e' : 'w';
+  if (dx === 0) {
+    if (dy === 0) {
+      return null;
+    }
+    return v;
+  }
+  if (dy === 0) {
+    return h;
+  }
+  return `${v}${h}`;
 };
