@@ -2,12 +2,7 @@ import type { CSSProperties, MouseEvent } from 'react';
 import { Fragment, useCallback, useMemo } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { IconClass, classnames } from '../../util/classnames.mts';
-import {
-  rcCell,
-  rcRxBufferLength,
-  rcSelectCell,
-  rcTxBufferLength,
-} from './recoil.app.mts';
+import { rcCell, rcRxBuffer, rcSelectCell, rcTxBuffer } from './recoil.app.mts';
 import * as style from './style.module.scss';
 import { useOnConnection } from './useOnConnection.mts';
 import { useOnPressCell } from './useOnPressCell.mts';
@@ -133,7 +128,7 @@ const Tx = ({ bufferId, debug }: TxRxProps) => {
   useTx(bufferId);
   useOnConnection(bufferId);
   const d = bufferId[1];
-  const bufferedCount = useRecoilValue(rcTxBufferLength(bufferId));
+  const bufferedCount = useRecoilValue(rcTxBuffer(bufferId)).length;
   const [cx, cy] = useArrowPosition(d, -0.2);
   return (
     debug &&
@@ -159,7 +154,7 @@ const Tx = ({ bufferId, debug }: TxRxProps) => {
 const Rx = ({ bufferId, debug }: TxRxProps) => {
   useRx(bufferId);
   const d = bufferId[1];
-  const bufferedCount = useRecoilValue(rcRxBufferLength(bufferId));
+  const bufferedCount = useRecoilValue(rcRxBuffer(bufferId)).length;
   const [cx, cy] = useArrowPosition(d, 0.2);
   return (
     debug &&

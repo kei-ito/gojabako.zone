@@ -1,12 +1,6 @@
 import { isSafeInteger } from '@nlib/typing';
-import type { GetRecoilValue, ResetRecoilState, SetRecoilState } from 'recoil';
-import { writer, writerFamily } from '../../util/recoil/selector.mts';
-import {
-  rcCell,
-  rcTxBufferLength,
-  rcPushToTxBuffer,
-  rcSelectedCoordinates,
-} from './recoil.app.mts';
+import type { RecoilSelectorOpts } from '../../util/recoil/selector.mts';
+import { rcCell, rcTxBuffer } from './recoil.app.mts';
 import type {
   DRCellId,
   DRDiagonalDirection,
@@ -21,52 +15,42 @@ import {
   toDRBufferId,
 } from './util.mts';
 
-interface RecoilSetterArg {
-  get: GetRecoilValue;
-  set: SetRecoilState;
-  reset: ResetRecoilState;
-}
+export const sendDRMessage = (
+  args: RecoilSelectorOpts,
+  cellId: DRCellId,
+  msg: DRMessage,
+) => {
+  const { mode } = msg;
+  if (isDRDirection(mode)) {
+    sendD(args, cellId, msg, mode);
+  } else if (isDRDiagonalDirection(mode)) {
+    sendDD(args, cellId, msg, mode);
+  } else {
+    spread(args, cellId, msg);
+  }
+};
 
-export const rcSend = writerFamily<DRMessage, DRCellId>({
-  key: 'Send',
-  set: (cellId) => (args, msg) => {
-    const { mode } = msg;
-    if (isDRDirection(mode)) {
-      sendD(args, cellId, msg, mode);
-    } else if (isDRDiagonalDirection(mode)) {
-      sendDD(args, cellId, msg, mode);
-    } else {
-      spread(args, cellId, msg);
-    }
-  },
-});
-
-interface ForwardProps {
-  from: DRDirection;
-  msg: DRMessage;
-}
-
-export const rcForward = writerFamily<ForwardProps, DRCellId>({
-  key: 'Forward',
-  set:
-    (cellId) =>
-    (args, { from, msg }) => {
-      const { mode, ttl } = msg;
-      if (isSafeInteger(ttl) && !(0 < ttl)) {
-        return;
-      }
-      if (isDRDirection(mode)) {
-        sendD(args, cellId, msg, mode);
-      } else if (isDRDiagonalDirection(mode)) {
-        sendDD(args, cellId, msg, mode);
-      } else {
-        spread(args, cellId, msg, from);
-      }
-    },
-});
+export const forwardDRMessage = (
+  args: RecoilSelectorOpts,
+  cellId: DRCellId,
+  msg: DRMessage,
+  from: DRDirection,
+) => {
+  const { mode, ttl } = msg;
+  if (isSafeInteger(ttl) && !(0 < ttl)) {
+    return;
+  }
+  if (isDRDirection(mode)) {
+    sendD(args, cellId, msg, mode);
+  } else if (isDRDiagonalDirection(mode)) {
+    sendDD(args, cellId, msg, mode);
+  } else {
+    spread(args, cellId, msg, from);
+  }
+};
 
 const sendD = (
-  { get, set }: RecoilSetterArg,
+  { get, set }: RecoilSelectorOpts,
   cellId: DRCellId,
   msg: DRMessage,
   d: DRDirection,
@@ -74,12 +58,12 @@ const sendD = (
   const adjacentId = getAdjacentId([cellId, d]);
   const adjacentCell = get(rcCell(adjacentId));
   if (adjacentCell) {
-    set(rcPushToTxBuffer(toDRBufferId(cellId, d)), msg);
+    set(rcTxBuffer(toDRBufferId(cellId, d)), (b) => [...b, msg]);
   }
 };
 
 const sendDD = (
-  args: RecoilSetterArg,
+  args: RecoilSelectorOpts,
   cellId: DRCellId,
   msg: DRMessage,
   dd: DRDiagonalDirection,
@@ -96,7 +80,7 @@ const sendDD = (
 };
 
 const sendToIdleBuffer = (
-  { get, set }: RecoilSetterArg,
+  { get, set }: RecoilSelectorOpts,
   cellId: DRCellId,
   msg: DRMessage,
   dd: DRDiagonalDirection,
@@ -104,7 +88,7 @@ const sendToIdleBuffer = (
   const counts: Partial<Record<DRDirection, number>> = {};
   for (const d of dd as Iterable<DRDirection>) {
     if (!(d in counts) && get(rcCell(getAdjacentId([cellId, d])))) {
-      counts[d] = get(rcTxBufferLength(toDRBufferId(cellId, d)));
+      counts[d] = get(rcTxBuffer(toDRBufferId(cellId, d))).length;
     }
   }
   let min: [number, DRDirection] | null = null;
@@ -116,13 +100,13 @@ const sendToIdleBuffer = (
   }
   if (min) {
     // sendD()でよいですが存在チェックが済んでいるので直接set()します
-    set(rcPushToTxBuffer(toDRBufferId(cellId, min[1])), msg);
+    set(rcTxBuffer(toDRBufferId(cellId, min[1])), (b) => [...b, msg]);
     counts[min[1]] = min[0] + 1;
   }
 };
 
 const spread = (
-  args: RecoilSetterArg,
+  args: RecoilSelectorOpts,
   cellId: DRCellId,
   msg: DRMessage,
   ...exclude: Array<DRDirection>
@@ -135,15 +119,3 @@ const spread = (
     sendD(args, cellId, msg, d);
   }
 };
-
-export const rcSendFromSelectedCell = writer<DRMessage>({
-  key: 'SendFromSelectedCell',
-  set: ({ get, set }, msg) => {
-    for (const cellId of get(rcSelectedCoordinates)) {
-      const cell = get(rcCell(cellId));
-      if (cell) {
-        set(rcSend(cellId), msg);
-      }
-    }
-  },
-});

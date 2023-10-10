@@ -1,18 +1,28 @@
 import type {
-  GetRecoilValue,
+  CallbackInterface,
   ReadOnlySelectorFamilyOptions,
   ReadOnlySelectorOptions,
-  ResetRecoilState,
+  RecoilState,
+  RecoilValue,
   SerializableParam,
-  SetRecoilState,
 } from 'recoil';
 import { DefaultValue, selector, selectorFamily } from 'recoil';
 
 export interface RecoilSelectorOpts {
-  set: SetRecoilState;
-  get: GetRecoilValue;
-  reset: ResetRecoilState;
+  set: <T>(recoilVal: RecoilState<T>, newVal: T | ((currVal: T) => T)) => void;
+  get: <T>(recoilVal: RecoilValue<T>) => T;
+  reset: <T>(recoilVal: RecoilState<T>) => void;
 }
+
+export const toSelectorOpts = ({
+  set,
+  reset,
+  snapshot,
+}: CallbackInterface): RecoilSelectorOpts => {
+  const get = <T,>(recoilValue: RecoilValue<T>) =>
+    snapshot.getLoadable(recoilValue).getValue();
+  return { set, reset, get };
+};
 
 const throwWriteOnlyError = (key: string) => () => {
   throw new Error(`${key} is write-only`);

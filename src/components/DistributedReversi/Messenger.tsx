@@ -1,11 +1,14 @@
 import type { ChangeEvent } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilCallback } from 'recoil';
+import { toSelectorOpts } from '../../util/recoil/selector.mts';
 import { SecondaryButton } from '../Button';
-import { rcSendFromSelectedCell } from './recoil.send.mts';
+import { rcCell, rcSelectedCoordinates } from './recoil.app.mts';
+import { sendDRMessage } from './recoil.send.mts';
 import { DRSelector } from './Selector';
 import * as style from './style.module.scss';
 import type {
+  DRMessage,
   DRMessageMode,
   DRMessageType,
   DRPlayerId,
@@ -32,7 +35,7 @@ export const DRMessenger = () => {
     playerCount: 2,
     state: 0 as DRPlayerId,
   });
-  const send = useSetRecoilState(rcSendFromSelectedCell);
+  const send = useSendFromSelectedCells();
   const sendMessage = useCallback(() => {
     switch (type) {
       case 'ping':
@@ -63,6 +66,20 @@ export const DRMessenger = () => {
     </>
   );
 };
+
+const useSendFromSelectedCells = () =>
+  useRecoilCallback(
+    (cbi) => (msg: DRMessage) => {
+      const args = toSelectorOpts(cbi);
+      for (const cellId of args.get(rcSelectedCoordinates)) {
+        const cell = args.get(rcCell(cellId));
+        if (cell) {
+          sendDRMessage(args, cellId, msg);
+        }
+      }
+    },
+    [],
+  );
 
 interface SelectorProps<T extends string> {
   onChange: (value: T) => void;
