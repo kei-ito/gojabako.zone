@@ -13,7 +13,7 @@ const listGroups = function* () {
       return;
     }
     const [{ group }] = buffer;
-    yield <h2 key={group}>{group}</h2>;
+    yield <h2 key={`${group}-heading`}>{group}</h2>;
     yield <PageList key={`${group}-pages`} pages={buffer} />;
     // eslint-disable-next-line require-atomic-updates
     buffer = [];
