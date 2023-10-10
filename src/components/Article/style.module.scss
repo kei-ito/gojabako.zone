@@ -286,9 +286,10 @@
           min-inline-size: var(--gjBaseWidth);
           max-inline-size: max-content;
           display: grid;
-          grid-template-columns: 1fr min-content;
+          grid-template-columns: auto max-content;
           column-gap: 0.5em;
           overflow-x: auto;
+          overflow-y: hidden;
 
           & > .base {
             justify-self: center;
