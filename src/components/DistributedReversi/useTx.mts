@@ -16,6 +16,7 @@ import {
   DRAdjacentStep,
   getAdjacentId,
   toDRBufferId,
+  isOpenableDRMessage,
 } from './util.mts';
 
 export const useTx = (bufferId: DRBufferId) => {
@@ -49,7 +50,7 @@ const useTransmit = (bufferId: DRBufferId) =>
       }
       const d = bufferId[1];
       const rMsg = { ...tMsg, d: vAdd(tMsg.d, DRAdjacentStep[d]) };
-      if (rMsg.ttl) {
+      if (rMsg.ttl && isOpenableDRMessage(rMsg)) {
         rMsg.ttl -= 1;
       }
       set(rcRxBuffer(toDRBufferId(adjacentId, OppositeDRDirection[d])), (b) => [

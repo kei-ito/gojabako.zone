@@ -15,7 +15,11 @@ import type {
   DRMessageMap,
   DRMessageType,
 } from './util.mts';
-import { generateMessageProps, isOpenableDRMessage } from './util.mts';
+import {
+  chessboardDistance,
+  generateMessageProps,
+  isOpenableDRMessage,
+} from './util.mts';
 
 export const useRx = (bufferId: DRBufferId) => {
   const receive = useReceive(bufferId);
@@ -109,6 +113,7 @@ const receivers: { [K in DRMessageType]: Receiver<DRMessageMap[K]> } = {
           type: 'reversi2',
           mode,
           payload: payload.state,
+          ttl: chessboardDistance(msg.d),
         });
       }
     } else {
@@ -140,6 +145,7 @@ const terminators: { [K in DRMessageType]?: Receiver<DRMessageMap[K]> } = {
         type: 'reversi2',
         mode,
         payload: null,
+        ttl: chessboardDistance(msg.d),
       });
       rso.set(rcCell(cellId), { ...cell, pending: null });
     }

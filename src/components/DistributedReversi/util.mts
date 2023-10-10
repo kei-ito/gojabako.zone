@@ -156,3 +156,5 @@ export const stepDRSharedState = ({
   state: ((state + 1) % playerCount) as DRPlayerId,
   playerCount,
 });
+export const chessboardDistance = ([dx, dy]: [number, number]) =>
+  Math.max(Math.abs(dx), Math.abs(dy));
