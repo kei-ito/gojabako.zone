@@ -3,7 +3,8 @@ import type { GetRecoilValue, ResetRecoilState, SetRecoilState } from 'recoil';
 import { writer, writerFamily } from '../../util/recoil/selector.mts';
 import {
   rcCell,
-  rcDirectedTxBuffer,
+  rcTxBufferLength,
+  rcPushToTxBuffer,
   rcSelectedCoordinates,
 } from './recoil.app.mts';
 import type {
@@ -50,7 +51,10 @@ export const rcForward = writerFamily<ForwardProps, DRCellId>({
   set:
     (cellId) =>
     (args, { from, msg }) => {
-      const { mode } = msg;
+      const { mode, ttl } = msg;
+      if (isSafeInteger(ttl) && !(0 < ttl)) {
+        return;
+      }
       if (isDRDirection(mode)) {
         sendD(args, cellId, msg, mode);
       } else if (isDRDiagonalDirection(mode)) {
@@ -70,10 +74,7 @@ const sendD = (
   const adjacentId = getAdjacentId([cellId, d]);
   const adjacentCell = get(rcCell(adjacentId));
   if (adjacentCell) {
-    set(rcDirectedTxBuffer(toDRBufferId(cellId, d)), (buffer) => [
-      ...buffer,
-      msg,
-    ]);
+    set(rcPushToTxBuffer(toDRBufferId(cellId, d)), msg);
   }
 };
 
@@ -103,7 +104,7 @@ const sendToIdleBuffer = (
   const counts: Partial<Record<DRDirection, number>> = {};
   for (const d of dd as Iterable<DRDirection>) {
     if (!(d in counts) && get(rcCell(getAdjacentId([cellId, d])))) {
-      counts[d] = get(rcDirectedTxBuffer(toDRBufferId(cellId, d))).length;
+      counts[d] = get(rcTxBufferLength(toDRBufferId(cellId, d)));
     }
   }
   let min: [number, DRDirection] | null = null;
@@ -115,10 +116,7 @@ const sendToIdleBuffer = (
   }
   if (min) {
     // sendD()でよいですが存在チェックが済んでいるので直接set()します
-    set(rcDirectedTxBuffer(toDRBufferId(cellId, min[1])), (buffer) => [
-      ...buffer,
-      msg,
-    ]);
+    set(rcPushToTxBuffer(toDRBufferId(cellId, min[1])), msg);
     counts[min[1]] = min[0] + 1;
   }
 };

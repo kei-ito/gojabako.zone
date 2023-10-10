@@ -4,9 +4,9 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { IconClass, classnames } from '../../util/classnames.mts';
 import {
   rcCell,
-  rcDirectedRxBuffer,
-  rcDirectedTxBuffer,
+  rcRxBufferLength,
   rcSelectCell,
+  rcTxBufferLength,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
 import { useOnConnection } from './useOnConnection.mts';
@@ -133,9 +133,8 @@ const Tx = ({ bufferId, debug }: TxRxProps) => {
   useTx(bufferId);
   useOnConnection(bufferId);
   const d = bufferId[1];
-  const buffer = useRecoilValue(rcDirectedTxBuffer(bufferId));
+  const bufferedCount = useRecoilValue(rcTxBufferLength(bufferId));
   const [cx, cy] = useArrowPosition(d, -0.2);
-  const bufferedCount = buffer.length;
   return (
     debug &&
     0 < bufferedCount && (
@@ -160,9 +159,8 @@ const Tx = ({ bufferId, debug }: TxRxProps) => {
 const Rx = ({ bufferId, debug }: TxRxProps) => {
   useRx(bufferId);
   const d = bufferId[1];
-  const buffer = useRecoilValue(rcDirectedRxBuffer(bufferId));
+  const bufferedCount = useRecoilValue(rcRxBufferLength(bufferId));
   const [cx, cy] = useArrowPosition(d, 0.2);
-  const bufferedCount = buffer.length;
   return (
     debug &&
     0 < bufferedCount && (

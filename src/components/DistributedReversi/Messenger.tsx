@@ -14,28 +14,16 @@ import type {
 import {
   DRDiagonalDirections,
   DRDirections,
+  DRMessagePayloadTypes,
+  DRMessageTypes,
   generateMessageProps,
 } from './util.mts';
-
-const messageTypes: Array<DRMessageType> = [
-  'ping',
-  'press',
-  'connect',
-  'setShared',
-];
 
 const messageModes = [
   'spread',
   ...DRDirections,
   ...DRDiagonalDirections,
 ] as const;
-
-const messagePayloadTypes = {
-  ping: null,
-  press: 'sharedState',
-  connect: 'sharedState',
-  setShared: 'sharedState',
-};
 
 export const DRMessenger = () => {
   const [type, setType] = useState<DRMessageType>('ping');
@@ -50,17 +38,20 @@ export const DRMessenger = () => {
       case 'ping':
         send({ ...generateMessageProps(), type, mode, payload: null });
         break;
+      case 'reversi2':
+        send({ ...generateMessageProps(), type, mode, payload: true });
+        break;
       default:
         send({ ...generateMessageProps(), type, mode, payload: sharedState });
     }
   }, [send, type, mode, sharedState]);
-  const payloadType = messagePayloadTypes[type];
+  const payloadType = DRMessagePayloadTypes[type];
   return (
     <>
       <div>メッセージの送信</div>
       <MessageModeSelector defaultValue={mode} onChange={setMode} />
       <MessageTypeSelector defaultValue={type} onChange={setType} />
-      {payloadType === 'sharedState' && (
+      {payloadType === 'shared' && (
         <SharedStateInputs
           defaultValue={sharedState}
           onChange={setSharedState}
@@ -86,11 +77,11 @@ const MessageTypeSelector = ({
     <DRSelector<DRMessageType>
       id="MessageType"
       label="msg.type"
-      values={messageTypes}
+      values={DRMessageTypes}
       defaultValue={defaultValue}
       onChange={useCallback(
         (value) => {
-          if (messageTypes.includes(value as DRMessageType)) {
+          if (DRMessageTypes.includes(value as DRMessageType)) {
             onChange(value as DRMessageType);
           }
         },

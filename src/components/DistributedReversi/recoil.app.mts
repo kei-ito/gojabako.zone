@@ -1,7 +1,13 @@
 import type { FunctionComponent } from 'react';
-import { DefaultValue, atom, atomFamily, selector } from 'recoil';
+import {
+  DefaultValue,
+  atom,
+  atomFamily,
+  selector,
+  selectorFamily,
+} from 'recoil';
 import { clamp } from '../../util/clamp.mts';
-import { writer } from '../../util/recoil/selector.mts';
+import { writer, writerFamily } from '../../util/recoil/selector.mts';
 import {
   syncSearchParamsBoolean,
   syncSearchParamsNumber,
@@ -177,14 +183,48 @@ export const rcCell = atomFamily<DRCell | null, DRCellId>({
   default: null,
 });
 
-export const rcDirectedRxBuffer = atomFamily<Array<DRMessage>, DRBufferId>({
-  key: 'DirectedRxBuffer',
+export const rcTxBuffer = atomFamily<Array<DRMessage>, DRBufferId>({
+  key: 'TxBuffer',
   default: [],
 });
 
-export const rcDirectedTxBuffer = atomFamily<Array<DRMessage>, DRBufferId>({
-  key: 'DirectedTxBuffer',
+export const rcTxBufferLength = selectorFamily<number, DRBufferId>({
+  key: 'TxBufferLength',
+  get:
+    (bufferId) =>
+    ({ get }) =>
+      get(rcTxBuffer(bufferId)).length,
+});
+
+export const rcPushToTxBuffer = writerFamily<DRMessage, DRBufferId>({
+  key: 'PushToTxBuffer',
+  set:
+    (bufferId) =>
+    ({ set }, msg) => {
+      set(rcTxBuffer(bufferId), (buffer) => [...buffer, msg]);
+    },
+});
+
+export const rcRxBuffer = atomFamily<Array<DRMessage>, DRBufferId>({
+  key: 'RxBuffer',
   default: [],
+});
+
+export const rcRxBufferLength = selectorFamily<number, DRBufferId>({
+  key: 'RxBufferLength',
+  get:
+    (bufferId) =>
+    ({ get }) =>
+      get(rcRxBuffer(bufferId)).length,
+});
+
+export const rcPushToRxBuffer = writerFamily<DRMessage, DRBufferId>({
+  key: 'PushToRxBuffer',
+  set:
+    (bufferId) =>
+    ({ set }, msg) => {
+      set(rcRxBuffer(bufferId), (buffer) => [...buffer, msg]);
+    },
 });
 
 export const rcCellList = atom<Set<DRCellId>>({

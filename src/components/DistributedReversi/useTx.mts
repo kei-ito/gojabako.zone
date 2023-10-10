@@ -6,9 +6,10 @@ import { vAdd } from '../../util/vector.mts';
 import {
   rcCell,
   rcDevMode,
-  rcDirectedRxBuffer,
-  rcDirectedTxBuffer,
+  rcTxBuffer,
+  rcPushToRxBuffer,
   rcTxDelayMs,
+  rcTxBufferLength,
 } from './recoil.app.mts';
 import type { DRBufferId } from './util.mts';
 import {
@@ -20,26 +21,25 @@ import {
 
 export const useTx = (bufferId: DRBufferId) => {
   const transmit = useSetRecoilState(rcTransmitMessage);
-  const buffer = useRecoilValue(rcDirectedTxBuffer(bufferId));
+  const txBufferLength = useRecoilValue(rcTxBufferLength(bufferId));
   const txDelayMs = useRecoilValue(rcTxDelayMs);
   const debug = useRecoilValue(rcDevMode);
   const delayMs = debug ? txDelayMs : 0;
   useEffect(() => {
-    if (0 < buffer.length) {
+    if (0 < txBufferLength) {
       const timerId = setTimeout(() => transmit(bufferId), delayMs);
       return () => clearTimeout(timerId);
     }
     return noop;
-  }, [buffer, bufferId, transmit, delayMs]);
+  }, [txBufferLength, bufferId, transmit, delayMs]);
 };
 
 const rcTransmitMessage = writer<DRBufferId>({
   key: 'TransmitMessage',
   set: ({ get, set }, bufferId) => {
-    const tx = rcDirectedTxBuffer(bufferId);
-    const buf = get(tx).slice();
+    const buf = get(rcTxBuffer(bufferId)).slice();
     const tMsg = buf.shift();
-    set(tx, buf);
+    set(rcTxBuffer(bufferId), buf);
     if (!tMsg) {
       return;
     }
@@ -53,9 +53,6 @@ const rcTransmitMessage = writer<DRBufferId>({
     if (rMsg.ttl) {
       rMsg.ttl -= 1;
     }
-    set(rcDirectedRxBuffer(toDRBufferId(adjacentId, ad)), (buffer) => [
-      ...buffer,
-      rMsg,
-    ]);
+    set(rcPushToRxBuffer(toDRBufferId(adjacentId, ad)), rMsg);
   },
 });

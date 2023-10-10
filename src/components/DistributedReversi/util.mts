@@ -96,12 +96,26 @@ interface DRMessageObject<T extends string, P> {
 }
 export interface DRMessageMap {
   ping: DRMessageObject<'ping', null>;
-  press: DRMessageObject<'press', DRSharedState>;
+  reversi1: DRMessageObject<'reversi1', DRSharedState>;
+  reversi2: DRMessageObject<'reversi2', boolean>;
   connect: DRMessageObject<'connect', DRSharedState>;
   setShared: DRMessageObject<'setShared', DRSharedState>;
 }
 export type DRMessageType = keyof DRMessageMap;
-export type DRMessage = DRMessageMap[keyof DRMessageMap];
+export const DRMessagePayloadTypes: Record<
+  DRMessageType,
+  'boolean' | 'shared' | null
+> = {
+  ping: null,
+  reversi1: 'shared',
+  reversi2: 'boolean',
+  connect: 'shared',
+  setShared: 'shared',
+};
+export const DRMessageTypes = Object.keys(
+  DRMessagePayloadTypes,
+) as Array<DRMessageType>;
+export type DRMessage = DRMessageMap[DRMessageType];
 export const generateMessageProps = (() => {
   let deduplicationIdCounter = 0;
   return () => ({

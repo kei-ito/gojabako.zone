@@ -1,15 +1,9 @@
-import { isSafeInteger } from '@nlib/typing';
 import { useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { noop } from '../../util/noop.mts';
 import type { RecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { writerFamily } from '../../util/recoil/selector.mts';
-import {
-  rcCell,
-  rcDevMode,
-  rcDirectedRxBuffer,
-  rcRxDelayMs,
-} from './recoil.app.mts';
+import { rcCell, rcDevMode, rcRxBuffer, rcRxDelayMs } from './recoil.app.mts';
 import { rcForward } from './recoil.send.mts';
 import type {
   DRBufferId,
@@ -18,12 +12,13 @@ import type {
   DRDirection,
   DRMessage,
   DRMessageMap,
+  DRMessageType,
 } from './util.mts';
-import { isOpenableDRMessage, stepDRSharedState } from './util.mts';
+import { isOpenableDRMessage } from './util.mts';
 
 export const useRx = (bufferId: DRBufferId) => {
   const receive = useSetRecoilState(rcReceive(bufferId));
-  const buffer = useRecoilValue(rcDirectedRxBuffer(bufferId));
+  const buffer = useRecoilValue(rcRxBuffer(bufferId));
   const rxDelayMs = useRecoilValue(rcRxDelayMs);
   const debug = useRecoilValue(rcDevMode);
   const delayMs = debug ? rxDelayMs : 0;
@@ -52,9 +47,9 @@ const rcReceive = writerFamily<undefined, DRBufferId>({
   key: 'Receive',
   set: (bufferId) => (arg) => {
     const { get, set } = arg;
-    const buf = get(rcDirectedRxBuffer(bufferId)).slice();
+    const buf = get(rcRxBuffer(bufferId)).slice();
     const msg = buf.shift();
-    set(rcDirectedRxBuffer(bufferId), buf);
+    set(rcRxBuffer(bufferId), buf);
     if (!msg) {
       return;
     }
@@ -68,10 +63,6 @@ const rcReceive = writerFamily<undefined, DRBufferId>({
     if (!cell) {
       return;
     }
-    if (!isSafeInteger(msg.ttl) || 0 < msg.ttl) {
-      /** 転送処理 */
-      set(rcForward(cellId), { msg, from });
-    }
     if (isOpenableDRMessage(msg)) {
       /** 受信処理 */
       (receivers[msg.type] as Receiver<DRMessage>)(
@@ -81,6 +72,8 @@ const rcReceive = writerFamily<undefined, DRBufferId>({
         msg,
         from,
       );
+    } else {
+      set(rcForward(cellId), { msg, from });
     }
   },
 });
@@ -93,29 +86,27 @@ type Receiver<T extends DRMessage> = (
   from: DRDirection,
 ) => void;
 type Receivers = {
-  [K in keyof DRMessageMap]: Receiver<DRMessageMap[K]>;
+  [K in DRMessageType]: Receiver<DRMessageMap[K]>;
 };
 const receivers: Receivers = {
   ping: noop,
   connect: ({ set }, cellId, cell, { payload }) => {
     set(rcCell(cellId), { ...cell, shared: payload });
   },
-  press: ({ set }, cellId, cell, { d, payload }) => {
-    set(rcCell(cellId), () => {
-      const next: DRCell = {
-        ...cell,
-        shared: stepDRSharedState(payload),
-      };
-      if (cell.state !== payload.state) {
-        const [dx, dy] = d;
-        if (dx === 0 || dy === 0 || Math.abs(dx) === Math.abs(dy)) {
-          next.pending = payload.state;
-        }
-      }
-      return next;
-    });
+  reversi1: ({ set }, cellId, cell, msg, from) => {
+    const { payload } = msg;
+    if (cell.state === payload.state) {
+      /** TODO: Write handler */
+    } else {
+      set(rcCell(cellId), { ...cell, pending: payload.state });
+      set(rcForward(cellId), { msg, from });
+    }
   },
-  setShared: ({ set }, cellId, cell, { payload }) => {
-    set(rcCell(cellId), { ...cell, shared: payload });
+  reversi2: () => {
+    /** TODO: Write handler */
+  },
+  setShared: ({ set }, cellId, cell, msg, from) => {
+    set(rcCell(cellId), { ...cell, shared: msg.payload });
+    set(rcForward(cellId), { msg, from });
   },
 };
