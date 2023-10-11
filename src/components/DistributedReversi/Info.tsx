@@ -1,21 +1,23 @@
 import type { ChangeEvent } from 'react';
 import { useCallback } from 'react';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
+import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { SecondaryButton } from '../Button';
 import { Toggle } from '../Toggle';
 import { useFullScreen } from '../use/FullScreen.mts';
 import { ZoomSlider } from '../ZoomSlider';
 import { DRCellInspector } from './CellInspector';
 import {
+  rcCell,
+  rcCellList,
   rcDevMode,
-  rcInitExistingCells,
   rcRxDelayMs,
   rcTxDelayMs,
   rcZoom,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
-import { zoom } from './util.mts';
+import { DRInitialState, InitialDRPlayerId, zoom } from './util.mts';
 
 export const DRInfo = () => {
   const devMode = useRecoilValue(rcDevMode);
@@ -33,17 +35,27 @@ export const DRInfo = () => {
   );
 };
 
-const InitGameButton = () => {
-  const initCells = useSetRecoilState(rcInitExistingCells);
-  return (
-    <SecondaryButton
-      icon="refresh"
-      onClick={useCallback(() => initCells(null), [initCells])}
-    >
-      はじめから
-    </SecondaryButton>
-  );
-};
+const InitGameButton = () => (
+  <SecondaryButton
+    icon="refresh"
+    onClick={useRecoilCallback(
+      (cbi) => () => {
+        const { get, set } = toRecoilSelectorOpts(cbi);
+        for (const cellId of get(rcCellList)) {
+          set(rcCell(cellId), (cell) => ({
+            shared: { state: InitialDRPlayerId, playerCount: 2 },
+            ...cell,
+            pending: null,
+            state: DRInitialState,
+          }));
+        }
+      },
+      [],
+    )}
+  >
+    はじめから
+  </SecondaryButton>
+);
 
 const ZoomControl = () => {
   const [{ z: value }, setZoom] = useRecoilState(rcZoom);

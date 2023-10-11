@@ -1,11 +1,14 @@
 import type { ChangeEvent } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilCallback } from 'recoil';
+import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { SecondaryButton } from '../Button';
-import { rcSendFromSelectedCell } from './recoil.send.mts';
+import { rcCell, rcSelectedCoordinates } from './recoil.app.mts';
+import { sendDRMessage } from './recoil.send.mts';
 import { DRSelector } from './Selector';
 import * as style from './style.module.scss';
 import type {
+  DRMessage,
   DRMessageMode,
   DRMessageType,
   DRPlayerId,
@@ -14,28 +17,16 @@ import type {
 import {
   DRDiagonalDirections,
   DRDirections,
+  DRMessagePayloadTypes,
+  DRMessageTypes,
   generateMessageProps,
 } from './util.mts';
-
-const messageTypes: Array<DRMessageType> = [
-  'ping',
-  'press',
-  'connect',
-  'setShared',
-];
 
 const messageModes = [
   'spread',
   ...DRDirections,
   ...DRDiagonalDirections,
 ] as const;
-
-const messagePayloadTypes = {
-  ping: null,
-  press: 'sharedState',
-  connect: 'sharedState',
-  setShared: 'sharedState',
-};
 
 export const DRMessenger = () => {
   const [type, setType] = useState<DRMessageType>('ping');
@@ -44,23 +35,26 @@ export const DRMessenger = () => {
     playerCount: 2,
     state: 0 as DRPlayerId,
   });
-  const send = useSetRecoilState(rcSendFromSelectedCell);
+  const send = useSendFromSelectedCells();
   const sendMessage = useCallback(() => {
     switch (type) {
       case 'ping':
+        send({ ...generateMessageProps(), type, mode, payload: null });
+        break;
+      case 'reversi2':
         send({ ...generateMessageProps(), type, mode, payload: null });
         break;
       default:
         send({ ...generateMessageProps(), type, mode, payload: sharedState });
     }
   }, [send, type, mode, sharedState]);
-  const payloadType = messagePayloadTypes[type];
+  const payloadType = DRMessagePayloadTypes[type];
   return (
     <>
       <div>メッセージの送信</div>
       <MessageModeSelector defaultValue={mode} onChange={setMode} />
       <MessageTypeSelector defaultValue={type} onChange={setType} />
-      {payloadType === 'sharedState' && (
+      {payloadType === 'shared' && (
         <SharedStateInputs
           defaultValue={sharedState}
           onChange={setSharedState}
@@ -72,6 +66,20 @@ export const DRMessenger = () => {
     </>
   );
 };
+
+const useSendFromSelectedCells = () =>
+  useRecoilCallback(
+    (cbi) => (msg: DRMessage) => {
+      const rso = toRecoilSelectorOpts(cbi);
+      for (const cellId of rso.get(rcSelectedCoordinates)) {
+        const cell = rso.get(rcCell(cellId));
+        if (cell) {
+          sendDRMessage(rso, cellId, msg);
+        }
+      }
+    },
+    [],
+  );
 
 interface SelectorProps<T extends string> {
   onChange: (value: T) => void;
@@ -86,11 +94,11 @@ const MessageTypeSelector = ({
     <DRSelector<DRMessageType>
       id="MessageType"
       label="msg.type"
-      values={messageTypes}
+      values={DRMessageTypes}
       defaultValue={defaultValue}
       onChange={useCallback(
         (value) => {
-          if (messageTypes.includes(value as DRMessageType)) {
+          if (DRMessageTypes.includes(value as DRMessageType)) {
             onChange(value as DRMessageType);
           }
         },

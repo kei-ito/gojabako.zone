@@ -49,7 +49,7 @@ export const isDRDiagonalDirection = createTypeChecker<DRDiagonalDirection>(
   (input: unknown): input is DRDiagonalDirection =>
     DRDiagonalDirections.includes(input as DRDiagonalDirection),
 );
-export const DRAdjacentRxDirection: Record<DRDirection, DRDirection> = {
+export const OppositeDRDirection: Record<DRDirection, DRDirection> = {
   e: 'w',
   n: 's',
   w: 'e',
@@ -64,18 +64,22 @@ export const DRAdjacentStep: Record<DRDirection, [number, number]> = {
 export const getAdjacentId = ([cellId, d]: [
   DRCellId,
   DRDirection,
+  ...others: Array<unknown>,
 ]): DRCellId => {
   const step = DRAdjacentStep[d];
   return toDRCellId(cellId[0] + step[0], cellId[1] + step[1]);
 };
-export type DRBufferId = Nominal<[DRCellId, DRDirection], 'DRBufferId'>;
+export type DRBufferId = Nominal<
+  [DRCellId, DRDirection, 'rx' | 'tx'],
+  'DRBufferId'
+>;
 export const toDRBufferId = (() => {
   const cache = new Map<string, DRBufferId>();
-  return (cellId: DRCellId, d: DRDirection) => {
-    const key = `${cellId[0]},${cellId[1]},${d}`;
+  return (cellId: DRCellId, d: DRDirection, mode: 'rx' | 'tx') => {
+    const key = `${cellId[0]},${cellId[1]},${d},${mode}`;
     let cached = cache.get(key);
     if (!cached) {
-      cached = [cellId, d] as DRBufferId;
+      cached = [cellId, d, mode] as DRBufferId;
       cache.set(key, cached);
     }
     return cached;
@@ -96,12 +100,26 @@ interface DRMessageObject<T extends string, P> {
 }
 export interface DRMessageMap {
   ping: DRMessageObject<'ping', null>;
-  press: DRMessageObject<'press', DRSharedState>;
+  reversi1: DRMessageObject<'reversi1', DRSharedState>;
+  reversi2: DRMessageObject<'reversi2', DRPlayerId | null>;
   connect: DRMessageObject<'connect', DRSharedState>;
   setShared: DRMessageObject<'setShared', DRSharedState>;
 }
 export type DRMessageType = keyof DRMessageMap;
-export type DRMessage = DRMessageMap[keyof DRMessageMap];
+export const DRMessagePayloadTypes: Record<
+  DRMessageType,
+  'boolean' | 'shared' | null
+> = {
+  ping: null,
+  reversi1: 'shared',
+  reversi2: 'boolean',
+  connect: 'shared',
+  setShared: 'shared',
+};
+export const DRMessageTypes = Object.keys(
+  DRMessagePayloadTypes,
+) as Array<DRMessageType>;
+export type DRMessage = DRMessageMap[DRMessageType];
 export const generateMessageProps = (() => {
   let deduplicationIdCounter = 0;
   return () => ({
@@ -142,3 +160,5 @@ export const stepDRSharedState = ({
   state: ((state + 1) % playerCount) as DRPlayerId,
   playerCount,
 });
+export const chessboardDistance = ([dx, dy]: [number, number]) =>
+  Math.max(Math.abs(dx), Math.abs(dy));

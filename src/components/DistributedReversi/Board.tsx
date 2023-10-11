@@ -1,21 +1,21 @@
 import type { MouseEvent, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
-import { writer } from '../../util/recoil/selector.mts';
+import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { useRect } from '../use/Rect.mts';
 import { DRCellG } from './Cell';
 import type { XYWHZ } from './recoil.app.mts';
 import {
   rcCell,
   rcCellList,
+  rcDevMode,
   rcDragging,
   rcPointerPosition,
   rcPointeredCell,
-  rcSelectCell,
   rcSelectedCoordinates,
-  rcDevMode,
   rcViewBox,
   rcXYWHZ,
+  selectCoordinates,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
 import { toDRCellId } from './util.mts';
@@ -30,8 +30,8 @@ export const DRBoard = () => {
       ref={setElement}
       className={style.board}
       viewBox={useRecoilValue(rcViewBox)}
-      onClick={useSetRecoilState(rcOnClickBoard)}
-      onContextMenu={useSetRecoilState(rcOnSubClickBoard)}
+      onClick={useOnClick()}
+      onContextMenu={useOnContextMenu()}
     >
       <PointeredCell />
       <Cells />
@@ -39,6 +39,45 @@ export const DRBoard = () => {
     </svg>
   );
 };
+
+const useOnClick = () =>
+  useRecoilCallback(
+    (cbi) => () => {
+      const { get, reset } = toRecoilSelectorOpts(cbi);
+      if (get(rcDragging)) {
+        return;
+      }
+      reset(rcSelectedCoordinates);
+    },
+    [],
+  );
+
+const useOnContextMenu = () =>
+  useRecoilCallback(
+    (cbi) => (event: MouseEvent) => {
+      event.preventDefault();
+      document.getSelection()?.removeAllRanges();
+      const { get, set } = toRecoilSelectorOpts(cbi);
+      if (!get(rcDevMode) || get(rcDragging)) {
+        return;
+      }
+      const [x, y, , , z] = get(rcXYWHZ);
+      const rect = event.currentTarget.getBoundingClientRect();
+      const cx = Math.round(x + (event.clientX - rect.left) / z);
+      const cy = -Math.round(y + (event.clientY - rect.top) / z);
+      const cellId = toDRCellId(cx, cy);
+      const cell = get(rcCell(cellId));
+      if (cell) {
+        return;
+      }
+      const alt = event.shiftKey || event.metaKey || event.ctrlKey;
+      set(
+        rcSelectedCoordinates,
+        selectCoordinates(cellId, alt ? 'add' : 'toggle'),
+      );
+    },
+    [],
+  );
 
 const PointeredCell = () => {
   const pointeredCell = useRecoilValue(rcPointeredCell);
@@ -89,38 +128,6 @@ const SelectedCoordinates = () => {
     })(),
   ];
 };
-
-const rcOnClickBoard = writer<MouseEvent>({
-  key: 'OnClickBoard',
-  set: ({ get, reset }) => {
-    if (get(rcDragging)) {
-      return;
-    }
-    reset(rcSelectedCoordinates);
-  },
-});
-
-const rcOnSubClickBoard = writer<MouseEvent>({
-  key: 'OnSubClickBoard',
-  set: ({ get, set }, event) => {
-    event.preventDefault();
-    document.getSelection()?.removeAllRanges();
-    if (!get(rcDevMode) || get(rcDragging)) {
-      return;
-    }
-    const [x, y, , , z] = get(rcXYWHZ);
-    const rect = event.currentTarget.getBoundingClientRect();
-    const cx = Math.round(x + (event.clientX - rect.left) / z);
-    const cy = -Math.round(y + (event.clientY - rect.top) / z);
-    const cellId = toDRCellId(cx, cy);
-    const cell = get(rcCell(cellId));
-    if (cell) {
-      return;
-    }
-    const alt = event.shiftKey || event.metaKey || event.ctrlKey;
-    set(rcSelectCell, { cellId, mode: alt ? 'add' : 'toggle' } as const);
-  },
-});
 
 const useSyncPointerPosition = (board: HTMLElement | null) => {
   const setPosition = useSetRecoilState(rcPointerPosition);
