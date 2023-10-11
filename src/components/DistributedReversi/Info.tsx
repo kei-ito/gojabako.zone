@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react';
 import { useCallback } from 'react';
-import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilCallback, useRecoilState } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
 import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { SecondaryButton } from '../Button';
@@ -19,21 +19,18 @@ import {
 import * as style from './style.module.scss';
 import { DRInitialState, InitialDRPlayerId, zoom } from './util.mts';
 
-export const DRInfo = () => {
-  const devMode = useRecoilValue(rcDevMode);
-  return (
-    <nav className={style.info}>
-      <DRCellInspector />
-      <div className={style.spacer} />
-      <InitGameButton />
-      <ZoomControl />
-      {!devMode && <FullScreenToggle />}
-      {devMode && <TxDelayControl />}
-      {devMode && <RxDelayControl />}
-      <DevModeToggle />
-    </nav>
-  );
-};
+export const DRInfo = () => (
+  <nav className={style.info}>
+    <DRCellInspector />
+    <div className={style.spacer} />
+    <InitGameButton />
+    <ZoomControl />
+    <FullScreenToggle />
+    <TxDelayControl />
+    <RxDelayControl />
+    <DevModeToggle />
+  </nav>
+);
 
 const InitGameButton = () => (
   <SecondaryButton

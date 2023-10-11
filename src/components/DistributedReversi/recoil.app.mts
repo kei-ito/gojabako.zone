@@ -108,13 +108,13 @@ export const rcDevMode = selector<boolean>({
 export const rcTxDelayMs = atom<number>({
   key: 'TxDelayMs',
   default: 300,
-  effects: [...syncSearchParamsNumber('txd', 80)],
+  effects: [...syncSearchParamsNumber('txd', 20)],
 });
 
 export const rcRxDelayMs = atom<number>({
   key: 'RxDelayMs',
   default: 300,
-  effects: [...syncSearchParamsNumber('rxd', 80)],
+  effects: [...syncSearchParamsNumber('rxd', 20)],
 });
 
 export type XYWHZ =
