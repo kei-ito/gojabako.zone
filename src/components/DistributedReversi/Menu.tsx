@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react';
 import { useCallback } from 'react';
-import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilCallback, useRecoilState } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
 import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { SecondaryButton } from '../Button';
@@ -11,20 +11,18 @@ import { DRCellInspector } from './CellInspector';
 import {
   rcCell,
   rcCellList,
-  rcAppMode,
+  rcDevMode,
+  rcEditMode,
   rcRxDelayMs,
   rcTxDelayMs,
   rcZoom,
-  rcSelectedCoordinates,
 } from './recoil.app.mts';
-import { DRSelector } from './Selector';
 import * as style from './style.module.scss';
-import type { DRAppMode } from './util.mts';
 import { DRInitialState, InitialDRPlayerId, zoom } from './util.mts';
 
 export const DRMenu = () => (
   <nav className={style.info}>
-    <AppModeSelector />
+    <EditModeToggle />
     <DRCellInspector />
     <div className={style.spacer} />
     <InitGameButton />
@@ -32,6 +30,7 @@ export const DRMenu = () => (
     <FullScreenToggle />
     <TxDelayControl />
     <RxDelayControl />
+    <DevModeToggle />
   </nav>
 );
 
@@ -115,30 +114,26 @@ const FullScreenToggle = () => {
   );
 };
 
-const AppModeSelector = () => {
-  const appMode = useRecoilValue(rcAppMode);
-  const descriptions: Record<DRAppMode, string> = {
-    play: 'クリックでセルの状態を変更します。',
-    edit: 'セルがなければ作成し、あれば削除します。',
-    debug: 'クリックでセルを選択します。Shiftキーで複数選択できます。',
-  };
+const EditModeToggle = () => {
+  const [editMode, setEditMode] = useRecoilState(rcEditMode);
+  const toggle = useCallback(() => setEditMode((s) => !s), [setEditMode]);
+  const id = 'CellInspector';
   return (
-    <>
-      <DRSelector<DRAppMode>
-        id="AppMode"
-        label="クリック操作"
-        values={['play', 'edit', 'debug']}
-        defaultValue={appMode}
-        onChange={useRecoilCallback(
-          ({ set, reset }) =>
-            (value) => {
-              set(rcAppMode, value as DRAppMode);
-              reset(rcSelectedCoordinates);
-            },
-          [],
-        )}
-      />
-      {<p>{descriptions[appMode]}</p>}
-    </>
+    <section className={style.toggle}>
+      <label htmlFor={id}>編集モード</label>
+      <Toggle id={id} state={editMode} onClick={toggle} />
+    </section>
+  );
+};
+
+const DevModeToggle = () => {
+  const [devMode, setDevMode] = useRecoilState(rcDevMode);
+  const toggle = useCallback(() => setDevMode((s) => !s), [setDevMode]);
+  const id = 'CellInspector';
+  return (
+    <section className={style.toggle}>
+      <label htmlFor={id}>開発モード</label>
+      <Toggle id={id} state={devMode} onClick={toggle} />
+    </section>
   );
 };

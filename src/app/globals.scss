@@ -26,6 +26,8 @@
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 
   @media (prefers-reduced-motion: reduce) {
     animation-duration: 0.01ms !important;
