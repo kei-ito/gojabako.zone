@@ -2,6 +2,7 @@ import type { FunctionComponent } from 'react';
 import { DefaultValue, atom, atomFamily, selector } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
 import { debounce } from '../../util/debounce.mts';
+import { isClient } from '../../util/env.mts';
 import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
 import { onResolve } from '../../util/promise.mts';
 import {
@@ -107,13 +108,13 @@ export const rcDevMode = selector<boolean>({
 export const rcTxDelayMs = atom<number>({
   key: 'TxDelayMs',
   default: 300,
-  effects: [...syncSearchParamsNumber('txd', 80)],
+  effects: [...syncSearchParamsNumber('txd', 20)],
 });
 
 export const rcRxDelayMs = atom<number>({
   key: 'RxDelayMs',
   default: 300,
-  effects: [...syncSearchParamsNumber('rxd', 80)],
+  effects: [...syncSearchParamsNumber('rxd', 20)],
 });
 
 export type XYWHZ =
@@ -177,8 +178,10 @@ export const rcCellList = atom<Set<DRCellId>>({
         url.searchParams.set(key, encodeCellList(list));
         history.replaceState(null, '', url);
       }, 400);
-      onSet(sync);
-      onResolve(getPromise(rcCellList), sync);
+      if (isClient) {
+        onSet(sync);
+        onResolve(getPromise(rcCellList), sync);
+      }
       return () => sync.abort();
     },
   ],

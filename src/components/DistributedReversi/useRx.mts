@@ -3,12 +3,7 @@ import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { noop } from '../../util/noop.mts';
 import type { RecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
-import {
-  rcCell,
-  rcDevMode,
-  rcMessageBuffer,
-  rcRxDelayMs,
-} from './recoil.app.mts';
+import { rcCell, rcMessageBuffer, rcRxDelayMs } from './recoil.app.mts';
 import { forwardDRMessage, sendDRMessage } from './recoil.send.mts';
 import type {
   DRBufferId,
@@ -21,17 +16,17 @@ import type {
   DRMessageType,
 } from './util.mts';
 import {
+  DRAdjacentStep,
   chessboardDistance,
   generateMessageProps,
+  isDRDiagonalDirection,
   isOpenableDRMessage,
 } from './util.mts';
 
 export const useRx = (bufferId: DRBufferId) => {
   const receive = useReceive(bufferId);
   const buffer = useRecoilValue(rcMessageBuffer(bufferId));
-  const rxDelayMs = useRecoilValue(rcRxDelayMs);
-  const debug = useRecoilValue(rcDevMode);
-  const delayMs = debug ? rxDelayMs : 0;
+  const delayMs = useRecoilValue(rcRxDelayMs);
   useEffect(() => {
     if (0 < buffer.length) {
       const timerId = setTimeout(() => receive(buffer), delayMs);
@@ -103,7 +98,6 @@ type Receiver<T extends DRMessage> = (
   from: DRDirection,
 ) => boolean;
 const receivers: { [K in DRMessageType]: Receiver<DRMessageMap[K]> } = {
-  ping: () => false,
   connect: ({ set }, cellId, cell, { payload }) => {
     set(rcCell(cellId), { ...cell, shared: payload });
     return false;
@@ -142,11 +136,19 @@ const receivers: { [K in DRMessageType]: Receiver<DRMessageMap[K]> } = {
 };
 
 const terminators: { [K in DRMessageType]?: Receiver<DRMessageMap[K]> } = {
-  reversi1: (rso, cellId, cell, msg) => {
+  reversi1: (rso, cellId, cell, msg, from) => {
     const mode = getAnswerDirection(msg.d);
     if (mode) {
+      let d: [number, number] = [0, 0];
+      if (
+        isDRDiagonalDirection(mode) &&
+        Math.abs(msg.d[0]) !== Math.abs(msg.d[1])
+      ) {
+        d = DRAdjacentStep[mode.replace(from, '') as DRDirection];
+      }
       sendDRMessage(rso, cellId, {
         ...generateMessageProps(),
+        d,
         type: 'reversi2',
         mode,
         payload: null,

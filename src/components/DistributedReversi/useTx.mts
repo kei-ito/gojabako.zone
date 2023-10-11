@@ -3,12 +3,7 @@ import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { noop } from '../../util/noop.mts';
 import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { vAdd } from '../../util/vector.mts';
-import {
-  rcCell,
-  rcDevMode,
-  rcMessageBuffer,
-  rcTxDelayMs,
-} from './recoil.app.mts';
+import { rcCell, rcMessageBuffer, rcTxDelayMs } from './recoil.app.mts';
 import type { DRBufferId } from './util.mts';
 import {
   OppositeDRDirection,
@@ -21,9 +16,7 @@ import {
 export const useTx = (bufferId: DRBufferId) => {
   const transmit = useTransmit(bufferId);
   const txBufferLength = useRecoilValue(rcMessageBuffer(bufferId)).length;
-  const txDelayMs = useRecoilValue(rcTxDelayMs);
-  const debug = useRecoilValue(rcDevMode);
-  const delayMs = debug ? txDelayMs : 0;
+  const delayMs = useRecoilValue(rcTxDelayMs);
   useEffect(() => {
     if (0 < txBufferLength) {
       const timerId = setTimeout(transmit, delayMs);

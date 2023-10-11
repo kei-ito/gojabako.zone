@@ -29,7 +29,7 @@ const messageModes = [
 ] as const;
 
 export const DRMessenger = () => {
-  const [type, setType] = useState<DRMessageType>('ping');
+  const [type, setType] = useState<DRMessageType>('setShared');
   const [mode, setMode] = useState<DRMessageMode>('spread');
   const [sharedState, setSharedState] = useState({
     playerCount: 2,
@@ -38,9 +38,6 @@ export const DRMessenger = () => {
   const send = useSendFromSelectedCells();
   const sendMessage = useCallback(() => {
     switch (type) {
-      case 'ping':
-        send({ ...generateMessageProps(), type, mode, payload: null });
-        break;
       case 'reversi2':
         send({ ...generateMessageProps(), type, mode, payload: null });
         break;
@@ -51,7 +48,7 @@ export const DRMessenger = () => {
   const payloadType = DRMessagePayloadTypes[type];
   return (
     <>
-      <div>メッセージの送信</div>
+      <div>メッセージを送信</div>
       <MessageModeSelector defaultValue={mode} onChange={setMode} />
       <MessageTypeSelector defaultValue={type} onChange={setType} />
       {payloadType === 'shared' && (
@@ -160,10 +157,8 @@ const SharedStateInputs = ({
           min={2}
           value={playerCount}
           onChange={useCallback((e: ChangeEvent<HTMLInputElement>) => {
-            setSharedState((current) => ({
-              ...current,
-              playerCount: Number(e.currentTarget.value),
-            }));
+            const count = Number(e.currentTarget.value);
+            setSharedState((current) => ({ ...current, playerCount: count }));
           }, [])}
         />
       </section>

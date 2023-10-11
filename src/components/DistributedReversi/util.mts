@@ -99,7 +99,6 @@ interface DRMessageObject<T extends string, P> {
   payload: P;
 }
 export interface DRMessageMap {
-  ping: DRMessageObject<'ping', null>;
   reversi1: DRMessageObject<'reversi1', DRSharedState>;
   reversi2: DRMessageObject<'reversi2', DRPlayerId | null>;
   connect: DRMessageObject<'connect', DRSharedState>;
@@ -110,7 +109,6 @@ export const DRMessagePayloadTypes: Record<
   DRMessageType,
   'boolean' | 'shared' | null
 > = {
-  ping: null,
   reversi1: 'shared',
   reversi2: 'boolean',
   connect: 'shared',
