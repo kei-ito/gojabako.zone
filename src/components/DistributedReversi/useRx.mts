@@ -16,8 +16,10 @@ import type {
   DRMessageType,
 } from './util.mts';
 import {
+  DRAdjacentStep,
   chessboardDistance,
   generateMessageProps,
+  isDRDiagonalDirection,
   isOpenableDRMessage,
 } from './util.mts';
 
@@ -134,11 +136,19 @@ const receivers: { [K in DRMessageType]: Receiver<DRMessageMap[K]> } = {
 };
 
 const terminators: { [K in DRMessageType]?: Receiver<DRMessageMap[K]> } = {
-  reversi1: (rso, cellId, cell, msg) => {
+  reversi1: (rso, cellId, cell, msg, from) => {
     const mode = getAnswerDirection(msg.d);
     if (mode) {
+      let d: [number, number] = [0, 0];
+      if (
+        isDRDiagonalDirection(mode) &&
+        Math.abs(msg.d[0]) !== Math.abs(msg.d[1])
+      ) {
+        d = DRAdjacentStep[mode.replace(from, '') as DRDirection];
+      }
       sendDRMessage(rso, cellId, {
         ...generateMessageProps(),
+        d,
         type: 'reversi2',
         mode,
         payload: null,
