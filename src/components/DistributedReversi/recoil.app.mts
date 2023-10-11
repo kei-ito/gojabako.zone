@@ -157,13 +157,8 @@ export const rcCell = atomFamily<DRCell | null, DRCellId>({
   default: null,
 });
 
-export const rcTxBuffer = atomFamily<Array<DRMessage>, DRBufferId>({
-  key: 'TxBuffer',
-  default: [],
-});
-
-export const rcRxBuffer = atomFamily<Array<DRMessage>, DRBufferId>({
-  key: 'RxBuffer',
+export const rcMessageBuffer = atomFamily<Array<DRMessage>, DRBufferId>({
+  key: 'MessageBuffer',
   default: [],
 });
 

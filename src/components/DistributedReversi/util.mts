@@ -64,18 +64,22 @@ export const DRAdjacentStep: Record<DRDirection, [number, number]> = {
 export const getAdjacentId = ([cellId, d]: [
   DRCellId,
   DRDirection,
+  ...others: Array<unknown>,
 ]): DRCellId => {
   const step = DRAdjacentStep[d];
   return toDRCellId(cellId[0] + step[0], cellId[1] + step[1]);
 };
-export type DRBufferId = Nominal<[DRCellId, DRDirection], 'DRBufferId'>;
+export type DRBufferId = Nominal<
+  [DRCellId, DRDirection, 'rx' | 'tx'],
+  'DRBufferId'
+>;
 export const toDRBufferId = (() => {
   const cache = new Map<string, DRBufferId>();
-  return (cellId: DRCellId, d: DRDirection) => {
-    const key = `${cellId[0]},${cellId[1]},${d}`;
+  return (cellId: DRCellId, d: DRDirection, mode: 'rx' | 'tx') => {
+    const key = `${cellId[0]},${cellId[1]},${d},${mode}`;
     let cached = cache.get(key);
     if (!cached) {
-      cached = [cellId, d] as DRBufferId;
+      cached = [cellId, d, mode] as DRBufferId;
       cache.set(key, cached);
     }
     return cached;

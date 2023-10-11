@@ -3,7 +3,12 @@ import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { noop } from '../../util/noop.mts';
 import type { RecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
-import { rcCell, rcDevMode, rcRxBuffer, rcRxDelayMs } from './recoil.app.mts';
+import {
+  rcCell,
+  rcDevMode,
+  rcMessageBuffer,
+  rcRxDelayMs,
+} from './recoil.app.mts';
 import { forwardDRMessage, sendDRMessage } from './recoil.send.mts';
 import type {
   DRBufferId,
@@ -23,7 +28,7 @@ import {
 
 export const useRx = (bufferId: DRBufferId) => {
   const receive = useReceive(bufferId);
-  const buffer = useRecoilValue(rcRxBuffer(bufferId));
+  const buffer = useRecoilValue(rcMessageBuffer(bufferId));
   const rxDelayMs = useRecoilValue(rcRxDelayMs);
   const debug = useRecoilValue(rcDevMode);
   const delayMs = debug ? rxDelayMs : 0;
@@ -55,7 +60,7 @@ const useReceive = (bufferId: DRBufferId) =>
       const { set, get } = rso;
       const buf = buffer.slice();
       const msg = buf.shift();
-      set(rcRxBuffer(bufferId), buf);
+      set(rcMessageBuffer(bufferId), buf);
       if (!msg) {
         return;
       }

@@ -4,9 +4,8 @@ import { useRecoilCallback, useRecoilValue } from 'recoil';
 import { IconClass, classnames } from '../../util/classnames.mts';
 import {
   rcCell,
-  rcRxBuffer,
+  rcMessageBuffer,
   rcSelectedCoordinates,
-  rcTxBuffer,
   selectCoordinates,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
@@ -14,12 +13,7 @@ import { useOnConnection } from './useOnConnection.mts';
 import { useOnPressCell } from './useOnPressCell.mts';
 import { useRx } from './useRx.mts';
 import { useTx } from './useTx.mts';
-import type {
-  DRBufferId,
-  DRCellId,
-  DRCellState,
-  DRDirection,
-} from './util.mts';
+import type { DRCellId, DRCellState, DRDirection } from './util.mts';
 import {
   DRDirections,
   DRInitialState,
@@ -42,11 +36,10 @@ export const DRCellG = ({ cellId, debug }: CellProps) => {
     >
       <Cell cellId={cellId} debug={debug} />
       {DRDirections.map((d) => {
-        const bufferId = toDRBufferId(cellId, d);
         return (
           <Fragment key={d}>
-            <Tx bufferId={bufferId} debug={debug} />
-            <Rx bufferId={bufferId} debug={debug} />
+            <Tx cellId={cellId} d={d} debug={debug} />
+            <Rx cellId={cellId} d={d} debug={debug} />
           </Fragment>
         );
       })}
@@ -138,15 +131,16 @@ const ForeRect = ({
 };
 
 interface TxRxProps {
-  bufferId: DRBufferId;
+  cellId: DRCellId;
+  d: DRDirection;
   debug?: boolean;
 }
 
-const Tx = ({ bufferId, debug }: TxRxProps) => {
+const Tx = ({ cellId, d, debug }: TxRxProps) => {
+  const bufferId = toDRBufferId(cellId, d, 'tx');
   useTx(bufferId);
   useOnConnection(bufferId);
-  const d = bufferId[1];
-  const bufferedCount = useRecoilValue(rcTxBuffer(bufferId)).length;
+  const bufferedCount = useRecoilValue(rcMessageBuffer(bufferId)).length;
   const [cx, cy] = useArrowPosition(d, -0.2);
   return (
     debug &&
@@ -169,10 +163,10 @@ const Tx = ({ bufferId, debug }: TxRxProps) => {
   );
 };
 
-const Rx = ({ bufferId, debug }: TxRxProps) => {
+const Rx = ({ cellId, d, debug }: TxRxProps) => {
+  const bufferId = toDRBufferId(cellId, d, 'rx');
   useRx(bufferId);
-  const d = bufferId[1];
-  const bufferedCount = useRecoilValue(rcRxBuffer(bufferId)).length;
+  const bufferedCount = useRecoilValue(rcMessageBuffer(bufferId)).length;
   const [cx, cy] = useArrowPosition(d, 0.2);
   return (
     debug &&

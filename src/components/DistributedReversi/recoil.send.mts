@@ -1,6 +1,6 @@
 import { isSafeInteger } from '@nlib/typing';
 import type { RecoilSelectorOpts } from '../../util/recoil/selector.mts';
-import { rcCell, rcTxBuffer } from './recoil.app.mts';
+import { rcCell, rcMessageBuffer } from './recoil.app.mts';
 import type {
   DRCellId,
   DRDiagonalDirection,
@@ -59,7 +59,7 @@ const sendD = (
   const adjacentId = getAdjacentId([cellId, d]);
   const adjacentCell = get(rcCell(adjacentId));
   if (adjacentCell) {
-    set(rcTxBuffer(toDRBufferId(cellId, d)), (b) => [...b, msg]);
+    set(rcMessageBuffer(toDRBufferId(cellId, d, 'tx')), (b) => [...b, msg]);
     return true;
   }
   return false;
@@ -91,7 +91,7 @@ const sendToIdleBuffer = (
   const counts: Partial<Record<DRDirection, number>> = {};
   for (const d of dd as Iterable<DRDirection>) {
     if (!(d in counts) && get(rcCell(getAdjacentId([cellId, d])))) {
-      counts[d] = get(rcTxBuffer(toDRBufferId(cellId, d))).length;
+      counts[d] = get(rcMessageBuffer(toDRBufferId(cellId, d, 'tx'))).length;
     }
   }
   let min: [number, DRDirection] | null = null;
@@ -103,7 +103,10 @@ const sendToIdleBuffer = (
   }
   if (min) {
     // sendD()でよいですが存在チェックが済んでいるので直接set()します
-    set(rcTxBuffer(toDRBufferId(cellId, min[1])), (b) => [...b, msg]);
+    set(rcMessageBuffer(toDRBufferId(cellId, min[1], 'tx')), (b) => [
+      ...b,
+      msg,
+    ]);
     counts[min[1]] = min[0] + 1;
     return true;
   }

@@ -6,8 +6,7 @@ import { vAdd } from '../../util/vector.mts';
 import {
   rcCell,
   rcDevMode,
-  rcRxBuffer,
-  rcTxBuffer,
+  rcMessageBuffer,
   rcTxDelayMs,
 } from './recoil.app.mts';
 import type { DRBufferId } from './util.mts';
@@ -21,7 +20,7 @@ import {
 
 export const useTx = (bufferId: DRBufferId) => {
   const transmit = useTransmit(bufferId);
-  const txBufferLength = useRecoilValue(rcTxBuffer(bufferId)).length;
+  const txBufferLength = useRecoilValue(rcMessageBuffer(bufferId)).length;
   const txDelayMs = useRecoilValue(rcTxDelayMs);
   const debug = useRecoilValue(rcDevMode);
   const delayMs = debug ? txDelayMs : 0;
@@ -38,9 +37,9 @@ const useTransmit = (bufferId: DRBufferId) =>
   useRecoilCallback(
     (cbi) => () => {
       const { get, set } = toRecoilSelectorOpts(cbi);
-      const buf = get(rcTxBuffer(bufferId)).slice();
+      const buf = get(rcMessageBuffer(bufferId)).slice();
       const tMsg = buf.shift();
-      set(rcTxBuffer(bufferId), buf);
+      set(rcMessageBuffer(bufferId), buf);
       if (!tMsg) {
         return;
       }
@@ -53,10 +52,10 @@ const useTransmit = (bufferId: DRBufferId) =>
       if (rMsg.ttl && isOpenableDRMessage(rMsg)) {
         rMsg.ttl -= 1;
       }
-      set(rcRxBuffer(toDRBufferId(adjacentId, OppositeDRDirection[d])), (b) => [
-        ...b,
-        rMsg,
-      ]);
+      set(
+        rcMessageBuffer(toDRBufferId(adjacentId, OppositeDRDirection[d], 'rx')),
+        (b) => [...b, rMsg],
+      );
     },
     [bufferId],
   );
