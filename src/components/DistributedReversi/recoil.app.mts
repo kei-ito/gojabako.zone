@@ -5,20 +5,23 @@ import { debounce } from '../../util/debounce.mts';
 import { isClient } from '../../util/env.mts';
 import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
 import { onResolve } from '../../util/promise.mts';
-import { syncSearchParamsNumber } from '../../util/recoil/syncSearchParams.mts';
+import {
+  syncSearchParamsBoolean,
+  syncSearchParamsNumber,
+} from '../../util/recoil/syncSearchParams.mts';
 import { encodeCellList } from './cellList.mts';
-import type {
-  DRAppMode,
-  DRBufferId,
-  DRCell,
-  DRCellId,
-  DRMessage,
-} from './util.mts';
+import type { DRBufferId, DRCell, DRCellId, DRMessage } from './util.mts';
 import { toDRCellId, zoom } from './util.mts';
 
-export const rcAppMode = atom<DRAppMode>({
-  key: 'AppMode',
-  default: 'play',
+export const rcEditMode = atom<boolean>({
+  key: 'EditMode',
+  default: false,
+});
+
+export const rcDevMode = atom<boolean>({
+  key: 'DevMode',
+  default: false,
+  effects: [...syncSearchParamsBoolean('dev', false)],
 });
 
 export const rcFloaterContent = atom<FunctionComponent | null>({

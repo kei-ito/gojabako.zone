@@ -6,19 +6,17 @@ import { useRect } from '../use/Rect.mts';
 import { DRCellG } from './Cell';
 import type { XYWHZ } from './recoil.app.mts';
 import {
-  rcAppMode,
   rcCell,
   rcCellList,
   rcDragging,
+  rcEditMode,
   rcPointerPosition,
   rcPointeredCell,
   rcSelectedCoordinates,
   rcViewBox,
   rcXYWHZ,
-  selectCoordinates,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
-import type { DRCellId } from './util.mts';
 import { defaultDRCell } from './util.mts';
 
 export const DRBoard = () => {
@@ -35,7 +33,7 @@ export const DRBoard = () => {
     >
       <Cells />
       <SelectedCoordinates />
-      <PointeredCell />
+      <EditGuide />
     </svg>
   );
 };
@@ -44,81 +42,63 @@ const useOnClick = () =>
   useRecoilCallback(
     (cbi) => () => {
       const { get, reset } = toRecoilSelectorOpts(cbi);
-      if (get(rcDragging)) {
-        return;
+      if (!get(rcDragging)) {
+        reset(rcSelectedCoordinates);
       }
-      reset(rcSelectedCoordinates);
     },
     [],
   );
 
-const PointeredCell = () => {
+const EditGuide = () => {
+  const editMode = useRecoilValue(rcEditMode);
   const cellId = useRecoilValue(rcPointeredCell);
   const dragging = useRecoilValue(rcDragging);
-  const onClick = useOnClickPointeredCell(cellId);
-  const appMode = useRecoilValue(rcAppMode);
   const list = useRecoilValue(rcCellList);
-  if (appMode === 'play' || !cellId || dragging) {
-    return null;
-  }
-  return (
-    <g
-      className={style.pointered}
-      transform={`translate(${cellId[0]},${-cellId[1]})`}
-    >
-      <rect x="-0.5" y="-0.5" width="1" height="1" onClick={onClick} />
-      {appMode === 'edit' && (
-        <path
-          d={
-            list.has(cellId)
-              ? 'M-0.2 -0.2L0.2 0.2M-0.2 0.2L0.2 -0.2'
-              : 'M-0.2 0H0.2M0 -0.2V0.2'
-          }
-        />
-      )}
-    </g>
-  );
-};
-
-const useOnClickPointeredCell = (cellId: DRCellId | null) =>
-  useRecoilCallback(
+  const onClick = useRecoilCallback(
     (cbi) => (event: MouseEvent) => {
       event.preventDefault();
       event.stopPropagation();
-      if (!cellId) {
-        return;
-      }
-      const { get, set } = toRecoilSelectorOpts(cbi);
-      const alt = event.shiftKey || event.metaKey || event.ctrlKey;
-      switch (get(rcAppMode)) {
-        case 'debug':
-          set(
-            rcSelectedCoordinates,
-            selectCoordinates(cellId, alt ? 'add' : 'toggle'),
-          );
-          break;
-        case 'edit':
-          if (get(rcCell(cellId))) {
-            set(rcCell(cellId), null);
-            set(rcCellList, (current) => {
-              const newSet = new Set(current);
-              newSet.delete(cellId);
-              return newSet;
-            });
-          } else {
-            set(rcCell(cellId), defaultDRCell());
-            set(rcCellList, (current) => {
-              const newSet = new Set(current);
-              newSet.add(cellId);
-              return newSet;
-            });
-          }
-          break;
-        default:
+      if (cellId) {
+        const { get, set } = toRecoilSelectorOpts(cbi);
+        if (get(rcCell(cellId))) {
+          set(rcCell(cellId), null);
+          set(rcCellList, (current) => {
+            const newSet = new Set(current);
+            newSet.delete(cellId);
+            return newSet;
+          });
+        } else {
+          set(rcCell(cellId), defaultDRCell());
+          set(rcCellList, (current) => {
+            const newSet = new Set(current);
+            newSet.add(cellId);
+            return newSet;
+          });
+        }
       }
     },
     [cellId],
   );
+  if (!editMode || !cellId || dragging) {
+    return null;
+  }
+  const transform = `translate(${cellId[0]},${-cellId[1]})`;
+  const empty = !list.has(cellId);
+  const s = 0.52;
+  const l = empty ? 0.24 : 0.2;
+  return (
+    <g className={style.pointered} transform={transform}>
+      <rect x={-s} y={-s} width={s * 2} height={s * 2} onClick={onClick} />
+      <path
+        d={
+          empty
+            ? `M${-l} 0H${l}M0 ${-l}V${l}`
+            : `M${-l} ${-l}L${l} ${l}M${-l} ${l}L${l} ${-l}`
+        }
+      />
+    </g>
+  );
+};
 
 const Cells = () => {
   const cells = useRecoilValue(rcCellList);
