@@ -96,7 +96,6 @@ type Receiver<T extends DRMessage> = (
   from: DRDirection,
 ) => boolean;
 const receivers: { [K in DRMessageType]: Receiver<DRMessageMap[K]> } = {
-  ping: () => false,
   connect: ({ set }, cellId, cell, { payload }) => {
     set(rcCell(cellId), { ...cell, shared: payload });
     return false;
