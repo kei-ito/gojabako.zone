@@ -82,6 +82,9 @@
   "renovate": {
     "extends": [
       "github>nlibjs/renovate-config"
+    ],
+    "ignoreDeps": [
+      "next"
     ]
   }
 }
