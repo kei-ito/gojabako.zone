@@ -6,9 +6,9 @@ import { useRect } from '../use/Rect.mts';
 import { DRCellG } from './Cell';
 import type { XYWHZ } from './recoil.app.mts';
 import {
+  rcAppMode,
   rcCell,
   rcCellList,
-  rcDevMode,
   rcDragging,
   rcPointerPosition,
   rcPointeredCell,
@@ -18,7 +18,8 @@ import {
   selectCoordinates,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
-import { toDRCellId } from './util.mts';
+import type { DRCellId } from './util.mts';
+import { defaultDRCell } from './util.mts';
 
 export const DRBoard = () => {
   const [element, setElement] = useState<Element | null>(null);
@@ -31,11 +32,10 @@ export const DRBoard = () => {
       className={style.board}
       viewBox={useRecoilValue(rcViewBox)}
       onClick={useOnClick()}
-      onContextMenu={useOnContextMenu()}
     >
-      <PointeredCell />
       <Cells />
       <SelectedCoordinates />
+      <PointeredCell />
     </svg>
   );
 };
@@ -52,59 +52,80 @@ const useOnClick = () =>
     [],
   );
 
-const useOnContextMenu = () =>
-  useRecoilCallback(
-    (cbi) => (event: MouseEvent) => {
-      event.preventDefault();
-      document.getSelection()?.removeAllRanges();
-      const { get, set } = toRecoilSelectorOpts(cbi);
-      if (!get(rcDevMode) || get(rcDragging)) {
-        return;
-      }
-      const [x, y, , , z] = get(rcXYWHZ);
-      const rect = event.currentTarget.getBoundingClientRect();
-      const cx = Math.round(x + (event.clientX - rect.left) / z);
-      const cy = -Math.round(y + (event.clientY - rect.top) / z);
-      const cellId = toDRCellId(cx, cy);
-      const cell = get(rcCell(cellId));
-      if (cell) {
-        return;
-      }
-      const alt = event.shiftKey || event.metaKey || event.ctrlKey;
-      set(
-        rcSelectedCoordinates,
-        selectCoordinates(cellId, alt ? 'add' : 'toggle'),
-      );
-    },
-    [],
-  );
-
 const PointeredCell = () => {
-  const pointeredCell = useRecoilValue(rcPointeredCell);
+  const cellId = useRecoilValue(rcPointeredCell);
   const dragging = useRecoilValue(rcDragging);
-  if (!pointeredCell || dragging) {
+  const onClick = useOnClickPointeredCell(cellId);
+  const appMode = useRecoilValue(rcAppMode);
+  const list = useRecoilValue(rcCellList);
+  if (appMode === 'play' || !cellId || dragging) {
     return null;
   }
   return (
-    <rect
+    <g
       className={style.pointered}
-      x={pointeredCell[0] - 0.5}
-      y={-pointeredCell[1] - 0.5}
-      width="1"
-      height="1"
-    />
+      transform={`translate(${cellId[0]},${-cellId[1]})`}
+    >
+      <rect x="-0.5" y="-0.5" width="1" height="1" onClick={onClick} />
+      {appMode === 'edit' && (
+        <path
+          d={
+            list.has(cellId)
+              ? 'M-0.2 -0.2L0.2 0.2M-0.2 0.2L0.2 -0.2'
+              : 'M-0.2 0H0.2M0 -0.2V0.2'
+          }
+        />
+      )}
+    </g>
   );
 };
 
+const useOnClickPointeredCell = (cellId: DRCellId | null) =>
+  useRecoilCallback(
+    (cbi) => (event: MouseEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!cellId) {
+        return;
+      }
+      const { get, set } = toRecoilSelectorOpts(cbi);
+      const alt = event.shiftKey || event.metaKey || event.ctrlKey;
+      switch (get(rcAppMode)) {
+        case 'debug':
+          set(
+            rcSelectedCoordinates,
+            selectCoordinates(cellId, alt ? 'add' : 'toggle'),
+          );
+          break;
+        case 'edit':
+          if (get(rcCell(cellId))) {
+            set(rcCell(cellId), null);
+            set(rcCellList, (current) => {
+              const newSet = new Set(current);
+              newSet.delete(cellId);
+              return newSet;
+            });
+          } else {
+            set(rcCell(cellId), defaultDRCell());
+            set(rcCellList, (current) => {
+              const newSet = new Set(current);
+              newSet.add(cellId);
+              return newSet;
+            });
+          }
+          break;
+        default:
+      }
+    },
+    [cellId],
+  );
+
 const Cells = () => {
   const cells = useRecoilValue(rcCellList);
-  const devMode = useRecoilValue(rcDevMode);
   return [
     ...(function* (): Generator<ReactNode> {
       for (const cellId of cells) {
-        yield (
-          <DRCellG key={cellId.join(',')} cellId={cellId} debug={devMode} />
-        );
+        yield <DRCellG key={cellId.join(',')} cellId={cellId} />;
       }
     })(),
   ];

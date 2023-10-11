@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react';
 import { useCallback } from 'react';
-import { useRecoilCallback, useRecoilState } from 'recoil';
+import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
 import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { SecondaryButton } from '../Button';
@@ -11,16 +11,20 @@ import { DRCellInspector } from './CellInspector';
 import {
   rcCell,
   rcCellList,
-  rcDevMode,
+  rcAppMode,
   rcRxDelayMs,
   rcTxDelayMs,
   rcZoom,
+  rcSelectedCoordinates,
 } from './recoil.app.mts';
+import { DRSelector } from './Selector';
 import * as style from './style.module.scss';
+import type { DRAppMode } from './util.mts';
 import { DRInitialState, InitialDRPlayerId, zoom } from './util.mts';
 
-export const DRInfo = () => (
+export const DRMenu = () => (
   <nav className={style.info}>
+    <AppModeSelector />
     <DRCellInspector />
     <div className={style.spacer} />
     <InitGameButton />
@@ -28,7 +32,6 @@ export const DRInfo = () => (
     <FullScreenToggle />
     <TxDelayControl />
     <RxDelayControl />
-    <DevModeToggle />
   </nav>
 );
 
@@ -112,14 +115,30 @@ const FullScreenToggle = () => {
   );
 };
 
-const DevModeToggle = () => {
-  const [devMode, setDevMode] = useRecoilState(rcDevMode);
-  const toggle = useCallback(() => setDevMode((s) => !s), [setDevMode]);
-  const id = 'CellInspector';
+const AppModeSelector = () => {
+  const appMode = useRecoilValue(rcAppMode);
+  const descriptions: Record<DRAppMode, string> = {
+    play: 'クリックでセルの状態を変更します。',
+    edit: 'セルがなければ作成し、あれば削除します。',
+    debug: 'クリックでセルを選択します。Shiftキーで複数選択できます。',
+  };
   return (
-    <section className={style.toggle}>
-      <label htmlFor={id}>開発モード</label>
-      <Toggle id={id} state={devMode} onClick={toggle} />
-    </section>
+    <>
+      <DRSelector<DRAppMode>
+        id="AppMode"
+        label="クリック操作"
+        values={['play', 'edit', 'debug']}
+        defaultValue={appMode}
+        onChange={useRecoilCallback(
+          ({ set, reset }) =>
+            (value) => {
+              set(rcAppMode, value as DRAppMode);
+              reset(rcSelectedCoordinates);
+            },
+          [],
+        )}
+      />
+      {<p>{descriptions[appMode]}</p>}
+    </>
   );
 };

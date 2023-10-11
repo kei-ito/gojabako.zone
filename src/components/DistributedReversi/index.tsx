@@ -9,11 +9,11 @@ import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
 import { DRBoard } from './Board';
 import { decodeCellList } from './cellList.mts';
 import { DRFloater } from './Floater';
-import { DRInfo } from './Info';
+import { DRMenu } from './Menu';
 import { rcCell, rcCellList } from './recoil.app.mts';
 import * as style from './style.module.scss';
 import type { DRCellId } from './util.mts';
-import { DRInitialState, InitialDRPlayerId, toDRCellId } from './util.mts';
+import { defaultDRCell, toDRCellId } from './util.mts';
 
 export const DistributedReversi = (props: HTMLAttributes<HTMLElement>) => {
   getCurrentUrl.defaultSearchParams = useSearchParams();
@@ -24,7 +24,7 @@ export const DistributedReversi = (props: HTMLAttributes<HTMLElement>) => {
     >
       <RecoilRoot initializeState={useInit()}>
         <DRBoard />
-        <DRInfo />
+        <DRMenu />
         <DRFloater />
       </RecoilRoot>
     </section>
@@ -49,11 +49,7 @@ const useInit = () =>
       }
     }
     for (const cellId of coordinates) {
-      set(rcCell(cellId), {
-        pending: null,
-        state: DRInitialState,
-        shared: { state: InitialDRPlayerId, playerCount: 2 },
-      });
+      set(rcCell(cellId), defaultDRCell());
     }
     set(rcCellList, coordinates);
   }, []);

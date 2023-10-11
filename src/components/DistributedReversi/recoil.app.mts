@@ -5,13 +5,21 @@ import { debounce } from '../../util/debounce.mts';
 import { isClient } from '../../util/env.mts';
 import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
 import { onResolve } from '../../util/promise.mts';
-import {
-  syncSearchParamsBoolean,
-  syncSearchParamsNumber,
-} from '../../util/recoil/syncSearchParams.mts';
+import { syncSearchParamsNumber } from '../../util/recoil/syncSearchParams.mts';
 import { encodeCellList } from './cellList.mts';
-import type { DRBufferId, DRCell, DRCellId, DRMessage } from './util.mts';
+import type {
+  DRAppMode,
+  DRBufferId,
+  DRCell,
+  DRCellId,
+  DRMessage,
+} from './util.mts';
 import { toDRCellId, zoom } from './util.mts';
+
+export const rcAppMode = atom<DRAppMode>({
+  key: 'AppMode',
+  default: 'play',
+});
 
 export const rcFloaterContent = atom<FunctionComponent | null>({
   key: 'FloaterContent',
@@ -88,21 +96,6 @@ export const rcPointeredCell = selector<DRCellId | null>({
 export const rcDragging = atom<AbortController | null>({
   key: 'Dragging',
   default: null,
-});
-
-const rcDev = atom<boolean>({
-  key: 'Dev',
-  default: false,
-  effects: [...syncSearchParamsBoolean('dev', false)],
-});
-
-export const rcDevMode = selector<boolean>({
-  key: 'DevMode',
-  get: ({ get }) => get(rcDev),
-  set: ({ set, reset }, value) => {
-    set(rcDev, value);
-    reset(rcSelectedCoordinates);
-  },
 });
 
 export const rcTxDelayMs = atom<number>({

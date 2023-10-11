@@ -2,6 +2,7 @@ import type { Nominal } from '@nlib/typing';
 import { createTypeChecker, isNonNegativeSafeInteger } from '@nlib/typing';
 
 export const zoom = { min: 40, max: 200 };
+export type DRAppMode = 'debug' | 'edit' | 'play';
 export type DRPlayerId = Nominal<number, 'DRPlayerId'>;
 export const isDRPlayerId = createTypeChecker<DRPlayerId>(
   'DRPlayerId',
@@ -35,6 +36,11 @@ export interface DRCell {
   pending: DRPlayerId | null;
   shared: DRSharedState;
 }
+export const defaultDRCell = (): DRCell => ({
+  pending: null,
+  state: DRInitialState,
+  shared: { state: InitialDRPlayerId, playerCount: 2 },
+});
 export const DRDirections = ['e', 'n', 'w', 's'] as const;
 export type DRDirection = (typeof DRDirections)[number];
 export const isDRDirection = createTypeChecker<DRDirection>(
