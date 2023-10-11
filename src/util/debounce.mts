@@ -5,10 +5,18 @@ export const debounce = <A extends Array<unknown>>(
   debounceMs: number,
 ) => {
   let timerId = setTimeout(noop);
-  const abort = () => clearTimeout(timerId);
+  let aborted = false;
+  const cancel = () => clearTimeout(timerId);
   const debouncedFn = (...args: A) => {
-    abort();
-    timerId = setTimeout(() => fn(...args), debounceMs);
+    if (!aborted) {
+      cancel();
+      timerId = setTimeout(() => fn(...args), debounceMs);
+    }
   };
-  return Object.assign(debouncedFn, { abort });
+  return Object.assign(debouncedFn, {
+    abort: () => {
+      cancel();
+      aborted = true;
+    },
+  });
 };

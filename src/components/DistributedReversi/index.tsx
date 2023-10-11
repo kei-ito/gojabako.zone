@@ -7,6 +7,7 @@ import { RecoilRoot } from 'recoil';
 import { classnames } from '../../util/classnames.mts';
 import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
 import { DRBoard } from './Board';
+import { decodeCellList } from './cellList.mts';
 import { DRFloater } from './Floater';
 import { DRInfo } from './Info';
 import { rcCell, rcCellList } from './recoil.app.mts';
@@ -34,16 +35,25 @@ const useInit = () =>
   useCallback(({ set }: MutableSnapshot) => {
     const size = 2;
     const coordinates = new Set<DRCellId>();
-    for (let x = -size; x <= size; x++) {
-      for (let y = -size; y <= size; y++) {
-        const cellId = toDRCellId(x, y);
-        set(rcCell(cellId), {
-          pending: null,
-          state: DRInitialState,
-          shared: { state: InitialDRPlayerId, playerCount: 2 },
-        });
+    const encoded = getCurrentUrl().searchParams.get('c');
+    if (encoded) {
+      for (const cellId of decodeCellList(encoded)) {
         coordinates.add(cellId);
       }
+    }
+    if (coordinates.size === 0) {
+      for (let x = -size; x <= size; x++) {
+        for (let y = -size; y <= size; y++) {
+          coordinates.add(toDRCellId(x, y));
+        }
+      }
+    }
+    for (const cellId of coordinates) {
+      set(rcCell(cellId), {
+        pending: null,
+        state: DRInitialState,
+        shared: { state: InitialDRPlayerId, playerCount: 2 },
+      });
     }
     set(rcCellList, coordinates);
   }, []);

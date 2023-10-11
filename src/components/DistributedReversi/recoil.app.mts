@@ -1,10 +1,14 @@
 import type { FunctionComponent } from 'react';
 import { DefaultValue, atom, atomFamily, selector } from 'recoil';
 import { clamp } from '../../util/clamp.mts';
+import { debounce } from '../../util/debounce.mts';
+import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
+import { onResolve } from '../../util/promise.mts';
 import {
   syncSearchParamsBoolean,
   syncSearchParamsNumber,
 } from '../../util/recoil/syncSearchParams.mts';
+import { encodeCellList } from './cellList.mts';
 import type { DRBufferId, DRCell, DRCellId, DRMessage } from './util.mts';
 import { toDRCellId, zoom } from './util.mts';
 
@@ -165,4 +169,17 @@ export const rcMessageBuffer = atomFamily<Array<DRMessage>, DRBufferId>({
 export const rcCellList = atom<Set<DRCellId>>({
   key: 'CellList',
   default: new Set(),
+  effects: [
+    ({ onSet, getPromise }) => {
+      const key = 'c';
+      const sync = debounce((list: Set<DRCellId>) => {
+        const url = getCurrentUrl();
+        url.searchParams.set(key, encodeCellList(list));
+        history.replaceState(null, '', url);
+      }, 400);
+      onSet(sync);
+      onResolve(getPromise(rcCellList), sync);
+      return () => sync.abort();
+    },
+  ],
 });
