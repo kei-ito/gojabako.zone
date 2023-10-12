@@ -1,6 +1,7 @@
 import type { MouseEvent, ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
+import { classnames } from '../../util/classnames.mts';
 import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
 import { useRect } from '../use/Rect.mts';
 import { DRCellG } from './Cell';
@@ -21,65 +22,64 @@ import { defaultDRCell } from './util.mts';
 
 export const DRBoard = () => {
   const [element, setElement] = useState<Element | null>(null);
+  const editMode = useRecoilValue(rcEditMode);
   useSyncRect(element);
   useSyncPointerPosition(element as HTMLElement);
   useGrab(element as HTMLElement);
   return (
     <svg
       ref={setElement}
-      className={style.board}
+      className={classnames(style.board, editMode && style.editing)}
       viewBox={useRecoilValue(rcViewBox)}
       onClick={useOnClick()}
     >
       <Cells />
       <SelectedCoordinates />
-      <EditGuide />
+      {editMode && <EditGuide />}
     </svg>
   );
 };
 
-const useOnClick = () =>
-  useRecoilCallback(
-    (cbi) => () => {
-      const { get, reset } = toRecoilSelectorOpts(cbi);
-      if (!get(rcDragging)) {
-        reset(rcSelectedCoordinates);
+const useOnClick = () => {
+  return useRecoilCallback(
+    (cbi) => (event: MouseEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const { get, set, reset } = toRecoilSelectorOpts(cbi);
+      if (get(rcDragging)) {
+        return;
+      }
+      reset(rcSelectedCoordinates);
+      const editMode = get(rcEditMode);
+      if (editMode) {
+        const cellId = get(rcPointeredCell);
+        if (cellId) {
+          if (get(rcCell(cellId))) {
+            reset(rcCell(cellId));
+            set(rcCellList, (current) => {
+              const newSet = new Set(current);
+              newSet.delete(cellId);
+              return newSet;
+            });
+          } else {
+            set(rcCell(cellId), defaultDRCell());
+            set(rcCellList, (current) => {
+              const newSet = new Set(current);
+              newSet.add(cellId);
+              return newSet;
+            });
+          }
+        }
       }
     },
     [],
   );
-
+};
 const EditGuide = () => {
-  const editMode = useRecoilValue(rcEditMode);
   const cellId = useRecoilValue(rcPointeredCell);
   const dragging = useRecoilValue(rcDragging);
   const list = useRecoilValue(rcCellList);
-  const onClick = useRecoilCallback(
-    (cbi) => (event: MouseEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
-      if (cellId) {
-        const { get, set } = toRecoilSelectorOpts(cbi);
-        if (get(rcCell(cellId))) {
-          set(rcCell(cellId), null);
-          set(rcCellList, (current) => {
-            const newSet = new Set(current);
-            newSet.delete(cellId);
-            return newSet;
-          });
-        } else {
-          set(rcCell(cellId), defaultDRCell());
-          set(rcCellList, (current) => {
-            const newSet = new Set(current);
-            newSet.add(cellId);
-            return newSet;
-          });
-        }
-      }
-    },
-    [cellId],
-  );
-  if (!editMode || !cellId || dragging) {
+  if (!cellId || dragging) {
     return null;
   }
   const transform = `translate(${cellId[0]},${-cellId[1]})`;
@@ -88,7 +88,7 @@ const EditGuide = () => {
   const l = empty ? 0.24 : 0.2;
   return (
     <g className={style.pointered} transform={transform}>
-      <rect x={-s} y={-s} width={s * 2} height={s * 2} onClick={onClick} />
+      <rect x={-s} y={-s} width={s * 2} height={s * 2} />
       <path
         d={
           empty
@@ -140,9 +140,6 @@ const useSyncPointerPosition = (board: HTMLElement | null) => {
         (e) => setPosition([e.offsetX, e.offsetY]),
         { signal: abc.signal },
       );
-      board.addEventListener('pointerleave', () => setPosition(null), {
-        signal: abc.signal,
-      });
     }
     return () => abc.abort();
   }, [board, setPosition]);

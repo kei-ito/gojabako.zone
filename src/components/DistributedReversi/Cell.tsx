@@ -24,32 +24,32 @@ import {
 
 const hue = (t: number) => Math.round(360 * t) % 360;
 
-interface CellProps {
+interface DRCellGProps {
   cellId: DRCellId;
 }
 
-export const DRCellG = ({ cellId }: CellProps) => {
+export const DRCellG = ({ cellId }: DRCellGProps) => {
   return (
     <g
       id={encodeURIComponent(`cell${cellId}`)}
       transform={`translate(${cellId[0]},${-cellId[1]})`}
     >
       <Cell cellId={cellId} />
-      {DRDirections.map((d) => {
-        return (
-          <Fragment key={d}>
-            <Tx cellId={cellId} d={d} />
-            <Rx cellId={cellId} d={d} />
-          </Fragment>
-        );
-      })}
+      {DRDirections.map((d) => (
+        <Fragment key={d}>
+          <Tx cellId={cellId} d={d} />
+          <Rx cellId={cellId} d={d} />
+        </Fragment>
+      ))}
     </g>
   );
 };
 
+interface CellProps extends DRCellGProps {}
+
 const Cell = ({ cellId }: CellProps) => {
-  const devMode = useRecoilValue(rcDevMode);
   const cell = useRecoilValue(rcCell(cellId));
+  const devMode = useRecoilValue(rcDevMode);
   return (
     cell && (
       <>
@@ -60,11 +60,13 @@ const Cell = ({ cellId }: CellProps) => {
           playerCount={cell.shared.playerCount}
         />
         {devMode && (
-          <text className={style.cellText} x={0} y={0}>
+          <text className={style.cellText} x={0} y={0.09}>
             {cell.state}
             {cell.pending !== null && (
               <>
-                <tspan className={IconClass}>double_arrow</tspan>
+                <tspan className={classnames(IconClass, style.icon)}>
+                  double_arrow
+                </tspan>
                 {cell.pending}
               </>
             )}
@@ -136,6 +138,8 @@ interface TxRxProps {
   d: DRDirection;
 }
 
+const textDy = 0.04;
+
 const Tx = ({ cellId, d }: TxRxProps) => {
   const bufferId = toDRBufferId(cellId, d, 'tx');
   useTx(bufferId);
@@ -156,7 +160,7 @@ const Tx = ({ cellId, d }: TxRxProps) => {
           )}
         />
 
-        <text x={cx} y={cy} className={style.buffer}>
+        <text x={cx} y={cy + textDy} className={style.buffer}>
           {bufferedCount}
         </text>
       </>
@@ -182,7 +186,7 @@ const Rx = ({ cellId, d }: TxRxProps) => {
             0 < bufferedCount && style.active,
           )}
         />
-        <text x={cx} y={cy} className={style.buffer}>
+        <text x={cx} y={cy + textDy} className={style.buffer}>
           {bufferedCount}
         </text>
       </>
