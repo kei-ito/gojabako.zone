@@ -18,7 +18,7 @@ import {
   rcXYWHZ,
 } from './recoil.app.mts';
 import * as style from './style.module.scss';
-import { defaultDRCell } from './util.mts';
+import { defaultDRCell, toDRCellId } from './util.mts';
 
 export const DRBoard = () => {
   const [element, setElement] = useState<Element | null>(null);
@@ -40,8 +40,8 @@ export const DRBoard = () => {
   );
 };
 
-const useOnClick = () => {
-  return useRecoilCallback(
+const useOnClick = () =>
+  useRecoilCallback(
     (cbi) => (event: MouseEvent) => {
       event.preventDefault();
       event.stopPropagation();
@@ -52,29 +52,29 @@ const useOnClick = () => {
       reset(rcSelectedCoordinates);
       const editMode = get(rcEditMode);
       if (editMode) {
-        const cellId = get(rcPointeredCell);
-        if (cellId) {
-          if (get(rcCell(cellId))) {
-            reset(rcCell(cellId));
-            set(rcCellList, (current) => {
-              const newSet = new Set(current);
-              newSet.delete(cellId);
-              return newSet;
-            });
-          } else {
-            set(rcCell(cellId), defaultDRCell());
-            set(rcCellList, (current) => {
-              const newSet = new Set(current);
-              newSet.add(cellId);
-              return newSet;
-            });
-          }
+        const [x0, y0, , , z] = get(rcXYWHZ);
+        const { nativeEvent: e } = event;
+        const cellId = toDRCellId(e.offsetX / z + x0, -e.offsetY / z - y0);
+        if (get(rcCell(cellId))) {
+          reset(rcCell(cellId));
+          set(rcCellList, (current) => {
+            const newSet = new Set(current);
+            newSet.delete(cellId);
+            return newSet;
+          });
+        } else {
+          set(rcCell(cellId), defaultDRCell());
+          set(rcCellList, (current) => {
+            const newSet = new Set(current);
+            newSet.add(cellId);
+            return newSet;
+          });
         }
       }
     },
     [],
   );
-};
+
 const EditGuide = () => {
   const cellId = useRecoilValue(rcPointeredCell);
   const dragging = useRecoilValue(rcDragging);
@@ -140,6 +140,9 @@ const useSyncPointerPosition = (board: HTMLElement | null) => {
         (e) => setPosition([e.offsetX, e.offsetY]),
         { signal: abc.signal },
       );
+      board.addEventListener('pointerleave', () => setPosition(null), {
+        signal: abc.signal,
+      });
     }
     return () => abc.abort();
   }, [board, setPosition]);
@@ -202,7 +205,41 @@ const useSyncRect = (board: Element | null) => {
 // };
 
 const useGrab = (board: HTMLElement | null) => {
-  const onPointerDown = useOnPointerDown();
+  const onPointerDown = useRecoilCallback(
+    ({ set, snapshot }) =>
+      (e0: PointerEvent) => {
+        if (e0.button !== 0 || snapshot.getLoadable(rcDragging).getValue()) {
+          return;
+        }
+        const target = e0.target as HTMLElement;
+        target.setPointerCapture(e0.pointerId);
+        const abc = new AbortController();
+        const diff = (e: PointerEvent): [number, number] => [
+          e.clientX - e0.clientX,
+          e.clientY - e0.clientY,
+        ];
+        const anchor = snapshot.getLoadable(rcXYWHZ).getValue();
+        const onMove = (e: PointerEvent) => {
+          if (e.pointerId === e0.pointerId) {
+            set(rcDragging, abc);
+            const newXYWHZ: XYWHZ = [...anchor];
+            newXYWHZ[5] = diff(e);
+            set(rcXYWHZ, newXYWHZ);
+          }
+        };
+        const onUp = (e: PointerEvent) => {
+          target.releasePointerCapture(e0.pointerId);
+          abc.abort();
+          const [x, y, w, h, z] = anchor;
+          const d = diff(e);
+          set(rcXYWHZ, [x - d[0] / z, y - d[1] / z, w, h, z]);
+          setTimeout(() => set(rcDragging, null), 50);
+        };
+        target.addEventListener('pointermove', onMove, { signal: abc.signal });
+        target.addEventListener('pointerup', onUp, { signal: abc.signal });
+      },
+    [],
+  );
   useEffect(() => {
     const abc = new AbortController();
     board?.addEventListener('pointerdown', onPointerDown, {
@@ -211,36 +248,3 @@ const useGrab = (board: HTMLElement | null) => {
     return () => abc.abort();
   }, [board, onPointerDown]);
 };
-
-const useOnPointerDown = () =>
-  useRecoilCallback(({ set, snapshot }) => (e0: PointerEvent) => {
-    if (e0.button !== 0 || snapshot.getLoadable(rcDragging).getValue()) {
-      return;
-    }
-    const target = e0.target as HTMLElement;
-    target.setPointerCapture(e0.pointerId);
-    const abc = new AbortController();
-    const diff = (e: PointerEvent): [number, number] => [
-      e.clientX - e0.clientX,
-      e.clientY - e0.clientY,
-    ];
-    const anchor = snapshot.getLoadable(rcXYWHZ).getValue();
-    const onMove = (e: PointerEvent) => {
-      if (e.pointerId === e0.pointerId) {
-        set(rcDragging, abc);
-        const newXYWHZ: XYWHZ = [...anchor];
-        newXYWHZ[5] = diff(e);
-        set(rcXYWHZ, newXYWHZ);
-      }
-    };
-    const onUp = (e: PointerEvent) => {
-      target.releasePointerCapture(e0.pointerId);
-      abc.abort();
-      const [x, y, w, h, z] = anchor;
-      const d = diff(e);
-      set(rcXYWHZ, [x - d[0] / z, y - d[1] / z, w, h, z]);
-      setTimeout(() => set(rcDragging, null), 50);
-    };
-    target.addEventListener('pointermove', onMove, { signal: abc.signal });
-    target.addEventListener('pointerup', onUp, { signal: abc.signal });
-  });
