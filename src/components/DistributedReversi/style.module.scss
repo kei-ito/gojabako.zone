@@ -11,6 +11,23 @@
   }
 }
 
+.cell {
+  cursor: pointer;
+  pointer-events: auto;
+  stroke-width: 0.1;
+  user-select: none;
+
+  &.initial {
+    fill: var(--gjGray3);
+    stroke: var(--gjGray4);
+
+    &:hover {
+      fill: var(--gjGray4);
+      stroke: var(--gjGray5);
+    }
+  }
+}
+
 .board {
   align-self: stretch;
   justify-self: stretch;
@@ -18,10 +35,19 @@
   paint-order: stroke fill;
 }
 
+.editing {
+  & > * {
+    & > rect {
+      pointer-events: none;
+    }
+  }
+}
+
 .pointered {
   fill: rgb(255 255 255 / 10%);
   stroke: var(--gjGray7);
   stroke-width: 0.04;
+  pointer-events: none;
 }
 
 .selected {
@@ -104,23 +130,6 @@
   grid-template-columns: auto 1fr auto;
 }
 
-.cell {
-  cursor: pointer;
-  pointer-events: auto;
-  stroke-width: 0.1;
-  user-select: none;
-
-  &.initial {
-    fill: var(--gjGray3);
-    stroke: var(--gjGray4);
-
-    &:hover {
-      fill: var(--gjGray4);
-      stroke: var(--gjGray5);
-    }
-  }
-}
-
 .cellBackground {
   stroke-width: 0.01;
 }
@@ -128,11 +137,10 @@
 .cellText {
   font-size: 0.26px;
   text-anchor: middle;
-  dominant-baseline: central;
   pointer-events: none;
   font-weight: 700;
 
-  & > tspan {
+  & > .icon {
     font-size: 120%;
   }
 }
@@ -141,7 +149,6 @@ text.buffer {
   font-size: 0.14px;
   font-weight: 700;
   text-anchor: middle;
-  dominant-baseline: central;
 }
 
 path.buffer {

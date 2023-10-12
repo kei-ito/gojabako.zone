@@ -8,7 +8,6 @@ import { classnames } from '../../util/classnames.mts';
 import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
 import { DRBoard } from './Board';
 import { decodeCellList } from './cellList.mts';
-import { DRFloater } from './Floater';
 import { DRMenu } from './Menu';
 import { rcCell, rcCellList } from './recoil.app.mts';
 import * as style from './style.module.scss';
@@ -25,7 +24,6 @@ export const DistributedReversi = (props: HTMLAttributes<HTMLElement>) => {
       <RecoilRoot initializeState={useInit()}>
         <DRBoard />
         <DRMenu />
-        <DRFloater />
       </RecoilRoot>
     </section>
   );
