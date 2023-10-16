@@ -23,4 +23,8 @@
       text-align: end;
     }
   }
+
+  @media print {
+    display: none;
+  }
 }

@@ -50,6 +50,10 @@
       grid-column: -2/-1;
     }
   }
+
+  @media print {
+    display: none;
+  }
 }
 
 .logo {

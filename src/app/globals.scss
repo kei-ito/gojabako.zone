@@ -109,6 +109,10 @@
   @media (width <= 667px) {
     --gjBaseWidth: 94%;
   }
+
+  @media print {
+    --gjHeaderHeight: 0;
+  }
 }
 
 button,
@@ -167,6 +171,13 @@ ul {
     margin-block-end: 0.25em;
     list-style-type: inherit;
 
+    &::before {
+      position: absolute;
+      display: block;
+      inset-inline-end: calc(100% - var(--gjListMarkerWidth) + 0.4em);
+      text-align: end;
+    }
+
     &:last-child {
       margin-block-end: 0;
     }
@@ -175,23 +186,10 @@ ul {
 
 ol > li::before {
   content: counter(list) '.';
-  position: absolute;
-  display: block;
-  inset-inline-end: calc(100% - var(--gjListMarkerWidth) + 0.4em);
-  text-align: end;
 }
 
 ul > li::before {
-  --gjSize: 0.4em;
-  content: '';
-  position: absolute;
-  display: block;
-  inset-inline-end: calc(100% - var(--gjListMarkerWidth) + 0.7em);
-  inset-block-start: calc((1em * var(--gjLineHeight) - var(--gjSize)) / 2);
-  inline-size: var(--gjSize);
-  block-size: var(--gjSize);
-  background-color: currentcolor;
-  border-radius: 50%;
+  content: '●';
 }
 
 iframe {
