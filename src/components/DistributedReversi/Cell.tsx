@@ -1,7 +1,7 @@
 import type { MouseEvent } from 'react';
 import { Fragment, useMemo } from 'react';
 import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { IconClass, classnames } from '../../util/classnames.mts';
+import { classnames } from '../../util/classnames.mts';
 import {
   rcCell,
   rcDevMode,
@@ -62,14 +62,7 @@ const Cell = ({ cellId }: CellProps) => {
         {devMode && (
           <text className={style.cellText} x={0} y={0.09}>
             {cell.state}
-            {cell.pending !== null && (
-              <>
-                <tspan className={classnames(IconClass, style.icon)}>
-                  double_arrow
-                </tspan>
-                {cell.pending}
-              </>
-            )}
+            {cell.pending !== null && ` - ${cell.pending}`}
           </text>
         )}
       </>
