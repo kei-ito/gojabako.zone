@@ -36,7 +36,7 @@
     "@nlib/typing": "1.1.0",
     "@storybook/csf": "0.1.1",
     "@types/acorn": "6.0.0",
-    "@types/kuromoji": "0.1.2",
+    "@types/kuromoji": "0.1.3",
     "@types/node": "20.8.10",
     "@types/react": "18.2.36",
     "@typescript-eslint/eslint-plugin": "6.10.0",
