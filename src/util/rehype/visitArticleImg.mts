@@ -1,9 +1,12 @@
 import { readFile } from 'node:fs/promises';
+import * as path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { isNonNegativeSafeInteger, isString } from '@nlib/typing';
 import type { Element } from 'hast';
-import type { MdxJsxTextElement } from 'mdast-util-mdx-jsx';
+import type { MdxJsxTextElementHast } from 'mdast-util-mdx-jsx';
 import type { Position } from 'unist';
 import { SKIP } from 'unist-util-visit';
+import { componentsDir } from '../node/directories.mts';
 import { mdToInlineHast } from '../node/mdToHast.mts';
 import type { VFileLike } from '../unified.mts';
 import { addClass } from './className.mts';
@@ -18,6 +21,9 @@ import { isHastElement } from './isHastElement.mts';
 import { serializePropertyValue } from './serializePropertyValue.mts';
 import type { HastElementVisitor } from './visitHastElement.mts';
 
+const mdxImageComponentFile = new URL('MdxImage', componentsDir);
+
+// eslint-disable-next-line max-lines-per-function
 export const visitArticleImg = (
   file: VFileLike,
   tasks: Array<Promise<void>>,
@@ -33,9 +39,15 @@ export const visitArticleImg = (
     if (!src.startsWith('./')) {
       throw new Error(`InvalidSrc: ${src}`);
     }
-    const elements: Array<Element | MdxJsxTextElement> = [];
+    const elements: Array<Element | MdxJsxTextElementHast> = [];
     if (imageCount === 0) {
-      elements.push(createMdxEsm(`import Image from 'next/image';`));
+      const pathToMdxImage = path.relative(
+        fileURLToPath(new URL('.', pathToFileURL(file.path))),
+        fileURLToPath(mdxImageComponentFile),
+      );
+      elements.push(
+        createMdxEsm(`import { MdxImage as Image } from '${pathToMdxImage}';`),
+      );
     }
     const id = `img${++imageCount}`;
     let name = imported.get(src);

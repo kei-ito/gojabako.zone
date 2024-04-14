@@ -12,7 +12,7 @@ export const getTokenizer = async (
   if (!cached) {
     cached = new Promise<Tokenizer<IpadicFeatures>>((resolve, reject) => {
       // eslint-disable-next-line import/no-named-as-default-member
-      kuromoji.builder({ dicPath }).build((error: unknown, result) => {
+      kuromoji.builder({ dicPath }).build((error: Error | null, result) => {
         if (error) {
           reject(error);
         } else {

@@ -46,6 +46,9 @@ export const listSelectors = function* (
       yield selector;
     }
   }
+  if (!container.nodes) {
+    return;
+  }
   for (const child of container.nodes) {
     if ('nodes' in child) {
       for (const s of listSelectors(child)) {

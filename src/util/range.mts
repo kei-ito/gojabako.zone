@@ -18,7 +18,7 @@ export const parseRangeListString = function* (
       break;
     }
     yield minmax([parseInt(a, 10), parseInt(b, 10)]);
-    pos = (index ?? 0) + length;
+    pos = index + length;
   }
 };
 

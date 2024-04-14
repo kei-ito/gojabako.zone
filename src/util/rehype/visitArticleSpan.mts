@@ -1,20 +1,73 @@
+import type { Element, Node } from 'hast';
+import { find } from 'unist-util-find';
 import { SKIP } from 'unist-util-visit';
 import type { VFileLike } from '../unified.mts';
 import { addClass, hasClass } from './className.mts';
-import { getKatexHtml } from './getKatexHtml.mts';
+import {
+  createFragmentRef,
+  createFragmentTarget,
+  createHastElement,
+} from './createHastElement.mts';
+import { isHastElement } from './isHastElement.mts';
 import type { HastElementVisitor } from './visitHastElement.mts';
+import { visitHastElement } from './visitHastElement.mts';
 
-export const visitArticleSpan =
-  (_file: VFileLike, _tasks: Array<Promise<void>>): HastElementVisitor =>
-  (div, index, parent) => {
-    if (hasClass(div, 'math-inline')) {
-      const katexHtml = getKatexHtml(div);
-      if (!katexHtml) {
-        return null;
+const findKatexHtml = (span: Element) =>
+  find<Element>(
+    span,
+    (n: Element | Node) => isHastElement(n) && hasClass(n, 'katex-html'),
+  );
+
+// eslint-disable-next-line max-lines-per-function
+export const visitArticleSpan = (
+  _file: VFileLike,
+  _tasks: Array<Promise<void>>,
+): HastElementVisitor => {
+  let mathCount = 0;
+  let equationCount = 0;
+  return (span, index, parent) => {
+    if (hasClass(span, 'katex-display')) {
+      const id = `math${++mathCount}`;
+      const katexHtml = findKatexHtml(span);
+      if (katexHtml) {
+        addClass(katexHtml, 'katex');
+        parent.children.splice(
+          index,
+          1,
+          createHastElement(
+            'figure',
+            { dataType: 'math' },
+            createFragmentTarget(id),
+            createHastElement(
+              'figcaption',
+              {},
+              createHastElement('span', {}),
+              createFragmentRef(id),
+            ),
+            katexHtml,
+          ),
+        );
+        visitHastElement(katexHtml, {
+          span: (e) => {
+            if (isHastElement(e, 'span', 'eqn-num')) {
+              const equationId = `eq${++equationCount}`;
+              e.children.push(
+                createFragmentTarget(equationId),
+                createFragmentRef(equationId, `(${equationCount})`),
+              );
+            }
+          },
+        });
       }
-      addClass(katexHtml, 'katex', 'katex-html', 'math-inline');
-      parent.children.splice(index, 1, katexHtml);
+      return SKIP;
+    } else if (hasClass(span, 'katex')) {
+      const katexHtml = findKatexHtml(span);
+      if (katexHtml) {
+        addClass(katexHtml, 'katex');
+        parent.children.splice(index, 1, katexHtml);
+      }
       return SKIP;
     }
     return null;
   };
+};

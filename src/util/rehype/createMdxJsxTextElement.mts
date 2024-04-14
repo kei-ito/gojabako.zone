@@ -2,7 +2,7 @@ import { entries, isString } from '@nlib/typing';
 import { parse } from 'acorn';
 import type { Program } from 'estree';
 import type {
-  MdxJsxTextElement,
+  MdxJsxTextElementHast,
   MdxJsxAttribute,
   MdxJsxAttributeValueExpression,
 } from 'mdast-util-mdx-jsx';
@@ -10,8 +10,8 @@ import type {
 export const createMdxJsxTextElement = (
   component: string,
   attributes: Record<string, string | [string]>,
-  ...children: MdxJsxTextElement['children']
-): MdxJsxTextElement => ({
+  ...children: MdxJsxTextElementHast['children']
+): MdxJsxTextElementHast => ({
   type: 'mdxJsxTextElement',
   name: component,
   attributes: entries(attributes).map<MdxJsxAttribute>(([name, value]) => ({

@@ -28,7 +28,8 @@
       {
         "ignorePseudoClasses": ["global", "local"]
       }
-    ]
+    ],
+    "declaration-block-no-redundant-longhand-properties": null
   },
   "overrides": [
     {

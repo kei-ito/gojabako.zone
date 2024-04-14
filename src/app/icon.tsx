@@ -1,4 +1,4 @@
-import { ImageResponse } from 'next/server';
+import { ImageResponse } from 'next/og';
 import { site } from '../util/site.mts';
 
 export const runtime = 'edge';
