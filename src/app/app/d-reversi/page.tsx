@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { Article } from '../../../components/Article';
 import { DistributedReversi } from '../../../components/DistributedReversi';
 import Readme from './readme.mdx';
@@ -13,7 +14,9 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <main>
-      <DistributedReversi className={style.game} />
+      <Suspense>
+        <DistributedReversi className={style.game} />
+      </Suspense>
       <Article>
         <Readme />
       </Article>
