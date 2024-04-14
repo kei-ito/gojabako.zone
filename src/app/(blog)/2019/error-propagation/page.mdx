@@ -12,15 +12,19 @@ https://maxi.wemo.me/ を更新していたのですがビンまとめの式の�
 
 ある量$x$の測定結果が$N$回分あり、それぞれの測定の精度（分散）$\sigma^2$が得られているとします。
 
-$$
+```math
+\begin{align}
 x_1, x_2, ..., x_N\quad\sigma_{x_1}^2, \sigma_{x_2}^2, ..., \sigma_{x_N}^2
-$$
+\end{align}
+```
 
 $x_i$の加重平均 $u$ がほしいとします。
 
-$$
+```math
+\begin{align}
 u=\frac{\sum_{i=1}^N a_i x_i}{\sum_{i=1}^N a_i}
-$$
+\end{align}
+```
 
 このとき$u$の誤差（分散）が最小になる$a_i$を導出します。
 
@@ -28,49 +32,62 @@ $$
 
 まず、ある$a_i$の組み合わせで$\sigma_u^{2}$が最小になっているなら、そこから$a_i$の値がずれると$\sigma_u^2$は大きくなります。これは$\sigma_u^2$がその$a_i$の組み合わせで極値をとっているということです。
 
-$$
+```math
+\begin{align}
 \forall i \in \{1, 2, ..., N\}: \frac{\partial\sigma_u^2}{\partial a_i}=0
-$$
+\end{align}
+```
 
 次に、$u$の誤差伝播の式は次のようになります。
 
-$$
+```math
+\begin{align}
 \sigma_u^2&=\sum_{i=1}^N\left(\frac{\partial u}{\partial x_i}\right)^2\sigma_{x_i}^2
-$$
+\end{align}
+```
 
 $u$の微分は$(2)$を使って計算できます。
 
-$$
+```math
+\begin{align}
 \frac{\partial u}{\partial x_i}
 &\overset{(2)}{=}\frac{\partial}{\partial x_i}\frac{\sum_{j=1}^N a_j x_j}{\sum_{j=1}^N a_j}\\
 &=\frac{a_i}{\sum_{j=1}^N a_j}
-$$
+\end{align}
+```
 
 すると$(4)$は次のようになります。
 
-$$
+```math
+\begin{align}
 \sigma_u^2
 &=\sum_{i=1}^N\left(\frac{\partial u}{\partial x_i}\right)^2\sigma_{x_i}^2
 \overset{(6)}{=}\frac{\sum_{i=1}^N a_i^2\sigma_{x_i}^2}{\left(\sum_{i=1}^N a_i\right)^2}
-$$
+\end{align}
+```
 
 これを極値の条件$(3)$に代入します。
 
-$$
+```math
+\begin{align}
 \frac{\partial}{\partial a_i}\frac{\sum_{j=1}^N a_j^2\sigma_{x_j}^2}{\left(\sum_{j=1}^N a_j\right)^2}&=0\\
 \frac{\partial}{\partial a_i}\left(\sum_{j=1}^N a_j^2\sigma_{x_j}^2\right)\!\left(\sum_{j=1}^N a_j\right)^{-2}&=0
-$$
+\end{align}
+```
 
 このまま計算すると横幅が足りないので以下の$f, g$を定義します。
 
-$$
+```math
+\begin{align}
 f(a_1,a_2,...,a_N)&=\sum_{j=1}^N a_j^2\sigma_{x_j}^2\\
 g(a_1,a_2,...,a_N)&=\left(\sum_{j=1}^N a_j\right)^{-2}
-$$
+\end{align}
+```
 
 それぞれ微分を計算します。
 
-$$
+```math
+\begin{align}
 \frac{\partial f}{\partial a_i}
 &=\frac{\partial}{\partial a_i}\sum_{j=1}^N a_j^2\sigma_{x_j}^2\\
 &=2a_i\sigma_{x_i}^2\\
@@ -78,11 +95,13 @@ $$
 &=\frac{\partial}{\partial a_i}\left(\sum_{j=1}^N a_j\right)^{-2}\\
 &=-2\left(\sum_{j=1}^N a_j\right)^{-3}\frac{\partial}{\partial a_i}\sum_{j=1}^N a_j\\
 &=-2\left(\sum_{j=1}^N a_j\right)^{-3}
-$$
+\end{align}
+```
 
 $(9)$の続きを計算します。
 
-$$
+```math
+\begin{align}
 \frac{\partial}{\partial a_i}f\cdot g&=0\\
 \left(\frac{\partial f}{\partial a_i}\right)g
 +f\left(\frac{\partial g}{\partial a_i}\right)&=0\\
@@ -91,46 +110,59 @@ $$
 2\left(\sum_{j=1}^N a_j\right)^{-3}\left(a_i\sigma_{x_i}^2\sum_{j=1}^N a_j
 -\sum_{j=1}^N a_j^2\sigma_{x_j}^2\right)&=0\\
 a_i\sigma_{x_i}^2\sum_{j=1}^N a_j-\sum_{j=1}^N a_j^2\sigma_{x_j}^2&=0
-$$
+\end{align}
+```
 
 $(21)$を$a_i$について整理します。
 
-$$
+```math
+\begin{align}
 a_i&=\frac{1}{\sigma_{x_i}^2}\frac{\sum_{j=1}^N a_j^2\sigma_{x_j}^2}{\sum_{j=1}^N a_j}
-$$
+\end{align}
+```
 
 両辺を$i=1,2,...,N$について足し、$\textstyle\sum_{j=1}^N a_j^2\sigma_{x_j}^2$について整理します。
 
-$$
+```math
+\begin{align}
 \sum_{i=1}^N a_i&=\sum_{i=1}^N\frac{1}{\sigma_{x_i}^2}\frac{\sum_{j=1}^N a_j^2\sigma_{x_j}^2}{\sum_{j=1}^N a_j}\\
 \sum_{j=1}^N a_j^2\sigma_{x_j}^2&=\left(\sum_{j=1}^N a_j\right)^2\left(\sum_{j=1}^N\frac{1}{\sigma_{x_j}^2}\right)^{-1}
-$$
+\end{align}
+```
 
 $(24)$を$(22)$に代入します。
 
-$$
+```math
+\begin{align}
 a_i&\overset{(24)}{=}\frac{1}{\sigma_{x_i}^2}\left(\sum_{j=1}^N a_j\right)\left(\sum_{j=1}^N\frac{1}{\sigma_{x_j}^2}\right)^{-1}
-$$
+\end{align}
+```
 
 $(24)$を$(7)$に代入します。
 
-$$
+```math
+\begin{align}
 \sigma_u^2
 &=\frac{\sum_{i=1}^N a_i^2\sigma_{x_i}^2}{\left(\sum_{i=1}^N a_i\right)^2}
 \overset{(24)}{=}\left(\sum_{j=1}^N\frac{1}{\sigma_{x_j}^2}\right)^{-1}
-$$
+\end{align}
+```
 
 ## 結論
 
 ある量$x$の複数回の測定結果$x_i$とその分散$\sigma_{x_i}^2$が得られており、その加重平均
 
-$$
+```math
+\begin{align}
 u&=\frac{\sum_{i=1}^N a_i x_i}{\sum_{i=1}^N a_i}
-$$
+\end{align}
+```
 
 の誤差（分散）が最小になる$a_i$とそのときの分散$\sigma_u^2$は次の式で表されます。
 
-$$
+```math
+\begin{align}
 a_i&=\frac{1}{\sigma_{x_i}^2}\left(\sum_{j=1}^N a_j\right)\left(\sum_{j=1}^N\frac{1}{\sigma_{x_j}^2}\right)^{-1}\\
 \sigma_u^2&=\left(\sum_{j=1}^N\frac{1}{\sigma_{x_j}^2}\right)^{-1}
-$$
+\end{align}
+```

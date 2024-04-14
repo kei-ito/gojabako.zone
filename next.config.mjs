@@ -7,15 +7,14 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import { rehypeArticle } from './src/unified/rehypeArticle.mts';
 import { rehypeEmbed } from './src/unified/rehypeEmbed.mts';
-import { remarkArticle } from './src/unified/remarkArticle.mts';
 
 const withMDX = mdx({
   options: {
-    remarkPlugins: [remarkArticle, remarkGfm, remarkMath],
+    remarkPlugins: [remarkGfm, remarkMath],
     rehypePlugins: [
       [rehypeHighlight, { languages: { ...all, terminal: all.bash } }],
       rehypeSlug,
-      rehypeKatex,
+      [rehypeKatex, { output: 'html' }],
       rehypeEmbed,
       rehypeArticle,
     ],
