@@ -1,4 +1,5 @@
 import { pathToFileURL } from 'node:url';
+import { isString } from '@nlib/typing';
 import type { Element, Root, RootContent } from 'hast';
 import type { MdxjsEsm } from 'mdast-util-mdxjs-esm';
 import { getPageFromFileUrl } from '../getPage.mts';
@@ -27,9 +28,17 @@ export const insertArticleData = (root: RootLike, file: VFileLike) => {
   }
 };
 
+const getOriginalLocation = (page: PageData) => {
+  if (isString(page.other?.originalLocation)) {
+    return page.other.originalLocation;
+  }
+  return null;
+};
+
 const listMetaElements = function* (
   page: PageData,
 ): Generator<Element | string> {
+  const originalLocation = getOriginalLocation(page);
   yield createHastElement(
     'span',
     { title: page.publishedAt },
@@ -38,7 +47,7 @@ const listMetaElements = function* (
       { dateTime: page.publishedAt },
       toDateString(page.publishedAt),
     ),
-    'に公開',
+    originalLocation ? `に ${originalLocation} で公開` : 'に公開',
   );
   if (page.publishedAt !== page.updatedAt) {
     yield createHastElement(

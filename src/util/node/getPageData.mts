@@ -34,6 +34,7 @@ export const getPageData = async (file: URL): Promise<PageData> => {
   return {
     ...metadata,
     ...history,
+    publishedAt: getPublishedAt(history, metadata),
     title: [...listPhrases(tokenizer, title)],
     path: pagePath,
     iri: site.iri(pagePath),
@@ -82,4 +83,16 @@ const getCommits = async (file: URL) => {
     updatedAt: new Date(updatedAt).toISOString(),
     commits: commits.size,
   };
+};
+
+const getPublishedAt = (
+  history: { publishedAt: string },
+  metadata: Metadata | null,
+) => {
+  const originalPublishedAt = metadata?.other?.originalPublishedAt;
+  const originalLocation = metadata?.other?.originalLocation;
+  if (isString(originalPublishedAt) && isString(originalLocation)) {
+    return originalPublishedAt;
+  }
+  return history.publishedAt;
 };
