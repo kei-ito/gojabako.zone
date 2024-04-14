@@ -41,7 +41,7 @@
     "@types/react": "18.2.78",
     "@typescript-eslint/eslint-plugin": "6.13.2",
     "@typescript-eslint/parser": "6.13.2",
-    "acorn": "8.11.2",
+    "acorn": "8.11.3",
     "chokidar": "3.5.3",
     "esbuild-loader": "4.0.2",
     "eslint": "8.55.0",
