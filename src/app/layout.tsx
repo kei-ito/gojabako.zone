@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unassigned-import, @next/next/google-font-display, @next/next/no-page-custom-font */
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import type { PropsWithChildren } from 'react';
 import { site } from '../util/site.mts';
 import './globals.scss';
@@ -9,8 +9,11 @@ export const metadata: Metadata = {
   metadataBase: site.baseUrl,
   title: { template: `%s | ${site.name}`, default: site.name },
   applicationName: site.name,
-  themeColor: 'hsla(0,0%,100%,0.8)',
   authors: [site.author],
+};
+
+export const viewport: Viewport = {
+  themeColor: 'hsla(0,0%,100%,0.8)',
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {
