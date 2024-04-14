@@ -68,9 +68,11 @@
     "remark-gfm": "4.0.0",
     "remark-math": "6.0.0",
     "sass": "1.75.0",
+    "sharp": "0.33.3",
     "stylelint": "16.3.1",
     "stylelint-config-standard-scss": "13.1.0",
     "typescript": "5.4.5",
+    "unist-util-find": "3.0.0",
     "unist-util-visit": "5.0.0",
     "vlq": "2.0.4"
   },
@@ -86,8 +88,5 @@
     "ignoreDeps": [
       "next"
     ]
-  },
-  "devDependencies": {
-    "unist-util-find": "3.0.0"
   }
 }
