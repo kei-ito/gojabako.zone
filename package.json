@@ -68,8 +68,8 @@
     "remark-gfm": "3.0.1",
     "remark-math": "5.1.1",
     "sass": "1.75.0",
-    "stylelint": "15.10.3",
-    "stylelint-config-standard-scss": "11.1.0",
+    "stylelint": "16.3.1",
+    "stylelint-config-standard-scss": "13.1.0",
     "typescript": "5.4.5",
     "unist-util-visit": "5.0.0",
     "vlq": "2.0.4"
