@@ -40,7 +40,7 @@ const BaseWidthSelector = ({ parent }: BaseWidthSelectorProps) => {
     if (baseWidth === 'default') {
       url.searchParams.delete('w');
     } else {
-      url.searchParams.set('w', `${baseWidth}`);
+      url.searchParams.set('w', baseWidth);
     }
     if (getCurrentUrl().href !== url.href) {
       history.replaceState(null, '', url);

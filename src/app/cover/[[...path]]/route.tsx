@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import { notFound } from 'next/navigation';
+import { ImageResponse } from 'next/og';
 import type { NextRequest } from 'next/server';
-import { ImageResponse } from 'next/server';
 import type { FontStyle, FontWeight } from '../../../util/fontFace.mts';
 import {
   listLines,
