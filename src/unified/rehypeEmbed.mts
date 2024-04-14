@@ -1,6 +1,9 @@
 import { isNonNegativeSafeInteger, isString } from '@nlib/typing';
 import type { Element, Root } from 'hast';
-import type { MdxJsxFlowElement, MdxJsxTextElement } from 'mdast-util-mdx-jsx';
+import type {
+  MdxJsxFlowElementHast,
+  MdxJsxTextElementHast,
+} from 'mdast-util-mdx-jsx';
 import { SKIP } from 'unist-util-visit';
 import { getSingle } from '../util/getSingle.mts';
 import { embedTwitter } from '../util/rehype/embedTwitter.mts';
@@ -11,8 +14,8 @@ import type { VFileLike } from '../util/unified.mts';
 
 declare module 'hast' {
   interface RootContentMap {
-    mdxJsxFlowElement: MdxJsxFlowElement;
-    mdxJsxTextElement: MdxJsxTextElement;
+    mdxJsxFlowElement: MdxJsxFlowElementHast;
+    mdxJsxTextElement: MdxJsxTextElementHast;
   }
 }
 
