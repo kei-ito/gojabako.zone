@@ -86,5 +86,8 @@
     "ignoreDeps": [
       "next"
     ]
+  },
+  "devDependencies": {
+    "unist-util-find": "3.0.0"
   }
 }

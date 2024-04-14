@@ -2,6 +2,7 @@
 import type {
   Element,
   ElementContent,
+  Node,
   Root,
   RootContent,
   Parent,
@@ -14,8 +15,16 @@ interface ElementWithClassName<T extends string> extends Element {
   properties: Properties & { className: Array<string> };
 }
 
-type Input = ElementContent | Parent | Root | RootContent | null | undefined;
+type Input =
+  | ElementContent
+  | Node
+  | Parent
+  | Root
+  | RootContent
+  | null
+  | undefined;
 
+export function isHastElement(element: Input): element is Element;
 export function isHastElement<T extends string>(
   element: Input,
   tagName: T,
@@ -27,10 +36,13 @@ export function isHastElement<T extends string>(
 ): element is ElementWithClassName<T>;
 export function isHastElement<T extends string>(
   element: Input,
-  tagName: T,
+  tagName?: T,
   ...classNames: Array<string>
 ) {
-  if (!element || !('tagName' in element) || element.tagName !== tagName) {
+  if (!element || !('tagName' in element)) {
+    return false;
+  }
+  if (tagName && element.tagName !== tagName) {
     return false;
   }
   return classNames.length === 0 || hasClass(element, ...classNames);

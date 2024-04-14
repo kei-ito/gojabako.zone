@@ -194,10 +194,6 @@
       }
     }
 
-    .math-inline {
-      margin-inline: 0.2em;
-    }
-
     .katex-html {
       font-size: 115%;
 
@@ -205,10 +201,6 @@
         margin-inline: unset;
         vertical-align: unset;
       }
-    }
-
-    .katex-inline {
-      margin-inline: 0.1em;
     }
 
     figcaption {
@@ -291,7 +283,7 @@
           overflow-x: auto;
           overflow-y: hidden;
 
-          & > .base {
+          .base {
             justify-self: center;
             flex-grow: 1;
             display: inline-flex;
