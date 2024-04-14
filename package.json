@@ -70,7 +70,7 @@
     "sass": "1.75.0",
     "stylelint": "15.10.3",
     "stylelint-config-standard-scss": "11.1.0",
-    "typescript": "5.3.3",
+    "typescript": "5.4.5",
     "unist-util-visit": "5.0.0",
     "vlq": "2.0.4"
   },
