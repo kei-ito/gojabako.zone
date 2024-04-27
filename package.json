@@ -28,7 +28,7 @@
   "dependencies": {
     "@fontsource/noto-sans-jp": "5.0.19",
     "@mdx-js/loader": "3.0.1",
-    "@next/mdx": "14.2.2",
+    "@next/mdx": "14.2.3",
     "@nlib/eslint-config": "3.20.5",
     "@nlib/githooks": "0.2.0",
     "@nlib/lint-commit": "1.0.1",
