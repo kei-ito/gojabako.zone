@@ -59,7 +59,7 @@
     "postcss": "8.4.38",
     "postcss-scss": "4.0.9",
     "postcss-selector-parser": "6.1.0",
-    "prettier": "3.3.0",
+    "prettier": "3.3.1",
     "recoil": "0.7.7",
     "rehype-highlight": "7.0.0",
     "rehype-katex": "7.0.0",
