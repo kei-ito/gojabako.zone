@@ -71,7 +71,7 @@
     "sharp": "0.33.4",
     "stylelint": "16.6.1",
     "stylelint-config-standard-scss": "13.1.0",
-    "typescript": "5.4.5",
+    "typescript": "5.5.2",
     "unist-util-find": "3.0.0",
     "unist-util-visit": "5.0.0",
     "vlq": "2.0.4"
