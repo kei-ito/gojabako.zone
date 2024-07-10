@@ -32,7 +32,7 @@
     "@nlib/eslint-config": "3.20.5",
     "@nlib/githooks": "0.2.0",
     "@nlib/lint-commit": "1.0.1",
-    "@nlib/tsm": "0.1.1",
+    "@nlib/tsm": "0.1.3",
     "@nlib/typing": "1.1.0",
     "@storybook/csf": "0.1.11",
     "@types/acorn": "6.0.0",
