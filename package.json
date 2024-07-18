@@ -43,7 +43,7 @@
     "@typescript-eslint/parser": "7.16.0",
     "acorn": "8.12.1",
     "chokidar": "3.6.0",
-    "esbuild-loader": "4.2.0",
+    "esbuild-loader": "4.2.1",
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.5",
     "hast-util-from-html": "2.0.1",
