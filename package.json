@@ -45,7 +45,7 @@
     "chokidar": "3.6.0",
     "esbuild-loader": "4.2.2",
     "eslint": "8.57.0",
-    "eslint-config-next": "14.2.6",
+    "eslint-config-next": "14.2.7",
     "hast-util-from-html": "2.0.2",
     "hast-util-to-string": "3.0.0",
     "kuromoji": "0.1.2",
