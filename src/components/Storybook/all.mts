@@ -11,7 +11,7 @@ type Stories = Record<string, StoryObj>;
 export const storyGroups = new Map<string, Stories>();
 storyGroups.set('Button', g1 as Stories);
 storyGroups.set('CryptoKey', g2 as Stories);
-storyGroups.set('DataView', g3 as Stories);
+storyGroups.set('DataViewer', g3 as Stories);
 storyGroups.set('LogSlider', g4 as Stories);
 storyGroups.set('Select', g5 as Stories);
 storyGroups.set('StoryElement', g6 as Stories);
