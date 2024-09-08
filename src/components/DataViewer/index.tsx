@@ -1,16 +1,16 @@
-import { entries, getType, isArray, isObject, isString } from '@nlib/typing';
-import type { HTMLAttributes, ReactNode } from 'react';
-import { Fragment } from 'react';
-import { classnames } from '../../util/classnames.mts';
-import { serializeFileSize } from '../../util/serializeFileSize.mts';
-import * as style from './style.module.scss';
+import { entries, getType, isArray, isObject, isString } from "@nlib/typing";
+import type { HTMLAttributes, ReactNode } from "react";
+import { Fragment } from "react";
+import { classnames } from "../../util/classnames.mts";
+import { serializeFileSize } from "../../util/serializeFileSize.mts";
+import * as style from "./style.module.scss";
 
-export interface DataViewProps<T = unknown>
+export interface DataViewerProps<T = unknown>
   extends HTMLAttributes<HTMLElement> {
   value: T;
 }
 
-export const DataView = <T,>({ value, ...props }: DataViewProps<T>) => (
+export const DataViewer = <T,>({ value, ...props }: DataViewerProps<T>) => (
   <Value value={value} className={style.container} depth={0} ddProps={props} />
 );
 
@@ -21,7 +21,6 @@ interface ValueProps<T> {
   ddProps?: HTMLAttributes<HTMLElement>;
 }
 
-// eslint-disable-next-line max-lines-per-function
 const Value = <T,>({
   value,
   className,
@@ -107,7 +106,7 @@ const Value = <T,>({
     }
     const type = getType(value);
     let v: Record<string, unknown> = value;
-    if (type === 'CryptoKey') {
+    if (type === "CryptoKey") {
       v = {
         type: v.type,
         algorithm: v.algorithm,
@@ -121,13 +120,13 @@ const Value = <T,>({
       </dd>
     );
   }
-  let s = '';
-  if (value === Infinity) {
-    s = '+Infinity';
-  } else if (value === -Infinity) {
-    s = '-Infinity';
+  let s = "";
+  if (value === Number.POSITIVE_INFINITY) {
+    s = "+Infinity";
+  } else if (value === Number.NEGATIVE_INFINITY) {
+    s = "-Infinity";
   } else if (Number.isNaN(value)) {
-    s = 'NaN';
+    s = "NaN";
   } else if (isString(value)) {
     s = value;
   } else {
@@ -178,7 +177,7 @@ const BufferView = ({ type, buffer, depth }: BufferViewProps) => {
   const showAsciiView = view instanceof Uint8Array;
   const listLines = function* (): Generator<ReactNode> {
     for (const [start, , line, c] of listBufferLines(view, 16)) {
-      const title = `0x${start.toString(16).padStart(2, '0')}`;
+      const title = `0x${start.toString(16).padStart(2, "0")}`;
       yield (
         <dt key={`${title}head`} className={classnames(c, style.buffer)}>
           {title}
@@ -191,20 +190,24 @@ const BufferView = ({ type, buffer, depth }: BufferViewProps) => {
         >
           {line.map((v, index) => {
             const pos = start + index;
+            const key = `line-${index}`;
             return (
-              <span key={index} title={`0x${pos.toString(16)} (${pos})`}>
-                {0 <= v ? v.toString(16).padStart(2, '0') : '  '}
+              <span key={key} title={`0x${pos.toString(16)} (${pos})`}>
+                {0 <= v ? v.toString(16).padStart(2, "0") : "  "}
               </span>
             );
           })}
           {showAsciiView && (
             <>
               <hr />
-              {line.map((v, index) => (
-                <span className={style.ascii} key={index}>
-                  {0 <= v ? String.fromCodePoint(v) : ' '}
-                </span>
-              ))}
+              {line.map((v, index) => {
+                const key = `ascii-${index}`;
+                return (
+                  <span className={style.ascii} key={key}>
+                    {0 <= v ? String.fromCodePoint(v) : " "}
+                  </span>
+                );
+              })}
             </>
           )}
         </dd>

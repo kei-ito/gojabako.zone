@@ -25,7 +25,6 @@ export const getPageData = async (file: URL): Promise<PageData> => {
   let title = metadata?.title ?? knownTitles.get(pagePath);
   if (!isString(title)) {
     const relativePath = file.pathname.slice(rootDir.pathname.length);
-    // eslint-disable-next-line no-console
     console.warn(
       new Error(`${title ? 'Invalid' : 'No'}Title: ${relativePath}`),
     );

@@ -1,11 +1,10 @@
-/* eslint-disable no-console */
-'use client';
-import type { MouseEvent, PropsWithChildren } from 'react';
-import { useCallback, useEffect, useState } from 'react';
-import { Buttons, PrimaryButton } from '../Button';
-import { DataView } from '../DataView';
-import { FieldSet } from '../Form';
-import * as style from './style.module.scss';
+"use client";
+import type { MouseEvent, PropsWithChildren } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Buttons, PrimaryButton } from "../Button";
+import { DataViewer } from "../DataViewer";
+import { FieldSet } from "../Form";
+import * as style from "./style.module.scss";
 
 interface KeyViewProps {
   name: string;
@@ -14,7 +13,6 @@ interface KeyViewProps {
   noExtract?: boolean;
 }
 
-// eslint-disable-next-line max-lines-per-function
 export const CryptoKeyView = ({
   name,
   keyObject,
@@ -30,7 +28,7 @@ export const CryptoKeyView = ({
       }
       Promise.resolve()
         .then(async () => {
-          setJwk(await crypto.subtle.exportKey('jwk', keyObject));
+          setJwk(await crypto.subtle.exportKey("jwk", keyObject));
         })
         .catch(setJwk);
     },
@@ -46,14 +44,14 @@ export const CryptoKeyView = ({
   return (
     <FieldSet className={style.container}>
       <legend>{name}</legend>
-      <DataView value={keyObject} className={style.data} />
+      <DataViewer value={keyObject} className={style.data} />
       {children}
       {extractButton && (
         <Buttons>
           <PrimaryButton
             type="button"
             onClick={extractKey}
-            style={{ justifySelf: 'start' }}
+            style={{ justifySelf: "start" }}
           >
             {name} を JWK にエクスポートする
           </PrimaryButton>
@@ -62,7 +60,7 @@ export const CryptoKeyView = ({
       {jwk && (
         <>
           <p>JWKのエクスポート結果</p>
-          <DataView value={jwk} className={style.data} />
+          <DataViewer value={jwk} className={style.data} />
         </>
       )}
     </FieldSet>

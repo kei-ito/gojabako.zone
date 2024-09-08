@@ -1,6 +1,6 @@
-import type { StoryObj } from '@storybook/react';
-import { StoryElement } from '../StoryElement';
-import { Toggle } from '.';
+import type { StoryObj } from "@storybook/react";
+import { StoryElement } from "../StoryElement";
+import { Toggle } from ".";
 
 export const Default: StoryObj = {
   render: () => (

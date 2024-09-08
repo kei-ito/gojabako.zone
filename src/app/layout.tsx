@@ -1,9 +1,8 @@
-/* eslint-disable import/no-unassigned-import, @next/next/google-font-display, @next/next/no-page-custom-font */
-import type { Metadata, Viewport } from 'next';
-import type { PropsWithChildren } from 'react';
-import { site } from '../util/site.mts';
-import './globals.scss';
-import './hljs.scss';
+import type { Metadata, Viewport } from "next";
+import type { PropsWithChildren } from "react";
+import { site } from "../util/site.mts";
+import "./globals.scss";
+import "./hljs.scss";
 
 export const metadata: Metadata = {
   metadataBase: site.baseUrl,
@@ -13,12 +12,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: 'hsla(0,0%,100%,0.8)',
+  themeColor: "hsla(0,0%,100%,0.8)",
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html>
+    <html lang="ja">
       <head>
         <link
           rel="stylesheet"
@@ -30,7 +29,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
-          crossOrigin={''}
+          crossOrigin={""}
         />
         <link
           href="https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap"
@@ -40,7 +39,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
           rel="stylesheet"
         />
-        <style>{'.material-symbols-rounded{font-size: inherit}'}</style>
+        <style>{".material-symbols-rounded{font-size: inherit}"}</style>
       </head>
       <body>{children}</body>
     </html>

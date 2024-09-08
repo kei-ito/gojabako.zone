@@ -2,9 +2,9 @@ import type {
   FieldsetHTMLAttributes,
   FormHTMLAttributes,
   PropsWithChildren,
-} from 'react';
-import { classnames } from '../../util/classnames.mts';
-import * as style from './style.module.scss';
+} from "react";
+import { classnames } from "../../util/classnames.mts";
+import * as style from "./style.module.scss";
 
 export const Form = (
   props: PropsWithChildren<FormHTMLAttributes<HTMLFormElement>>,

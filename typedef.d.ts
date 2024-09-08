@@ -1,5 +1,3 @@
-/* eslint-disable import/unambiguous */
-
 declare module '@storybook/react' {
   import type { StoryAnnotations } from '@storybook/csf';
   import type { ComponentType, ReactElement } from 'react';

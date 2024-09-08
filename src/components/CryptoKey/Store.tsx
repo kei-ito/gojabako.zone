@@ -1,14 +1,13 @@
-/* eslint-disable no-console */
-'use client';
-import type { FormEvent } from 'react';
-import { useCallback, useEffect, useState } from 'react';
-import { Buttons, PrimaryButton } from '../Button';
-import { Form } from '../Form';
-import { generateKeyPair, storeKeyPair, loadKeyPair } from './util.mts';
-import { CryptoKeyView } from './View';
+"use client";
+import type { FormEvent } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Buttons, PrimaryButton } from "../Button";
+import { Form } from "../Form";
+import { generateKeyPair, storeKeyPair, loadKeyPair } from "./util.mts";
+import { CryptoKeyView } from "./View";
 
 export const CryptoKeyStore = () => {
-  const keyId = 'testKeyPair';
+  const keyId = "testKeyPair";
   const [keyPair, setKeyPair] = useState<CryptoKeyPair | null>(null);
   const onSubmit = useCallback((event: FormEvent) => {
     event.preventDefault();
@@ -27,7 +26,7 @@ export const CryptoKeyStore = () => {
       <p>鍵ペアをIndexedDBに保管します。</p>
       <Buttons>
         <PrimaryButton type="submit">
-          {keyPair ? '鍵ペアを更新して保管する' : '鍵ペアを作成して保管する'}
+          {keyPair ? "鍵ペアを更新して保管する" : "鍵ペアを作成して保管する"}
         </PrimaryButton>
       </Buttons>
       {keyPair && (

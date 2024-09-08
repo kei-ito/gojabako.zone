@@ -1,6 +1,6 @@
-import { pageList } from '../../util/pageList.mts';
-import type { PageData } from '../../util/type.mts';
-import { PageLink } from '../PageLink';
+import { pageList } from "../../util/pageList.mts";
+import type { PageData } from "../../util/type.mts";
+import { PageLink } from "../PageLink";
 
 export const SiteMap = () => [...listGroups()];
 
@@ -15,7 +15,6 @@ const listGroups = function* () {
     const [{ group }] = buffer;
     yield <h2 key={`${group}-heading`}>{group}</h2>;
     yield <PageList key={`${group}-pages`} pages={buffer} />;
-    // eslint-disable-next-line require-atomic-updates
     buffer = [];
   };
   for (const page of pageList) {

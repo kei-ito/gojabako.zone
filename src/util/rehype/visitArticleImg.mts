@@ -23,7 +23,6 @@ import type { HastElementVisitor } from './visitHastElement.mts';
 
 const mdxImageComponentFile = new URL('MdxImage', componentsDir);
 
-// eslint-disable-next-line max-lines-per-function
 export const visitArticleImg = (
   file: VFileLike,
   tasks: Array<Promise<void>>,

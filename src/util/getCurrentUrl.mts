@@ -9,7 +9,6 @@ interface Fn {
 
 export const getCurrentUrl: Fn = () => {
   if (isClient) {
-    // eslint-disable-next-line no-restricted-globals
     return new URL(location.href);
   }
   const { defaultSearchParams } = getCurrentUrl;

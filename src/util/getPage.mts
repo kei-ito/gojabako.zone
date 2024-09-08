@@ -1,4 +1,3 @@
-/* eslint-disable func-style */
 import { rootDir } from './node/directories.mts';
 import { pageList } from './pageList.mts';
 import type { PageData } from './type.mts';

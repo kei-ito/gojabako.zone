@@ -1,4 +1,3 @@
-/* eslint-disable import/no-named-as-default-member */
 import ts from 'typescript';
 
 export const objectLiteralToValue = (literal: ts.ObjectLiteralExpression) => {
@@ -58,7 +57,6 @@ export const literalToValue = (literal: ts.Expression) => {
 };
 
 export const logTsNode = (node: ts.Node) => {
-  // eslint-disable-next-line no-console
   console.info({ ...node, kind: lookupTsKind(node), parent: null });
 };
 

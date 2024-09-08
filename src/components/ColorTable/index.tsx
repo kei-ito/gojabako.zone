@@ -1,6 +1,6 @@
-import type { CSSProperties, HTMLAttributes } from 'react';
-import { classnames } from '../../util/classnames.mts';
-import * as style from './style.module.scss';
+import type { CSSProperties, HTMLAttributes } from "react";
+import { classnames } from "../../util/classnames.mts";
+import * as style from "./style.module.scss";
 
 type ColorFn = (a: number, b: number, c: number) => [string, string];
 
@@ -27,7 +27,7 @@ interface Item {
 }
 
 export const hsl: Item = {
-  url: 'https://developer.mozilla.org/docs/Web/CSS/color_value/hsl',
+  url: "https://developer.mozilla.org/docs/Web/CSS/color_value/hsl",
   fn: (a, b, c) => {
     const p = (20 + 70 * a).toFixed(0);
     const q = (20 + 60 * b).toFixed(0);
@@ -37,7 +37,7 @@ export const hsl: Item = {
 };
 
 export const hwb: Item = {
-  url: 'https://developer.mozilla.org/docs/Web/CSS/color_value/hwb',
+  url: "https://developer.mozilla.org/docs/Web/CSS/color_value/hwb",
   fn: (a, b, c) => {
     const p = (10 + 50 * b).toFixed(0);
     const q = (10 + 40 * a).toFixed(0);
@@ -47,7 +47,7 @@ export const hwb: Item = {
 };
 
 export const lch: Item = {
-  url: 'https://developer.mozilla.org/docs/Web/CSS/color_value/lch',
+  url: "https://developer.mozilla.org/docs/Web/CSS/color_value/lch",
   fn: (a, b, c) => {
     const p = (30 + 60 * a).toFixed(0);
     const q = (10 + 80 * b).toFixed(0);
@@ -57,7 +57,7 @@ export const lch: Item = {
 };
 
 export const oklch: Item = {
-  url: 'https://developer.mozilla.org/docs/Web/CSS/color_value/oklch',
+  url: "https://developer.mozilla.org/docs/Web/CSS/color_value/oklch",
   fn: (a, b, c) => {
     const p = (30 + 60 * a).toFixed(0);
     const q = (0.1 + 0.3 * b).toFixed(2);
@@ -79,7 +79,7 @@ const round = (ratio: number, r: number, precision: number) => {
 };
 
 export const lab: Item = {
-  url: 'https://developer.mozilla.org/docs/Web/CSS/color_value/lab',
+  url: "https://developer.mozilla.org/docs/Web/CSS/color_value/lab",
   fn: (a, b, c) => {
     const [x, y] = round(c, 100 * (0.3 + 0.6 * b), 0);
     const t = `${(100 * (0.3 + 0.6 * a)).toFixed(0)}% ${x} ${y}`;
@@ -88,7 +88,7 @@ export const lab: Item = {
 };
 
 export const oklab: Item = {
-  url: 'https://developer.mozilla.org/docs/Web/CSS/color_value/oklab',
+  url: "https://developer.mozilla.org/docs/Web/CSS/color_value/oklab",
   fn: (a, b, c) => {
     const [x, y] = round(c, 0.5 * (0.3 + 0.6 * b), 2);
     const t = `${(100 * (0.3 + 0.6 * a)).toFixed(0)}% ${x} ${y}`;
@@ -101,7 +101,7 @@ const listColors = function* (color: ColorFn, n: number, m: number) {
     for (let b = 0; b <= n; b++) {
       for (let i = 0; i < m; i++) {
         const [t, c] = color(a / n, b / n, i / m);
-        const cellStyle = { '--gjColor': c };
+        const cellStyle = { "--gjColor": c };
         yield (
           <div
             title={c}

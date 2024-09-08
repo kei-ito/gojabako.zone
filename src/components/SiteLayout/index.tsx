@@ -1,7 +1,7 @@
-import type { PropsWithChildren } from 'react';
-import { SiteFooter } from '../SiteFooter';
-import type { SiteHeaderProps } from '../SiteHeader';
-import { SiteHeader } from '../SiteHeader';
+import type { PropsWithChildren } from "react";
+import { SiteFooter } from "../SiteFooter";
+import type { SiteHeaderProps } from "../SiteHeader";
+import { SiteHeader } from "../SiteHeader";
 
 interface SiteLayoutProps extends SiteHeaderProps {}
 

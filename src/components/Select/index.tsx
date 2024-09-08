@@ -1,6 +1,6 @@
-import type { PropsWithChildren, SelectHTMLAttributes } from 'react';
-import { classnames } from '../../util/classnames.mts';
-import * as style from './style.module.scss';
+import type { PropsWithChildren, SelectHTMLAttributes } from "react";
+import { classnames } from "../../util/classnames.mts";
+import * as style from "./style.module.scss";
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {}
 

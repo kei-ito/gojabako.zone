@@ -1,10 +1,10 @@
-'use client';
-import { ensure, isFiniteNumber } from '@nlib/typing';
-import type { ChangeEvent, InputHTMLAttributes } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { clamp } from '../../util/clamp.mts';
-import type { Range } from '../../util/range.mts';
-import { useLastValue } from '../use/LastValue.mts';
+"use client";
+import { ensure, isFiniteNumber } from "@nlib/typing";
+import type { ChangeEvent, InputHTMLAttributes } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { clamp } from "../../util/clamp.mts";
+import type { Range } from "../../util/range.mts";
+import { useLastValue } from "../use/LastValue.mts";
 
 const v = (value: ReadonlyArray<string> | number | string): number =>
   ensure(Number(value), isFiniteNumber);
@@ -19,12 +19,11 @@ export const toLinearValue = (ratio: number, [min, max]: Range) => {
 };
 export const defaultLinearRange = [0.1, 2];
 export interface LogSliderProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'max' | 'min' | 'type'> {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "max" | "min" | "type"> {
   min: number;
   max: number;
   onChangeValue?: (value: number) => void;
 }
-// eslint-disable-next-line max-lines-per-function
 export const LogSlider = ({
   min,
   max,
@@ -46,24 +45,18 @@ export const LogSlider = ({
     },
     [onChangeFn],
   );
-  useEffect(
-    () => {
-      if (lastValue !== null && value !== lastValue && onChangeValue) {
-        onChangeValue(value);
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [value],
-  );
-  useEffect(
-    () => {
-      if (lastValue !== null) {
-        setRatio(toLogValue(v(zValue), range));
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [zValue, range],
-  );
+  // biome-ignore lint/correctness/useExhaustiveDependencies: valueのみ見る
+  useEffect(() => {
+    if (lastValue !== null && value !== lastValue && onChangeValue) {
+      onChangeValue(value);
+    }
+  }, [value]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: zValue,rangeのみ見る
+  useEffect(() => {
+    if (lastValue !== null) {
+      setRatio(toLogValue(v(zValue), range));
+    }
+  }, [zValue, range]);
   return (
     <input
       {...props}

@@ -18,7 +18,6 @@ const findKatexHtml = (span: Element) =>
     (n: Element | Node) => isHastElement(n) && hasClass(n, 'katex-html'),
   );
 
-// eslint-disable-next-line max-lines-per-function
 export const visitArticleSpan = (
   _file: VFileLike,
   _tasks: Array<Promise<void>>,

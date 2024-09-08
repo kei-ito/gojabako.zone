@@ -1,7 +1,7 @@
-'use client';
-import { useCallback, useState } from 'react';
-import { SecondaryButton } from '../Button';
-import style from './style.module.scss';
+"use client";
+import { useCallback, useState } from "react";
+import { SecondaryButton } from "../Button";
+import style from "./style.module.scss";
 
 export const Counter = () => {
   const [count, setCount] = useState(100);

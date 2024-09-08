@@ -1,6 +1,6 @@
-import type { StoryObj } from '@storybook/react';
-import { StoryElement } from '../StoryElement';
-import { LogSlider } from '.';
+import type { StoryObj } from "@storybook/react";
+import { StoryElement } from "../StoryElement";
+import { LogSlider } from ".";
 
 export const Default: StoryObj = {
   render: () => (

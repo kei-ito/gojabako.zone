@@ -33,7 +33,6 @@ const listFragments = function* (
   let buffer: Array<Element | Text> = [];
   const flush = function* (): Generator<Array<Element | Text>> {
     yield buffer.filter((e) => !isEmptyText(e));
-    // eslint-disable-next-line require-atomic-updates
     buffer = [];
   };
   for (const child of node.children) {

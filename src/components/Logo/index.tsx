@@ -1,7 +1,7 @@
-import type { PropsWithChildren, SVGProps } from 'react';
+import type { PropsWithChildren, SVGProps } from "react";
 
 export const Logo = (
-  props: PropsWithChildren<Omit<SVGProps<SVGSVGElement>, 'viewBox'>>,
+  props: PropsWithChildren<Omit<SVGProps<SVGSVGElement>, "viewBox">>,
 ) => (
   <svg {...props} viewBox="0 0 8 4" aria-hidden="true">
     <path

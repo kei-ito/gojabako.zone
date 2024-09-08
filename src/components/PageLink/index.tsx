@@ -1,7 +1,7 @@
-import { isString } from '@nlib/typing';
-import Link from 'next/link';
-import type { PageData } from '../../util/type.mts';
-import * as style from './style.module.scss';
+import { isString } from "@nlib/typing";
+import Link from "next/link";
+import type { PageData } from "../../util/type.mts";
+import * as style from "./style.module.scss";
 
 interface PageLinkProps {
   page: PageData;
@@ -18,7 +18,7 @@ export const PageLink = ({ page, showDescription }: PageLinkProps) => {
   return (
     <>
       <Link href={page.path} className={style.container}>
-        <span>{page.title}</span>{' '}
+        <span>{page.title}</span>{" "}
         <span className={style.time}>
           <time dateTime={d.toISOString()}>{date}</time>
           公開

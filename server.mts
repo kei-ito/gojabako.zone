@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import * as console from 'node:console';
 import * as fs from 'node:fs/promises';
 import type * as http from 'node:http';
@@ -34,7 +33,6 @@ const parseUrl = (requestPath = '/') => {
   const parsedUrl = url.parse(new URL(requestPath, rootUrl).href, true);
   return {
     ...parsedUrl,
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     query: parsedUrl.query || {},
     pathname: parsedUrl.pathname ?? '',
   };

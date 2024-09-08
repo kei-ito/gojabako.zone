@@ -1,8 +1,7 @@
-/* eslint-disable import/order */
 import type { StoryObj } from '@storybook/react';
 import * as g1 from '../Button/index.stories';
 import * as g2 from '../CryptoKey/index.stories';
-import * as g3 from '../DataView/index.stories';
+import * as g3 from '../DataViewer/index.stories';
 import * as g4 from '../LogSlider/index.stories';
 import * as g5 from '../Select/index.stories';
 import * as g6 from '../StoryElement/index.stories';

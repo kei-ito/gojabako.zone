@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react';
-import { Fragment } from 'react';
+import type { ReactNode } from "react";
+import { Fragment } from "react";
 
 interface ViewProps {
   id: string;
@@ -16,14 +16,14 @@ export const View = ({ id, caption, style }: ViewProps) => {
       <code className="hljs language-json">
         <LineNumber id={id} lineCount={++lineCount} />
         <span>
-          <span>{'{'}</span>
+          <span>{"{"}</span>
         </span>
         {Object.entries(style).map(([key, value]) => {
           return (
             <Fragment key={key}>
               <LineNumber id={id} lineCount={++lineCount} />
               <span>
-                {'  '}
+                {"  "}
                 <span className="hljs-attr">{`"${key}"`}</span>
                 <span className="hljs-punctuation">:</span>
                 <span className="hljs-string">{`"${value}"`}</span>
@@ -33,9 +33,10 @@ export const View = ({ id, caption, style }: ViewProps) => {
         })}
         <LineNumber id={id} lineCount={++lineCount} />
         <span>
-          <span>{'}'}</span>
+          <span>{"}"}</span>
         </span>
       </code>
+      {/* biome-ignore lint/a11y/useAnchorContent: CSS生成のため */}
       <a href={`#${id}`} className="fragment-ref" />
     </figure>
   );

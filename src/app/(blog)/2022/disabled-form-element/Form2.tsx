@@ -1,6 +1,6 @@
-import { PrimaryButton, Buttons } from '../../../../components/Button';
-import { FieldSet, Form } from '../../../../components/Form';
-import { Query } from './Query';
+import { PrimaryButton, Buttons } from "../../../../components/Button";
+import { FieldSet, Form } from "../../../../components/Form";
+import { Query } from "./Query";
 
 export const Form2 = () => (
   <Form action="#form2" method="GET">
@@ -14,7 +14,7 @@ export const Form2 = () => (
     </p>
     <FieldSet>
       <legend>
-        <code>{'<fieldset>'}</code>
+        <code>{"<fieldset>"}</code>
       </legend>
       <label htmlFor="v2-1">
         <code>{'<input name="v2-1" type="text"/>'}</code>
@@ -27,7 +27,7 @@ export const Form2 = () => (
     </FieldSet>
     <FieldSet disabled>
       <legend>
-        <code>{'<fieldset disabled>'}</code>
+        <code>{"<fieldset disabled>"}</code>
       </legend>
       <label htmlFor="v2-3">
         <code>{'<input name="v2-3" type="text"/>'}</code>

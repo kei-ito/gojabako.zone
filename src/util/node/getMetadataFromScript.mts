@@ -1,4 +1,3 @@
-/* eslint-disable import/no-named-as-default-member */
 import { readFile } from 'node:fs/promises';
 import type { Metadata } from 'next';
 import ts from 'typescript';
