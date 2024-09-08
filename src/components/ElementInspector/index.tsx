@@ -1,12 +1,12 @@
-'use client';
-import type { ChangeEvent } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { IconClass } from '../../util/classnames.mts';
-import { isClient } from '../../util/env.mts';
-import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
-import { noop } from '../../util/noop.mts';
-import { Select } from '../Select';
-import * as style from './style.module.scss';
+"use client";
+import type { ChangeEvent } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { IconClass } from "../../util/classnames.mts";
+import { isClient } from "../../util/env.mts";
+import { getCurrentUrl } from "../../util/getCurrentUrl.mts";
+import { noop } from "../../util/noop.mts";
+import { Select } from "../Select";
+import * as style from "./style.module.scss";
 
 export const ElementInspector = () => {
   const [div, setContainer] = useState<HTMLElement | null>(null);
@@ -37,33 +37,33 @@ const BaseWidthSelector = ({ parent }: BaseWidthSelectorProps) => {
   const [baseWidth, setBaseWidth] = useState(getInitialBaseWidth());
   useEffect(() => {
     const url = getCurrentUrl();
-    if (baseWidth === 'default') {
-      url.searchParams.delete('w');
+    if (baseWidth === "default") {
+      url.searchParams.delete("w");
     } else {
-      url.searchParams.set('w', baseWidth);
+      url.searchParams.set("w", baseWidth);
     }
     if (getCurrentUrl().href !== url.href) {
-      history.replaceState(null, '', url);
+      history.replaceState(null, "", url);
     }
   }, [baseWidth]);
   useEffect(() => {
     if (!parent) {
       return noop;
     }
-    if (baseWidth !== 'default') {
-      parent.style.setProperty('--gjBaseWidth', '94%');
+    if (baseWidth !== "default") {
+      parent.style.setProperty("--gjBaseWidth", "94%");
     }
     if (/^[1-9]\d+$/.test(baseWidth)) {
-      parent.style.setProperty('inline-size', `${baseWidth}px`);
+      parent.style.setProperty("inline-size", `${baseWidth}px`);
     }
     return () => {
-      parent.style.removeProperty('--gjBaseWidth');
-      parent.style.removeProperty('inline-size');
+      parent.style.removeProperty("--gjBaseWidth");
+      parent.style.removeProperty("inline-size");
     };
   }, [parent, baseWidth]);
   const onChange = useCallback(
     ({ target }: ChangeEvent<HTMLSelectElement>) => setBaseWidth(target.value),
-    [setBaseWidth],
+    [],
   );
   return (
     <>
@@ -82,7 +82,7 @@ const BaseWidthSelector = ({ parent }: BaseWidthSelectorProps) => {
 
 const getInitialBaseWidth = () => {
   if (!isClient) {
-    return 'default';
+    return "default";
   }
-  return getCurrentUrl().searchParams.get('w') ?? 'default';
+  return getCurrentUrl().searchParams.get("w") ?? "default";
 };

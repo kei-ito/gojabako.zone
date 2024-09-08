@@ -1,11 +1,11 @@
-import type { MouseEvent, ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil';
-import { classnames } from '../../util/classnames.mts';
-import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
-import { useRect } from '../use/Rect.mts';
-import { DRCellG } from './Cell';
-import type { XYWHZ } from './recoil.app.mts';
+import type { MouseEvent, ReactNode } from "react";
+import { useEffect, useState } from "react";
+import { useRecoilCallback, useRecoilValue, useSetRecoilState } from "recoil";
+import { classnames } from "../../util/classnames.mts";
+import { toRecoilSelectorOpts } from "../../util/recoil/selector.mts";
+import { useRect } from "../use/Rect.mts";
+import { DRCellG } from "./Cell";
+import type { XYWHZ } from "./recoil.app.mts";
 import {
   rcCell,
   rcCellList,
@@ -16,9 +16,9 @@ import {
   rcSelectedCoordinates,
   rcViewBox,
   rcXYWHZ,
-} from './recoil.app.mts';
-import * as style from './style.module.scss';
-import { defaultDRCell, toDRCellId } from './util.mts';
+} from "./recoil.app.mts";
+import * as style from "./style.module.scss";
+import { defaultDRCell, toDRCellId } from "./util.mts";
 
 export const DRBoard = () => {
   const [element, setElement] = useState<Element | null>(null);
@@ -27,12 +27,14 @@ export const DRBoard = () => {
   useSyncPointerPosition(element as HTMLElement);
   useGrab(element as HTMLElement);
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: 仮実装のため省略
     <svg
       ref={setElement}
       className={classnames(style.board, editMode && style.editing)}
       viewBox={useRecoilValue(rcViewBox)}
       onClick={useOnClick()}
     >
+      <title>DRBoard</title>
       <Cells />
       <SelectedCoordinates />
       {editMode && <EditGuide />}
@@ -105,7 +107,7 @@ const Cells = () => {
   return [
     ...(function* (): Generator<ReactNode> {
       for (const cellId of cells) {
-        yield <DRCellG key={cellId.join(',')} cellId={cellId} />;
+        yield <DRCellG key={cellId.join(",")} cellId={cellId} />;
       }
     })(),
   ];
@@ -136,11 +138,11 @@ const useSyncPointerPosition = (board: HTMLElement | null) => {
     const abc = new AbortController();
     if (board) {
       board.addEventListener(
-        'pointermove',
+        "pointermove",
         (e) => setPosition([e.offsetX, e.offsetY]),
         { signal: abc.signal },
       );
-      board.addEventListener('pointerleave', () => setPosition(null), {
+      board.addEventListener("pointerleave", () => setPosition(null), {
         signal: abc.signal,
       });
     }
@@ -152,31 +154,28 @@ const useSyncRect = (board: Element | null) => {
   const [lastRect, setLastRect] = useState<DOMRect | null>(null);
   const rect = useRect(board);
   const setXYZ = useSetRecoilState(rcXYWHZ);
-  useEffect(
-    () => {
-      if (!rect) {
+  // biome-ignore lint/correctness/useExhaustiveDependencies: rect,setXYZの変更のみ見る
+  useEffect(() => {
+    if (!rect) {
+      return;
+    }
+    const { width: w, height: h } = rect;
+    if (lastRect) {
+      const dx = rect.width - lastRect.width;
+      const dy = rect.height - lastRect.height;
+      if (dx === 0 && dy === 0) {
         return;
       }
-      const { width: w, height: h } = rect;
-      if (lastRect) {
-        const dx = rect.width - lastRect.width;
-        const dy = rect.height - lastRect.height;
-        if (dx === 0 && dy === 0) {
-          return;
-        }
-        setXYZ(([x, y, _w, _h, z]) => {
-          return [x - dx / z / 2, y - dy / z / 2, w / z, h / z, z];
-        });
-      } else {
-        setXYZ(([_x, _y, _w, _h, z]) => {
-          return [rect.width / -2 / z, rect.height / -2 / z, w / z, h / z, z];
-        });
-      }
-      setLastRect(rect);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [rect, setXYZ],
-  );
+      setXYZ(([x, y, _w, _h, z]) => {
+        return [x - dx / z / 2, y - dy / z / 2, w / z, h / z, z];
+      });
+    } else {
+      setXYZ(([_x, _y, _w, _h, z]) => {
+        return [rect.width / -2 / z, rect.height / -2 / z, w / z, h / z, z];
+      });
+    }
+    setLastRect(rect);
+  }, [rect, setXYZ]);
 };
 
 // const useWheel = (board: HTMLElement | null) => {
@@ -235,14 +234,14 @@ const useGrab = (board: HTMLElement | null) => {
           set(rcXYWHZ, [x - d[0] / z, y - d[1] / z, w, h, z]);
           setTimeout(() => set(rcDragging, null), 50);
         };
-        target.addEventListener('pointermove', onMove, { signal: abc.signal });
-        target.addEventListener('pointerup', onUp, { signal: abc.signal });
+        target.addEventListener("pointermove", onMove, { signal: abc.signal });
+        target.addEventListener("pointerup", onUp, { signal: abc.signal });
       },
     [],
   );
   useEffect(() => {
     const abc = new AbortController();
-    board?.addEventListener('pointerdown', onPointerDown, {
+    board?.addEventListener("pointerdown", onPointerDown, {
       signal: abc.signal,
     });
     return () => abc.abort();

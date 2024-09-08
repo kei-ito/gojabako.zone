@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const openDB = async (): Promise<IDBDatabase> =>
   await new Promise((resolve, reject) => {
     const request = indexedDB.open('KeyPairTest', 1);

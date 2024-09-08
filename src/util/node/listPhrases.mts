@@ -11,7 +11,6 @@ export const getTokenizer = async (
   let cached = cache.get(dicPath);
   if (!cached) {
     cached = new Promise<Tokenizer<IpadicFeatures>>((resolve, reject) => {
-      // eslint-disable-next-line import/no-named-as-default-member
       kuromoji.builder({ dicPath }).build((error: Error | null, result) => {
         if (error) {
           reject(error);

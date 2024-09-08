@@ -1,6 +1,6 @@
-import type { StoryObj } from '@storybook/react';
-import { StoryElement } from '../StoryElement';
-import { ZoomSlider } from '.';
+import type { StoryObj } from "@storybook/react";
+import { StoryElement } from "../StoryElement";
+import { ZoomSlider } from ".";
 
 export const Default: StoryObj = {
   render: () => (

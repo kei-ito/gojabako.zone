@@ -1,12 +1,11 @@
-'use client';
-import type { MouseEvent } from 'react';
-import { useCallback } from 'react';
-import { IconClass, classnames } from '../../util/classnames.mts';
-import type { LogSliderProps } from '../LogSlider';
-import { LogSlider, toLinearValue } from '../LogSlider';
-import * as style from './style.module.scss';
+"use client";
+import type { MouseEvent } from "react";
+import { useCallback } from "react";
+import { IconClass, classnames } from "../../util/classnames.mts";
+import type { LogSliderProps } from "../LogSlider";
+import { LogSlider, toLinearValue } from "../LogSlider";
+import * as style from "./style.module.scss";
 
-// eslint-disable-next-line max-lines-per-function
 export const ZoomSlider = ({ className, ...props }: LogSliderProps) => {
   const { onChangeValue, min, max } = props;
   const onClick = useCallback(
@@ -16,7 +15,7 @@ export const ZoomSlider = ({ className, ...props }: LogSliderProps) => {
       if (!input) {
         return;
       }
-      const d = { '-': -0.1, '+': 0.1 }[button.value] ?? 0;
+      const d = { "-": -0.1, "+": 0.1 }[button.value] ?? 0;
       if (d === 0) {
         return;
       }
@@ -29,11 +28,11 @@ export const ZoomSlider = ({ className, ...props }: LogSliderProps) => {
   );
   return (
     <div className={classnames(style.container, className)}>
-      <button className={IconClass} value="-" onClick={onClick}>
+      <button type="button" className={IconClass} value="-" onClick={onClick}>
         zoom_out
       </button>
       <LogSlider {...props} />
-      <button className={IconClass} value="+" onClick={onClick}>
+      <button type="button" className={IconClass} value="+" onClick={onClick}>
         zoom_in
       </button>
     </div>
@@ -50,4 +49,4 @@ const findSiblingRangeInput = (e: Element): HTMLInputElement | null => {
 };
 
 const isRangeInput = (e: Element): e is HTMLInputElement =>
-  e.tagName.toLowerCase() === 'input' && e.getAttribute('type') === 'range';
+  e.tagName.toLowerCase() === "input" && e.getAttribute("type") === "range";

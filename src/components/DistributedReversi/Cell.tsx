@@ -1,26 +1,26 @@
-import type { MouseEvent } from 'react';
-import { Fragment, useMemo } from 'react';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { classnames } from '../../util/classnames.mts';
+import type { MouseEvent } from "react";
+import { Fragment, useMemo } from "react";
+import { useRecoilCallback, useRecoilValue } from "recoil";
+import { classnames } from "../../util/classnames.mts";
 import {
   rcCell,
   rcDevMode,
   rcMessageBuffer,
   rcSelectedCoordinates,
   selectCoordinates,
-} from './recoil.app.mts';
-import * as style from './style.module.scss';
-import { useOnConnection } from './useOnConnection.mts';
-import { useOnPressCell } from './useOnPressCell.mts';
-import { useRx } from './useRx.mts';
-import { useTx } from './useTx.mts';
-import type { DRCellId, DRCellState, DRDirection } from './util.mts';
+} from "./recoil.app.mts";
+import * as style from "./style.module.scss";
+import { useOnConnection } from "./useOnConnection.mts";
+import { useOnPressCell } from "./useOnPressCell.mts";
+import { useRx } from "./useRx.mts";
+import { useTx } from "./useTx.mts";
+import type { DRCellId, DRCellState, DRDirection } from "./util.mts";
 import {
   DRDirections,
   DRInitialState,
   isDRPlayerId,
   toDRBufferId,
-} from './util.mts';
+} from "./util.mts";
 
 const hue = (t: number) => Math.round(360 * t) % 360;
 
@@ -94,12 +94,13 @@ const ForeRect = ({
   playerCount: number;
 }) => {
   const initial = state === DRInitialState;
-  let color = '';
+  let color = "";
   if (isDRPlayerId(state)) {
     const h = hue(state / playerCount);
     color = `oklch(80% 0.15 ${h})`;
   }
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: 仮実装のため省略
     <rect
       className={classnames(style.cell, initial && style.initial)}
       x="-0.4"
@@ -116,7 +117,7 @@ const ForeRect = ({
             const alt = event.shiftKey || event.metaKey || event.ctrlKey;
             set(
               rcSelectedCoordinates,
-              selectCoordinates(cellId, alt ? 'add' : 'toggle'),
+              selectCoordinates(cellId, alt ? "add" : "toggle"),
             );
           },
         [cellId],
@@ -134,7 +135,7 @@ interface TxRxProps {
 const textDy = 0.04;
 
 const Tx = ({ cellId, d }: TxRxProps) => {
-  const bufferId = toDRBufferId(cellId, d, 'tx');
+  const bufferId = toDRBufferId(cellId, d, "tx");
   useTx(bufferId);
   useOnConnection(bufferId);
   const bufferedCount = useRecoilValue(rcMessageBuffer(bufferId)).length;
@@ -162,7 +163,7 @@ const Tx = ({ cellId, d }: TxRxProps) => {
 };
 
 const Rx = ({ cellId, d }: TxRxProps) => {
-  const bufferId = toDRBufferId(cellId, d, 'rx');
+  const bufferId = toDRBufferId(cellId, d, "rx");
   useRx(bufferId);
   const bufferedCount = useRecoilValue(rcMessageBuffer(bufferId)).length;
   const [cx, cy] = useArrowPosition(d, 0.2);

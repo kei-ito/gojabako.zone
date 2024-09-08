@@ -1,8 +1,8 @@
-import { isString } from '@nlib/typing';
-import type { ChangeEvent, ReactNode } from 'react';
-import { useCallback } from 'react';
-import { Select } from '../Select';
-import * as style from './style.module.scss';
+import { isString } from "@nlib/typing";
+import type { ChangeEvent, ReactNode } from "react";
+import { useCallback } from "react";
+import { Select } from "../Select";
+import * as style from "./style.module.scss";
 
 export interface DRSelectorProps<T extends number | string> {
   id: string;
@@ -37,7 +37,7 @@ export const DRSelector = <T extends number | string>({
             for (const value of values) {
               yield (
                 <option key={value} value={value}>
-                  {value === '' ? '選択' : value}
+                  {value === "" ? "選択" : value}
                 </option>
               );
             }

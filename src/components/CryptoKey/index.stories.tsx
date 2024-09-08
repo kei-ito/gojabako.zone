@@ -1,14 +1,14 @@
-import type { StoryObj } from '@storybook/react';
-import { StoryElement } from '../StoryElement';
-import { CryptoKeyGenerator } from './Generator';
-import { CryptoKeyStore } from './Store';
-import { CryptoKeyView } from './View';
+import type { StoryObj } from "@storybook/react";
+import { StoryElement } from "../StoryElement";
+import { CryptoKeyGenerator } from "./Generator";
+import { CryptoKeyStore } from "./Store";
+import { CryptoKeyView } from "./View";
 
 const sampleKey: CryptoKey = {
-  type: 'secret',
-  algorithm: { name: 'ECDSA' },
+  type: "secret",
+  algorithm: { name: "ECDSA" },
   extractable: true,
-  usages: ['encrypt', 'decrypt'],
+  usages: ["encrypt", "decrypt"],
 };
 
 export const Default: StoryObj = {

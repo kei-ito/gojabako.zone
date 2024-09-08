@@ -1,6 +1,6 @@
-import type { StoryObj } from '@storybook/react';
-import { StoryElement } from '../StoryElement';
-import { PrimaryButton, SecondaryButton, TextButton } from '.';
+import type { StoryObj } from "@storybook/react";
+import { StoryElement } from "../StoryElement";
+import { PrimaryButton, SecondaryButton, TextButton } from ".";
 
 const buttons = {
   Primary: PrimaryButton,
@@ -17,12 +17,12 @@ export const Default: StoryObj = {
         rows={
           {
             default: {},
-            hover: { state: 'hover' },
-            active: { state: 'active' },
-            focus: { state: 'focus' },
+            hover: { state: "hover" },
+            active: { state: "active" },
+            focus: { state: "focus" },
             disabled: { disabled: true },
-            icon1: { icon: 'download' },
-            icon2: { icon: 'downloading' },
+            icon1: { icon: "download" },
+            icon2: { icon: "downloading" },
           } as const
         }
         render={({ column: Button, row }) => <Button {...row}>Button</Button>}
@@ -32,8 +32,8 @@ export const Default: StoryObj = {
         columns={buttons}
         rows={
           {
-            Long: 'Lorem ipsum dolor sit amet',
-            LongCJK: 'テキストが長いボタンは作らない',
+            Long: "Lorem ipsum dolor sit amet",
+            LongCJK: "テキストが長いボタンは作らない",
           } as const
         }
         render={({ column: Button, row }) => <Button>{row}</Button>}

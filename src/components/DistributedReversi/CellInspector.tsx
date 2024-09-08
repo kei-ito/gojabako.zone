@@ -1,18 +1,18 @@
-import type { ChangeEvent } from 'react';
-import { useCallback, useMemo } from 'react';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
-import { DRMessenger } from './Messenger';
-import type { CellSelection } from './recoil.app.mts';
+import type { ChangeEvent } from "react";
+import { useCallback, useMemo } from "react";
+import { useRecoilCallback, useRecoilValue } from "recoil";
+import { toRecoilSelectorOpts } from "../../util/recoil/selector.mts";
+import { DRMessenger } from "./Messenger";
+import type { CellSelection } from "./recoil.app.mts";
 import {
   rcCell,
   rcSelectedCells,
   rcSelectedCoordinates,
-} from './recoil.app.mts';
-import { DRSelector } from './Selector';
-import * as style from './style.module.scss';
-import type { DRCell, DRCellState, DRPlayerId } from './util.mts';
-import { DRInitialState, isDRPlayerId } from './util.mts';
+} from "./recoil.app.mts";
+import { DRSelector } from "./Selector";
+import * as style from "./style.module.scss";
+import type { DRCell, DRCellState, DRPlayerId } from "./util.mts";
+import { DRInitialState, isDRPlayerId } from "./util.mts";
 
 export const DRCellInspector = () => {
   const coordinates = useRecoilValue(rcSelectedCoordinates);
@@ -49,14 +49,14 @@ const StateSelector = ({ maxPlayerCount }: CellSelection) => {
           update({ state });
         }
       }
-      return '';
+      return "";
     },
     [update],
   );
   const values = useMemo(
     () => [
       ...(function* () {
-        yield '';
+        yield "";
         yield DRInitialState;
         for (let player = 0; player < maxPlayerCount; player++) {
           yield player;
@@ -83,14 +83,14 @@ const SharedStateSelector = ({ maxPlayerCount }: CellSelection) => {
       if (isDRPlayerId(sharedState)) {
         update({ sharedState });
       }
-      return '';
+      return "";
     },
     [update],
   );
   const values = useMemo(
     () => [
       ...(function* () {
-        yield '';
+        yield "";
         for (let player = 0; player < maxPlayerCount; player++) {
           yield player;
         }
@@ -120,7 +120,7 @@ const PlayerCountControl = ({ value }: { value: number }) => {
     },
     [update],
   );
-  const id = 'CellSharedPlayerCount';
+  const id = "CellSharedPlayerCount";
   return (
     <section className={style.number}>
       <label htmlFor={id}>playerCount</label>
@@ -140,14 +140,14 @@ const useUpdateSelectedCells = () =>
     (cbi) => (updates: CellUpdates) => {
       const { get, set } = toRecoilSelectorOpts(cbi);
       const cellUpdates: Partial<DRCell> = {};
-      if ('state' in updates) {
+      if ("state" in updates) {
         cellUpdates.state = updates.state;
       }
-      const sharedUpdates: Partial<DRCell['shared']> = {};
-      if ('sharedState' in updates) {
+      const sharedUpdates: Partial<DRCell["shared"]> = {};
+      if ("sharedState" in updates) {
         sharedUpdates.state = updates.sharedState;
       }
-      if ('playerCount' in updates) {
+      if ("playerCount" in updates) {
         sharedUpdates.playerCount = updates.playerCount;
       }
       for (const cellId of get(rcSelectedCoordinates)) {

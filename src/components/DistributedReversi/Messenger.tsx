@@ -1,36 +1,36 @@
-import type { ChangeEvent } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useRecoilCallback } from 'recoil';
-import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
-import { SecondaryButton } from '../Button';
-import { rcCell, rcSelectedCoordinates } from './recoil.app.mts';
-import { sendDRMessage } from './recoil.send.mts';
-import { DRSelector } from './Selector';
-import * as style from './style.module.scss';
+import type { ChangeEvent } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRecoilCallback } from "recoil";
+import { toRecoilSelectorOpts } from "../../util/recoil/selector.mts";
+import { SecondaryButton } from "../Button";
+import { rcCell, rcSelectedCoordinates } from "./recoil.app.mts";
+import { sendDRMessage } from "./recoil.send.mts";
+import { DRSelector } from "./Selector";
+import * as style from "./style.module.scss";
 import type {
   DRMessage,
   DRMessageMode,
   DRMessageType,
   DRPlayerId,
   DRSharedState,
-} from './util.mts';
+} from "./util.mts";
 import {
   DRDiagonalDirections,
   DRDirections,
   DRMessagePayloadTypes,
   DRMessageTypes,
   generateMessageProps,
-} from './util.mts';
+} from "./util.mts";
 
 const messageModes = [
-  'spread',
+  "spread",
   ...DRDirections,
   ...DRDiagonalDirections,
 ] as const;
 
 export const DRMessenger = () => {
-  const [type, setType] = useState<DRMessageType>('setShared');
-  const [mode, setMode] = useState<DRMessageMode>('spread');
+  const [type, setType] = useState<DRMessageType>("setShared");
+  const [mode, setMode] = useState<DRMessageMode>("spread");
   const [sharedState, setSharedState] = useState({
     playerCount: 2,
     state: 0 as DRPlayerId,
@@ -38,7 +38,7 @@ export const DRMessenger = () => {
   const send = useSendFromSelectedCells();
   const sendMessage = useCallback(() => {
     switch (type) {
-      case 'reversi2':
+      case "reversi2":
         send({ ...generateMessageProps(), type, mode, payload: null });
         break;
       default:
@@ -51,7 +51,7 @@ export const DRMessenger = () => {
       <div>メッセージを送信</div>
       <MessageModeSelector defaultValue={mode} onChange={setMode} />
       <MessageTypeSelector defaultValue={type} onChange={setType} />
-      {payloadType === 'shared' && (
+      {payloadType === "shared" && (
         <SharedStateInputs
           defaultValue={sharedState}
           onChange={setSharedState}

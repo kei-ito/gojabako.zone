@@ -1,6 +1,6 @@
-import { PrimaryButton, Buttons } from '../../../../components/Button';
-import { Form } from '../../../../components/Form';
-import { Query } from './Query';
+import { PrimaryButton, Buttons } from "../../../../components/Button";
+import { Form } from "../../../../components/Form";
+import { Query } from "./Query";
 
 export const Form1 = () => (
   <Form action="#form1" method="GET">

@@ -1,6 +1,6 @@
-import { entries, isFunction } from '@nlib/typing';
-import type { ComponentType, PropsWithChildren, ReactNode } from 'react';
-import * as style from './style.module.scss';
+import { entries, isFunction } from "@nlib/typing";
+import type { ComponentType, PropsWithChildren, ReactNode } from "react";
+import * as style from "./style.module.scss";
 
 const Heading = (props: PropsWithChildren) => {
   return <h2 className={style.heading}>{props.children}</h2>;
@@ -84,11 +84,12 @@ const Table = <C, R>({
       <dt className={style.title}>{title}</dt>
       {[...listColumnHeadings(columnLabels, 1)]}
       {[...listRowHeadings(rowLabels, 1)]}
-      {[...listItems()].map(({ column, columnCount, row, rowCount }, i) => {
+      {[...listItems()].map(({ column, columnCount, row, rowCount }) => {
         const c = columnCount + 2;
         const r = rowCount + 2;
+        const gridArea = `${r} / ${c} / ${r + 1} / ${c + 1}`;
         return (
-          <dd key={i} style={{ gridArea: `${r} / ${c} / ${r + 1} / ${c + 1}` }}>
+          <dd key={gridArea} style={{ gridArea }}>
             <Render row={row} column={column} />
           </dd>
         );
@@ -107,11 +108,14 @@ const Columns = <C,>({ columns, render: Render }: ColumnsProps<C>) => {
   return (
     <dl className={style.columns}>
       {[...listColumnHeadings(columnLabels)]}
-      {columnValues.map((columnValue, i) => (
-        <dd key={i}>
-          <Render column={columnValue} />
-        </dd>
-      ))}
+      {columnValues.map((columnValue, i) => {
+        const key = `col-${i}`;
+        return (
+          <dd key={key}>
+            <Render column={columnValue} />
+          </dd>
+        );
+      })}
     </dl>
   );
 };
@@ -126,11 +130,14 @@ const Rows = <R,>({ rows, render: Render }: RowsProps<R>) => {
   return (
     <dl className={style.rows}>
       {[...listRowHeadings(rowLabels)]}
-      {rowValues.map((rowValue, i) => (
-        <dd key={i}>
-          <Render row={rowValue} />
-        </dd>
-      ))}
+      {rowValues.map((rowValue, i) => {
+        const key = `row-${i}`;
+        return (
+          <dd key={key}>
+            <Render row={rowValue} />
+          </dd>
+        );
+      })}
     </dl>
   );
 };

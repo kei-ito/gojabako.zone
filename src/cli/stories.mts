@@ -17,7 +17,7 @@ const onError = (error: unknown) => {
 };
 
 const generate = async () => {
-  let code = '/* eslint-disable import/order */\n';
+  let code = '';
   code += "import type { StoryObj } from '@storybook/react';";
   let count = 0;
   const groupNames = new Map<string, string>();

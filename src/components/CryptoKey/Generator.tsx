@@ -1,10 +1,10 @@
-'use client';
-import type { FormEvent } from 'react';
-import { useCallback, useEffect, useState } from 'react';
-import { Buttons, PrimaryButton } from '../Button';
-import { Form } from '../Form';
-import { generateKeyPair } from './util.mts';
-import { CryptoKeyView } from './View';
+"use client";
+import type { FormEvent } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Buttons, PrimaryButton } from "../Button";
+import { Form } from "../Form";
+import { generateKeyPair } from "./util.mts";
+import { CryptoKeyView } from "./View";
 
 export const CryptoKeyGenerator = () => {
   const [error, setError] = useState<Error | null>(null);

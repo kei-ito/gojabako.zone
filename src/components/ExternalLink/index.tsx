@@ -1,9 +1,9 @@
-import Link from 'next/link';
-import type { HTMLAttributes, PropsWithChildren } from 'react';
-import { IconClass } from '../../util/classnames.mts';
+import Link from "next/link";
+import type { HTMLAttributes, PropsWithChildren } from "react";
+import { IconClass } from "../../util/classnames.mts";
 
 interface ExternalLinkProps
-  extends Omit<HTMLAttributes<HTMLAnchorElement>, 'target'> {
+  extends Omit<HTMLAttributes<HTMLAnchorElement>, "target"> {
   href: string;
 }
 

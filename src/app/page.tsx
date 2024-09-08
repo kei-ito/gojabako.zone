@@ -1,10 +1,10 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { Article } from '../components/Article';
-import { PageLink } from '../components/PageLink';
-import { SiteLayout } from '../components/SiteLayout';
-import { pageList } from '../util/pageList.mts';
-import { site } from '../util/site.mts';
+import type { Metadata } from "next";
+import Link from "next/link";
+import { Article } from "../components/Article";
+import { PageLink } from "../components/PageLink";
+import { SiteLayout } from "../components/SiteLayout";
+import { pageList } from "../util/pageList.mts";
+import { site } from "../util/site.mts";
 
 export const metadata: Metadata = {};
 

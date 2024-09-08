@@ -2,12 +2,12 @@ import type {
   ButtonHTMLAttributes,
   HTMLAttributes,
   PropsWithChildren,
-} from 'react';
-import { IconClass, classnames } from '../../util/classnames.mts';
-import * as style from './style.module.scss';
+} from "react";
+import { IconClass, classnames } from "../../util/classnames.mts";
+import * as style from "./style.module.scss";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  state?: 'active' | 'focus' | 'hover';
+  state?: "active" | "focus" | "hover";
   icon?: string;
 }
 

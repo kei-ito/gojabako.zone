@@ -21,7 +21,6 @@ export const visitHastElement = <T extends Element>(
       return null;
     }
     const visitor = visitors[node.tagName];
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return visitor ? visitor(node as T, index, parent) : null;
   });
 };

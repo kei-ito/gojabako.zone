@@ -64,7 +64,6 @@ export const listSelectors = function* (
   }
 };
 
-// eslint-disable-next-line max-lines-per-function
 export const listLocalNamesInSelector = function* (
   container: parseSelector.Container | parseSelector.Root,
   isLocal: boolean,

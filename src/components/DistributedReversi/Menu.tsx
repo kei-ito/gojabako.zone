@@ -1,13 +1,13 @@
-import type { ChangeEvent } from 'react';
-import { useCallback } from 'react';
-import { useRecoilCallback, useRecoilState } from 'recoil';
-import { clamp } from '../../util/clamp.mts';
-import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
-import { SecondaryButton } from '../Button';
-import { Toggle } from '../Toggle';
-import { useFullScreen } from '../use/FullScreen.mts';
-import { ZoomSlider } from '../ZoomSlider';
-import { DRCellInspector } from './CellInspector';
+import type { ChangeEvent } from "react";
+import { useCallback } from "react";
+import { useRecoilCallback, useRecoilState } from "recoil";
+import { clamp } from "../../util/clamp.mts";
+import { toRecoilSelectorOpts } from "../../util/recoil/selector.mts";
+import { SecondaryButton } from "../Button";
+import { Toggle } from "../Toggle";
+import { useFullScreen } from "../use/FullScreen.mts";
+import { ZoomSlider } from "../ZoomSlider";
+import { DRCellInspector } from "./CellInspector";
 import {
   rcCell,
   rcCellList,
@@ -16,9 +16,9 @@ import {
   rcRxDelayMs,
   rcTxDelayMs,
   rcZoom,
-} from './recoil.app.mts';
-import * as style from './style.module.scss';
-import { DRInitialState, InitialDRPlayerId, zoom } from './util.mts';
+} from "./recoil.app.mts";
+import * as style from "./style.module.scss";
+import { DRInitialState, InitialDRPlayerId, zoom } from "./util.mts";
 
 export const DRMenu = () => (
   <nav className={style.info}>
@@ -77,7 +77,7 @@ const TxDelayControl = () => {
     },
     [setMs],
   );
-  const id = 'TxDelayMs';
+  const id = "TxDelayMs";
   return (
     <section className={style.number}>
       <label htmlFor={id}>送信遅延 [ms]</label>
@@ -94,7 +94,7 @@ const RxDelayControl = () => {
     },
     [setMs],
   );
-  const id = 'RxDelayMs';
+  const id = "RxDelayMs";
   return (
     <section className={style.number}>
       <label htmlFor={id}>受信遅延 [ms]</label>
@@ -105,7 +105,7 @@ const RxDelayControl = () => {
 
 const FullScreenToggle = () => {
   const [state, toggle] = useFullScreen(`.${style.container}`);
-  const id = 'FullScreen';
+  const id = "FullScreen";
   return (
     <section className={style.toggle}>
       <label htmlFor={id}>フルスクリーン</label>
@@ -117,7 +117,7 @@ const FullScreenToggle = () => {
 const EditModeToggle = () => {
   const [editMode, setEditMode] = useRecoilState(rcEditMode);
   const toggle = useCallback(() => setEditMode((s) => !s), [setEditMode]);
-  const id = 'CellInspector';
+  const id = "CellInspector";
   return (
     <section className={style.toggle}>
       <label htmlFor={id}>編集モード</label>
@@ -129,7 +129,7 @@ const EditModeToggle = () => {
 const DevModeToggle = () => {
   const [devMode, setDevMode] = useRecoilState(rcDevMode);
   const toggle = useCallback(() => setDevMode((s) => !s), [setDevMode]);
-  const id = 'CellInspector';
+  const id = "CellInspector";
   return (
     <section className={style.toggle}>
       <label htmlFor={id}>開発モード</label>
