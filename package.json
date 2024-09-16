@@ -26,7 +26,7 @@
     "lint:css": "stylelint 'src/**/*.scss'"
   },
   "dependencies": {
-    "@fontsource/noto-sans-jp": "5.0.20",
+    "@fontsource/noto-sans-jp": "5.1.0",
     "@mdx-js/loader": "3.0.1",
     "@next/mdx": "14.2.11",
     "@nlib/tsm": "0.1.3",
