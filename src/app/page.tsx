@@ -28,17 +28,14 @@ export default function Page() {
 }
 
 const listRecentPages = function* (limit: number) {
-  let count = 0;
   for (const page of pageList
     .slice()
-    .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))) {
+    .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))
+    .slice(0, limit)) {
     yield (
       <li key={page.path}>
         <PageLink page={page} />
       </li>
     );
-    if (!(++count < limit)) {
-      break;
-    }
   }
 };
