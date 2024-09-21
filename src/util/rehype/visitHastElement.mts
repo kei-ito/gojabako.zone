@@ -1,7 +1,7 @@
-import { isNonNegativeSafeInteger } from '@nlib/typing';
-import type { Element, Parent, Root } from 'hast';
-import type { VisitorResult } from 'unist-util-visit';
-import { visit } from 'unist-util-visit';
+import { isNonNegativeSafeInteger } from "@nlib/typing";
+import type { Element, Parent, Root } from "hast";
+import type { VisitorResult } from "unist-util-visit";
+import { visit } from "unist-util-visit";
 
 export type HastElementVisitor<T extends Element = Element> = (
   e: T,
@@ -16,7 +16,7 @@ export const visitHastElement = <T extends Element>(
   if (!tree) {
     return;
   }
-  visit(tree, 'element', (node, index, parent) => {
+  visit(tree, "element", (node, index, parent) => {
     if (!parent || !isNonNegativeSafeInteger(index)) {
       return null;
     }

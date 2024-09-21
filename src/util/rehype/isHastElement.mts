@@ -6,8 +6,8 @@ import type {
   RootContent,
   Parent,
   Properties,
-} from 'hast';
-import { hasClass } from './className.mts';
+} from "hast";
+import { hasClass } from "./className.mts";
 
 interface ElementWithClassName<T extends string> extends Element {
   tagName: T;
@@ -38,7 +38,7 @@ export function isHastElement<T extends string>(
   tagName?: T,
   ...classNames: Array<string>
 ) {
-  if (!element || !('tagName' in element)) {
+  if (!element || !("tagName" in element)) {
     return false;
   }
   if (tagName && element.tagName !== tagName) {

@@ -1,12 +1,12 @@
-import type { ValueOf } from '@nlib/typing';
-import { listCodePoints } from '@nlib/typing';
-import type { AtRule } from 'postcss';
-import { parse } from 'postcss';
-import { isInRange, normalizeRanges } from './range.mts';
+import type { ValueOf } from "@nlib/typing";
+import { listCodePoints } from "@nlib/typing";
+import type { AtRule } from "postcss";
+import { parse } from "postcss";
+import { isInRange, normalizeRanges } from "./range.mts";
 
 const fontStyles = {
-  italic: 'italic',
-  normal: 'normal',
+  italic: "italic",
+  normal: "normal",
 } as const;
 export type FontStyle = ValueOf<typeof fontStyles>;
 
@@ -23,10 +23,10 @@ const fontWeights = {
 } as const;
 export type FontWeight = ValueOf<typeof fontWeights>;
 
-const getWoffSrc = (src = '') => {
+const getWoffSrc = (src = "") => {
   for (const item of src.split(/\s*,\s*/)) {
     const format = /format\([\s'"]*(.*?)[\s'"]*\)/.exec(item);
-    if (format && format[1] === 'woff') {
+    if (format && format[1] === "woff") {
       const url = /url\([\s'"]*(.*?)[\s'"]*\)/.exec(item);
       if (url) {
         return url[1];
@@ -40,16 +40,16 @@ export const parseFontFaceAtRule = (atRule: AtRule) => {
   const values: Record<string, string> = {};
   atRule.walkDecls((decl) => {
     switch (decl.prop) {
-      case 'font-style':
+      case "font-style":
         values.fontStyle = decl.value;
         break;
-      case 'font-weight':
+      case "font-weight":
         values.fontWeight = decl.value;
         break;
-      case 'src':
+      case "src":
         values.src = decl.value;
         break;
-      case 'unicode-range':
+      case "unicode-range":
         values.unicodeRange = decl.value;
         break;
       default:
@@ -69,11 +69,11 @@ export const parseFontFaceAtRule = (atRule: AtRule) => {
   const unicodeRange = [
     ...normalizeRanges(
       (function* () {
-        for (const match of (values.unicodeRange || '').matchAll(
+        for (const match of (values.unicodeRange || "").matchAll(
           /U\+([0-9a-f]+)(-[0-9a-f]+)?/gi,
         )) {
-          const from = parseInt(match[1], 16);
-          const to = match[2] ? parseInt(match[2].slice(1), 16) : from;
+          const from = Number.parseInt(match[1], 16);
+          const to = match[2] ? Number.parseInt(match[2].slice(1), 16) : from;
           yield [from, to];
         }
       })(),
@@ -91,7 +91,7 @@ export const listFontFacesWoff = function* (
   cssString: string,
 ): Generator<FontFace> {
   for (const node of parse(cssString).nodes) {
-    if (node.type === 'atrule' && node.name === 'font-face') {
+    if (node.type === "atrule" && node.name === "font-face") {
       const fontFace = parseFontFaceAtRule(node);
       if (fontFace) {
         yield fontFace;
@@ -104,7 +104,7 @@ export const listRequiredFontFaces = function* (
   fontFaces: Iterable<FontFace>,
   ...args: Array<string>
 ) {
-  const characters = new Set([...listCodePoints(args.join(''))]);
+  const characters = new Set([...listCodePoints(args.join(""))]);
   const yielded = new WeakSet<FontFace>();
   for (const fontFace of fontFaces) {
     for (const c of characters) {

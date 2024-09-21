@@ -1,18 +1,18 @@
-import type { ElementContent } from 'hast';
-import { fromMarkdown } from 'mdast-util-from-markdown';
-import { toHast } from 'mdast-util-to-hast';
+import type { ElementContent } from "hast";
+import { fromMarkdown } from "mdast-util-from-markdown";
+import { toHast } from "mdast-util-to-hast";
 
 export const mdToInlineHast = function* (
   markdown: string,
 ): Generator<ElementContent> {
   const root = mdToHast(markdown);
-  for (const node of root.type === 'root' ? root.children : [root]) {
+  for (const node of root.type === "root" ? root.children : [root]) {
     switch (node.type) {
-      case 'text':
+      case "text":
         yield node;
         break;
-      case 'element':
-        if (node.tagName === 'p') {
+      case "element":
+        if (node.tagName === "p") {
           for (const child of node.children) {
             yield child;
           }

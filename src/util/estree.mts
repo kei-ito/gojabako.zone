@@ -4,13 +4,13 @@ import type {
   ObjectExpression,
   Property,
   SimpleLiteral,
-} from 'estree';
+} from "estree";
 
 export const createProperty = <T,>(name: string, value: T): Property => ({
-  type: 'Property',
-  key: { type: 'Identifier', name },
+  type: "Property",
+  key: { type: "Identifier", name },
   value: createPropertyValue(value),
-  kind: 'init',
+  kind: "init",
   method: false,
   shorthand: false,
   computed: false,
@@ -21,14 +21,14 @@ export const createPropertyValue = (value: unknown): Expression => {
     return createArrayLiteral(value);
   }
   switch (typeof value) {
-    case 'object':
+    case "object":
       if (value) {
         return createObjectLiteral(value);
       }
       break;
-    case 'boolean':
-    case 'number':
-    case 'string':
+    case "boolean":
+    case "number":
+    case "string":
       return createSimpleLiteral(value);
     default:
   }
@@ -36,7 +36,7 @@ export const createPropertyValue = (value: unknown): Expression => {
 };
 
 export const createArrayLiteral = <T,>(value: Array<T>): ArrayExpression => ({
-  type: 'ArrayExpression',
+  type: "ArrayExpression",
   elements: value.map((v) => createPropertyValue(v)),
 });
 
@@ -44,13 +44,13 @@ export const createObjectLiteral = <T extends object>(
   value: T,
 ): ObjectExpression => {
   return {
-    type: 'ObjectExpression',
+    type: "ObjectExpression",
     properties: Object.entries(value).map(([n, v]) => createProperty(n, v)),
   };
 };
 
 export const createSimpleLiteral = (
-  value: SimpleLiteral['value'],
+  value: SimpleLiteral["value"],
 ): SimpleLiteral => {
-  return { type: 'Literal', value };
+  return { type: "Literal", value };
 };

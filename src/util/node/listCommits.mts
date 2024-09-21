@@ -1,19 +1,19 @@
-import type { Commit } from '../type.mts';
-import { rootDir } from './directories.mts';
-import { spawn } from './spawn.mts';
+import type { Commit } from "../type.mts";
+import { rootDir } from "./directories.mts";
+import { spawn } from "./spawn.mts";
 
 /**
  * https://git-scm.com/docs/pretty-formats
  */
-const NewLine = '%x0A';
-const CommitHash = '%H';
-const AbbreviatedCommitHash = '%h';
-const AuthorDate = '%aI';
-const delimiter = '--------';
+const NewLine = "%x0A";
+const CommitHash = "%H";
+const AbbreviatedCommitHash = "%h";
+const AuthorDate = "%aI";
+const delimiter = "--------";
 
 export const listCommits = async function* (
   file: URL,
-  startCommitish = 'HEAD',
+  startCommitish = "HEAD",
 ): AsyncGenerator<Commit> {
   const history = new Set<string>();
   const format = [
@@ -24,7 +24,7 @@ export const listCommits = async function* (
   ].join(NewLine);
   let before = startCommitish;
   while (true) {
-    let command = 'git log --follow';
+    let command = "git log --follow";
     command += ` --format="${format}"`;
     command += ` --before=${before}`;
     const relativePath = file.pathname.slice(rootDir.pathname.length);
@@ -48,7 +48,7 @@ export const listCommits = async function* (
   }
 };
 
-const sanitizePath = (filePath: string) => filePath.replace(/[()]/g, '\\$&');
+const sanitizePath = (filePath: string) => filePath.replace(/[()]/g, "\\$&");
 
 const parseCommitOutput = (entry: string): Commit => {
   const [commit, abbr, aDate] = [...entry.split(/[\r\n]+/)];

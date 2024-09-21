@@ -1,5 +1,5 @@
-import { isString } from '@nlib/typing';
-import type { Element } from 'hast';
+import { isString } from "@nlib/typing";
+import type { Element } from "hast";
 
 export const hasClass = (
   { properties: { className } }: Element,

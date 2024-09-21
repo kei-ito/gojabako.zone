@@ -1,16 +1,16 @@
-import { isObject, isString } from '@nlib/typing';
-import { SKIP } from 'unist-util-visit';
-import { getSingle } from '../getSingle.mts';
-import { mdToInlineHast } from '../node/mdToHast.mts';
-import type { VFileLike } from '../unified.mts';
+import { isObject, isString } from "@nlib/typing";
+import { SKIP } from "unist-util-visit";
+import { getSingle } from "../getSingle.mts";
+import { mdToInlineHast } from "../node/mdToHast.mts";
+import type { VFileLike } from "../unified.mts";
 import {
   createFragmentRef,
   createFragmentTarget,
   createHastElement,
-} from './createHastElement.mts';
-import { insertLineNumbers } from './insertLineNumbers.mts';
-import { isHastElement } from './isHastElement.mts';
-import type { HastElementVisitor } from './visitHastElement.mts';
+} from "./createHastElement.mts";
+import { insertLineNumbers } from "./insertLineNumbers.mts";
+import { isHastElement } from "./isHastElement.mts";
+import type { HastElementVisitor } from "./visitHastElement.mts";
 
 export const visitArticlePre = (
   _file: VFileLike,
@@ -19,12 +19,12 @@ export const visitArticlePre = (
   let count = 0;
   return (e, index, parent) => {
     const code = getSingle(e.children);
-    if (!isHastElement(code, 'code', 'hljs')) {
+    if (!isHastElement(code, "code", "hljs")) {
       return null;
     }
     let language =
-      code.properties.className.find((c) => c.startsWith('language-')) ?? '';
-    language = language.slice('language-'.length);
+      code.properties.className.find((c) => c.startsWith("language-")) ?? "";
+    language = language.slice("language-".length);
     const value = isObject(code.data) && code.data.meta;
     const id = `code${++count}`;
     insertLineNumbers(code, id);
@@ -32,23 +32,23 @@ export const visitArticlePre = (
       index,
       1,
       createHastElement(
-        'figure',
+        "figure",
         {
-          dataType: 'code',
-          ...(isString(value) ? { className: ['caption'] } : {}),
+          dataType: "code",
+          ...(isString(value) ? { className: ["caption"] } : {}),
         },
         createFragmentTarget(id),
         createHastElement(
-          'figcaption',
+          "figcaption",
           {},
           createHastElement(
-            'span',
+            "span",
             {},
             ...(isString(value) ? mdToInlineHast(value) : []),
           ),
           createHastElement(
-            'span',
-            { className: ['language-label'] },
+            "span",
+            { className: ["language-label"] },
             language,
           ),
           createFragmentRef(id),

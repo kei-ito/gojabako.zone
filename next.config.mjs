@@ -13,10 +13,10 @@ const withMDX = mdx({
     remarkPlugins: [remarkGfm, remarkMath],
     rehypePlugins: [
       [rehypeHighlight, { languages: { ...all, terminal: all.bash } }],
-      rehypeSlug,
+      [rehypeSlug],
       [rehypeKatex, { output: 'html' }],
-      rehypeEmbed,
-      rehypeArticle,
+      [rehypeEmbed],
+      [rehypeArticle],
     ],
   },
 });

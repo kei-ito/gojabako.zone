@@ -1,27 +1,28 @@
-import { readFile } from 'node:fs/promises';
-import * as path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
-import { isNonNegativeSafeInteger, isString } from '@nlib/typing';
-import type { Element } from 'hast';
-import type { MdxJsxTextElementHast } from 'mdast-util-mdx-jsx';
-import type { Position } from 'unist';
-import { SKIP } from 'unist-util-visit';
-import { componentsDir } from '../node/directories.mts';
-import { mdToInlineHast } from '../node/mdToHast.mts';
-import type { VFileLike } from '../unified.mts';
-import { addClass } from './className.mts';
+import { readFile } from "node:fs/promises";
+import * as path from "node:path";
+import { fileURLToPath } from "node:url";
+import { isNonNegativeSafeInteger, isString } from "@nlib/typing";
+import type { Element } from "hast";
+import type { MdxJsxTextElementHast } from "mdast-util-mdx-jsx";
+import type { Position } from "unist";
+import { SKIP } from "unist-util-visit";
+import { componentsDir } from "../node/directories.mts";
+import { mdToInlineHast } from "../node/mdToHast.mts";
+import type { VFileLike } from "../unified.mts";
+import { addClass } from "./className.mts";
 import {
   createFragmentRef,
   createFragmentTarget,
   createHastElement,
-} from './createHastElement.mts';
-import { createMdxEsm } from './createMdxJsEsm.mts';
-import { createMdxJsxTextElement } from './createMdxJsxTextElement.mts';
-import { isHastElement } from './isHastElement.mts';
-import { serializePropertyValue } from './serializePropertyValue.mts';
-import type { HastElementVisitor } from './visitHastElement.mts';
+} from "./createHastElement.mts";
+import { createMdxEsm } from "./createMdxJsEsm.mts";
+import { createMdxJsxTextElement } from "./createMdxJsxTextElement.mts";
+import { isHastElement } from "./isHastElement.mts";
+import { serializePropertyValue } from "./serializePropertyValue.mts";
+import type { HastElementVisitor } from "./visitHastElement.mts";
+import { filePathToFileUrl } from "../node/filePathToFileUrl.mts";
 
-const mdxImageComponentFile = new URL('MdxImage', componentsDir);
+const mdxImageComponentFile = new URL("MdxImage", componentsDir);
 
 export const visitArticleImg = (
   file: VFileLike,
@@ -35,13 +36,13 @@ export const visitArticleImg = (
     if (!isString(src)) {
       return null;
     }
-    if (!src.startsWith('./')) {
+    if (!src.startsWith("./")) {
       throw new Error(`InvalidSrc: ${src}`);
     }
     const elements: Array<Element | MdxJsxTextElementHast> = [];
     if (imageCount === 0) {
       const pathToMdxImage = path.relative(
-        fileURLToPath(new URL('.', pathToFileURL(file.path))),
+        fileURLToPath(new URL(".", filePathToFileUrl(file.path))),
         fileURLToPath(mdxImageComponentFile),
       );
       elements.push(
@@ -55,21 +56,21 @@ export const visitArticleImg = (
       imported.set(src, name);
       elements.push(createMdxEsm(`import ${name} from '${src}';`));
     }
-    if (isHastElement(parent, 'p') && parent.children.length === 1) {
-      const alt = createHastElement('span', {});
+    if (isHastElement(parent, "p") && parent.children.length === 1) {
+      const alt = createHastElement("span", {});
       if (e.position) {
-        sourcePromise = sourcePromise ?? readFile(file.path, 'utf8');
+        sourcePromise = sourcePromise ?? readFile(file.path, "utf8");
         tasks.push(parseAlt(parent, alt, sourcePromise, e.position));
       }
-      parent.tagName = 'figure';
-      parent.properties.dataType = 'image';
+      parent.tagName = "figure";
+      parent.properties.dataType = "image";
       elements.push(
         createFragmentTarget(id),
-        createHastElement('figcaption', {}, alt, createFragmentRef(id)),
+        createHastElement("figcaption", {}, alt, createFragmentRef(id)),
       );
     }
     elements.push(
-      createMdxJsxTextElement('Image', {
+      createMdxJsxTextElement("Image", {
         src: [name],
         alt: serializePropertyValue(e.properties.alt),
       }),
@@ -97,6 +98,6 @@ const parseAlt = async (
   const children = [...mdToInlineHast(matched[1])];
   alt.children.push(...children);
   if (0 < children.length) {
-    addClass(parent, 'caption');
+    addClass(parent, "caption");
   }
 };

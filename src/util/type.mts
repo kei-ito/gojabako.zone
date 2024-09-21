@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata } from "next";
 
 export interface Commit {
   commit: string;
@@ -6,7 +6,7 @@ export interface Commit {
   aDate: number;
 }
 
-export interface PageData extends Omit<Metadata, 'title'> {
+export interface PageData extends Omit<Metadata, "title"> {
   title: Array<string>;
   path: string;
   iri: string;

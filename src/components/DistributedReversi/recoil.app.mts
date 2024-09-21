@@ -1,51 +1,50 @@
-import type { FunctionComponent } from 'react';
-import { DefaultValue, atom, atomFamily, selector } from 'recoil';
-import { clamp } from '../../util/clamp.mts';
-import { debounce } from '../../util/debounce.mts';
-import { isClient } from '../../util/env.mts';
-import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
-import { onResolve } from '../../util/promise.mts';
+import type { FunctionComponent } from "react";
+import { DefaultValue, atom, atomFamily, selector } from "recoil";
+import { clamp } from "../../util/clamp.mts";
+import { debounce } from "../../util/debounce.mts";
+import { isClient } from "../../util/env.mts";
+import { getCurrentUrl } from "../../util/getCurrentUrl.mts";
+import { onResolve } from "../../util/promise.mts";
 import {
   syncSearchParamsBoolean,
   syncSearchParamsNumber,
-} from '../../util/recoil/syncSearchParams.mts';
-import { encodeCellList } from './cellList.mts';
-import type { DRBufferId, DRCell, DRCellId, DRMessage } from './util.mts';
-import { toDRCellId, zoom } from './util.mts';
+} from "../../util/recoil/syncSearchParams.mts";
+import { encodeCellList } from "./cellList.mts";
+import type { DRBufferId, DRCell, DRCellId, DRMessage } from "./util.mts";
+import { toDRCellId, zoom } from "./util.mts";
 
 export const rcEditMode = atom<boolean>({
-  key: 'EditMode',
+  key: "EditMode",
   default: false,
 });
 
 export const rcDevMode = atom<boolean>({
-  key: 'DevMode',
+  key: "DevMode",
   default: false,
-  effects: [...syncSearchParamsBoolean('dev', false)],
+  effects: [...syncSearchParamsBoolean("dev", false)],
 });
 
 export const rcFloaterContent = atom<FunctionComponent | null>({
-  key: 'FloaterContent',
+  key: "FloaterContent",
   default: null,
 });
 
 export const rcSelectedCoordinates = atom<Set<DRCellId>>({
-  key: 'SelectedCoordinates',
+  key: "SelectedCoordinates",
   default: new Set(),
 });
 
 export const selectCoordinates =
-  (cellId: DRCellId, mode: 'add' | 'toggle') => (currentSet: Set<DRCellId>) => {
+  (cellId: DRCellId, mode: "add" | "toggle") => (currentSet: Set<DRCellId>) => {
     const newSet = new Set(currentSet);
     switch (mode) {
-      case 'add':
+      case "add":
         if (currentSet.has(cellId)) {
           newSet.delete(cellId);
         } else {
           newSet.add(cellId);
         }
         break;
-      case 'toggle':
       default:
         newSet.clear();
         if (!currentSet.has(cellId)) {
@@ -61,7 +60,7 @@ export interface CellSelection {
 }
 
 export const rcSelectedCells = selector<CellSelection>({
-  key: 'SelectedCells',
+  key: "SelectedCells",
   get: ({ get }) => {
     const map = new Map<DRCellId, DRCell>();
     let maxPlayerCount = 0;
@@ -80,12 +79,12 @@ export const rcSelectedCells = selector<CellSelection>({
 });
 
 export const rcPointerPosition = atom<[number, number] | null>({
-  key: 'PointerPosition',
+  key: "PointerPosition",
   default: null,
 });
 
 export const rcPointeredCell = selector<DRCellId | null>({
-  key: 'PointeredCell',
+  key: "PointeredCell",
   get: ({ get }) => {
     const pointer = get(rcPointerPosition);
     if (pointer) {
@@ -97,20 +96,20 @@ export const rcPointeredCell = selector<DRCellId | null>({
 });
 
 export const rcDragging = atom<AbortController | null>({
-  key: 'Dragging',
+  key: "Dragging",
   default: null,
 });
 
 export const rcTxDelayMs = atom<number>({
-  key: 'TxDelayMs',
+  key: "TxDelayMs",
   default: 300,
-  effects: [...syncSearchParamsNumber('txd', 20)],
+  effects: [...syncSearchParamsNumber("txd", 20)],
 });
 
 export const rcRxDelayMs = atom<number>({
-  key: 'RxDelayMs',
+  key: "RxDelayMs",
   default: 300,
-  effects: [...syncSearchParamsNumber('rxd', 20)],
+  effects: [...syncSearchParamsNumber("rxd", 20)],
 });
 
 export type XYWHZ =
@@ -118,12 +117,12 @@ export type XYWHZ =
   | [number, number, number, number, number];
 
 export const rcXYWHZ = atom<XYWHZ>({
-  key: 'XYZ',
+  key: "XYZ",
   default: [0, 0, 0, 0, 80],
 });
 
 export const rcViewBox = selector<string>({
-  key: 'ViewBox',
+  key: "ViewBox",
   get: ({ get }) => {
     const [x, y, w, h, z, d] = get(rcXYWHZ);
     const r = (v: number) => v.toFixed(3);
@@ -135,7 +134,7 @@ export const rcViewBox = selector<string>({
 });
 
 export const rcZoom = selector<{ z: number; cx?: number; cy?: number }>({
-  key: 'Zoom',
+  key: "Zoom",
   get: ({ get }) => ({ z: get(rcXYWHZ)[4] }),
   set: ({ set }, value) => {
     if (value instanceof DefaultValue) {
@@ -154,25 +153,25 @@ export const rcZoom = selector<{ z: number; cx?: number; cy?: number }>({
 });
 
 export const rcCell = atomFamily<DRCell | null, DRCellId>({
-  key: 'Cell',
+  key: "Cell",
   default: null,
 });
 
 export const rcMessageBuffer = atomFamily<Array<DRMessage>, DRBufferId>({
-  key: 'MessageBuffer',
+  key: "MessageBuffer",
   default: [],
 });
 
 export const rcCellList = atom<Set<DRCellId>>({
-  key: 'CellList',
+  key: "CellList",
   default: new Set(),
   effects: [
     ({ onSet, getPromise }) => {
-      const key = 'c';
+      const key = "c";
       const sync = debounce((list: Set<DRCellId>) => {
         const url = getCurrentUrl();
         url.searchParams.set(key, encodeCellList(list));
-        history.replaceState(null, '', url);
+        history.replaceState(null, "", url);
       }, 400);
       if (isClient) {
         onSet(sync);

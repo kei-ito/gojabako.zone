@@ -1,13 +1,13 @@
-import * as console from 'node:console';
-import { unlink } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
-import { watch } from 'chokidar';
-import { rootDir, srcDir } from '../util/node/directories.mts';
-import { generateCssModuleType } from '../util/node/generateCssModuleType.mts';
-import { ignoreENOENT } from '../util/node/ignoreENOENT.mts';
-import { walkFiles } from '../util/node/walkFiles.mts';
+import * as console from "node:console";
+import { unlink } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import { watch } from "chokidar";
+import { rootDir, srcDir } from "../util/node/directories.mts";
+import { generateCssModuleType } from "../util/node/generateCssModuleType.mts";
+import { ignoreENOENT } from "../util/node/ignoreENOENT.mts";
+import { walkFiles } from "../util/node/walkFiles.mts";
 
-const scssSuffix = '.module.scss';
+const scssSuffix = ".module.scss";
 const rootPath = fileURLToPath(rootDir);
 
 const generate = async (scssFilePath: string) => {
@@ -21,7 +21,7 @@ const cleanup = async (dtsFilePath: string) => {
   console.info(`Removed ${dtsFilePath.slice(rootPath.length)}`);
 };
 
-if (process.argv.includes('--watch')) {
+if (process.argv.includes("--watch")) {
   const onChange = (filePath: string) => {
     if (filePath.endsWith(scssSuffix)) {
       generate(filePath).catch(ignoreENOENT({ throw: false }));
@@ -33,9 +33,9 @@ if (process.argv.includes('--watch')) {
     }
   };
   watch(fileURLToPath(srcDir), { ignoreInitial: true })
-    .on('add', onChange)
-    .on('change', onChange)
-    .on('unlink', onUnlink);
+    .on("add", onChange)
+    .on("change", onChange)
+    .on("unlink", onUnlink);
 } else {
   const processed = new Set<string>();
   const found = new Set<string>();

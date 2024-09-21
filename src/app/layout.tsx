@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import type { PropsWithChildren } from "react";
 import { site } from "../util/site.mts";
-import "./globals.scss";
-import "./hljs.scss";
+import "./globals.css";
+import "./hljs.css";
 
 export const metadata: Metadata = {
   metadataBase: site.baseUrl,

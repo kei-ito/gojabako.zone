@@ -1,17 +1,17 @@
-import { useEffect } from 'react';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { noop } from '../../util/noop.mts';
-import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
-import { vAdd } from '../../util/vector.mts';
-import { rcCell, rcMessageBuffer, rcTxDelayMs } from './recoil.app.mts';
-import type { DRBufferId } from './util.mts';
+import { useEffect } from "react";
+import { useRecoilCallback, useRecoilValue } from "recoil";
+import { noop } from "../../util/noop.mts";
+import { toRecoilSelectorOpts } from "../../util/recoil/selector.mts";
+import { vAdd } from "../../util/vector.mts";
+import { rcCell, rcMessageBuffer, rcTxDelayMs } from "./recoil.app.mts";
+import type { DRBufferId } from "./util.mts";
 import {
   OppositeDRDirection,
   DRAdjacentStep,
   getAdjacentId,
   toDRBufferId,
   isOpenableDRMessage,
-} from './util.mts';
+} from "./util.mts";
 
 export const useTx = (bufferId: DRBufferId) => {
   const transmit = useTransmit(bufferId);
@@ -23,7 +23,7 @@ export const useTx = (bufferId: DRBufferId) => {
       return () => clearTimeout(timerId);
     }
     return noop;
-  }, [txBufferLength, bufferId, transmit, delayMs]);
+  }, [txBufferLength, transmit, delayMs]);
 };
 
 const useTransmit = (bufferId: DRBufferId) =>
@@ -46,7 +46,7 @@ const useTransmit = (bufferId: DRBufferId) =>
         rMsg.ttl -= 1;
       }
       set(
-        rcMessageBuffer(toDRBufferId(adjacentId, OppositeDRDirection[d], 'rx')),
+        rcMessageBuffer(toDRBufferId(adjacentId, OppositeDRDirection[d], "rx")),
         (b) => [...b, rMsg],
       );
     },

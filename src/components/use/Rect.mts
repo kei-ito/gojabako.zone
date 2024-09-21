@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { noop } from '../../util/noop.mts';
+import { useEffect, useState } from "react";
+import { noop } from "../../util/noop.mts";
 
 export function useRect(element: Element): DOMRect;
 export function useRect(element?: Element | null): DOMRect | null;

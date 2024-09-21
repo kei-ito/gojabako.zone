@@ -16,8 +16,8 @@ export default function Icon() {
         justifyContent: "center",
       }}
     >
+      {/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
       <svg viewBox={site.logo.viewBox.join(" ")} width={size.width}>
-        <title>Gojabako Zone</title>
         <path d={site.logo.d} fill="#1e293b" />
       </svg>
     </div>,

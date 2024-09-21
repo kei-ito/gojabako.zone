@@ -1,14 +1,14 @@
-import { HttpStatusCode } from '@nlib/typing';
-import { encodeToUint8Array } from '../../util/encodeToUint8Array.mts';
-import { pageList } from '../../util/pageList.mts';
-import { site } from '../../util/site.mts';
+import { HttpStatusCode } from "@nlib/typing";
+import { encodeToUint8Array } from "../../util/encodeToUint8Array.mts";
+import { pageList } from "../../util/pageList.mts";
+import { site } from "../../util/site.mts";
 
 export const GET = () => {
   return new Response(encodeToUint8Array(selialize()), {
     status: HttpStatusCode.OK,
     headers: {
-      'content-type': 'application/atom+xml; charset=utf-8',
-      'cache-control': 'max-age=10800',
+      "content-type": "application/atom+xml; charset=utf-8",
+      "cache-control": "max-age=10800",
     },
   });
 };
@@ -25,13 +25,13 @@ const selialize = function* () {
   yield `  <updated>${new Date(updated).toISOString()}</updated>\n`;
   yield `  <id>${site.baseUrl}</id>\n`;
   for (const page of pageList) {
-    yield '  <entry>\n';
+    yield "  <entry>\n";
     yield `    <id>${page.iri}</id>\n`;
     yield `    <title>${page.title}</title>\n`;
     yield `    <link href="${new URL(page.path, site.baseUrl)}"/>\n`;
     yield `    <updated>${page.updatedAt}</updated>\n`;
     yield `    <published>${page.publishedAt}</published>\n`;
-    yield '  </entry>\n';
+    yield "  </entry>\n";
   }
-  yield '</feed>\n';
+  yield "</feed>\n";
 };

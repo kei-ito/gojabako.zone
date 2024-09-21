@@ -1,11 +1,11 @@
-import { SKIP } from 'unist-util-visit';
-import type { VFileLike } from '../unified.mts';
+import { SKIP } from "unist-util-visit";
+import type { VFileLike } from "../unified.mts";
 import {
   createFragmentRef,
   createFragmentTarget,
   createHastElement,
-} from './createHastElement.mts';
-import type { HastElementVisitor } from './visitHastElement.mts';
+} from "./createHastElement.mts";
+import type { HastElementVisitor } from "./visitHastElement.mts";
 
 export const visitArticleTable = (
   _file: VFileLike,
@@ -18,13 +18,13 @@ export const visitArticleTable = (
       index,
       1,
       createHastElement(
-        'figure',
-        { dataType: 'table' },
+        "figure",
+        { dataType: "table" },
         createFragmentTarget(id),
         createHastElement(
-          'figcaption',
+          "figcaption",
           {},
-          createHastElement('span', {}),
+          createHastElement("span", {}),
           createFragmentRef(id),
         ),
         e,

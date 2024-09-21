@@ -1,4 +1,4 @@
-import { isObject } from '@nlib/typing';
+import { isObject } from "@nlib/typing";
 
 interface IgnoreConfig {
   /** @default true */
@@ -8,12 +8,11 @@ interface IgnoreConfig {
 export const ignoreENOENT =
   ({ throw: throwError = true }: IgnoreConfig = {}) =>
   (error: unknown) => {
-    if (!isObject(error) || error.code !== 'ENOENT') {
+    if (!isObject(error) || error.code !== "ENOENT") {
       if (throwError) {
         throw error;
-      } else {
-        console.error(error);
       }
+      console.error(error);
     }
     return null;
   };

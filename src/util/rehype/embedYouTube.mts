@@ -1,14 +1,14 @@
-import type { Element } from 'hast';
-import { fromHtml } from 'hast-util-from-html';
-import { toString as hastToString } from 'hast-util-to-string';
-import { EXIT } from 'unist-util-visit';
-import { fetchYouTubeVideoData } from '../node/fetchYouTubeVideoData.mts';
+import type { Element } from "hast";
+import { fromHtml } from "hast-util-from-html";
+import { toString as hastToString } from "hast-util-to-string";
+import { EXIT } from "unist-util-visit";
+import { fetchYouTubeVideoData } from "../node/fetchYouTubeVideoData.mts";
 import {
   createFragmentRef,
   createFragmentTarget,
   createHastElement,
-} from './createHastElement.mts';
-import { visitHastElement } from './visitHastElement.mts';
+} from "./createHastElement.mts";
+import { visitHastElement } from "./visitHastElement.mts";
 
 export const embedYouTube = async function* (
   node: Element,
@@ -23,26 +23,26 @@ export const embedYouTube = async function* (
       result.push(async () => {
         const data = await fetchYouTubeVideoData(videoId);
         if (data) {
-          delete iframe.properties.width;
-          delete iframe.properties.height;
+          iframe.properties.width = undefined;
+          iframe.properties.height = undefined;
           iframe.properties.style = `aspect-ratio:${data.width}/${data.height};`;
         }
         iframe.position = node.position;
         const id = `yt-${videoId}`;
         return createHastElement(
-          'figure',
-          { dataType: 'youtube', className: ['caption'] },
+          "figure",
+          { dataType: "youtube", className: ["caption"] },
           createFragmentTarget(id),
           createHastElement(
-            'figcaption',
+            "figcaption",
             {},
             data
               ? createHastElement(
-                  'a',
-                  { href: data.watchUrl.href, target: '_blank' },
+                  "a",
+                  { href: data.watchUrl.href, target: "_blank" },
                   data.title,
                 )
-              : createHastElement('span', {}),
+              : createHastElement("span", {}),
             createFragmentRef(id),
           ),
           iframe,
@@ -57,7 +57,7 @@ export const embedYouTube = async function* (
 };
 
 const getYouTubeVideoId = (url: URL): string | null => {
-  let videoId = url.searchParams.get('v');
+  let videoId = url.searchParams.get("v");
   if (!videoId) {
     const matched = /\/(?:embed|v|youtu\.be)\/([^/]*)$/.exec(url.href);
     if (matched) {

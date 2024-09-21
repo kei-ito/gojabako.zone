@@ -1,6 +1,6 @@
 export const minmax = (values: Iterable<number>): [number, number] => {
-  let min = Infinity;
-  let max = -Infinity;
+  let min = Number.POSITIVE_INFINITY;
+  let max = Number.NEGATIVE_INFINITY;
   for (const value of values) {
     if (value < min) {
       min = value;

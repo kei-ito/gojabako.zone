@@ -1,7 +1,7 @@
-import { isFiniteNumber } from '@nlib/typing';
-import type { AtomEffect } from 'recoil';
-import { debounce } from '../debounce.mts';
-import { getCurrentUrl } from '../getCurrentUrl.mts';
+import { isFiniteNumber } from "@nlib/typing";
+import type { AtomEffect } from "recoil";
+import { debounce } from "../debounce.mts";
+import { getCurrentUrl } from "../getCurrentUrl.mts";
 
 const debounceMs = 200;
 
@@ -12,13 +12,13 @@ export const syncSearchParamsBoolean = function* (
   yield ({ setSelf }) => {
     const url = getCurrentUrl();
     const value = url.searchParams.get(key);
-    if (value === '1' || value === '0') {
-      setSelf(value === '1');
+    if (value === "1" || value === "0") {
+      setSelf(value === "1");
     } else {
       setSelf(defaultValue);
       if (value) {
         url.searchParams.delete(key);
-        history.replaceState(null, '', url);
+        history.replaceState(null, "", url);
       }
     }
   };
@@ -28,9 +28,9 @@ export const syncSearchParamsBoolean = function* (
       if (value === defaultValue) {
         url.searchParams.delete(key);
       } else {
-        url.searchParams.set(key, value ? '1' : '0');
+        url.searchParams.set(key, value ? "1" : "0");
       }
-      history.replaceState(null, '', url);
+      history.replaceState(null, "", url);
     }, debounceMs);
     onSet(sync);
     return sync.abort;
@@ -52,7 +52,7 @@ export const syncSearchParamsNumber = function* (
       setSelf(defaultValue);
       if (param) {
         url.searchParams.delete(key);
-        history.replaceState(null, '', url);
+        history.replaceState(null, "", url);
       }
     }
   };
@@ -64,7 +64,7 @@ export const syncSearchParamsNumber = function* (
       } else {
         url.searchParams.set(key, value.toFixed(precision));
       }
-      history.replaceState(null, '', url);
+      history.replaceState(null, "", url);
     }, debounceMs);
     onSet(sync);
     return sync.abort;

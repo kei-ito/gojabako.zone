@@ -1,6 +1,6 @@
-import type { SyntheticEvent } from 'react';
-import { useCallback, useState } from 'react';
-import { isClient } from '../../util/env.mts';
+import type { SyntheticEvent } from "react";
+import { useCallback, useState } from "react";
+import { isClient } from "../../util/env.mts";
 
 export const useFullScreen = (selector: string) => {
   const [state, setState] = useState(getState());

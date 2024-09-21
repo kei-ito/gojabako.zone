@@ -1,7 +1,7 @@
-import { isSafeInteger } from '@nlib/typing';
-import { decode, encode } from 'vlq';
-import { toDRCellId } from './util.mts';
-import type { DRCellId } from './util.mts';
+import { isSafeInteger } from "@nlib/typing";
+import { decode, encode } from "vlq";
+import { toDRCellId } from "./util.mts";
+import type { DRCellId } from "./util.mts";
 
 export const encodeCellList = (cellList: Set<DRCellId>): string => {
   const limits = getBoundingLimits(cellList);
@@ -49,10 +49,10 @@ export const decodeCellList = function* (encoded: string): Generator<DRCellId> {
 type Limits = [number, number, number, number];
 
 const getBoundingLimits = (cellList: Iterable<DRCellId>): Limits => {
-  let minX = Infinity;
-  let maxX = -Infinity;
-  let minY = Infinity;
-  let maxY = -Infinity;
+  let minX = Number.POSITIVE_INFINITY;
+  let maxX = Number.NEGATIVE_INFINITY;
+  let minY = Number.POSITIVE_INFINITY;
+  let maxY = Number.NEGATIVE_INFINITY;
   for (const [x, y] of cellList) {
     if (x < minX) {
       minX = x;

@@ -1,21 +1,21 @@
-import { entries, isString } from '@nlib/typing';
-import { parse } from 'acorn';
-import type { Program } from 'estree';
+import { entries, isString } from "@nlib/typing";
+import { parse } from "acorn";
+import type { Program } from "estree";
 import type {
   MdxJsxTextElementHast,
   MdxJsxAttribute,
   MdxJsxAttributeValueExpression,
-} from 'mdast-util-mdx-jsx';
+} from "mdast-util-mdx-jsx";
 
 export const createMdxJsxTextElement = (
   component: string,
   attributes: Record<string, string | [string]>,
-  ...children: MdxJsxTextElementHast['children']
+  ...children: MdxJsxTextElementHast["children"]
 ): MdxJsxTextElementHast => ({
-  type: 'mdxJsxTextElement',
+  type: "mdxJsxTextElement",
   name: component,
   attributes: entries(attributes).map<MdxJsxAttribute>(([name, value]) => ({
-    type: 'mdxJsxAttribute',
+    type: "mdxJsxAttribute",
     name,
     value: isString(value) ? value : parseExpression(value[0]),
   })),
@@ -23,9 +23,9 @@ export const createMdxJsxTextElement = (
 });
 
 const parseExpression = (expr: string): MdxJsxAttributeValueExpression => {
-  const node = parse(expr, { ecmaVersion: 'latest', sourceType: 'module' });
+  const node = parse(expr, { ecmaVersion: "latest", sourceType: "module" });
   return {
-    type: 'mdxJsxAttributeValueExpression',
+    type: "mdxJsxAttributeValueExpression",
     value: expr,
     data: { estree: node as unknown as Program },
   };

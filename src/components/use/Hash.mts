@@ -1,8 +1,8 @@
-import { isString } from '@nlib/typing';
-import { useCallback, useEffect, useState } from 'react';
-import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
+import { isString } from "@nlib/typing";
+import { useCallback, useEffect, useState } from "react";
+import { getCurrentUrl } from "../../util/getCurrentUrl.mts";
 
-const eventName = '_hashchange';
+const eventName = "_hashchange";
 const get = () => decodeURIComponent(getCurrentUrl().hash);
 
 export const useHash = (): [string, (newHash?: string) => void] => {
@@ -14,14 +14,14 @@ export const useHash = (): [string, (newHash?: string) => void] => {
       if (url.hash === newHash && !newHash) {
         return;
       }
-      url.hash = url.hash === newHash ? '' : newHash;
-      history.replaceState(null, '', url);
+      url.hash = url.hash === newHash ? "" : newHash;
+      history.replaceState(null, "", url);
     }
     dispatchEvent(new Event(eventName));
   }, []);
   useEffect(() => {
     const abc = new AbortController();
-    addEventListener('hashchange', set, { signal: abc.signal });
+    addEventListener("hashchange", set, { signal: abc.signal });
     addEventListener(eventName, set, { signal: abc.signal });
     return () => abc.abort();
   }, [set]);
