@@ -232,7 +232,7 @@ export const pageList: Array<PageData> = [
   },
   {
     publishedAt: '2023-09-18T10:16:16.000Z',
-    updatedAt: '2024-09-21T03:19:37.000Z',
+    updatedAt: '2024-09-21T03:20:58.000Z',
     commits: 10,
     title: ['Home'],
     path: '/',
