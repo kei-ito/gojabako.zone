@@ -1,4 +1,4 @@
-import { Writable } from 'node:stream';
+import { Writable } from "node:stream";
 
 export class Terminator extends Writable {
   private readonly chunks: Array<Buffer>;

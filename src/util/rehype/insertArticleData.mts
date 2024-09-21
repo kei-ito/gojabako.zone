@@ -1,15 +1,15 @@
-import { isString } from '@nlib/typing';
-import type { Element, Root, RootContent } from 'hast';
-import type { MdxjsEsm } from 'mdast-util-mdxjs-esm';
-import { getPageFromFileUrl } from '../getPage.mts';
-import { site } from '../site.mts';
-import type { PageData } from '../type.mts';
-import type { VFileLike } from '../unified.mts';
-import { createHastElement } from './createHastElement.mts';
-import { setOpenGraphMetadata } from './setOpenGraphMetadata.mts';
-import { filePathToFileUrl } from '../node/filePathToFileUrl.mts';
+import { isString } from "@nlib/typing";
+import type { Element, Root, RootContent } from "hast";
+import type { MdxjsEsm } from "mdast-util-mdxjs-esm";
+import { getPageFromFileUrl } from "../getPage.mts";
+import { site } from "../site.mts";
+import type { PageData } from "../type.mts";
+import type { VFileLike } from "../unified.mts";
+import { createHastElement } from "./createHastElement.mts";
+import { setOpenGraphMetadata } from "./setOpenGraphMetadata.mts";
+import { filePathToFileUrl } from "../node/filePathToFileUrl.mts";
 
-interface RootLike extends Omit<Root, 'children'> {
+interface RootLike extends Omit<Root, "children"> {
   children: Array<MdxjsEsm | RootContent>;
 }
 
@@ -19,10 +19,10 @@ export const insertArticleData = (root: RootLike, file: VFileLike) => {
     setOpenGraphMetadata(root, page);
     root.children.unshift(
       createHastElement(
-        'header',
+        "header",
         {},
-        createHastElement('h1', {}, page.title.join('')),
-        createHastElement('div', {}, ...listMetaElements(page)),
+        createHastElement("h1", {}, page.title.join("")),
+        createHastElement("div", {}, ...listMetaElements(page)),
       ),
     );
   }
@@ -40,31 +40,31 @@ const listMetaElements = function* (
 ): Generator<Element | string> {
   const originalLocation = getOriginalLocation(page);
   yield createHastElement(
-    'span',
+    "span",
     { title: page.publishedAt },
     createHastElement(
-      'time',
+      "time",
       { dateTime: page.publishedAt },
       toDateString(page.publishedAt),
     ),
-    originalLocation ? `に ${originalLocation} で公開` : 'に公開',
+    originalLocation ? `に ${originalLocation} で公開` : "に公開",
   );
   if (page.publishedAt !== page.updatedAt) {
     yield createHastElement(
-      'span',
+      "span",
       { title: page.updatedAt },
-      '（',
+      "（",
       createHastElement(
-        'time',
+        "time",
         { dateTime: page.updatedAt },
         toDateString(page.updatedAt),
       ),
-      'に更新）',
+      "に更新）",
     );
   }
   if (1 < page.commits) {
     yield createHastElement(
-      'a',
+      "a",
       {
         href: new URL(`commits/main/${page.filePath}`, site.repositoryUrl).href,
       },
@@ -75,11 +75,11 @@ const listMetaElements = function* (
 
 const toDateString = (src: string) => {
   const d = new Date(src);
-  let result = '';
+  let result = "";
   result += d.getFullYear();
-  result += '/';
+  result += "/";
   result += d.getMonth() + 1;
-  result += '/';
+  result += "/";
   result += d.getDate();
   return result;
 };

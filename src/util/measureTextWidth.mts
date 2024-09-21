@@ -1,4 +1,4 @@
-import { listCodePoints } from '@nlib/typing';
+import { listCodePoints } from "@nlib/typing";
 
 const widths = new Map<number, number>([
   [65, 12.26],
@@ -109,12 +109,12 @@ export const listLines = function* (
   fontScale = 1,
 ) {
   let totalWidth = 0;
-  let line = '';
+  let line = "";
   for (const phrase of phrases) {
     const width = measureTextWidth(phrase) * fontScale;
     if (maxWidth < totalWidth + width) {
       yield line;
-      line = '';
+      line = "";
       totalWidth = 0;
     }
     line += phrase;

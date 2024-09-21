@@ -1,20 +1,20 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { isString } from '@nlib/typing';
-import type { PageMetaData } from '../extractPageMetaDataFromHtml.mts';
-import { extractPageMetaDataFromHtml } from '../extractPageMetaDataFromHtml.mts';
-import { cacheDir } from './directories.mts';
-import { getHash } from './getHash.mts';
-import { ignoreENOENT } from './ignoreENOENT.mts';
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { isString } from "@nlib/typing";
+import type { PageMetaData } from "../extractPageMetaDataFromHtml.mts";
+import { extractPageMetaDataFromHtml } from "../extractPageMetaDataFromHtml.mts";
+import { cacheDir } from "./directories.mts";
+import { getHash } from "./getHash.mts";
+import { ignoreENOENT } from "./ignoreENOENT.mts";
 
 const sessionCache = new Map<string, PageMetaData>();
-const fnCacheDir = new URL('fetchWebPageMetaData/', cacheDir);
+const fnCacheDir = new URL("fetchWebPageMetaData/", cacheDir);
 const getCacheDest = (pageUrl: URL) =>
   new URL(`${getHash(pageUrl.href)}.json`, fnCacheDir);
 const getCache = async (pageUrl: URL) => {
   let cached = sessionCache.get(pageUrl.href) ?? null;
   if (!cached) {
     const cacheDest = getCacheDest(pageUrl);
-    const json = await readFile(cacheDest, 'utf8').catch(ignoreENOENT());
+    const json = await readFile(cacheDest, "utf8").catch(ignoreENOENT());
     if (json) {
       const parsed: unknown = JSON.parse(json);
       if (isString.array.dictionary(parsed)) {

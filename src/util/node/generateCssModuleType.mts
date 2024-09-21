@@ -1,13 +1,13 @@
-import { readFile, writeFile } from 'node:fs/promises';
-import type { Root, AtRule, Rule } from 'postcss';
-import { parse as parseScss } from 'postcss-scss';
-import parseSelector from 'postcss-selector-parser';
+import { readFile, writeFile } from "node:fs/promises";
+import type { Root, AtRule, Rule } from "postcss";
+import { parse as parseScss } from "postcss-scss";
+import parseSelector from "postcss-selector-parser";
 
 export const generateCssModuleType = async (
   scssFilePath: string,
   localByDefault = true,
 ) => {
-  const root = parseScss(await readFile(scssFilePath, 'utf-8'));
+  const root = parseScss(await readFile(scssFilePath, "utf-8"));
   const dest = `${scssFilePath}.d.ts`;
   await writeFile(
     dest,
@@ -36,7 +36,7 @@ export const listSelectors = function* (
   container: AtRule | Root | Rule,
 ): Generator<string> {
   const selectors = new Set<string>();
-  if ('selector' in container) {
+  if ("selector" in container) {
     const root = parseSelector().astSync(container.selector, {
       lossless: false,
     });
@@ -50,13 +50,13 @@ export const listSelectors = function* (
     return;
   }
   for (const child of container.nodes) {
-    if ('nodes' in child) {
+    if ("nodes" in child) {
       for (const s of listSelectors(child)) {
         if (selectors.size === 0) {
           yield s;
         } else {
           for (const parent of selectors) {
-            yield `${parent}${s.startsWith('&') ? s.slice(1) : ` ${s}`}`;
+            yield `${parent}${s.startsWith("&") ? s.slice(1) : ` ${s}`}`;
           }
         }
       }
@@ -71,18 +71,18 @@ export const listLocalNamesInSelector = function* (
   let currentIsLocal = isLocal;
   for (const node of container.nodes) {
     switch (node.type) {
-      case 'root':
-      case 'selector':
+      case "root":
+      case "selector":
         yield* listLocalNamesInSelector(node, currentIsLocal);
         break;
-      case 'class':
+      case "class":
         if (currentIsLocal) {
           yield node.value;
         }
         break;
-      case 'pseudo':
+      case "pseudo":
         switch (node.value) {
-          case ':global':
+          case ":global":
             if (0 < node.nodes.length) {
               for (const c of node.nodes) {
                 yield* listLocalNamesInSelector(c, false);
@@ -91,7 +91,7 @@ export const listLocalNamesInSelector = function* (
               currentIsLocal = false;
             }
             break;
-          case ':local':
+          case ":local":
             if (0 < node.nodes.length) {
               for (const c of node.nodes) {
                 yield* listLocalNamesInSelector(c, true);
@@ -109,7 +109,7 @@ export const listLocalNamesInSelector = function* (
 };
 
 export const generateTypeDefinition = (localNames: Iterable<string>) => {
-  let code = '';
+  let code = "";
   for (let name of localNames) {
     name = name.replace(/-+([a-z])/g, (_, c: string) => c.toUpperCase());
     code += `export declare const ${name}: string;\n`;

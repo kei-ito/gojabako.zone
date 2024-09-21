@@ -1,15 +1,15 @@
-import { useEffect } from 'react';
-import { getCurrentUrl } from '../../util/getCurrentUrl.mts';
-import { minmax } from '../../util/minmax.mts';
-import { noop } from '../../util/noop.mts';
+import { useEffect } from "react";
+import { getCurrentUrl } from "../../util/getCurrentUrl.mts";
+import { minmax } from "../../util/minmax.mts";
+import { noop } from "../../util/noop.mts";
 import {
   listValues,
   normalizeRanges,
   parseRangeListString,
   toRangeListString,
-} from '../../util/range.mts';
-import { useHash } from './Hash.mts';
-import { hashHitClassName } from './HighlightAndScroll.mts';
+} from "../../util/range.mts";
+import { useHash } from "./Hash.mts";
+import { hashHitClassName } from "./HighlightAndScroll.mts";
 
 export const useLineLinkHandlers = (root: Element | null) => {
   const [, syncHash] = useHash();
@@ -31,8 +31,8 @@ export const useLineLinkHandlers = (root: Element | null) => {
           }),
         );
       };
-      for (const a of root.querySelectorAll<HTMLAnchorElement>('a.hljs-ln')) {
-        a.addEventListener('click', onClick, { signal: abc.signal });
+      for (const a of root.querySelectorAll<HTMLAnchorElement>("a.hljs-ln")) {
+        a.addEventListener("click", onClick, { signal: abc.signal });
       }
     };
     const reset = () => {
@@ -67,7 +67,7 @@ const calculateHash = (
   }
   if (requestedLineId === currentLineId) {
     const reset = getCurrentUrl();
-    reset.hash = '';
+    reset.hash = "";
     return reset.hash;
   }
   let ranges = [...parseRangeListString(requestedLineId)];
@@ -106,7 +106,7 @@ export const useHighlightCodeLines = (root: Element | null) => {
         let line = code.firstElementChild;
         for (const i of listValues(normalizedRanges)) {
           const href = `#${codeId}L${i}`;
-          while (line && line.getAttribute('href') !== href) {
+          while (line && line.getAttribute("href") !== href) {
             line = line.nextElementSibling;
           }
           if (!line) {
@@ -116,7 +116,7 @@ export const useHighlightCodeLines = (root: Element | null) => {
           targets.add(line);
         }
       } else {
-        history.replaceState(null, '', `#${codeId}L${expected}`);
+        history.replaceState(null, "", `#${codeId}L${expected}`);
       }
     }
     return () => {
@@ -129,7 +129,7 @@ export const useHighlightCodeLines = (root: Element | null) => {
 
 const getCodeElement = (codeId: string, root: Element | null) => {
   let code = codeId && root ? root.querySelector(`#${codeId}`) : null;
-  while (code && code.tagName.toLowerCase() !== 'code') {
+  while (code && code.tagName.toLowerCase() !== "code") {
     code = code.nextElementSibling;
   }
   return code;
@@ -137,5 +137,5 @@ const getCodeElement = (codeId: string, root: Element | null) => {
 
 const parseHash = (hash: string) => {
   const matched = /^#(\w+?)(?:L([\d-,]*))?$/.exec(hash) ?? [];
-  return [matched[1] || '', matched[2] || ''];
+  return [matched[1] || "", matched[2] || ""];
 };

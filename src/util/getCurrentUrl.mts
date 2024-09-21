@@ -1,6 +1,6 @@
-import type { ReadonlyURLSearchParams } from 'next/navigation';
-import { isClient } from './env.mts';
-import { site } from './site.mts';
+import type { ReadonlyURLSearchParams } from "next/navigation";
+import { isClient } from "./env.mts";
+import { site } from "./site.mts";
 
 interface Fn {
   (): URL;

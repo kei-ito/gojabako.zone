@@ -1,4 +1,4 @@
-import { noop } from './noop.mts';
+import { noop } from "./noop.mts";
 
 export const debounce = <A extends Array<unknown>>(
   fn: (...args: A) => void,

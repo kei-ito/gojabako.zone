@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback } from "react";
 
 export const useOnClickLog = <T,>(value: T) =>
   useCallback(

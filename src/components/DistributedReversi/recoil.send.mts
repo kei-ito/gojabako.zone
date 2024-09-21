@@ -1,19 +1,19 @@
-import { isSafeInteger } from '@nlib/typing';
-import type { RecoilSelectorOpts } from '../../util/recoil/selector.mts';
-import { rcCell, rcMessageBuffer } from './recoil.app.mts';
+import { isSafeInteger } from "@nlib/typing";
+import type { RecoilSelectorOpts } from "../../util/recoil/selector.mts";
+import { rcCell, rcMessageBuffer } from "./recoil.app.mts";
 import type {
   DRCellId,
   DRDiagonalDirection,
   DRDirection,
   DRMessage,
-} from './util.mts';
+} from "./util.mts";
 import {
   DRDirections,
   getAdjacentId,
   isDRDiagonalDirection,
   isDRDirection,
   toDRBufferId,
-} from './util.mts';
+} from "./util.mts";
 
 export const sendDRMessage = (
   rso: RecoilSelectorOpts,
@@ -43,11 +43,11 @@ export const forwardDRMessage = (
   }
   if (isDRDirection(mode)) {
     return sendD(rso, cellId, msg, mode);
-  } else if (isDRDiagonalDirection(mode)) {
-    return sendDD(rso, cellId, msg, mode);
-  } else {
-    return spread(rso, cellId, msg, from);
   }
+  if (isDRDiagonalDirection(mode)) {
+    return sendDD(rso, cellId, msg, mode);
+  }
+  return spread(rso, cellId, msg, from);
 };
 
 const sendD = (
@@ -59,7 +59,7 @@ const sendD = (
   const adjacentId = getAdjacentId([cellId, d]);
   const adjacentCell = get(rcCell(adjacentId));
   if (adjacentCell) {
-    set(rcMessageBuffer(toDRBufferId(cellId, d, 'tx')), (b) => [...b, msg]);
+    set(rcMessageBuffer(toDRBufferId(cellId, d, "tx")), (b) => [...b, msg]);
     return true;
   }
   return false;
@@ -75,11 +75,11 @@ const sendDD = (
   const dy = Math.abs(msg.d[1]);
   if (dy < dx) {
     return sendD(rso, cellId, msg, dd[0] as DRDirection);
-  } else if (dx < dy) {
-    return sendD(rso, cellId, msg, dd[1] as DRDirection);
-  } else {
-    return sendToIdleBuffer(rso, cellId, msg, dd);
   }
+  if (dx < dy) {
+    return sendD(rso, cellId, msg, dd[1] as DRDirection);
+  }
+  return sendToIdleBuffer(rso, cellId, msg, dd);
 };
 
 const sendToIdleBuffer = (
@@ -91,7 +91,7 @@ const sendToIdleBuffer = (
   const counts: Partial<Record<DRDirection, number>> = {};
   for (const d of dd as Iterable<DRDirection>) {
     if (!(d in counts) && get(rcCell(getAdjacentId([cellId, d])))) {
-      counts[d] = get(rcMessageBuffer(toDRBufferId(cellId, d, 'tx'))).length;
+      counts[d] = get(rcMessageBuffer(toDRBufferId(cellId, d, "tx"))).length;
     }
   }
   let min: [number, DRDirection] | null = null;
@@ -103,7 +103,7 @@ const sendToIdleBuffer = (
   }
   if (min) {
     // sendD()でよいですが存在チェックが済んでいるので直接set()します
-    set(rcMessageBuffer(toDRBufferId(cellId, min[1], 'tx')), (b) => [
+    set(rcMessageBuffer(toDRBufferId(cellId, min[1], "tx")), (b) => [
       ...b,
       msg,
     ]);

@@ -1,4 +1,4 @@
-import type { CallbackInterface, RecoilState, RecoilValue } from 'recoil';
+import type { CallbackInterface, RecoilState, RecoilValue } from "recoil";
 
 export interface RecoilSelectorOpts {
   set: <T>(recoilVal: RecoilState<T>, newVal: T | ((currVal: T) => T)) => void;

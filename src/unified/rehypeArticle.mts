@@ -1,15 +1,15 @@
-import type { Root } from 'hast';
-import { insertArticleData } from '../util/rehype/insertArticleData.mts';
-import { visitArticleA } from '../util/rehype/visitArticleA.mts';
-import { visitArticleHeading } from '../util/rehype/visitArticleHeading.mts';
-import { visitArticleImg } from '../util/rehype/visitArticleImg.mts';
-import { visitArticleLi } from '../util/rehype/visitArticleLi.mts';
-import { visitArticlePre } from '../util/rehype/visitArticlePre.mts';
-import { visitArticleSpan } from '../util/rehype/visitArticleSpan.mts';
-import { visitArticleSup } from '../util/rehype/visitArticleSup.mts';
-import { visitArticleTable } from '../util/rehype/visitArticleTable.mts';
-import { visitHastElement } from '../util/rehype/visitHastElement.mts';
-import type { VFileLike } from '../util/unified.mts';
+import type { Root } from "hast";
+import { insertArticleData } from "../util/rehype/insertArticleData.mts";
+import { visitArticleA } from "../util/rehype/visitArticleA.mts";
+import { visitArticleHeading } from "../util/rehype/visitArticleHeading.mts";
+import { visitArticleImg } from "../util/rehype/visitArticleImg.mts";
+import { visitArticleLi } from "../util/rehype/visitArticleLi.mts";
+import { visitArticlePre } from "../util/rehype/visitArticlePre.mts";
+import { visitArticleSpan } from "../util/rehype/visitArticleSpan.mts";
+import { visitArticleSup } from "../util/rehype/visitArticleSup.mts";
+import { visitArticleTable } from "../util/rehype/visitArticleTable.mts";
+import { visitHastElement } from "../util/rehype/visitHastElement.mts";
+import type { VFileLike } from "../util/unified.mts";
 
 export const rehypeArticle = () => async (tree: Root, file: VFileLike) => {
   const tasks: Array<Promise<void>> = [];

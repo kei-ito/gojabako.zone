@@ -1,14 +1,14 @@
-import * as console from 'node:console';
-import { writeFile } from 'node:fs/promises';
-import { fileURLToPath } from 'node:url';
-import { watch } from 'chokidar';
-import { componentsDir, rootDir } from '../util/node/directories.mts';
-import { formatCode } from '../util/node/formatCode.mts';
-import { walkFiles } from '../util/node/walkFiles.mts';
-import { noop } from '../util/noop.mts';
+import * as console from "node:console";
+import { writeFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import { watch } from "chokidar";
+import { componentsDir, rootDir } from "../util/node/directories.mts";
+import { formatCode } from "../util/node/formatCode.mts";
+import { walkFiles } from "../util/node/walkFiles.mts";
+import { noop } from "../util/noop.mts";
 
-const dest = new URL('Storybook/all.mts', componentsDir);
-const storySuffix = '/index.stories.tsx';
+const dest = new URL("Storybook/all.mts", componentsDir);
+const storySuffix = "/index.stories.tsx";
 const storyFiles = new Set<string>();
 const componentsDirPath = fileURLToPath(componentsDir);
 
@@ -17,7 +17,7 @@ const onError = (error: unknown) => {
 };
 
 const generate = async () => {
-  let code = '';
+  let code = "";
   code += "import type { StoryObj } from '@storybook/react';";
   let count = 0;
   const groupNames = new Map<string, string>();
@@ -25,11 +25,11 @@ const generate = async () => {
     const relativePath = filePath.slice(componentsDirPath.length);
     const name = `g${++count}`;
     groupNames.set(relativePath.slice(0, -storySuffix.length), name);
-    const source = `../${relativePath}`.replace(/\.tsx?$/, '');
+    const source = `../${relativePath}`.replace(/\.tsx?$/, "");
     code += `import * as ${name} from '${source}';`;
   }
-  code += 'type Stories = Record<string, StoryObj>;';
-  code += 'export const storyGroups = new Map<string, Stories>();';
+  code += "type Stories = Record<string, StoryObj>;";
+  code += "export const storyGroups = new Map<string, Stories>();";
   for (const [relativePath, name] of groupNames) {
     code += `storyGroups.set('${relativePath}', ${name} as Stories);`;
   }
@@ -38,7 +38,7 @@ const generate = async () => {
   return dest;
 };
 
-if (process.argv.includes('--watch')) {
+if (process.argv.includes("--watch")) {
   let timerId = setTimeout(noop);
   const update = () => {
     clearTimeout(timerId);
@@ -59,9 +59,9 @@ if (process.argv.includes('--watch')) {
     }
   };
   watch(fileURLToPath(componentsDir), { ignoreInitial: false })
-    .on('add', onChange)
-    .on('change', onChange)
-    .on('unlink', onUnlink);
+    .on("add", onChange)
+    .on("change", onChange)
+    .on("unlink", onUnlink);
 } else {
   for await (const file of walkFiles(componentsDir)) {
     const filePath = fileURLToPath(file);

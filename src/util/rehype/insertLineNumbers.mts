@@ -1,5 +1,5 @@
-import type { Element, Text } from 'hast';
-import { createHastElement } from './createHastElement.mts';
+import type { Element, Text } from "hast";
+import { createHastElement } from "./createHastElement.mts";
 
 export const insertLineNumbers = (node: Element, codeId: string) => {
   let lineNumber = 0;
@@ -9,12 +9,12 @@ export const insertLineNumbers = (node: Element, codeId: string) => {
       const id = `${codeId}L${++lineNumber}`;
       elements.push(
         createHastElement(
-          'a',
-          { href: `#${id}`, className: ['hljs-ln'], draggable: 'false' },
-          createHastElement('span', { id, className: ['fragment-target'] }),
-          createHastElement('span', {}, `${lineNumber}`),
+          "a",
+          { href: `#${id}`, className: ["hljs-ln"], draggable: "false" },
+          createHastElement("span", { id, className: ["fragment-target"] }),
+          createHastElement("span", {}, `${lineNumber}`),
         ),
-        createHastElement('span', {}, ...line),
+        createHastElement("span", {}, ...line),
       );
     }
   }
@@ -37,17 +37,17 @@ const listFragments = function* (
   };
   for (const child of node.children) {
     switch (child.type) {
-      case 'text':
+      case "text":
         for (const value of listLines(child.value)) {
           if (value === 0) {
             yield* flush();
             yield 0;
           } else {
-            buffer.push({ type: 'text', value });
+            buffer.push({ type: "text", value });
           }
         }
         break;
-      case 'element':
+      case "element":
         for (const children of listFragments(child)) {
           if (children === 0) {
             yield* flush();
@@ -66,7 +66,7 @@ const listFragments = function* (
 };
 
 const isEmptyText = (e: Element | Text) => {
-  return e.type === 'text' && !e.value;
+  return e.type === "text" && !e.value;
 };
 
 const listLines = function* (text: string): Generator<string | 0> {
@@ -75,13 +75,12 @@ const listLines = function* (text: string): Generator<string | 0> {
     if (0 < pos) {
       yield 0;
     }
-    const index = text.indexOf('\n', pos);
+    const index = text.indexOf("\n", pos);
     if (index < 0) {
       yield text.slice(pos);
       break;
-    } else {
-      yield text.slice(pos, index);
-      pos = index + 1;
     }
+    yield text.slice(pos, index);
+    pos = index + 1;
   }
 };

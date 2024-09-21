@@ -1,15 +1,15 @@
-import { useRecoilCallback } from 'recoil';
-import { iterate } from '../../util/iterate.mts';
-import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
-import { rcCell, rcDragging } from './recoil.app.mts';
-import { sendDRMessage } from './recoil.send.mts';
-import type { DRCellId } from './util.mts';
+import { useRecoilCallback } from "recoil";
+import { iterate } from "../../util/iterate.mts";
+import { toRecoilSelectorOpts } from "../../util/recoil/selector.mts";
+import { rcCell, rcDragging } from "./recoil.app.mts";
+import { sendDRMessage } from "./recoil.send.mts";
+import type { DRCellId } from "./util.mts";
 import {
   DRDiagonalDirections,
   DRDirections,
   generateMessageProps,
   stepDRSharedState,
-} from './util.mts';
+} from "./util.mts";
 
 export const useOnPressCell = (cellId: DRCellId) =>
   useRecoilCallback(
@@ -27,15 +27,15 @@ export const useOnPressCell = (cellId: DRCellId) =>
         sendDRMessage(rso, cellId, {
           ...generateMessageProps(),
           mode,
-          type: 'reversi1',
+          type: "reversi1",
           payload: cell.shared,
         });
       }
       const nextSharedState = stepDRSharedState(cell.shared);
       sendDRMessage(rso, cellId, {
         ...generateMessageProps(),
-        mode: 'spread',
-        type: 'setShared',
+        mode: "spread",
+        type: "setShared",
         payload: nextSharedState,
       });
       set(rcCell(cellId), {

@@ -1,22 +1,22 @@
-import { isString } from '@nlib/typing';
-import type { Metadata } from 'next';
-import { site } from '../site.mts';
-import type { PageData } from '../type.mts';
-import { appDir, rootDir } from './directories.mts';
-import { getMetadataFromMdx } from './getMetadataFromMdx.mts';
-import { getMetadataFromScript } from './getMetadataFromScript.mts';
-import { listCommits } from './listCommits.mts';
-import { getTokenizer, listPhrases } from './listPhrases.mts';
+import { isString } from "@nlib/typing";
+import type { Metadata } from "next";
+import { site } from "../site.mts";
+import type { PageData } from "../type.mts";
+import { appDir, rootDir } from "./directories.mts";
+import { getMetadataFromMdx } from "./getMetadataFromMdx.mts";
+import { getMetadataFromScript } from "./getMetadataFromScript.mts";
+import { listCommits } from "./listCommits.mts";
+import { getTokenizer, listPhrases } from "./listPhrases.mts";
 
 const knownTitles = new Map<string, string>();
-knownTitles.set('/', 'Home');
+knownTitles.set("/", "Home");
 
 export const getPageData = async (file: URL): Promise<PageData> => {
   let pagePath = file.pathname.slice(appDir.pathname.length - 1);
-  pagePath = pagePath.replace(/\/page\.\w+$/, '');
-  pagePath = pagePath.replace(/\([^/]+\)\//, '');
-  pagePath = pagePath.replace(/\/\[+[^\]]*\]+/, '');
-  pagePath = pagePath || '/';
+  pagePath = pagePath.replace(/\/page\.\w+$/, "");
+  pagePath = pagePath.replace(/\([^/]+\)\//, "");
+  pagePath = pagePath.replace(/\/\[+[^\]]*\]+/, "");
+  pagePath = pagePath || "/";
   const [history, metadata, tokenizer] = await Promise.all([
     getCommits(file),
     getMetadata(file),
@@ -26,9 +26,9 @@ export const getPageData = async (file: URL): Promise<PageData> => {
   if (!isString(title)) {
     const relativePath = file.pathname.slice(rootDir.pathname.length);
     console.warn(
-      new Error(`${title ? 'Invalid' : 'No'}Title: ${relativePath}`),
+      new Error(`${title ? "Invalid" : "No"}Title: ${relativePath}`),
     );
-    title = '';
+    title = "";
   }
   return {
     ...metadata,
@@ -43,21 +43,21 @@ export const getPageData = async (file: URL): Promise<PageData> => {
 };
 
 const getGroup = (pagePath: string): string => {
-  const group = /^\/(.*)\/.*?$/.exec(pagePath)?.[1] ?? '';
+  const group = /^\/(.*)\/.*?$/.exec(pagePath)?.[1] ?? "";
   switch (group) {
-    case 'stories':
-      return '';
+    case "stories":
+      return "";
     default:
       return group;
   }
 };
 
 export const getMetadata = async (file: URL): Promise<Metadata | null> => {
-  switch (file.pathname.slice(file.pathname.lastIndexOf('.'))) {
-    case '.mdx':
+  switch (file.pathname.slice(file.pathname.lastIndexOf("."))) {
+    case ".mdx":
       return await getMetadataFromMdx(file);
-    case '.mts':
-    case '.tsx':
+    case ".mts":
+    case ".tsx":
       return await getMetadataFromScript(file);
     default:
       return null;

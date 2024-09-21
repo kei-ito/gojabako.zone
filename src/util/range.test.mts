@@ -1,21 +1,21 @@
-import * as assert from 'node:assert';
-import { test, describe } from 'node:test';
-import type { Range } from './range.mts';
+import * as assert from "node:assert";
+import { test, describe } from "node:test";
+import type { Range } from "./range.mts";
 import {
   listValues,
   normalizeRanges,
   parseRangeListString,
   toRangeListString,
-} from './range.mts';
+} from "./range.mts";
 
 describe(parseRangeListString.name, () => {
   const cases: Array<[string, ...Array<Range>]> = [
-    ['1', [1, 1]],
-    ['1,2,3', [1, 1], [2, 2], [3, 3]],
-    ['1,2 ,3', [1, 1], [2, 2]],
-    ['2-5', [2, 5]],
-    ['5-2', [2, 5]],
-    ['1,3-6,12-3', [1, 1], [3, 6], [3, 12]],
+    ["1", [1, 1]],
+    ["1,2,3", [1, 1], [2, 2], [3, 3]],
+    ["1,2 ,3", [1, 1], [2, 2]],
+    ["2-5", [2, 5]],
+    ["5-2", [2, 5]],
+    ["1,3-6,12-3", [1, 1], [3, 6], [3, 12]],
   ];
   for (const [input, ...expected] of cases) {
     test(input, () => {
@@ -86,14 +86,14 @@ describe(normalizeRanges.name, () => {
 
 describe(toRangeListString.name, () => {
   const cases: Array<{ input: Iterable<Range>; expected: string }> = [
-    { input: [[1, 1]], expected: '1' },
-    { input: [[1, 2]], expected: '1-2' },
+    { input: [[1, 1]], expected: "1" },
+    { input: [[1, 2]], expected: "1-2" },
     {
       input: [
         [1, 2],
         [3, 4],
       ],
-      expected: '1-2,3-4',
+      expected: "1-2,3-4",
     },
     {
       input: [
@@ -101,7 +101,7 @@ describe(toRangeListString.name, () => {
         [2, 2],
         [8, 8],
       ],
-      expected: '1-5,2,8',
+      expected: "1-5,2,8",
     },
   ];
   for (const { input, expected } of cases) {
@@ -126,7 +126,7 @@ describe(listValues.name, () => {
   ];
   for (const { input, expected } of cases) {
     test(`${JSON.stringify(input).slice(1, -1)} → ${expected.join(
-      ',',
+      ",",
     )}`, () => {
       const actual = [...listValues(input)];
       assert.deepStrictEqual(actual, expected);

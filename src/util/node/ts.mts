@@ -1,4 +1,4 @@
-import ts from 'typescript';
+import ts from "typescript";
 
 export const objectLiteralToValue = (literal: ts.ObjectLiteralExpression) => {
   const result: Record<string, unknown> = {};

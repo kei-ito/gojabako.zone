@@ -1,9 +1,9 @@
-import { isString } from '@nlib/typing';
-import type { Properties } from 'hast';
-import { fromHtml } from 'hast-util-from-html';
-import { toString as hastToString } from 'hast-util-to-string';
-import { SKIP } from 'unist-util-visit';
-import { visitHastElement } from './rehype/visitHastElement.mts';
+import { isString } from "@nlib/typing";
+import type { Properties } from "hast";
+import { fromHtml } from "hast-util-from-html";
+import { toString as hastToString } from "hast-util-to-string";
+import { SKIP } from "unist-util-visit";
+import { visitHastElement } from "./rehype/visitHastElement.mts";
 
 export type PageMetaData = Record<string, Array<string> | undefined>;
 
@@ -24,8 +24,8 @@ export const extractPageMetaDataFromHtml = (html: string): PageMetaData => {
     }
   };
   visitHastElement(fromHtml(html, { fragment: true }), {
-    html: ({ properties }) => set('lang', properties.lang),
-    title: (e) => set('title', hastToString(e)),
+    html: ({ properties }) => set("lang", properties.lang),
+    title: (e) => set("title", hastToString(e)),
     meta: (e) => {
       const {
         itemProp,
@@ -42,7 +42,7 @@ export const extractPageMetaDataFromHtml = (html: string): PageMetaData => {
 
 const stringify = (value: Properties[string]) => {
   if (Array.isArray(value)) {
-    return value.join(' ');
+    return value.join(" ");
   }
   return isString(value) ? value : null;
 };

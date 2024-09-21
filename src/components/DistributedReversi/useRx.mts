@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-import { useRecoilCallback, useRecoilValue } from 'recoil';
-import { noop } from '../../util/noop.mts';
-import type { RecoilSelectorOpts } from '../../util/recoil/selector.mts';
-import { toRecoilSelectorOpts } from '../../util/recoil/selector.mts';
-import { rcCell, rcMessageBuffer, rcRxDelayMs } from './recoil.app.mts';
-import { forwardDRMessage, sendDRMessage } from './recoil.send.mts';
+import { useEffect } from "react";
+import { useRecoilCallback, useRecoilValue } from "recoil";
+import { noop } from "../../util/noop.mts";
+import type { RecoilSelectorOpts } from "../../util/recoil/selector.mts";
+import { toRecoilSelectorOpts } from "../../util/recoil/selector.mts";
+import { rcCell, rcMessageBuffer, rcRxDelayMs } from "./recoil.app.mts";
+import { forwardDRMessage, sendDRMessage } from "./recoil.send.mts";
 import type {
   DRBufferId,
   DRCell,
@@ -14,14 +14,14 @@ import type {
   DRMessage,
   DRMessageMap,
   DRMessageType,
-} from './util.mts';
+} from "./util.mts";
 import {
   DRAdjacentStep,
   chessboardDistance,
   generateMessageProps,
   isDRDiagonalDirection,
   isOpenableDRMessage,
-} from './util.mts';
+} from "./util.mts";
 
 export const useRx = (bufferId: DRBufferId) => {
   const receive = useReceive(bufferId);
@@ -109,7 +109,7 @@ const receivers: { [K in DRMessageType]: Receiver<DRMessageMap[K]> } = {
       if (mode) {
         sendDRMessage(rso, cellId, {
           ...generateMessageProps(),
-          type: 'reversi2',
+          type: "reversi2",
           mode,
           payload: payload.state,
           ttl: chessboardDistance(msg.d),
@@ -144,12 +144,12 @@ const terminators: { [K in DRMessageType]?: Receiver<DRMessageMap[K]> } = {
         isDRDiagonalDirection(mode) &&
         Math.abs(msg.d[0]) !== Math.abs(msg.d[1])
       ) {
-        d = DRAdjacentStep[mode.replace(from, '') as DRDirection];
+        d = DRAdjacentStep[mode.replace(from, "") as DRDirection];
       }
       sendDRMessage(rso, cellId, {
         ...generateMessageProps(),
         d,
-        type: 'reversi2',
+        type: "reversi2",
         mode,
         payload: null,
         ttl: chessboardDistance(msg.d),
@@ -164,8 +164,8 @@ const getAnswerDirection = ([dx, dy]: [number, number]):
   | DRDiagonalDirection
   | DRDirection
   | null => {
-  const v = dy < 0 ? 'n' : 's';
-  const h = dx < 0 ? 'e' : 'w';
+  const v = dy < 0 ? "n" : "s";
+  const h = dx < 0 ? "e" : "w";
   if (dx === 0) {
     if (dy === 0) {
       return null;

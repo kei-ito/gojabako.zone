@@ -1,12 +1,12 @@
-import { isString } from '@nlib/typing';
-import type { Element, ElementContent, Properties } from 'hast';
+import { isString } from "@nlib/typing";
+import type { Element, ElementContent, Properties } from "hast";
 
 export const createHastElement = (
   tagName: string,
   properties: Properties,
   ...children: Array<ElementContent | string | false | null | undefined>
 ): Element => ({
-  type: 'element',
+  type: "element",
   tagName,
   properties,
   children: [...listChildren(children)],
@@ -18,7 +18,7 @@ const listChildren = function* (
   for (const child of children) {
     if (isString(child)) {
       if (child) {
-        yield { type: 'text', value: child };
+        yield { type: "text", value: child };
       }
     } else if (child) {
       yield child;
@@ -27,14 +27,14 @@ const listChildren = function* (
 };
 
 export const createFragmentTarget = (id: string) =>
-  createHastElement('span', { id, className: ['fragment-target'] });
+  createHastElement("span", { id, className: ["fragment-target"] });
 
 export const createFragmentRef = (
   id: string,
   ...children: Array<ElementContent | string | false | null | undefined>
 ) =>
   createHastElement(
-    'a',
-    { href: `#${id}`, className: ['fragment-ref'] },
+    "a",
+    { href: `#${id}`, className: ["fragment-ref"] },
     ...children,
   );

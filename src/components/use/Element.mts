@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { noop } from '../../util/noop.mts';
+import { useEffect, useState } from "react";
+import { noop } from "../../util/noop.mts";
 
 export const useElement = (
   selector: string,

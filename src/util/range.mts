@@ -1,10 +1,10 @@
-import { minmax } from './minmax.mts';
+import { minmax } from "./minmax.mts";
 
 export type Range = [number, number];
 
 export const parseRangeListString = function* (
   rangeListString: string,
-  delimiter = ',',
+  delimiter = ",",
 ): Generator<Range> {
   let pos = 0;
   for (const {
@@ -17,7 +17,7 @@ export const parseRangeListString = function* (
     if (d && d !== delimiter) {
       break;
     }
-    yield minmax([parseInt(a, 10), parseInt(b, 10)]);
+    yield minmax([Number.parseInt(a, 10), Number.parseInt(b, 10)]);
     pos = index + length;
   }
 };
@@ -46,10 +46,10 @@ export const normalizeRanges = function* (
 export const toRangeListString = (
   normalizedRanges: Iterable<Range>,
 ): string => {
-  let result = '';
+  let result = "";
   for (const [a, b] of normalizedRanges) {
     if (result) {
-      result += ',';
+      result += ",";
     }
     result += a === b ? a : `${a}-${b}`;
   }

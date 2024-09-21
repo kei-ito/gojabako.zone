@@ -1,12 +1,12 @@
-import { writeFile } from 'node:fs/promises';
-import { appDir, rootDir, srcDir } from '../util/node/directories.mts';
-import { formatCode } from '../util/node/formatCode.mts';
-import { getPageData } from '../util/node/getPageData.mts';
-import { walkFiles } from '../util/node/walkFiles.mts';
-import type { PageData } from '../util/type.mts';
+import { writeFile } from "node:fs/promises";
+import { appDir, rootDir, srcDir } from "../util/node/directories.mts";
+import { formatCode } from "../util/node/formatCode.mts";
+import { getPageData } from "../util/node/getPageData.mts";
+import { walkFiles } from "../util/node/walkFiles.mts";
+import type { PageData } from "../util/type.mts";
 
 if (process.env.CI) {
-  console.info('build/pageList.mts: skipped');
+  console.info("build/pageList.mts: skipped");
   process.exit();
 }
 
@@ -34,18 +34,18 @@ const generateCode = async function* () {
     );
   });
   yield "import type { PageData } from './type.mts';\n";
-  yield 'export const pageList: Array<PageData> = ';
+  yield "export const pageList: Array<PageData> = ";
   yield* JSON.stringify(pageList);
-  yield ';';
+  yield ";";
 };
 
-let code = '';
+let code = "";
 for await (const chunk of generateCode()) {
   code += chunk;
 }
-const dest = new URL('util/pageList.mts', srcDir);
+const dest = new URL("util/pageList.mts", srcDir);
 await writeFile(dest, await formatCode(code));
 console.info(
-  'build/pageList: done',
+  "build/pageList: done",
   dest.pathname.slice(rootDir.pathname.length),
 );

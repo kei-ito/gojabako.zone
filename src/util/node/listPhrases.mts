@@ -1,12 +1,12 @@
-import { fileURLToPath } from 'node:url';
-import type { IpadicFeatures, Tokenizer } from 'kuromoji';
-import kuromoji from 'kuromoji';
-import { rootDir } from './directories.mts';
+import { fileURLToPath } from "node:url";
+import type { IpadicFeatures, Tokenizer } from "kuromoji";
+import kuromoji from "kuromoji";
+import { rootDir } from "./directories.mts";
 
 const cache = new Map<string, Promise<Tokenizer<IpadicFeatures>>>();
 
 export const getTokenizer = async (
-  dicPath = fileURLToPath(new URL('node_modules/kuromoji/dict', rootDir)),
+  dicPath = fileURLToPath(new URL("node_modules/kuromoji/dict", rootDir)),
 ): Promise<Tokenizer<IpadicFeatures>> => {
   let cached = cache.get(dicPath);
   if (!cached) {
@@ -28,10 +28,10 @@ export const listPhrases = function* (
   tokenizer: Tokenizer<IpadicFeatures>,
   source: string,
 ): Generator<string> {
-  let buffer = '';
+  let buffer = "";
   for (const item of tokenizer.tokenize(source)) {
     const { surface_form: text, pos } = item;
-    if (pos === '助詞' || pos === '助動詞') {
+    if (pos === "助詞" || pos === "助動詞") {
       buffer += text;
     } else {
       const joint = `${buffer[buffer.length - 1]}${text[0]}`;

@@ -1,8 +1,8 @@
-import { readFile } from 'node:fs/promises';
-import type { Metadata } from 'next';
-import ts from 'typescript';
-import { rootDir } from './directories.mts';
-import { objectLiteralToValue } from './ts.mts';
+import { readFile } from "node:fs/promises";
+import type { Metadata } from "next";
+import ts from "typescript";
+import { rootDir } from "./directories.mts";
+import { objectLiteralToValue } from "./ts.mts";
 
 export const getMetadataFromScript = async (
   file: URL,
@@ -10,7 +10,7 @@ export const getMetadataFromScript = async (
 ): Promise<Metadata | null> => {
   const src = ts.createSourceFile(
     file.pathname.slice(rootDir.pathname.length),
-    code ?? (await readFile(file, 'utf8')),
+    code ?? (await readFile(file, "utf8")),
     ts.ScriptTarget.ESNext,
     true,
     ts.ScriptKind.TSX,
@@ -20,7 +20,7 @@ export const getMetadataFromScript = async (
       const { name, initializer } = statement.declarationList.declarations[0];
       if (
         ts.isIdentifier(name) &&
-        name.text === 'metadata' &&
+        name.text === "metadata" &&
         initializer &&
         ts.isObjectLiteralExpression(initializer)
       ) {
