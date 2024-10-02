@@ -38,8 +38,12 @@ export const GET = async (req: NextRequest) => {
     ...size,
     fonts: await Promise.all([
       loadFont(
-        new URL("/fonts/noto-sans-jp/japanese-500-normal.woff", req.nextUrl),
-        { name: "Noto Sans JP", style: "normal", weight: 500 },
+        new URL("/fonts/noto-sans-jp/japanese-900-normal.woff", req.nextUrl),
+        { name: "Noto Sans JP", style: "normal", weight: 900 },
+      ),
+      loadFont(
+        new URL("/fonts/noto-sans-jp/japanese-700-normal.woff", req.nextUrl),
+        { name: "Noto Sans JP", style: "normal", weight: 700 },
       ),
     ]),
     // debug: true,
@@ -49,16 +53,16 @@ export const GET = async (req: NextRequest) => {
 const ImageComponent = ({ page }: { page: PageData }) => {
   const color = "#1e293b";
   const outerPadding = 36;
-  const innerPadding = 24;
-  const lineHeight = 1.4;
+  const innerPadding = 36;
+  const lineHeight = 1.2;
   const h1LineHeight = 1.2;
-  const logoHeight = outerPadding * 2;
-  const logoWidth = logoHeight * 2;
   const innerWidth = size.width - outerPadding * 2;
   const textWidth = innerWidth - innerPadding * 2;
   const titleLength = measureTextWidth(page.title.join(""));
   const baseFontSize = 32;
-  const h1FontSize0 = Math.min((16 * textWidth) / titleLength, 60);
+  const h1FontSize0 = Math.min((16 * textWidth) / titleLength, 72);
+  const logoHeight = baseFontSize * lineHeight;
+  const logoWidth = logoHeight * 2;
   let lineCount = 1;
   let h1AvailableHeight = size.height - outerPadding * 2;
   h1AvailableHeight -= logoHeight;
@@ -86,6 +90,7 @@ const ImageComponent = ({ page }: { page: PageData }) => {
         backgroundColor: "#f1f5f9",
         fontFamily: "Noto Sans JP",
         fontSize: baseFontSize,
+        fontWeight: 700,
         lineHeight,
       }}
     >
@@ -95,17 +100,30 @@ const ImageComponent = ({ page }: { page: PageData }) => {
           left: outerPadding,
           right: outerPadding,
           top: outerPadding,
-          bottom: outerPadding + logoHeight,
+          bottom: outerPadding,
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
           justifyContent: "center",
           padding: innerPadding,
           backgroundColor: "#ffffff",
-          borderRadius: 8,
+          borderRadius: 20,
           boxShadow: "0 0 8px rgba(0, 0, 0, 0.25)",
         }}
       >
+        {/* biome-ignore lint/a11y/noSvgWithoutTitle: ロゴに字が出てしまうので */}
+        <svg
+          viewBox={site.logo.viewBox.join(" ")}
+          width={logoWidth}
+          height={logoHeight}
+          style={{
+            position: "absolute",
+            right: innerPadding,
+            bottom: innerPadding,
+          }}
+        >
+          <path d={site.logo.d} fill={color} />
+        </svg>
         <h1
           style={{
             alignSelf: "stretch",
@@ -115,6 +133,7 @@ const ImageComponent = ({ page }: { page: PageData }) => {
             alignItems: "center",
             justifyContent: "center",
             fontSize: h1FontSize,
+            fontWeight: 900,
             lineHeight: h1LineHeight,
           }}
         >
@@ -144,15 +163,6 @@ const ImageComponent = ({ page }: { page: PageData }) => {
         </div>
         <div>{new URL(page.path, site.baseUrl).href}</div>
       </div>
-      <svg
-        viewBox={site.logo.viewBox.join(" ")}
-        width={logoWidth}
-        height={logoHeight}
-        style={{ position: "absolute", bottom: outerPadding / 2 }}
-      >
-        <title>Gojabako Zone</title>
-        <path d={site.logo.d} fill={color} />
-      </svg>
     </div>
   );
 };
