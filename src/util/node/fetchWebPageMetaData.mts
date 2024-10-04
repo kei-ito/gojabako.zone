@@ -1,5 +1,5 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { isString } from "@nlib/typing";
+import { isArrayOf, isDictionaryOf, isString } from "@nlib/typing";
 import type { PageMetaData } from "../extractPageMetaDataFromHtml.mts";
 import { extractPageMetaDataFromHtml } from "../extractPageMetaDataFromHtml.mts";
 import { cacheDir } from "./directories.mts";
@@ -17,7 +17,7 @@ const getCache = async (pageUrl: URL) => {
     const json = await readFile(cacheDest, "utf8").catch(ignoreENOENT());
     if (json) {
       const parsed: unknown = JSON.parse(json);
-      if (isString.array.dictionary(parsed)) {
+      if (isDictionaryOf(isArrayOf(isString))(parsed)) {
         cached = parsed;
         sessionCache.set(pageUrl.href, cached);
       }

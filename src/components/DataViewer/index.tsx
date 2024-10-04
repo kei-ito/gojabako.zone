@@ -1,4 +1,4 @@
-import { entries, getType, isArray, isObject, isString } from "@nlib/typing";
+import { getType, isArray, isObject, isString } from "@nlib/typing";
 import type { HTMLAttributes, ReactNode } from "react";
 import { Fragment } from "react";
 import { classnames } from "../../util/classnames.mts";
@@ -65,7 +65,7 @@ const Value = <T,>({
       <dd {...ddProps} className={classnames(className, ddProps.className)}>
         <KVView
           type={getType(value)}
-          items={entries([...value])}
+          items={Object.entries([...value])}
           depth={depth}
         />
       </dd>
@@ -92,7 +92,11 @@ const Value = <T,>({
   if (isArray(value)) {
     return (
       <dd {...ddProps} className={classnames(className, ddProps.className)}>
-        <KVView type={getType(value)} items={entries(value)} depth={depth} />
+        <KVView
+          type={getType(value)}
+          items={Object.entries(value)}
+          depth={depth}
+        />
       </dd>
     );
   }
@@ -116,7 +120,7 @@ const Value = <T,>({
     }
     return (
       <dd {...ddProps} className={classnames(className, ddProps.className)}>
-        <KVView type={type} items={entries(v)} depth={depth} />
+        <KVView type={type} items={Object.entries(v)} depth={depth} />
       </dd>
     );
   }

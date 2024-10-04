@@ -1,4 +1,4 @@
-import { entries, isString } from "@nlib/typing";
+import { isString } from "@nlib/typing";
 import { parse } from "acorn";
 import type { Program } from "estree";
 import type {
@@ -14,11 +14,13 @@ export const createMdxJsxTextElement = (
 ): MdxJsxTextElementHast => ({
   type: "mdxJsxTextElement",
   name: component,
-  attributes: entries(attributes).map<MdxJsxAttribute>(([name, value]) => ({
-    type: "mdxJsxAttribute",
-    name,
-    value: isString(value) ? value : parseExpression(value[0]),
-  })),
+  attributes: Object.entries(attributes).map<MdxJsxAttribute>(
+    ([name, value]) => ({
+      type: "mdxJsxAttribute",
+      name,
+      value: isString(value) ? value : parseExpression(value[0]),
+    }),
+  ),
   children,
 });
 

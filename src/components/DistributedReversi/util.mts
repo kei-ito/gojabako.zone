@@ -1,10 +1,9 @@
 import type { Nominal } from "@nlib/typing";
-import { createTypeChecker, isNonNegativeSafeInteger } from "@nlib/typing";
+import { typeChecker, isNonNegativeSafeInteger } from "@nlib/typing";
 
 export const zoom = { min: 40, max: 200 };
 export type DRPlayerId = Nominal<number, "DRPlayerId">;
-export const isDRPlayerId = createTypeChecker<DRPlayerId>(
-  "DRPlayerId",
+export const isDRPlayerId = typeChecker<DRPlayerId>(
   (input: unknown): input is DRPlayerId => isNonNegativeSafeInteger(input),
 );
 /** この値は描画用で、実機では使えないことに注意します */
@@ -42,15 +41,13 @@ export const defaultDRCell = (): DRCell => ({
 });
 export const DRDirections = ["e", "n", "w", "s"] as const;
 export type DRDirection = (typeof DRDirections)[number];
-export const isDRDirection = createTypeChecker<DRDirection>(
-  "DRDirection",
+export const isDRDirection = typeChecker<DRDirection>(
   (input: unknown): input is DRDirection =>
     DRDirections.includes(input as DRDirection),
 );
 export const DRDiagonalDirections = ["ne", "nw", "sw", "se"] as const;
 export type DRDiagonalDirection = (typeof DRDiagonalDirections)[number];
-export const isDRDiagonalDirection = createTypeChecker<DRDiagonalDirection>(
-  "DRDiagonalDirection",
+export const isDRDiagonalDirection = typeChecker<DRDiagonalDirection>(
   (input: unknown): input is DRDiagonalDirection =>
     DRDiagonalDirections.includes(input as DRDiagonalDirection),
 );

@@ -1,4 +1,4 @@
-import { entries, isFunction } from "@nlib/typing";
+import { isFunction } from "@nlib/typing";
 import type { ComponentType, PropsWithChildren, ReactNode } from "react";
 import * as style from "./style.module.scss";
 
@@ -45,7 +45,7 @@ const isIterable = <T,>(input: Iterable<T> | object): input is Iterable<T> => {
 const parseTuples = <T,>(tuples: KVList<T>) => {
   const labels = [];
   const values = [];
-  const iter = isIterable(tuples) ? tuples : entries(tuples);
+  const iter = isIterable(tuples) ? tuples : Object.entries(tuples);
   for (const [label, value] of iter) {
     labels.push(label);
     values.push(value);

@@ -1,4 +1,3 @@
-import { keys } from "@nlib/typing";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { classnames } from "../../util/classnames.mts";
@@ -16,7 +15,7 @@ export const StorybookNav = ({ currentPath = "" }: StorybookNavProps) => (
 const listItems = function* (currentPath: string): Generator<ReactNode> {
   for (const [group, stories] of storyGroups) {
     const groupPath = group.split("_").join("/");
-    for (const name of keys(stories)) {
+    for (const name of Object.keys(stories)) {
       let storyPath = groupPath;
       if (name !== "Default") {
         storyPath += `/${name}`;

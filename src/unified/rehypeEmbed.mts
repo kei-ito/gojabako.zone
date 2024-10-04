@@ -1,4 +1,4 @@
-import { isNonNegativeSafeInteger, isString } from "@nlib/typing";
+import { isArrayOf, isNonNegativeSafeInteger, isString } from "@nlib/typing";
 import type { Element, Root } from "hast";
 import type {
   MdxJsxFlowElementHast,
@@ -35,7 +35,7 @@ export const rehypeEmbed = () => async (tree: Root, _file: VFileLike) => {
         return null;
       }
       const { className } = code.properties;
-      if (!isString.array(className)) {
+      if (!isArrayOf(isString)(className)) {
         return null;
       }
       const prefix = "language-embed:";

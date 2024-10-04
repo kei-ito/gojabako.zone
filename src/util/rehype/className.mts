@@ -1,11 +1,11 @@
-import { isString } from "@nlib/typing";
+import { isArrayOf, isString } from "@nlib/typing";
 import type { Element } from "hast";
 
 export const hasClass = (
   { properties: { className } }: Element,
   ...requiredClassNames: Array<string>
 ): boolean => {
-  if (isString.array(className)) {
+  if (isArrayOf(isString)(className)) {
     return requiredClassNames.every((name) => className.includes(name));
   }
   if (isString(className) && requiredClassNames.length === 1) {
@@ -17,7 +17,7 @@ export const hasClass = (
 export const addClass = (element: Element, ...classNames: Array<string>) => {
   const newClassNames = new Set<string>();
   const current = element.properties.className;
-  if (isString.array(current)) {
+  if (isArrayOf(isString)(current)) {
     for (const name of current) {
       newClassNames.add(name);
     }
