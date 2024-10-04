@@ -1,16 +1,17 @@
-import { fileURLToPath } from "node:url";
-import type { RequiredOptions } from "prettier";
-import { format, resolveConfig } from "prettier";
-import { rootDir } from "./directories.mts";
+import {
+  Biome,
+  Distribution,
+  type FormatContentOptions,
+} from "@biomejs/js-api";
+
+let biome: Biome | null = null;
 
 export const formatCode = async (
   code: string,
-  options?: RequiredOptions,
+  options: FormatContentOptions,
 ): Promise<string> => {
-  const configFile = new URL(".prettierrc.json", rootDir);
-  return await format(code, {
-    parser: "typescript",
-    ...(await resolveConfig(fileURLToPath(configFile))),
-    ...options,
-  });
+  if (biome === null) {
+    biome = await Biome.create({ distribution: Distribution.NODE });
+  }
+  return biome.formatContent(code, options).content;
 };

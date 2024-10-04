@@ -33,7 +33,10 @@ const generate = async () => {
   for (const [relativePath, name] of groupNames) {
     code += `storyGroups.set('${relativePath}', ${name} as Stories);`;
   }
-  await writeFile(dest, await formatCode(code));
+  await writeFile(
+    dest,
+    await formatCode(code, { filePath: fileURLToPath(dest) }),
+  );
   console.info(`Generated ${dest.pathname.slice(rootDir.pathname.length)}`);
   return dest;
 };

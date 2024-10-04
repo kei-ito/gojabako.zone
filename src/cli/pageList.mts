@@ -1,3 +1,4 @@
+import { fileURLToPath } from "node:url";
 import { writeFile } from "node:fs/promises";
 import { appDir, rootDir, srcDir } from "../util/node/directories.mts";
 import { formatCode } from "../util/node/formatCode.mts";
@@ -44,7 +45,10 @@ for await (const chunk of generateCode()) {
   code += chunk;
 }
 const dest = new URL("util/pageList.mts", srcDir);
-await writeFile(dest, await formatCode(code));
+await writeFile(
+  dest,
+  await formatCode(code, { filePath: fileURLToPath(dest) }),
+);
 console.info(
   "build/pageList: done",
   dest.pathname.slice(rootDir.pathname.length),
