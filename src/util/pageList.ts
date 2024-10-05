@@ -78,8 +78,8 @@ export const pageList: Array<PageData> = [
 	{
 		title: ["DPoPの", "ブラウザ", "実装"],
 		publishedAt: "2023-09-18T10:16:16.000Z",
-		updatedAt: "2023-09-24T04:39:02.000Z",
-		commits: 2,
+		updatedAt: "2024-10-05T14:35:55.000Z",
+		commits: 3,
 		path: "/2022/dpop",
 		iri: "gjbkz://gojabako.zone/2022/dpop",
 		group: "2022",
