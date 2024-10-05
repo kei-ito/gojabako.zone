@@ -1,3 +1,3 @@
 export interface VFileLike {
-  path: string;
+	path: string;
 }

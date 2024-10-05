@@ -9,41 +9,41 @@ import { ignoreENOENT } from "./ignoreENOENT.ts";
 const sessionCache = new Map<string, PageMetaData>();
 const fnCacheDir = new URL("fetchWebPageMetaData/", cacheDir);
 const getCacheDest = (pageUrl: URL) =>
-  new URL(`${getHash(pageUrl.href)}.json`, fnCacheDir);
+	new URL(`${getHash(pageUrl.href)}.json`, fnCacheDir);
 const getCache = async (pageUrl: URL) => {
-  let cached = sessionCache.get(pageUrl.href) ?? null;
-  if (!cached) {
-    const cacheDest = getCacheDest(pageUrl);
-    const json = await readFile(cacheDest, "utf8").catch(ignoreENOENT());
-    if (json) {
-      const parsed: unknown = JSON.parse(json);
-      if (isDictionaryOf(isArrayOf(isString))(parsed)) {
-        cached = parsed;
-        sessionCache.set(pageUrl.href, cached);
-      }
-    }
-  }
-  return cached;
+	let cached = sessionCache.get(pageUrl.href) ?? null;
+	if (!cached) {
+		const cacheDest = getCacheDest(pageUrl);
+		const json = await readFile(cacheDest, "utf8").catch(ignoreENOENT());
+		if (json) {
+			const parsed: unknown = JSON.parse(json);
+			if (isDictionaryOf(isArrayOf(isString))(parsed)) {
+				cached = parsed;
+				sessionCache.set(pageUrl.href, cached);
+			}
+		}
+	}
+	return cached;
 };
 const cache = async (pageUrl: URL, data: PageMetaData) => {
-  sessionCache.set(pageUrl.href, data);
-  await mkdir(fnCacheDir, { recursive: true });
-  const cacheDest = getCacheDest(pageUrl);
-  await writeFile(cacheDest, JSON.stringify(data, null, 2));
+	sessionCache.set(pageUrl.href, data);
+	await mkdir(fnCacheDir, { recursive: true });
+	const cacheDest = getCacheDest(pageUrl);
+	await writeFile(cacheDest, JSON.stringify(data, null, 2));
 };
 
 export const fetchWebPageMetaData = async (
-  pageUrl: URL,
+	pageUrl: URL,
 ): Promise<PageMetaData> => {
-  const cached = await getCache(pageUrl);
-  if (cached) {
-    return cached;
-  }
-  const res = await fetch(pageUrl);
-  if (!res.ok) {
-    throw new Error(`${res.status} ${res.statusText}: ${pageUrl}`);
-  }
-  const data = extractPageMetaDataFromHtml(await res.text());
-  await cache(pageUrl, data);
-  return data;
+	const cached = await getCache(pageUrl);
+	if (cached) {
+		return cached;
+	}
+	const res = await fetch(pageUrl);
+	if (!res.ok) {
+		throw new Error(`${res.status} ${res.statusText}: ${pageUrl}`);
+	}
+	const data = extractPageMetaDataFromHtml(await res.text());
+	await cache(pageUrl, data);
+	return data;
 };

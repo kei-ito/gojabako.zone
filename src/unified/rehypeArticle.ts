@@ -12,23 +12,23 @@ import { visitHastElement } from "../util/rehype/visitHastElement.ts";
 import type { VFileLike } from "../util/unified.ts";
 
 export const rehypeArticle = () => async (tree: Root, file: VFileLike) => {
-  const tasks: Array<Promise<void>> = [];
-  visitHastElement(tree, {
-    span: visitArticleSpan(file, tasks),
-    sup: visitArticleSup(file, tasks),
-    li: visitArticleLi(file, tasks),
-    h1: visitArticleHeading(file, tasks),
-    h2: visitArticleHeading(file, tasks),
-    h3: visitArticleHeading(file, tasks),
-    h4: visitArticleHeading(file, tasks),
-    h5: visitArticleHeading(file, tasks),
-    h6: visitArticleHeading(file, tasks),
-    pre: visitArticlePre(file, tasks),
-    table: visitArticleTable(file, tasks),
-    img: visitArticleImg(file, tasks),
-    a: visitArticleA(file, tasks),
-  });
-  await Promise.all(tasks);
-  insertArticleData(tree, file);
-  return tree;
+	const tasks: Array<Promise<void>> = [];
+	visitHastElement(tree, {
+		span: visitArticleSpan(file, tasks),
+		sup: visitArticleSup(file, tasks),
+		li: visitArticleLi(file, tasks),
+		h1: visitArticleHeading(file, tasks),
+		h2: visitArticleHeading(file, tasks),
+		h3: visitArticleHeading(file, tasks),
+		h4: visitArticleHeading(file, tasks),
+		h5: visitArticleHeading(file, tasks),
+		h6: visitArticleHeading(file, tasks),
+		pre: visitArticlePre(file, tasks),
+		table: visitArticleTable(file, tasks),
+		img: visitArticleImg(file, tasks),
+		a: visitArticleA(file, tasks),
+	});
+	await Promise.all(tasks);
+	insertArticleData(tree, file);
+	return tree;
 };

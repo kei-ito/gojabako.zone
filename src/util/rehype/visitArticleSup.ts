@@ -8,17 +8,17 @@ import { serializePropertyValue } from "./serializePropertyValue.ts";
 import type { HastElementVisitor } from "./visitHastElement.ts";
 
 export const visitArticleSup =
-  (_file: VFileLike, _tasks: Array<Promise<void>>): HastElementVisitor =>
-  (e) => {
-    const a = getSingle(e.children);
-    if (!isHastElement(a, "a") || !a.properties.dataFootnoteRef) {
-      return null;
-    }
-    addClass(e, "footnote-ref");
-    e.children.unshift(
-      createFragmentTarget(serializePropertyValue(a.properties.id)),
-    );
-    a.properties.id = undefined;
-    a.properties.dataFootnoteRef = undefined;
-    return SKIP;
-  };
+	(_file: VFileLike, _tasks: Array<Promise<void>>): HastElementVisitor =>
+	(e) => {
+		const a = getSingle(e.children);
+		if (!isHastElement(a, "a") || !a.properties.dataFootnoteRef) {
+			return null;
+		}
+		addClass(e, "footnote-ref");
+		e.children.unshift(
+			createFragmentTarget(serializePropertyValue(a.properties.id)),
+		);
+		a.properties.id = undefined;
+		a.properties.dataFootnoteRef = undefined;
+		return SKIP;
+	};
