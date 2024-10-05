@@ -1,4 +1,4 @@
-import { getType, isArray, isObject, isString } from "@nlib/typing";
+import { getType, isArray, isObject, isUndefined } from "@nlib/typing";
 import type { HTMLAttributes, ReactNode } from "react";
 import { Fragment } from "react";
 import { classnames } from "../../util/classnames.ts";
@@ -27,14 +27,14 @@ const Value = <T,>({
 	depth,
 	ddProps = {},
 }: ValueProps<T>) => {
+	const type = getType(value);
 	if (value instanceof Date) {
 		return (
 			<dd
 				{...ddProps}
 				className={classnames(className, style.primitive, ddProps.className)}
 			>
-				<span className={style.type}>{getType(value)}</span>
-				<span className={style.value}>{value.toLocaleString()}</span>
+				<span className={style.value}>Date ({value.toLocaleString()})</span>
 			</dd>
 		);
 	}
@@ -44,7 +44,6 @@ const Value = <T,>({
 				{...ddProps}
 				className={classnames(className, style.primitive, ddProps.className)}
 			>
-				<span className={style.type}>{getType(value)}</span>
 				<span className={style.value}>{value.toString()}</span>
 			</dd>
 		);
@@ -55,48 +54,56 @@ const Value = <T,>({
 				{...ddProps}
 				className={classnames(className, style.primitive, ddProps.className)}
 			>
-				<span className={style.type}>{getType(value)}</span>
 				<span className={style.value}>{value.stack}</span>
 			</dd>
 		);
 	}
 	if (value instanceof Set) {
 		return (
-			<dd {...ddProps} className={classnames(className, ddProps.className)}>
-				<KVView
-					type={getType(value)}
-					items={Object.entries([...value])}
-					depth={depth}
-				/>
+			<dd
+				{...ddProps}
+				title={`${type}(${value.size})`}
+				className={classnames(className, ddProps.className)}
+			>
+				<KVView items={Object.entries([...value])} depth={depth} />
 			</dd>
 		);
 	}
 	if (value instanceof Map) {
 		return (
-			<dd {...ddProps} className={classnames(className, ddProps.className)}>
-				<KVView type={getType(value)} items={value} depth={depth} />
+			<dd
+				{...ddProps}
+				title={`${type}(${value.size})`}
+				className={classnames(className, ddProps.className)}
+			>
+				<KVView items={value} depth={depth} />
 			</dd>
+		);
+	}
+	if (value instanceof WeakSet || value instanceof WeakMap) {
+		return (
+			<dd
+				{...ddProps}
+				title={type}
+				className={classnames(className, ddProps.className)}
+			/>
 		);
 	}
 	if (value instanceof ArrayBuffer) {
 		return (
 			<dd {...ddProps} className={classnames(className, ddProps.className)}>
-				<BufferView
-					type={getType(value)}
-					buffer={{ buffer: value }}
-					depth={depth}
-				/>
+				<BufferView type={type} buffer={{ buffer: value }} depth={depth} />
 			</dd>
 		);
 	}
 	if (isArray(value)) {
 		return (
-			<dd {...ddProps} className={classnames(className, ddProps.className)}>
-				<KVView
-					type={getType(value)}
-					items={Object.entries(value)}
-					depth={depth}
-				/>
+			<dd
+				{...ddProps}
+				title={`${type}(${value.length})`}
+				className={classnames(className, ddProps.className)}
+			>
+				<KVView items={Object.entries(value)} depth={depth} />
 			</dd>
 		);
 	}
@@ -104,11 +111,10 @@ const Value = <T,>({
 		if (isTypedArrayLike(value)) {
 			return (
 				<dd {...ddProps} className={classnames(className, ddProps.className)}>
-					<BufferView type={getType(value)} buffer={value} depth={depth} />
+					<BufferView type={type} buffer={value} depth={depth} />
 				</dd>
 			);
 		}
-		const type = getType(value);
 		let v: Record<string, unknown> = value;
 		if (type === "CryptoKey") {
 			v = {
@@ -118,9 +124,14 @@ const Value = <T,>({
 				usages: v.usages,
 			};
 		}
+		const items = Object.entries(v);
 		return (
-			<dd {...ddProps} className={classnames(className, ddProps.className)}>
-				<KVView type={type} items={Object.entries(v)} depth={depth} />
+			<dd
+				{...ddProps}
+				title={`${type}(${items.length})`}
+				className={classnames(className, ddProps.className)}
+			>
+				<KVView items={items} depth={depth} />
 			</dd>
 		);
 	}
@@ -131,8 +142,8 @@ const Value = <T,>({
 		s = "-Infinity";
 	} else if (Number.isNaN(value)) {
 		s = "NaN";
-	} else if (isString(value)) {
-		s = value;
+	} else if (isUndefined(value)) {
+		s = "undefined";
 	} else {
 		s = JSON.stringify(value);
 	}
@@ -140,34 +151,27 @@ const Value = <T,>({
 		<dd
 			{...ddProps}
 			className={classnames(className, style.primitive, ddProps.className)}
+			data-type={type}
 		>
-			<span className={style.type}>{getType(value)}</span>
-			<span className={style.value}>{s}</span>
+			{s && <span className={style.value}>{s}</span>}
 		</dd>
 	);
 };
 
 interface KVViewProps {
-	type: string;
 	items: Iterable<[string, unknown]>;
 	depth: number;
 }
 
-const KVView = ({ type, items, depth }: KVViewProps) => (
-	<dl className={style.kv} data-depth={`${depth}`}>
-		{0 < depth && <span className={style.type}>{type}</span>}
-		{[...items].map(([k, v], index, { length }) => {
-			const first = index === 0;
-			const last = index === length - 1;
-			const c = classnames(first && style.first, last && style.last);
-			return (
-				<Fragment key={k}>
-					<dt className={c}>{k}</dt>
-					<Value value={v} className={c} depth={depth + 1} />
-				</Fragment>
-			);
-		})}
-	</dl>
+const KVView = ({ items, depth }: KVViewProps) => (
+	<Fragment>
+		{[...items].map(([k, v]) => (
+			<dl key={k} className={style.kv} data-depth={`${depth}`}>
+				<dt>{k}:</dt>
+				<Value value={v} depth={depth + 1} />
+			</dl>
+		))}
+	</Fragment>
 );
 
 interface BufferViewProps {
@@ -184,7 +188,7 @@ const BufferView = ({ type, buffer, depth }: BufferViewProps) => {
 			const title = `0x${start.toString(16).padStart(2, "0")}`;
 			yield (
 				<dt key={`${title}head`} className={classnames(c, style.buffer)}>
-					{title}
+					{title}:
 				</dt>
 			);
 			yield (
@@ -219,10 +223,12 @@ const BufferView = ({ type, buffer, depth }: BufferViewProps) => {
 		}
 	};
 	return (
-		<dl className={style.kv} data-depth={`${depth}`}>
-			<span className={style.type}>
-				{type} ({serializeFileSize(view.byteLength)})
-			</span>
+		<dl
+			className={style.kv}
+			title={`${type} (${serializeFileSize(view.byteLength)})`}
+			data-type={type}
+			data-depth={`${depth}`}
+		>
 			{[...listLines()]}
 		</dl>
 	);
@@ -243,7 +249,7 @@ const listBufferLines = function* (
 				yield lastLine;
 				lastLine = [pos, pos + lineWidth - 1, line];
 			} else {
-				lastLine = [pos, pos + lineWidth - 1, line, style.first];
+				lastLine = [pos, pos + lineWidth - 1, line];
 			}
 			line = [];
 			pos += lineWidth;
@@ -253,21 +259,13 @@ const listBufferLines = function* (
 		}
 	}
 	if (lastLine) {
-		if (line.length === 0) {
-			lastLine[3] = classnames(lastLine[3], style.last);
-		}
 		yield lastLine;
 	}
 	if (0 < line.length) {
 		while (line.length < lineWidth) {
 			line.push(-1);
 		}
-		yield [
-			pos,
-			pos + line.length - 1,
-			line,
-			classnames(!lastLine && style.first, style.last),
-		];
+		yield [pos, pos + line.length - 1, line];
 	}
 };
 

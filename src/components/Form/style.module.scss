@@ -1,6 +1,6 @@
 .form {
   padding-block: 1em;
-  border-radius: 0.3em;
+  border-radius: 0.2em;
   border-style: solid;
   border-color: var(--gjGray4);
   background-color: var(--gjGray0);
@@ -8,6 +8,11 @@
   & > * {
     inline-size: 94%;
     margin-inline: auto;
+    margin-block-end: 1em;
+
+    &:last-child {
+      margin-block-end: 0;
+    }
   }
 
   & > :global(.fragment-target) + *,
@@ -17,8 +22,10 @@
   }
 
   & > legend {
+    padding-inline: 1%;
     inline-size: max-content;
-    margin-inline-start: 1em;
+    margin-inline-start: 2%;
+    margin-block-end: 0;
   }
 
   & > label {
@@ -35,13 +42,9 @@
     inline-size: 100%;
     padding-block: 0.3em;
     padding-inline: 0.5em;
-    margin-block-end: 1em;
     border-block-end-style: solid;
     border-color: var(--gjGray5);
     background-color: var(--gjGray2);
   }
 
-  & > .form {
-    margin-block-end: 1em;
-  }
 }

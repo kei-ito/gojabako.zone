@@ -1,20 +1,10 @@
 .container {
   --gjBorder: solid var(--gj1px) var(--gjGray4);
-  font-size: 13px;
-  border-inline: var(--gjBorder);
-  border-block: var(--gjBorder);
-}
-
-.type {
-  display: inline-grid;
-  padding-inline: 0.3em;
-  margin-block: 0.2em;
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1.4;
-  color: var(--gjGray0);
-  background-color: var(--gjGray5);
-  border-radius: 0.3em;
+  padding: 0.25em 0.5em;
+  font-size: 14px;
+  font-family: var(--gjFontMonospace);
+  line-height: 1;
+  background-color: var(--gjGray2);
 }
 
 .value {
@@ -26,17 +16,29 @@
 
 .primitive {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto auto;
   align-items: baseline;
+  justify-content: start;
   column-gap: 0.3em;
-  padding-inline: 0.3em;
+
+  &[data-type='String'] {
+    color: var(--gjRed6);
+  }
+
+  &[data-type='Number'],
+  &[data-type='Boolean'] {
+    color: var(--gjBlue6);
+  }
+
+  &[data-type='Undefined'] {
+    color: var(--gjGray5);
+  }
 }
 
 .buffer {
   display: grid;
   grid-auto-flow: column;
   justify-content: start;
-  padding-inline: 0.4em;
 
   & > span {
     display: grid;
@@ -59,74 +61,34 @@
 }
 
 .kv {
+  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: auto 1fr;
-  align-content: start;
-  justify-content: start;
+  place-content: start;
+  align-items: baseline;
+  column-gap: 0.4em;
+  overflow: auto;
 
   & > .type {
     justify-self: start;
     grid-column: 1 / -1;
-    margin-inline-start: 0.3em;
-  }
-
-  & > * {
-    border-block-end: var(--gjBorder);
-
-    &.last {
-      border-block-end: none;
-    }
-  }
-
-  &:not([data-depth='0']) {
-    & > .first {
-      border-block-start: var(--gjBorder);
-    }
+    margin-block-end: 0.3em;
   }
 
   & > dt {
-    padding-inline: 0.4em;
-    text-align: end;
-    border-inline-end: var(--gjBorder);
+    color: var(--gjRed9);
   }
 
   & > dd {
     display: grid;
-    grid-auto-flow: column;
+    grid-template-columns: auto 1fr;
     align-items: baseline;
+    justify-items: start;
+    column-gap: 0.5em;
 
-    & > .type {
-      justify-self: start;
-      display: inline-grid;
-    }
-
-    & > .value {
-      display: grid;
-      align-items: center;
-      justify-items: start;
-    }
-
-    & > .kv {
-      justify-self: stretch;
-      border-block-start: none;
-
-      & > * {
-        &.last {
-          border-block-end: none;
-        }
-      }
-    }
-
-    &.primitive {
-      display: block;
-
-      & > .type {
-        margin-inline-end: 0.3em;
-      }
-
-      & > .value {
-        display: inline;
-      }
+    &[title]::before {
+      content: attr(title);
+      grid-column: 1 / -1;
     }
   }
 }

@@ -18,7 +18,6 @@ export const CryptoKeyGenerator = () => {
 	}, [onSubmit]);
 	return (
 		<Form onSubmit={onSubmit}>
-			<p>鍵ペアを作成します。</p>
 			<Buttons>
 				<PrimaryButton type="submit">鍵ペアを作成する</PrimaryButton>
 			</Buttons>
