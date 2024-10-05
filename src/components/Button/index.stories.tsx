@@ -1,6 +1,6 @@
 import type { StoryObj } from "@storybook/react";
-import { StoryElement } from "../StoryElement";
 import { PrimaryButton, SecondaryButton, TextButton } from ".";
+import { StoryView } from "../StoryView";
 
 const buttons = {
 	Primary: PrimaryButton,
@@ -10,9 +10,9 @@ const buttons = {
 
 export const Default: StoryObj = {
 	render: () => (
-		<StoryElement.Gallery>
-			<StoryElement.Table
-				title="state"
+		<StoryView.Gallery>
+			<StoryView.Table
+				title="ボタンの状態"
 				columns={buttons}
 				rows={
 					{
@@ -27,8 +27,8 @@ export const Default: StoryObj = {
 				}
 				render={({ column: Button, row }) => <Button {...row}>Button</Button>}
 			/>
-			<StoryElement.Table
-				title="children"
+			<StoryView.Table
+				title="長いテキスト"
 				columns={buttons}
 				rows={
 					{
@@ -38,6 +38,6 @@ export const Default: StoryObj = {
 				}
 				render={({ column: Button, row }) => <Button>{row}</Button>}
 			/>
-		</StoryElement.Gallery>
+		</StoryView.Gallery>
 	),
 };

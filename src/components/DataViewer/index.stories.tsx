@@ -1,7 +1,7 @@
 import { listCodePoints } from "@nlib/typing";
 import type { StoryObj } from "@storybook/react";
-import { StoryElement } from "../StoryElement";
 import { DataViewer } from ".";
+import { StoryView } from "../StoryView";
 
 type Story = StoryObj<typeof DataViewer>;
 
@@ -11,10 +11,10 @@ const sampleBuffer = new Uint8Array(
 
 export const Default: Story = {
 	render: () => (
-		<StoryElement.Gallery>
-			<StoryElement.Heading>String</StoryElement.Heading>
+		<StoryView.Gallery>
+			<StoryView.Heading>String</StoryView.Heading>
 			<DataViewer value="Sample String" />
-			<StoryElement.Heading>Object</StoryElement.Heading>
+			<StoryView.Heading>Object</StoryView.Heading>
 			<DataViewer
 				value={{
 					number: 1,
@@ -41,6 +41,6 @@ export const Default: Story = {
 					nan: Number.NaN,
 				}}
 			/>
-		</StoryElement.Gallery>
+		</StoryView.Gallery>
 	),
 };

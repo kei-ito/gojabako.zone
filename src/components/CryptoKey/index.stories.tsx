@@ -1,5 +1,5 @@
 import type { StoryObj } from "@storybook/react";
-import { StoryElement } from "../StoryElement";
+import { StoryView } from "../StoryView";
 import { CryptoKeyGenerator } from "./Generator";
 import { CryptoKeyStore } from "./Store";
 import { CryptoKeyView } from "./View";
@@ -13,13 +13,13 @@ const sampleKey: CryptoKey = {
 
 export const Default: StoryObj = {
 	render: () => (
-		<StoryElement.Gallery>
-			<StoryElement.Heading>CryptoKeyStore</StoryElement.Heading>
+		<StoryView.Gallery>
+			<StoryView.Heading>CryptoKeyStore</StoryView.Heading>
 			<CryptoKeyStore />
-			<StoryElement.Heading>CryptoKeyGenerator</StoryElement.Heading>
+			<StoryView.Heading>CryptoKeyGenerator</StoryView.Heading>
 			<CryptoKeyGenerator />
-			<StoryElement.Heading>CryptoKeyView</StoryElement.Heading>
+			<StoryView.Heading>CryptoKeyView</StoryView.Heading>
 			<CryptoKeyView name="SampleKey" keyObject={sampleKey} />
-		</StoryElement.Gallery>
+		</StoryView.Gallery>
 	),
 };

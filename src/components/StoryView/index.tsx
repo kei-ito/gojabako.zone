@@ -1,5 +1,10 @@
 import { isFunction } from "@nlib/typing";
-import type { ComponentType, PropsWithChildren, ReactNode } from "react";
+import type {
+	ComponentType,
+	HTMLAttributes,
+	PropsWithChildren,
+	ReactNode,
+} from "react";
 import * as style from "./style.module.scss";
 
 const Heading = (props: PropsWithChildren) => {
@@ -25,12 +30,9 @@ const listRowHeadings = function* (labelList: Array<ReactNode>, offset = 0) {
 	let r = offset;
 	const c = 1;
 	for (const label of labelList) {
+		const gridArea = `${++r} / ${c} / ${r + 1} / ${c + 1}`;
 		yield (
-			<dt
-				key={`${r}${c}`}
-				className={style.rh}
-				style={{ gridArea: `${++r} / ${c} / ${r + 1} / ${c + 1}` }}
-			>
+			<dt key={`${r}${c}`} style={{ gridArea }}>
 				{label}
 			</dt>
 		);
@@ -53,11 +55,13 @@ const parseTuples = <T,>(tuples: KVList<T>) => {
 	return { labels, values };
 };
 
-interface TableProps<C, R> {
+interface TableProps<C, R>
+	extends Omit<HTMLAttributes<HTMLDListElement>, "title"> {
 	title?: ReactNode;
 	columns: KVList<C>;
 	rows: KVList<R>;
 	render: ComponentType<{ column: C; row: R }>;
+	cellProps?: HTMLAttributes<HTMLElement>;
 }
 
 const Table = <C, R>({
@@ -65,6 +69,8 @@ const Table = <C, R>({
 	columns,
 	rows,
 	render: Render,
+	cellProps,
+	...props
 }: TableProps<C, R>) => {
 	const { labels: columnLabels, values: columnValues } = parseTuples(columns);
 	const { labels: rowLabels, values: rowValues } = parseTuples(rows);
@@ -80,16 +86,20 @@ const Table = <C, R>({
 		}
 	};
 	return (
-		<dl className={style.table}>
-			<dt className={style.title}>{title}</dt>
+		<dl {...props} className={style.table}>
+			<dt>{title}</dt>
 			{[...listColumnHeadings(columnLabels, 1)]}
 			{[...listRowHeadings(rowLabels, 1)]}
 			{[...listItems()].map(({ column, columnCount, row, rowCount }) => {
 				const c = columnCount + 2;
 				const r = rowCount + 2;
 				const gridArea = `${r} / ${c} / ${r + 1} / ${c + 1}`;
+				const style = {
+					...cellProps?.style,
+					gridArea,
+				};
 				return (
-					<dd key={gridArea} style={{ gridArea }}>
+					<dd {...cellProps} key={gridArea} style={style}>
 						<Render row={row} column={column} />
 					</dd>
 				);
@@ -98,20 +108,30 @@ const Table = <C, R>({
 	);
 };
 
-interface ColumnsProps<C> {
+interface ColumnsProps<C> extends HTMLAttributes<HTMLDListElement> {
 	columns: KVList<C>;
 	render: ComponentType<{ column: C }>;
+	cellProps?: HTMLAttributes<HTMLElement>;
 }
 
-const Columns = <C,>({ columns, render: Render }: ColumnsProps<C>) => {
+const Columns = <C,>({
+	columns,
+	render: Render,
+	cellProps,
+	...props
+}: ColumnsProps<C>) => {
 	const { labels: columnLabels, values: columnValues } = parseTuples(columns);
 	return (
-		<dl className={style.columns}>
+		<dl {...props} className={style.columns}>
 			{[...listColumnHeadings(columnLabels)]}
 			{columnValues.map((columnValue, i) => {
 				const key = `col-${i}`;
+				const style = {
+					...cellProps?.style,
+					gridColumn: `${i + 1} / ${i + 2}`,
+				};
 				return (
-					<dd key={key}>
+					<dd {...cellProps} key={key} style={style}>
 						<Render column={columnValue} />
 					</dd>
 				);
@@ -120,20 +140,30 @@ const Columns = <C,>({ columns, render: Render }: ColumnsProps<C>) => {
 	);
 };
 
-interface RowsProps<R> {
+interface RowsProps<R> extends HTMLAttributes<HTMLDListElement> {
 	rows: KVList<R>;
 	render: ComponentType<{ row: R }>;
+	cellProps?: HTMLAttributes<HTMLElement>;
 }
 
-const Rows = <R,>({ rows, render: Render }: RowsProps<R>) => {
+const Rows = <R,>({
+	rows,
+	render: Render,
+	cellProps,
+	...props
+}: RowsProps<R>) => {
 	const { labels: rowLabels, values: rowValues } = parseTuples(rows);
 	return (
-		<dl className={style.rows}>
+		<dl {...props} className={style.rows}>
 			{[...listRowHeadings(rowLabels)]}
 			{rowValues.map((rowValue, i) => {
 				const key = `row-${i}`;
+				const style = {
+					...cellProps?.style,
+					gridRow: `${i + 1} / ${i + 2}`,
+				};
 				return (
-					<dd key={key}>
+					<dd {...cellProps} key={key} style={style}>
 						<Render row={rowValue} />
 					</dd>
 				);
@@ -148,7 +178,7 @@ const Gallery = (props: PropsWithChildren) => (
 
 const FullScreen = (props: PropsWithChildren) => <main>{props.children}</main>;
 
-export const StoryElement = {
+export const StoryView = {
 	Heading,
 	Table,
 	Columns,
