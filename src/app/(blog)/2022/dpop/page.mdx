@@ -76,7 +76,7 @@ A. アクセストークンの持ち主の鍵ペアが持ち出せずブラウ�
 
 ## 鍵ペアの保管方法
 
-秘密鍵を`extractable:false`で作ることはわかりましたが、文字列等に変換できないその鍵をどうやってブラウザに保管するかという問題が残っています。少なくともアクセストークンの期限までは鍵ペアを保管しなければなりません。
+秘密鍵を`extractable:false`で作ることはわかりましたが、文字列等に変換できないその鍵をどうやってブラウザに保管するかという問題が残っています。
 
 `localStorage`や`sessionStorage`等の[Storage](https://developer.mozilla.org/en-US/docs/Web/API/Storage)は文字列しか入らないので使えませんが、[IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)はオブジェクトをオブジェクトのまま保管できます。
 
