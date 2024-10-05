@@ -23,17 +23,22 @@ export const syncSearchParamsBoolean = function* (
 		}
 	};
 	yield ({ onSet }) => {
-		const sync = debounce((value: boolean) => {
-			const url = getCurrentUrl();
-			if (value === defaultValue) {
-				url.searchParams.delete(key);
-			} else {
-				url.searchParams.set(key, value ? "1" : "0");
-			}
-			history.replaceState(null, "", url);
-		}, debounceMs);
+		const abc = new AbortController();
+		const sync = debounce(
+			(value: boolean) => {
+				const url = getCurrentUrl();
+				if (value === defaultValue) {
+					url.searchParams.delete(key);
+				} else {
+					url.searchParams.set(key, value ? "1" : "0");
+				}
+				history.replaceState(null, "", url);
+			},
+			debounceMs,
+			abc.signal,
+		);
 		onSet(sync);
-		return sync.abort;
+		return () => abc.abort();
 	};
 };
 
@@ -57,16 +62,21 @@ export const syncSearchParamsNumber = function* (
 		}
 	};
 	yield ({ onSet }) => {
-		const sync = debounce((value: number) => {
-			const url = getCurrentUrl();
-			if (value === defaultValue) {
-				url.searchParams.delete(key);
-			} else {
-				url.searchParams.set(key, value.toFixed(precision));
-			}
-			history.replaceState(null, "", url);
-		}, debounceMs);
+		const abc = new AbortController();
+		const sync = debounce(
+			(value: number) => {
+				const url = getCurrentUrl();
+				if (value === defaultValue) {
+					url.searchParams.delete(key);
+				} else {
+					url.searchParams.set(key, value.toFixed(precision));
+				}
+				history.replaceState(null, "", url);
+			},
+			debounceMs,
+			abc.signal,
+		);
 		onSet(sync);
-		return sync.abort;
+		return () => abc.abort();
 	};
 };

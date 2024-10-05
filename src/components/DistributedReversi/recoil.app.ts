@@ -167,17 +167,22 @@ export const rcCellList = atom<Set<DRCellId>>({
 	default: new Set(),
 	effects: [
 		({ onSet, getPromise }) => {
+			const abc = new AbortController();
 			const key = "c";
-			const sync = debounce((list: Set<DRCellId>) => {
-				const url = getCurrentUrl();
-				url.searchParams.set(key, encodeCellList(list));
-				history.replaceState(null, "", url);
-			}, 400);
+			const sync = debounce(
+				(list: Set<DRCellId>) => {
+					const url = getCurrentUrl();
+					url.searchParams.set(key, encodeCellList(list));
+					history.replaceState(null, "", url);
+				},
+				400,
+				abc.signal,
+			);
 			if (isClient) {
 				onSet(sync);
 				onResolve(getPromise(rcCellList), sync);
 			}
-			return () => sync.abort();
+			return () => abc.abort();
 		},
 	],
 });

@@ -3,20 +3,18 @@ import { noop } from "./noop.ts";
 export const debounce = <A extends Array<unknown>>(
 	fn: (...args: A) => void,
 	debounceMs: number,
+	abortSignal: AbortSignal,
 ) => {
 	let timerId = setTimeout(noop);
-	let aborted = false;
 	const cancel = () => clearTimeout(timerId);
-	const debouncedFn = (...args: A) => {
-		if (!aborted) {
+	abortSignal.addEventListener("abort", cancel);
+	return (...args: A) => {
+		if (!abortSignal.aborted) {
 			cancel();
-			timerId = setTimeout(() => fn(...args), debounceMs);
+			timerId = setTimeout(() => {
+				fn(...args);
+				abortSignal.removeEventListener("abort", cancel);
+			}, debounceMs);
 		}
 	};
-	return Object.assign(debouncedFn, {
-		abort: () => {
-			cancel();
-			aborted = true;
-		},
-	});
 };
