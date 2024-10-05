@@ -27,7 +27,8 @@ export interface LogSliderProps
 export const LogSlider = ({
 	min,
 	max,
-	value: zValue = 1,
+	defaultValue = 1,
+	value: zValue = defaultValue,
 	onChangeValue,
 	onChange: onChangeFn,
 	...props
