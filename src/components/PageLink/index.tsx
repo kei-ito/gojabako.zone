@@ -1,6 +1,6 @@
 import { isString } from "@nlib/typing";
 import Link from "next/link";
-import type { PageData } from "../../util/type.mts";
+import type { PageData } from "../../util/type.ts";
 import * as style from "./style.module.scss";
 
 interface PageLinkProps {

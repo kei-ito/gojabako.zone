@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from "react";
-import { classnames } from "../../util/classnames.mts";
+import { classnames } from "../../util/classnames.ts";
 import * as style from "./style.module.scss";
 
 export interface ToggleProps extends HTMLAttributes<HTMLButtonElement> {

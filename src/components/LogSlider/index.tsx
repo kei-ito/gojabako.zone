@@ -2,9 +2,9 @@
 import { ensure, isFiniteNumber } from "@nlib/typing";
 import type { ChangeEvent, InputHTMLAttributes } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { clamp } from "../../util/clamp.mts";
-import type { Range } from "../../util/range.mts";
-import { useLastValue } from "../use/LastValue.mts";
+import { clamp } from "../../util/clamp.ts";
+import type { Range } from "../../util/range.ts";
+import { useLastValue } from "../use/LastValue.ts";
 
 const v = (value: ReadonlyArray<string> | number | string): number =>
   ensure(Number(value), isFiniteNumber);

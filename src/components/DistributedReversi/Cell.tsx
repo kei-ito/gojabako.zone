@@ -1,26 +1,26 @@
 import type { MouseEvent } from "react";
 import { Fragment, useMemo } from "react";
 import { useRecoilCallback, useRecoilValue } from "recoil";
-import { classnames } from "../../util/classnames.mts";
+import { classnames } from "../../util/classnames.ts";
 import {
   rcCell,
   rcDevMode,
   rcMessageBuffer,
   rcSelectedCoordinates,
   selectCoordinates,
-} from "./recoil.app.mts";
+} from "./recoil.app.ts";
 import * as style from "./style.module.scss";
-import { useOnConnection } from "./useOnConnection.mts";
-import { useOnPressCell } from "./useOnPressCell.mts";
-import { useRx } from "./useRx.mts";
-import { useTx } from "./useTx.mts";
-import type { DRCellId, DRCellState, DRDirection } from "./util.mts";
+import { useOnConnection } from "./useOnConnection.ts";
+import { useOnPressCell } from "./useOnPressCell.ts";
+import { useRx } from "./useRx.ts";
+import { useTx } from "./useTx.ts";
+import type { DRCellId, DRCellState, DRDirection } from "./util.ts";
 import {
   DRDirections,
   DRInitialState,
   isDRPlayerId,
   toDRBufferId,
-} from "./util.mts";
+} from "./util.ts";
 
 const hue = (t: number) => Math.round(360 * t) % 360;
 

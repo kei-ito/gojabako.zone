@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { PropsWithChildren } from "react";
-import { site } from "../util/site.mts";
+import { site } from "../util/site.ts";
 import "./globals.css";
 import "./hljs.css";
 

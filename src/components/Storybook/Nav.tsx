@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { classnames } from "../../util/classnames.mts";
-import { storyGroups } from "./all.mts";
+import { classnames } from "../../util/classnames.ts";
+import { storyGroups } from "./all.ts";
 import * as style from "./style.module.scss";
 
 interface StorybookNavProps {

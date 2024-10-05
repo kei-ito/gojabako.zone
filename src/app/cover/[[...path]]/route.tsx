@@ -1,14 +1,11 @@
 import { notFound } from "next/navigation";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
-import type { FontStyle, FontWeight } from "../../../util/fontFace.mts";
-import {
-  listLines,
-  measureTextWidth,
-} from "../../../util/measureTextWidth.mts";
-import { pageList } from "../../../util/pageList.mts";
-import { site } from "../../../util/site.mts";
-import type { PageData } from "../../../util/type.mts";
+import type { FontStyle, FontWeight } from "../../../util/fontFace.ts";
+import { listLines, measureTextWidth } from "../../../util/measureTextWidth.ts";
+import { pageList } from "../../../util/pageList.ts";
+import { site } from "../../../util/site.ts";
+import type { PageData } from "../../../util/type.ts";
 
 interface FontOptions {
   data: ArrayBuffer;

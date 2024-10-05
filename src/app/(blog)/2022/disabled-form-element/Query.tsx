@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { getCurrentUrl } from "../../../../util/getCurrentUrl.mts";
+import { getCurrentUrl } from "../../../../util/getCurrentUrl.ts";
 
 export const Query = () => {
   const [query, setQuery] = useState("なし");

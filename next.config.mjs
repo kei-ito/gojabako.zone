@@ -5,8 +5,8 @@ import rehypeKatex from 'rehype-katex';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
-import { rehypeArticle } from './src/unified/rehypeArticle.mts';
-import { rehypeEmbed } from './src/unified/rehypeEmbed.mts';
+import { rehypeArticle } from './src/unified/rehypeArticle.ts';
+import { rehypeEmbed } from './src/unified/rehypeEmbed.ts';
 
 const withMDX = mdx({
   options: {
@@ -23,11 +23,11 @@ const withMDX = mdx({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  pageExtensions: ['tsx', 'mts', 'mdx'],
+  pageExtensions: ['tsx', 'ts', 'mdx'],
   reactStrictMode: true,
   webpack: (config, _options) => {
     config.module.rules.push({
-      test: /\.mts$/,
+      test: /\.ts$/,
       loader: 'esbuild-loader',
       options: { loader: 'ts' },
     });

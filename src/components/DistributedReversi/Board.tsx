@@ -1,11 +1,11 @@
 import type { MouseEvent, ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { useRecoilCallback, useRecoilValue, useSetRecoilState } from "recoil";
-import { classnames } from "../../util/classnames.mts";
-import { toRecoilSelectorOpts } from "../../util/recoil/selector.mts";
-import { useRect } from "../use/Rect.mts";
+import { classnames } from "../../util/classnames.ts";
+import { toRecoilSelectorOpts } from "../../util/recoil/selector.ts";
+import { useRect } from "../use/Rect.ts";
 import { DRCellG } from "./Cell";
-import type { XYWHZ } from "./recoil.app.mts";
+import type { XYWHZ } from "./recoil.app.ts";
 import {
   rcCell,
   rcCellList,
@@ -16,9 +16,9 @@ import {
   rcSelectedCoordinates,
   rcViewBox,
   rcXYWHZ,
-} from "./recoil.app.mts";
+} from "./recoil.app.ts";
 import * as style from "./style.module.scss";
-import { defaultDRCell, toDRCellId } from "./util.mts";
+import { defaultDRCell, toDRCellId } from "./util.ts";
 
 export const DRBoard = () => {
   const [element, setElement] = useState<Element | null>(null);

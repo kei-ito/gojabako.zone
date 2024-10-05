@@ -3,7 +3,7 @@ import type { FormEvent } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { Buttons, PrimaryButton } from "../Button";
 import { Form } from "../Form";
-import { generateKeyPair } from "./util.mts";
+import { generateKeyPair } from "./util.ts";
 import { CryptoKeyView } from "./View";
 
 export const CryptoKeyGenerator = () => {

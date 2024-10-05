@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { HTMLAttributes } from "react";
-import { classnames } from "../../util/classnames.mts";
-import { site } from "../../util/site.mts";
+import { classnames } from "../../util/classnames.ts";
+import { site } from "../../util/site.ts";
 import { SiteMap } from "../SiteMap";
 import * as style from "./style.module.scss";
 

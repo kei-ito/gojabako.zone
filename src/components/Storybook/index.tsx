@@ -1,6 +1,6 @@
 import type { Story } from "@storybook/react";
 import { StoryElement } from "../StoryElement";
-import { storyGroups } from "./all.mts";
+import { storyGroups } from "./all.ts";
 import { StorybookNav } from "./Nav";
 import * as style from "./style.module.scss";
 

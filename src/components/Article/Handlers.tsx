@@ -1,11 +1,11 @@
 "use client";
 import { useMemo, useState } from "react";
-import { useHighlightAndScroll } from "../use/HighlightAndScroll.mts";
+import { useHighlightAndScroll } from "../use/HighlightAndScroll.ts";
 import {
   useHighlightCodeLines,
   useLineLinkHandlers,
-} from "../use/HighlightCode.mts";
-import { useInPageLinkHandler } from "../use/InPageLinkHandler.mts";
+} from "../use/HighlightCode.ts";
+import { useInPageLinkHandler } from "../use/InPageLinkHandler.ts";
 
 export const ArticleHandlers = () => {
   useHighlightAndScroll();

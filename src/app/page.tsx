@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Article } from "../components/Article";
 import { PageLink } from "../components/PageLink";
 import { SiteLayout } from "../components/SiteLayout";
-import { pageList } from "../util/pageList.mts";
-import { site } from "../util/site.mts";
+import { pageList } from "../util/pageList.ts";
+import { site } from "../util/site.ts";
 
 export const metadata: Metadata = {};
 

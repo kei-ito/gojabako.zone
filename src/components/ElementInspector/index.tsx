@@ -1,10 +1,10 @@
 "use client";
 import type { ChangeEvent } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { IconClass } from "../../util/classnames.mts";
-import { isClient } from "../../util/env.mts";
-import { getCurrentUrl } from "../../util/getCurrentUrl.mts";
-import { noop } from "../../util/noop.mts";
+import { IconClass } from "../../util/classnames.ts";
+import { isClient } from "../../util/env.ts";
+import { getCurrentUrl } from "../../util/getCurrentUrl.ts";
+import { noop } from "../../util/noop.ts";
 import { Select } from "../Select";
 import * as style from "./style.module.scss";
 

@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { site } from "../util/site.mts";
+import { site } from "../util/site.ts";
 
 export const runtime = "edge";
 export const size = { width: 180, height: 180 };

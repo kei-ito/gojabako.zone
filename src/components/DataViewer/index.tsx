@@ -1,8 +1,8 @@
 import { getType, isArray, isObject, isString } from "@nlib/typing";
 import type { HTMLAttributes, ReactNode } from "react";
 import { Fragment } from "react";
-import { classnames } from "../../util/classnames.mts";
-import { serializeFileSize } from "../../util/serializeFileSize.mts";
+import { classnames } from "../../util/classnames.ts";
+import { serializeFileSize } from "../../util/serializeFileSize.ts";
 import * as style from "./style.module.scss";
 
 export interface DataViewerProps<T = unknown>

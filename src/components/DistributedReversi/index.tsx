@@ -4,15 +4,15 @@ import type { HTMLAttributes } from "react";
 import { useCallback } from "react";
 import type { MutableSnapshot } from "recoil";
 import { RecoilRoot } from "recoil";
-import { classnames } from "../../util/classnames.mts";
-import { getCurrentUrl } from "../../util/getCurrentUrl.mts";
+import { classnames } from "../../util/classnames.ts";
+import { getCurrentUrl } from "../../util/getCurrentUrl.ts";
 import { DRBoard } from "./Board";
-import { decodeCellList } from "./cellList.mts";
+import { decodeCellList } from "./cellList.ts";
 import { DRMenu } from "./Menu";
-import { rcCell, rcCellList } from "./recoil.app.mts";
+import { rcCell, rcCellList } from "./recoil.app.ts";
 import * as style from "./style.module.scss";
-import type { DRCellId } from "./util.mts";
-import { defaultDRCell, toDRCellId } from "./util.mts";
+import type { DRCellId } from "./util.ts";
+import { defaultDRCell, toDRCellId } from "./util.ts";
 
 export const DistributedReversi = (props: HTMLAttributes<HTMLElement>) => {
   getCurrentUrl.defaultSearchParams = useSearchParams();

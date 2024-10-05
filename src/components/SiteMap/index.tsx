@@ -1,5 +1,5 @@
-import { pageList } from "../../util/pageList.mts";
-import type { PageData } from "../../util/type.mts";
+import { pageList } from "../../util/pageList.ts";
+import type { PageData } from "../../util/type.ts";
 import { PageLink } from "../PageLink";
 
 export const SiteMap = () => [...listGroups()];

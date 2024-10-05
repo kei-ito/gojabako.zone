@@ -3,8 +3,5 @@
   "formatter": {
     "indentStyle": "space",
     "indentWidth": 2
-  },
-  "files": {
-    "include": ["src/**/*.ts", "src/**/*.mts", "src/**/*.tsx"]
   }
 }

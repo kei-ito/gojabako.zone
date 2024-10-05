@@ -1,5 +1,5 @@
 import type { CSSProperties, HTMLAttributes } from "react";
-import { classnames } from "../../util/classnames.mts";
+import { classnames } from "../../util/classnames.ts";
 import * as style from "./style.module.scss";
 
 type ColorFn = (a: number, b: number, c: number) => [string, string];

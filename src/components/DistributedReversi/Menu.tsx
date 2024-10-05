@@ -1,11 +1,11 @@
 import type { ChangeEvent } from "react";
 import { useCallback } from "react";
 import { useRecoilCallback, useRecoilState } from "recoil";
-import { clamp } from "../../util/clamp.mts";
-import { toRecoilSelectorOpts } from "../../util/recoil/selector.mts";
+import { clamp } from "../../util/clamp.ts";
+import { toRecoilSelectorOpts } from "../../util/recoil/selector.ts";
 import { SecondaryButton } from "../Button";
 import { Toggle } from "../Toggle";
-import { useFullScreen } from "../use/FullScreen.mts";
+import { useFullScreen } from "../use/FullScreen.ts";
 import { ZoomSlider } from "../ZoomSlider";
 import { DRCellInspector } from "./CellInspector";
 import {
@@ -16,9 +16,9 @@ import {
   rcRxDelayMs,
   rcTxDelayMs,
   rcZoom,
-} from "./recoil.app.mts";
+} from "./recoil.app.ts";
 import * as style from "./style.module.scss";
-import { DRInitialState, InitialDRPlayerId, zoom } from "./util.mts";
+import { DRInitialState, InitialDRPlayerId, zoom } from "./util.ts";
 
 export const DRMenu = () => (
   <nav className={style.info}>

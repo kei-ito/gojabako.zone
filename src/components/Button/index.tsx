@@ -3,7 +3,7 @@ import type {
   HTMLAttributes,
   PropsWithChildren,
 } from "react";
-import { IconClass, classnames } from "../../util/classnames.mts";
+import { IconClass, classnames } from "../../util/classnames.ts";
 import * as style from "./style.module.scss";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
