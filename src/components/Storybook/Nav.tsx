@@ -23,6 +23,7 @@ const listItems = function* (currentPath: string): Generator<ReactNode> {
 			const active = currentPath === storyPath;
 			yield (
 				<Link
+					key={storyPath}
 					href={`/app/components/${storyPath}`}
 					className={classnames(active && style.active)}
 				>

@@ -1,7 +1,8 @@
+"use client";
 import type { Story } from "@storybook/react";
-import { StoryElement } from "../StoryElement";
-import { storyGroups } from "./all.ts";
+import { StoryView } from "../StoryView";
 import { StorybookNav } from "./Nav";
+import { storyGroups } from "./all.ts";
 import * as style from "./style.module.scss";
 
 interface StorybookProps {
@@ -14,9 +15,9 @@ export const Storybook = ({ path }: StorybookProps) => {
 		<div className={style.container}>
 			<StorybookNav currentPath={path.join("/")} />
 			{!story && (
-				<StoryElement.Gallery>
-					<p>Select a component from the menu.</p>
-				</StoryElement.Gallery>
+				<StoryView.Gallery>
+					<p>メニューからコンポーネントを選択してください。</p>
+				</StoryView.Gallery>
 			)}
 			{story?.render && <story.render />}
 		</div>
