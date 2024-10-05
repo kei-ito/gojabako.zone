@@ -4,11 +4,10 @@ import type { ChangeEvent, InputHTMLAttributes } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { clamp } from "../../util/clamp.ts";
 import type { Range } from "../../util/range.ts";
-import { useLastValue } from "../use/LastValue.ts";
 
-const v = (value: ReadonlyArray<string> | number | string): number =>
+const toNumber = (value: ReadonlyArray<string> | number | string): number =>
 	ensure(Number(value), isFiniteNumber);
-export const toLogValue = (value: number, [min, max]: Range): number => {
+const toLogValue = (value: number, [min, max]: Range): number => {
 	const logValue = Math.log(clamp(value, min, max));
 	const logMin = Math.log(min);
 	const logMax = Math.log(max);
@@ -17,47 +16,47 @@ export const toLogValue = (value: number, [min, max]: Range): number => {
 export const toLinearValue = (ratio: number, [min, max]: Range) => {
 	return min * Number((max / min) ** ratio);
 };
-export const defaultLinearRange = [0.1, 2];
 export interface LogSliderProps
 	extends Omit<InputHTMLAttributes<HTMLInputElement>, "max" | "min" | "type"> {
 	min: number;
 	max: number;
 	onChangeValue?: (value: number) => void;
 }
+
 export const LogSlider = ({
 	min,
 	max,
-	defaultValue = 1,
-	value: zValue = defaultValue,
+	defaultValue = Math.sqrt(min * max),
+	value: rawValue,
 	onChangeValue,
 	onChange: onChangeFn,
 	...props
 }: LogSliderProps) => {
 	const range = useMemo((): Range => [min, max], [min, max]);
-	const [ratio, setRatio] = useState<number>(toLogValue(v(zValue), range));
-	const value = useMemo(() => toLinearValue(ratio, range), [ratio, range]);
-	const lastValue = useLastValue(value, null);
+	const [ratio, setRatio] = useState(toLogValue(toNumber(defaultValue), range));
 	const onChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
+			setRatio(clamp(toNumber(event.currentTarget.value), 0, 1));
 			if (onChangeFn) {
 				onChangeFn(event);
 			}
-			setRatio(clamp(v(event.currentTarget.value), 0, 1));
 		},
 		[onChangeFn],
 	);
-	// biome-ignore lint/correctness/useExhaustiveDependencies: valueのみ見る
+	// biome-ignore lint/correctness/useExhaustiveDependencies: rawValueは見ない
 	useEffect(() => {
-		if (lastValue !== null && value !== lastValue && onChangeValue) {
-			onChangeValue(value);
+		if (onChangeValue) {
+			const diff = rawValue ? toLogValue(toNumber(rawValue), range) - ratio : 1;
+			if (0.001 < Math.abs(diff)) {
+				onChangeValue(toLinearValue(ratio, range));
+			}
 		}
-	}, [value]);
-	// biome-ignore lint/correctness/useExhaustiveDependencies: zValue,rangeのみ見る
+	}, [ratio, range, onChangeValue]);
 	useEffect(() => {
-		if (lastValue !== null) {
-			setRatio(toLogValue(v(zValue), range));
+		if (rawValue) {
+			setRatio(toLogValue(toNumber(rawValue), range));
 		}
-	}, [zValue, range]);
+	}, [rawValue, range]);
 	return (
 		<input
 			{...props}

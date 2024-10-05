@@ -5,7 +5,7 @@ import { StoryView } from "../StoryView";
 export const Default: StoryObj = {
 	render: () => (
 		<StoryView.Gallery>
-			<StoryView.Heading>Select</StoryView.Heading>
+			<StoryView.Heading>{Select.name}</StoryView.Heading>
 			<Select defaultValue="2">
 				<option value="1">option1</option>
 				<option value="2">option2</option>

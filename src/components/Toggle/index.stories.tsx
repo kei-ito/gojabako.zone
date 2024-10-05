@@ -5,7 +5,7 @@ import { StoryView } from "../StoryView";
 export const Default: StoryObj = {
 	render: () => (
 		<StoryView.Gallery>
-			<StoryView.Heading>States</StoryView.Heading>
+			<StoryView.Heading>{Toggle.name}</StoryView.Heading>
 			<StoryView.Table
 				columns={{ on: true, off: false }}
 				rows={{ default: false, disabled: true }}

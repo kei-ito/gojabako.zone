@@ -11,8 +11,9 @@ const buttons = {
 export const Default: StoryObj = {
 	render: () => (
 		<StoryView.Gallery>
+			<StoryView.Heading>Button</StoryView.Heading>
 			<StoryView.Table
-				title="ボタンの状態"
+				title="状態・種類"
 				columns={buttons}
 				rows={
 					{
