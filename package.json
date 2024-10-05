@@ -22,7 +22,7 @@
 		"build:next": "NODE_OPTIONS='--import=@nlib/tsm' next build",
 		"start": "NODE_ENV=production NODE_OPTIONS='--import=@nlib/tsm' node server.mjs",
 		"lint": "run-s lint:*",
-		"lint:biome": "npx @biomejs/biome lint",
+		"lint:biome": "npx @biomejs/biome check",
 		"lint:css": "stylelint 'src/**/*.scss'"
 	},
 	"dependencies": {
