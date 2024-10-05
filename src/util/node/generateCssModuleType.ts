@@ -1,5 +1,5 @@
 import { readFile, writeFile } from "node:fs/promises";
-import type { Root, AtRule, Rule } from "postcss";
+import type { AtRule, Root, Rule } from "postcss";
 import { parse as parseScss } from "postcss-scss";
 import parseSelector from "postcss-selector-parser";
 

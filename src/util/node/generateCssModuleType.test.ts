@@ -5,10 +5,10 @@ import { parse as parseScss } from "postcss-scss";
 import parseSelector from "postcss-selector-parser";
 import { srcDir } from "./directories.ts";
 import {
-	listSelectors,
-	listLocalNamesInSelector,
-	listLocalNames,
 	generateTypeDefinition,
+	listLocalNames,
+	listLocalNamesInSelector,
+	listSelectors,
 } from "./generateCssModuleType.ts";
 
 describe(listSelectors.name, () => {

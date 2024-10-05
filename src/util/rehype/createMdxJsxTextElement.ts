@@ -2,9 +2,9 @@ import { isString } from "@nlib/typing";
 import { parse } from "acorn";
 import type { Program } from "estree";
 import type {
-	MdxJsxTextElementHast,
 	MdxJsxAttribute,
 	MdxJsxAttributeValueExpression,
+	MdxJsxTextElementHast,
 } from "mdast-util-mdx-jsx";
 
 export const createMdxJsxTextElement = (

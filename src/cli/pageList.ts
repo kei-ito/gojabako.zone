@@ -1,5 +1,5 @@
-import { fileURLToPath } from "node:url";
 import { writeFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 import { appDir, rootDir, srcDir } from "../util/node/directories.ts";
 import { formatCode } from "../util/node/formatCode.ts";
 import { getPageData } from "../util/node/getPageData.ts";

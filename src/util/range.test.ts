@@ -1,5 +1,5 @@
 import * as assert from "node:assert";
-import { test, describe } from "node:test";
+import { describe, test } from "node:test";
 import type { Range } from "./range.ts";
 import {
 	listValues,

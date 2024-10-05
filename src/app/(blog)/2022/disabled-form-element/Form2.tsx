@@ -1,4 +1,4 @@
-import { PrimaryButton, Buttons } from "../../../../components/Button";
+import { Buttons, PrimaryButton } from "../../../../components/Button";
 import { FieldSet, Form } from "../../../../components/Form";
 import { Query } from "./Query";
 

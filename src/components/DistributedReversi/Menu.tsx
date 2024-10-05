@@ -5,8 +5,8 @@ import { clamp } from "../../util/clamp.ts";
 import { toRecoilSelectorOpts } from "../../util/recoil/selector.ts";
 import { SecondaryButton } from "../Button";
 import { Toggle } from "../Toggle";
-import { useFullScreen } from "../use/FullScreen.ts";
 import { ZoomSlider } from "../ZoomSlider";
+import { useFullScreen } from "../use/FullScreen.ts";
 import { DRCellInspector } from "./CellInspector";
 import {
 	rcCell,

@@ -3,13 +3,13 @@ import { useCallback, useMemo } from "react";
 import { useRecoilCallback, useRecoilValue } from "recoil";
 import { toRecoilSelectorOpts } from "../../util/recoil/selector.ts";
 import { DRMessenger } from "./Messenger";
+import { DRSelector } from "./Selector";
 import type { CellSelection } from "./recoil.app.ts";
 import {
 	rcCell,
 	rcSelectedCells,
 	rcSelectedCoordinates,
 } from "./recoil.app.ts";
-import { DRSelector } from "./Selector";
 import * as style from "./style.module.scss";
 import type { DRCell, DRCellState, DRPlayerId } from "./util.ts";
 import { DRInitialState, isDRPlayerId } from "./util.ts";

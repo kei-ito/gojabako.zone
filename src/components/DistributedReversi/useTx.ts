@@ -6,11 +6,11 @@ import { vAdd } from "../../util/vector.ts";
 import { rcCell, rcMessageBuffer, rcTxDelayMs } from "./recoil.app.ts";
 import type { DRBufferId } from "./util.ts";
 import {
-	OppositeDRDirection,
 	DRAdjacentStep,
+	OppositeDRDirection,
 	getAdjacentId,
-	toDRBufferId,
 	isOpenableDRMessage,
+	toDRBufferId,
 } from "./util.ts";
 
 export const useTx = (bufferId: DRBufferId) => {

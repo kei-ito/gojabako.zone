@@ -1,4 +1,4 @@
-import { pathToFileURL, type PathToFileUrlOptions } from "node:url";
+import { type PathToFileUrlOptions, pathToFileURL } from "node:url";
 
 export const filePathToFileUrl = pathToFileURL as (
 	filePath: string,

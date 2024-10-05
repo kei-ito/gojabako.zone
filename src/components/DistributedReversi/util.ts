@@ -1,5 +1,5 @@
 import type { Nominal } from "@nlib/typing";
-import { typeChecker, isNonNegativeSafeInteger } from "@nlib/typing";
+import { isNonNegativeSafeInteger, typeChecker } from "@nlib/typing";
 
 export const zoom = { min: 40, max: 200 };
 export type DRPlayerId = Nominal<number, "DRPlayerId">;

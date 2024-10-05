@@ -2,10 +2,10 @@ import type {
 	Element,
 	ElementContent,
 	Node,
-	Root,
-	RootContent,
 	Parent,
 	Properties,
+	Root,
+	RootContent,
 } from "hast";
 import { hasClass } from "./className.ts";
 

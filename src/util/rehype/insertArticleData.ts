@@ -2,12 +2,12 @@ import { isString } from "@nlib/typing";
 import type { Element, Root, RootContent } from "hast";
 import type { MdxjsEsm } from "mdast-util-mdxjs-esm";
 import { getPageFromFileUrl } from "../getPage.ts";
+import { filePathToFileUrl } from "../node/filePathToFileUrl.ts";
 import { site } from "../site.ts";
 import type { PageData } from "../type.ts";
 import type { VFileLike } from "../unified.ts";
 import { createHastElement } from "./createHastElement.ts";
 import { setOpenGraphMetadata } from "./setOpenGraphMetadata.ts";
-import { filePathToFileUrl } from "../node/filePathToFileUrl.ts";
 
 interface RootLike extends Omit<Root, "children"> {
 	children: Array<MdxjsEsm | RootContent>;

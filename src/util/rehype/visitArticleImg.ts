@@ -7,6 +7,7 @@ import type { MdxJsxTextElementHast } from "mdast-util-mdx-jsx";
 import type { Position } from "unist";
 import { SKIP } from "unist-util-visit";
 import { componentsDir } from "../node/directories.ts";
+import { filePathToFileUrl } from "../node/filePathToFileUrl.ts";
 import { mdToInlineHast } from "../node/mdToHast.ts";
 import type { VFileLike } from "../unified.ts";
 import { addClass } from "./className.ts";
@@ -20,7 +21,6 @@ import { createMdxJsxTextElement } from "./createMdxJsxTextElement.ts";
 import { isHastElement } from "./isHastElement.ts";
 import { serializePropertyValue } from "./serializePropertyValue.ts";
 import type { HastElementVisitor } from "./visitHastElement.ts";
-import { filePathToFileUrl } from "../node/filePathToFileUrl.ts";
 
 const mdxImageComponentFile = new URL("MdxImage", componentsDir);
 

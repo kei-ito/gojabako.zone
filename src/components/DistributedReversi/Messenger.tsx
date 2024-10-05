@@ -3,9 +3,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRecoilCallback } from "recoil";
 import { toRecoilSelectorOpts } from "../../util/recoil/selector.ts";
 import { SecondaryButton } from "../Button";
+import { DRSelector } from "./Selector";
 import { rcCell, rcSelectedCoordinates } from "./recoil.app.ts";
 import { sendDRMessage } from "./recoil.send.ts";
-import { DRSelector } from "./Selector";
 import * as style from "./style.module.scss";
 import type {
 	DRMessage,
