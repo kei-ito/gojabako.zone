@@ -3,201 +3,201 @@
 ::before,
 ::after,
 ::marker {
-  position: relative;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  border-style: none;
-  border-width: var(--gj1px);
-  border-color: currentcolor;
-  list-style: none;
-  font: inherit;
-  line-height: inherit;
-  color: inherit;
-  text-decoration: inherit;
-  background-size: cover;
-  background-color: unset;
-  background-position: center;
-  background-repeat: no-repeat;
-  outline-color: var(--gjBlue6);
-  outline-width: 0.2em;
-  appearance: none;
-  text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+	position: relative;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	border-style: none;
+	border-width: var(--gj1px);
+	border-color: currentcolor;
+	list-style: none;
+	font: inherit;
+	line-height: inherit;
+	color: inherit;
+	text-decoration: inherit;
+	background-size: cover;
+	background-color: unset;
+	background-position: center;
+	background-repeat: no-repeat;
+	outline-color: var(--gjBlue6);
+	outline-width: 0.2em;
+	appearance: none;
+	text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+	-moz-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+	stroke-linecap: round;
+	stroke-linejoin: round;
 
-  @media (prefers-reduced-motion: reduce) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+	@media (prefers-reduced-motion: reduce) {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
 }
 
 :root {
-  --gj1px: 1px;
-  --gjBaseWidth: 627px;
-  --gjHeaderHeight: 2.4em;
-  /* stylelint-disable-next-line unit-allowed-list */
-  --gjFullScreenAvailableHeight: calc(100vh - var(--gjHeaderHeight));
-  --gjGray0: #fff;
-  --gjGray1: #f8fafc;
-  --gjGray2: #f1f5f9;
-  --gjGray3: #e2e8f0;
-  --gjGray4: #cbd5e1;
-  --gjGray5: #94a3b8;
-  --gjGray6: #64748b;
-  --gjGray7: #475569;
-  --gjGray8: #334155;
-  --gjGray9: #1e293b;
-  --gjYellow1: #fef9c3;
-  --gjYellow2: #fef08a;
-  --gjYellow3: #fde047;
-  --gjYellow4: #facc15;
-  --gjYellow5: #eab308;
-  --gjYellow6: #ca8a04;
-  --gjYellow7: #a16207;
-  --gjYellow8: #854d0e;
-  --gjYellow9: #713f12;
-  --gjBlue1: #dbeafe;
-  --gjBlue2: #bfdbfe;
-  --gjBlue3: #93c5fd;
-  --gjBlue4: #60a5fa;
-  --gjBlue5: #3b82f6;
-  --gjBlue6: #2563eb;
-  --gjBlue7: #1d4ed8;
-  --gjBlue8: #1e40af;
-  --gjBlue9: #1e3a8a;
-  --gjGreen1: #f0fdf4;
-  --gjGreen2: #dcfce7;
-  --gjGreen3: #bbf7d0;
-  --gjGreen4: #86efac;
-  --gjGreen5: #4ade80;
-  --gjGreen6: #22c55e;
-  --gjGreen7: #16a34a;
-  --gjGreen8: #15803d;
-  --gjGreen9: #166534;
-  --gjRed1: #fee2e2;
-  --gjRed2: #fecaca;
-  --gjRed3: #fca5a5;
-  --gjRed4: #f87171;
-  --gjRed5: #ef4444;
-  --gjRed6: #dc2626;
-  --gjRed7: #b91c1c;
-  --gjRed8: #991b1b;
-  --gjRed9: #7f1d1d;
-  --gjFontSans: 'Helvetica Neue', arial, 'Hiragino Kaku Gothic ProN', meiryo,
-    sans-serif;
-  --gjFontMonospace: 'Ubuntu Mono', menlo, consolas, monospace;
-  --gjListMarkerWidth: 1.6em;
-  --gjLineHeight: 1.6;
-  --gjColorBackground: var(--gjGray0);
-  --gjColorText1: var(--gjGray9);
-  --gjColorText2: var(--gjGray6);
-  --gjColorFocus1: var(--gjYellow3);
-  --gjColorFocus2: var(--gjYellow1);
-  font-size: 15px;
-  font-family: var(--gjFontSans);
-  line-height: var(--gjLineHeight);
-  text-rendering: optimizespeed;
-  color: var(--gjColorText1);
-  scroll-behavior: smooth;
+	--gj1px: 1px;
+	--gjBaseWidth: 627px;
+	--gjHeaderHeight: 2.4em;
+	/* stylelint-disable-next-line unit-allowed-list */
+	--gjFullScreenAvailableHeight: calc(100vh - var(--gjHeaderHeight));
+	--gjGray0: #fff;
+	--gjGray1: #f8fafc;
+	--gjGray2: #f1f5f9;
+	--gjGray3: #e2e8f0;
+	--gjGray4: #cbd5e1;
+	--gjGray5: #94a3b8;
+	--gjGray6: #64748b;
+	--gjGray7: #475569;
+	--gjGray8: #334155;
+	--gjGray9: #1e293b;
+	--gjYellow1: #fef9c3;
+	--gjYellow2: #fef08a;
+	--gjYellow3: #fde047;
+	--gjYellow4: #facc15;
+	--gjYellow5: #eab308;
+	--gjYellow6: #ca8a04;
+	--gjYellow7: #a16207;
+	--gjYellow8: #854d0e;
+	--gjYellow9: #713f12;
+	--gjBlue1: #dbeafe;
+	--gjBlue2: #bfdbfe;
+	--gjBlue3: #93c5fd;
+	--gjBlue4: #60a5fa;
+	--gjBlue5: #3b82f6;
+	--gjBlue6: #2563eb;
+	--gjBlue7: #1d4ed8;
+	--gjBlue8: #1e40af;
+	--gjBlue9: #1e3a8a;
+	--gjGreen1: #f0fdf4;
+	--gjGreen2: #dcfce7;
+	--gjGreen3: #bbf7d0;
+	--gjGreen4: #86efac;
+	--gjGreen5: #4ade80;
+	--gjGreen6: #22c55e;
+	--gjGreen7: #16a34a;
+	--gjGreen8: #15803d;
+	--gjGreen9: #166534;
+	--gjRed1: #fee2e2;
+	--gjRed2: #fecaca;
+	--gjRed3: #fca5a5;
+	--gjRed4: #f87171;
+	--gjRed5: #ef4444;
+	--gjRed6: #dc2626;
+	--gjRed7: #b91c1c;
+	--gjRed8: #991b1b;
+	--gjRed9: #7f1d1d;
+	--gjFontSans: "Helvetica Neue", arial, "Hiragino Kaku Gothic ProN", meiryo,
+		sans-serif;
+	--gjFontMonospace: "Ubuntu Mono", menlo, consolas, monospace;
+	--gjListMarkerWidth: 1.6em;
+	--gjLineHeight: 1.6;
+	--gjColorBackground: var(--gjGray0);
+	--gjColorText1: var(--gjGray9);
+	--gjColorText2: var(--gjGray6);
+	--gjColorFocus1: var(--gjYellow3);
+	--gjColorFocus2: var(--gjYellow1);
+	font-size: 15px;
+	font-family: var(--gjFontSans);
+	line-height: var(--gjLineHeight);
+	text-rendering: optimizespeed;
+	color: var(--gjColorText1);
+	scroll-behavior: smooth;
 
-  /* stylelint-disable-next-line unit-allowed-list */
-  @media (width <= 667px) {
-    --gjBaseWidth: 94%;
-  }
+	/* stylelint-disable-next-line unit-allowed-list */
+	@media (width <= 667px) {
+		--gjBaseWidth: 94%;
+	}
 
-  @media print {
-    --gjHeaderHeight: 0;
-  }
+	@media print {
+		--gjHeaderHeight: 0;
+	}
 }
 
 button,
 label {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 a {
-  color: var(--gjBlue8);
-  text-decoration: underline;
+	color: var(--gjBlue8);
+	text-decoration: underline;
 
-  &:hover {
-    text-decoration: underline;
-    opacity: 1;
-  }
+	&:hover {
+		text-decoration: underline;
+		opacity: 1;
+	}
 
-  & > code {
-    color: var(--gjColorText1);
-  }
+	& > code {
+		color: var(--gjColorText1);
+	}
 }
 
 s,
 del {
-  text-decoration-line: line-through;
+	text-decoration-line: line-through;
 }
 
 b,
 strong {
-  font-weight: bolder;
+	font-weight: bolder;
 }
 
 i,
 em {
-  font-style: italic;
+	font-style: italic;
 }
 
 img {
-  /* Style for alt */
-  font-size: 80%;
+	/* Style for alt */
+	font-size: 80%;
 }
 
 hr {
-  block-size: var(--gj1px);
-  background-color: currentcolor;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
+	block-size: var(--gj1px);
+	background-color: currentcolor;
+	margin-block-start: 1em;
+	margin-block-end: 1em;
 }
 
 ol,
 ul {
-  counter-reset: list;
+	counter-reset: list;
 
-  & > li {
-    counter-increment: list;
-    padding-inline-start: var(--gjListMarkerWidth);
-    margin-block-end: 0.25em;
-    list-style-type: inherit;
+	& > li {
+		counter-increment: list;
+		padding-inline-start: var(--gjListMarkerWidth);
+		margin-block-end: 0.25em;
+		list-style-type: inherit;
 
-    &::before {
-      position: absolute;
-      display: block;
-      inset-inline-end: calc(100% - var(--gjListMarkerWidth) + 0.4em);
-      text-align: end;
-    }
+		&::before {
+			position: absolute;
+			display: block;
+			inset-inline-end: calc(100% - var(--gjListMarkerWidth) + 0.4em);
+			text-align: end;
+		}
 
-    &:last-child {
-      margin-block-end: 0;
-    }
-  }
+		&:last-child {
+			margin-block-end: 0;
+		}
+	}
 }
 
 ol > li::before {
-  content: counter(list) '.';
+	content: counter(list) ".";
 }
 
 ul > li::before {
-  content: '●';
+	content: "●";
 }
 
 iframe {
-  display: block;
+	display: block;
 }
 
-input[type='range'] {
-  background-image: linear-gradient(0deg, var(--gjGray5), var(--gjGray5));
-  background-size: 100% var(--gj1px);
-  background-position: center;
+input[type="range"] {
+	background-image: linear-gradient(0deg, var(--gjGray5), var(--gjGray5));
+	background-size: 100% var(--gj1px);
+	background-position: center;
 }

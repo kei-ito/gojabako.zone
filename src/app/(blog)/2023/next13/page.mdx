@@ -8,11 +8,11 @@ export const metadata = {
 
 いきなりNext.jsではないのですが、[`webpack@5.80`](https://github.com/webpack/webpack/releases/tag/v5.80.0)でESMのLoaderが指定できるようになりました。これがいちばんありがたかったポイントです。
 
-例えば`*.mts`をTypeScriptでロードするために以下のような設定をしたとしましょう。`MyTsLoader`は[`{"type":"module"}`](https://nodejs.org/api/packages.html#type)なパッケージとします。
+例えば`*.ts`をTypeScriptでロードするために以下のような設定をしたとしましょう。`MyTsLoader`は[`{"type":"module"}`](https://nodejs.org/api/packages.html#type)なパッケージとします。
 
 ```javascript webpack.config.js
 const webpackConfig = {
-  module: { rules: [{ test: /\.mts$/, loader: 'MyTsLoader' }] },
+  module: { rules: [{ test: /\.ts$/, loader: 'MyTsLoader' }] },
 };
 ```
 
@@ -175,7 +175,7 @@ export const metadata = {
 
 機能追加は以下のような関数を`next.config.mjs`の`remarkPlugins`と`rehypePlugins`に追加すれば動きます。
 
-```typescript rehypePlugin.mts
+```typescript rehypePlugin.ts
 // import type { Root } from 'mdast'; // MarkdownのASTをいじる場合
 import type { Root } from 'hast'; // HTMLのASTをいじる場合
 

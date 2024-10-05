@@ -1,6 +1,6 @@
 /* stylelint-disable unit-allowed-list */
 .parent {
-  --gjSize: 15px;
+  --gjSize: 1em;
   --gjSize2: calc(var(--gjSize) * 2);
   --gjColor: var(--gjGray1);
   background-image: linear-gradient(45deg, var(--gjColor) 26%, transparent 26%),
@@ -10,10 +10,10 @@
   background-size: var(--gjSize2) var(--gjSize2);
   background-repeat: repeat;
   background-position:
-    50% 0,
-    calc(50% + var(--gjSize)) var(--gjSize),
-    calc(50% + var(--gjSize)) var(--gjSize),
-    calc(50% + var(--gjSize2)) 0;
+    0% 0,
+    calc(0% + var(--gjSize)) var(--gjSize),
+    calc(0% + var(--gjSize)) var(--gjSize),
+    calc(0% + var(--gjSize2)) 0;
   box-shadow: 0 0 0 1px var(--gjGray4);
 }
 
