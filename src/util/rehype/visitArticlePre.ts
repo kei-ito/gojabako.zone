@@ -46,11 +46,12 @@ export const visitArticlePre = (
 						{},
 						...(isString(value) ? mdToInlineHast(value) : []),
 					),
-					createHastElement(
-						"span",
-						{ className: ["language-label"] },
-						language,
-					),
+					language !== "text" &&
+						createHastElement(
+							"span",
+							{ className: ["language-label"] },
+							language,
+						),
 					createFragmentRef(id),
 				),
 				code,
