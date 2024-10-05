@@ -1,10 +1,6 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
 	"files": {
-		"ignore": [
-			".cache/**",
-			".next/**",
-			".vercel/**"
-		]
+		"ignore": [".cache/**", ".next/**", ".vercel/**"]
 	}
 }
