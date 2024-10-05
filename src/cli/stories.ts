@@ -25,7 +25,7 @@ const generate = async () => {
 		const relativePath = filePath.slice(componentsDirPath.length);
 		const name = `g${++count}`;
 		groupNames.set(relativePath.slice(0, -storySuffix.length), name);
-		const source = `../${relativePath}`.replace(/\.tsx?$/, "");
+		const source = `../${relativePath}`;
 		code += `import * as ${name} from '${source}';`;
 	}
 	code += "type Stories = Record<string, StoryObj>;";
