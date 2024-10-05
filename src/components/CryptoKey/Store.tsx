@@ -31,11 +31,7 @@ export const CryptoKeyStore = () => {
 			</Buttons>
 			{keyPair && (
 				<>
-					<CryptoKeyView
-						name="PublicKey"
-						keyObject={keyPair.publicKey}
-						extract
-					/>
+					<CryptoKeyView name="PublicKey" keyObject={keyPair.publicKey} />
 					<CryptoKeyView
 						name="PrivateKey"
 						keyObject={keyPair.privateKey}

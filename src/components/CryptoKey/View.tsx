@@ -8,21 +8,26 @@ import * as style from "./style.module.scss";
 interface KeyViewProps {
 	name: string;
 	keyObject: CryptoKey;
+	noExtract?: boolean;
 }
 
 export const CryptoKeyView = ({
 	name,
 	keyObject,
 	children,
+	noExtract,
 }: PropsWithChildren<KeyViewProps>) => {
 	const [jwk, setJwk] = useState<Error | JsonWebKey | null>(null);
 	useEffect(() => {
+		if (noExtract) {
+			return;
+		}
 		Promise.resolve()
 			.then(async () => {
 				setJwk(await crypto.subtle.exportKey("jwk", keyObject));
 			})
 			.catch(setJwk);
-	}, [keyObject]);
+	}, [noExtract, keyObject]);
 	return (
 		<FieldSet className={style.container}>
 			<legend>{name}</legend>
