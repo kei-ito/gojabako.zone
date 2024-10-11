@@ -30,8 +30,6 @@
 
   & > label {
     display: block;
-    inline-size: 100%;
-    max-inline-size: max-content;
     margin-block-start: 1em;
     padding-block-end: 0.25em;
     cursor: pointer;
@@ -39,7 +37,6 @@
 
   & > input {
     display: block;
-    inline-size: 100%;
     padding-block: 0.3em;
     padding-inline: 0.5em;
     border-block-end-style: solid;
