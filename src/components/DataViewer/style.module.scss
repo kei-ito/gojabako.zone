@@ -1,94 +1,35 @@
 .container {
-  --gjBorder: solid var(--gj1px) var(--gjGray4);
-  padding: 0.25em 0.5em;
+  display: grid;
+  grid-auto-flow: row;
+  gap: 0.2em;
+  padding: 0.6em 0.8em;
   font-size: 14px;
   font-family: var(--gjFontMonospace);
   line-height: 1;
   background-color: var(--gjGray2);
-}
 
-.value {
-  white-space: pre-wrap;
-  word-break: break-all;
-  font-family: var(--gjFontMonospace);
-  font-size: 14px;
-}
-
-.primitive {
-  display: grid;
-  grid-template-columns: auto auto;
-  align-items: baseline;
-  justify-content: start;
-  column-gap: 0.3em;
-
-  &[data-type='String'] {
-    color: var(--gjRed6);
-  }
-
-  &[data-type='Number'],
-  &[data-type='Boolean'] {
-    color: var(--gjBlue6);
-  }
-
-  &[data-type='Undefined'] {
-    color: var(--gjGray5);
-  }
-}
-
-.buffer {
-  display: grid;
-  grid-auto-flow: column;
-  justify-content: start;
-
-  & > span {
+  & > dl {
     display: grid;
-    justify-content: center;
-    white-space: pre;
-    inline-size: 1.5em;
-  }
+    grid-template-columns: max-content 1fr;
 
-  & > .ascii {
-    inline-size: 0.6em;
-  }
+    & > dt {
+      white-space: pre;
+      color: var(--gjRed9);
+    }
 
-  & > hr {
-    inline-size: var(--gj1px);
-    block-size: 100%;
-    background-color: var(--gjGray4);
-    margin-block: 0;
-    margin-inline: 0.4em;
-  }
-}
+    & > dd {
+      &[title="String"] {
+        color: var(--gjRed6);
+      }
 
-.kv {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  place-content: start;
-  align-items: baseline;
-  column-gap: 0.4em;
-  overflow: auto;
+      &[title="Number"],
+      &[title="Boolean"] {
+        color: var(--gjBlue6);
+      }
 
-  & > .type {
-    justify-self: start;
-    grid-column: 1 / -1;
-    margin-block-end: 0.3em;
-  }
-
-  & > dt {
-    color: var(--gjRed9);
-  }
-
-  & > dd {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: baseline;
-    justify-items: start;
-    column-gap: 0.5em;
-
-    &[title]::before {
-      content: attr(title);
-      grid-column: 1 / -1;
+      &[title="Undefined"] {
+        color: var(--gjGray5);
+      }
     }
   }
 }
