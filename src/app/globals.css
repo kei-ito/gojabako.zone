@@ -10,7 +10,6 @@
 	border-style: none;
 	border-width: var(--gj1px);
 	border-color: currentcolor;
-	list-style: none;
 	font: inherit;
 	line-height: inherit;
 	color: inherit;
@@ -90,10 +89,9 @@
 	--gjRed7: #b91c1c;
 	--gjRed8: #991b1b;
 	--gjRed9: #7f1d1d;
-	--gjFontSans: "Helvetica Neue", arial, "Hiragino Kaku Gothic ProN", meiryo,
-		sans-serif;
-	--gjFontMonospace: "Ubuntu Mono", menlo, consolas, monospace;
-	--gjListMarkerWidth: 1.6em;
+	--gjFontEmoji: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	--gjFontSans: ui-sans-serif, system-ui, sans-serif, var(--gjFontEmoji);
+	--gjFontMonospace: "Roboto Mono", ui-monospace, monospace, var(--gjFontEmoji);
 	--gjLineHeight: 1.6;
 	--gjColorBackground: var(--gjGray0);
 	--gjColorText1: var(--gjGray9);
@@ -122,6 +120,17 @@ label {
 	cursor: pointer;
 }
 
+pre {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+code {
+	white-space: pre-wrap;
+	font-family: var(--gjFontMonospace);
+	font-size: 90%;
+}
+
 a {
 	color: var(--gjBlue8);
 	text-decoration: underline;
@@ -130,9 +139,13 @@ a {
 		text-decoration: underline;
 		opacity: 1;
 	}
+}
 
-	& > code {
-		color: var(--gjColorText1);
+p {
+	code {
+		padding-inline: 0.3em;
+		border-radius: 0.3em;
+		background-color: var(--gjGray1);
 	}
 }
 
@@ -165,33 +178,7 @@ hr {
 
 ol,
 ul {
-	counter-reset: list;
-
-	& > li {
-		counter-increment: list;
-		padding-inline-start: var(--gjListMarkerWidth);
-		margin-block-end: 0.25em;
-		list-style-type: inherit;
-
-		&::before {
-			position: absolute;
-			display: block;
-			inset-inline-end: calc(100% - var(--gjListMarkerWidth) + 0.4em);
-			text-align: end;
-		}
-
-		&:last-child {
-			margin-block-end: 0;
-		}
-	}
-}
-
-ol > li::before {
-	content: counter(list) ".";
-}
-
-ul > li::before {
-	content: "●";
+	padding-inline-start: 1.5em;
 }
 
 iframe {
