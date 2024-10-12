@@ -2,7 +2,7 @@
   display: grid;
   grid-auto-flow: row;
   gap: 0.2em;
-  padding: 0.6em 0.8em;
+  padding: var(--gjBasePadding);
   font-size: 14px;
   font-family: var(--gjFontMonospace);
   line-height: 1;

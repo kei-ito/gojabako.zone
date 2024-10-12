@@ -17,7 +17,7 @@
   border-block-end: solid var(--gj1px) var(--gjGray3);
 
   &.full {
-    --gjBaseWidth: calc(100% - 2em);
+    --gjBaseWidth: var(--gjBaseFullWidth);
   }
 
   & > * {
