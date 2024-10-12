@@ -37,8 +37,8 @@
   display: grid;
   grid-auto-flow: row;
   align-content: start;
-  padding: 1em;
-  line-height: 1.4em;
+  padding: var(--gjBasePadding);
+  line-height: 1.4;
 
   & > .active {
     font-weight: 700;
