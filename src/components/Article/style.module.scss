@@ -340,6 +340,9 @@
 
           & > .hljs-ln {
             --gjColorText: var(--gjGray4);
+            z-index: 1;
+            position: sticky;
+            inset-inline-start: 0;
             color: inherit;
             padding-inline-start: 0.5em;
             padding-inline-end: 0.4em;
