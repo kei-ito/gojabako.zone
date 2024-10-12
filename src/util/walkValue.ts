@@ -78,6 +78,12 @@ const walkObject = function* (
 	if (circularPath) {
 		const text = `[Circular ${circularPath.join(".")}]`;
 		yield { text, value, type: "Circular", path };
+	} else if (typeof value.message === "string" && "stack" in value) {
+		const { stack } = value;
+		if (typeof stack === "string") {
+			yield { text: stack, value, type: getType(value), path };
+			return;
+		}
 	} else {
 		circular.set(value, path);
 		const type = getType(value);
