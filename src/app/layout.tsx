@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-	themeColor: "hsla(0,0%,100%,0.8)",
+	themeColor: "hsl(0,0%,100%)",
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {
