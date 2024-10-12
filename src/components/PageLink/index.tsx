@@ -1,28 +1,34 @@
 import { isString } from "@nlib/typing";
 import Link from "next/link";
+import type { PropsWithChildren } from "react";
 import type { PageData } from "../../util/type.ts";
 import * as style from "./style.module.scss";
 
 interface PageLinkProps {
 	page: PageData;
+	showUpdatedAt?: boolean;
 	showDescription?: boolean;
 }
 
-export const PageLink = ({ page, showDescription }: PageLinkProps) => {
-	const d = new Date(page.publishedAt);
-	const originalPublishedAt = page.other?.originalPublishedAt;
-	if (isString(originalPublishedAt)) {
-		d.setTime(Date.parse(originalPublishedAt));
+export const PageLink = ({
+	page,
+	showUpdatedAt,
+	showDescription,
+}: PageLinkProps) => {
+	let { publishedAt } = page;
+	if (isString(page.other?.originalPublishedAt)) {
+		publishedAt = page.other?.originalPublishedAt;
 	}
-	const date = `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
 	return (
 		<>
 			<Link href={page.path} className={style.container}>
 				<span>{page.title}</span>{" "}
-				<span className={style.time}>
-					<time dateTime={d.toISOString()}>{date}</time>
-					公開
-				</span>
+				{showUpdatedAt && (
+					<>
+						<PageDate dateTime={page.updatedAt}>更新</PageDate>{" "}
+					</>
+				)}
+				<PageDate dateTime={publishedAt}>公開</PageDate>
 				{showDescription && page.description && (
 					<>
 						<br />
@@ -31,5 +37,19 @@ export const PageLink = ({ page, showDescription }: PageLinkProps) => {
 				)}
 			</Link>
 		</>
+	);
+};
+
+const PageDate = ({
+	dateTime,
+	children,
+}: PropsWithChildren<{ dateTime: string }>) => {
+	const date = new Date(dateTime);
+	const dateString = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+	return (
+		<time className={style.time} dateTime={date.toISOString()}>
+			{dateString}
+			{children}
+		</time>
 	);
 };

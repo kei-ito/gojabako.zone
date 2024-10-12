@@ -19,22 +19,27 @@ export default function Page() {
 					<p>
 						<Link href="/author">{site.author.name}</Link> のサイトです。
 					</p>
-					<h2>最近の更新</h2>
-					<ul>{[...listRecentPages(10)]}</ul>
+					<h2>最近公開したページ</h2>
+					<ul>{[...listRecentPages(6, "publishedAt")]}</ul>
+					<h2>最近更新したページ</h2>
+					<ul>{[...listRecentPages(6, "updatedAt")]}</ul>
 				</Article>
 			</main>
 		</SiteLayout>
 	);
 }
 
-const listRecentPages = function* (limit: number) {
+const listRecentPages = function* (
+	limit: number,
+	key: "publishedAt" | "updatedAt",
+) {
 	for (const page of pageList
 		.slice()
-		.sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))
+		.sort((a, b) => Date.parse(b[key]) - Date.parse(a[key]))
 		.slice(0, limit)) {
 		yield (
 			<li key={page.path}>
-				<PageLink page={page} />
+				<PageLink page={page} showUpdatedAt={key === "updatedAt"} />
 			</li>
 		);
 	}
