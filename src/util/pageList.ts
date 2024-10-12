@@ -48,8 +48,8 @@ export const pageList: Array<PageData> = [
 	{
 		title: ["Next.js", " ", "13に", "しました"],
 		publishedAt: "2023-09-22T06:09:19.000Z",
-		updatedAt: "2024-10-05T02:47:47.000Z",
-		commits: 3,
+		updatedAt: "2024-10-12T14:30:32.000Z",
+		commits: 4,
 		path: "/2023/next13",
 		iri: "gjbkz://gojabako.zone/2023/next13",
 		group: "2023",
