@@ -10,8 +10,7 @@
   inset-inline: 0;
   block-size: var(--gjHeaderHeight);
   padding-inline: calc(50% - var(--gjBaseWidth) / 2);
-  background-color: hsl(0deg 0% 100% / 80%);
-  backdrop-filter: blur(2px);
+  background-color: hsl(0deg 0% 100%);
   font-weight: 500;
   line-height: 1;
   border-block-end: solid var(--gj1px) var(--gjGray3);
