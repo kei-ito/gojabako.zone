@@ -25,6 +25,7 @@ export const insertLineNumbers = (node: Element, codeId: string) => {
 		elements.splice(-2, 2);
 	}
 	node.children = elements;
+	return node;
 };
 
 const listFragments = function* (

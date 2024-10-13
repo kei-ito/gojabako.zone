@@ -18,16 +18,13 @@ export const visitArticlePre = (
 ): HastElementVisitor => {
 	let count = 0;
 	return (e, index, parent) => {
-		const code = getSingle(e.children);
-		if (!isHastElement(code, "code", "hljs")) {
+		const codeElement = getSingle(e.children);
+		if (!isHastElement(codeElement, "code", "hljs")) {
 			return null;
 		}
-		let language =
-			code.properties.className.find((c) => c.startsWith("language-")) ?? "";
-		language = language.slice("language-".length);
-		const value = isObject(code.data) && code.data.meta;
-		const id = `code${++count}`;
-		insertLineNumbers(code, id);
+		const codeLanguage = getCodeLanguage(codeElement.properties.className);
+		const caption = isObject(codeElement.data) && codeElement.data.meta;
+		const elementId = `code${++count}`;
 		parent.children.splice(
 			index,
 			1,
@@ -35,28 +32,37 @@ export const visitArticlePre = (
 				"figure",
 				{
 					dataType: "code",
-					...(isString(value) ? { className: ["caption"] } : {}),
+					...(isString(caption) ? { className: ["caption"] } : {}),
 				},
-				createFragmentTarget(id),
+				createFragmentTarget(elementId),
 				createHastElement(
 					"figcaption",
 					{},
 					createHastElement(
 						"span",
 						{},
-						...(isString(value) ? mdToInlineHast(value) : []),
+						...(isString(caption) ? mdToInlineHast(caption) : []),
 					),
-					language !== "text" &&
-						createHastElement(
-							"span",
-							{ className: ["language-label"] },
-							language,
-						),
-					createFragmentRef(id),
+					createHastElement(
+						"span",
+						{ className: ["language-label"] },
+						codeLanguage,
+					),
+					createFragmentRef(elementId),
 				),
-				code,
+				insertLineNumbers(codeElement, elementId),
 			),
 		);
 		return SKIP;
 	};
+};
+
+const getCodeLanguage = (classNameList: Array<string>): string => {
+	const prefix = "language-";
+	for (const className of classNameList) {
+		if (className.startsWith(prefix)) {
+			return className.slice(prefix.length);
+		}
+	}
+	return "text";
 };
