@@ -296,13 +296,6 @@
         --gjColorBackground: var(--gjGray1);
         overflow: visible;
 
-        & > figcaption {
-          & > .language-label {
-            color: var(--gjColorText2);
-            user-select: none;
-          }
-        }
-
         & > .hljs {
           display: grid;
           grid-template-columns: max-content 1fr;

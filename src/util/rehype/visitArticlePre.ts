@@ -43,11 +43,6 @@ export const visitArticlePre = (
 						{},
 						...(isString(caption) ? mdToInlineHast(caption) : []),
 					),
-					createHastElement(
-						"span",
-						{ className: ["language-label"] },
-						codeLanguage,
-					),
 					createFragmentRef(elementId),
 				),
 				insertLineNumbers(codeElement, elementId),
