@@ -53,14 +53,13 @@ export const LogSlider = ({
 		}
 	}, [ratio, range, onChangeValue]);
 	useEffect(() => {
-		// let frameId = 0;
+		let frameId = 0;
 		if (rawValue) {
-			setRatio(toLogValue(toNumber(rawValue), range));
-			// frameId = requestAnimationFrame(() => {
-			// 	setRatio(toLogValue(toNumber(rawValue), range));
-			// });
+			frameId = requestAnimationFrame(() => {
+				setRatio(toLogValue(toNumber(rawValue), range));
+			});
 		}
-		// return () => cancelAnimationFrame(frameId);
+		return () => cancelAnimationFrame(frameId);
 	}, [rawValue, range]);
 	return (
 		<input
