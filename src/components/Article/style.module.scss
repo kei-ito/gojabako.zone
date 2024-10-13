@@ -307,6 +307,12 @@
           overflow-x: auto;
           white-space: pre;
 
+          &.language-text-wrap {
+            & > span {
+              white-space: pre-wrap;
+            }
+          }
+
           & > .hljs-ln {
             --gjColorText: var(--gjGray4);
             z-index: 1;
@@ -347,6 +353,7 @@
             }
           }
         }
+
       }
 
       &.hash-hit {
