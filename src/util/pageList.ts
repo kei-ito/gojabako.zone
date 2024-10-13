@@ -58,8 +58,8 @@ export const pageList: Array<PageData> = [
 	{
 		title: ["CSS", " ", "Modulesの", ":", "globalと", ":", "localの", "効果"],
 		publishedAt: "2023-09-19T16:42:34.000Z",
-		updatedAt: "2023-09-19T16:42:34.000Z",
-		commits: 1,
+		updatedAt: "2024-10-13T11:09:54.000Z",
+		commits: 2,
 		path: "/2023/css-modules",
 		iri: "gjbkz://gojabako.zone/2023/css-modules",
 		group: "2023",
