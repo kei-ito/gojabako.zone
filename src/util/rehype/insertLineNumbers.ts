@@ -10,7 +10,12 @@ export const insertLineNumbers = (node: Element, codeId: string) => {
 			elements.push(
 				createHastElement(
 					"a",
-					{ href: `#${id}`, className: ["hljs-ln"], draggable: "false" },
+					{
+						href: `#${id}`,
+						className: ["hljs-ln"],
+						draggable: "false",
+						tabIndex: -1,
+					},
 					createHastElement("span", { id, className: ["fragment-target"] }),
 					createHastElement("span", {}, `${lineNumber}`),
 				),

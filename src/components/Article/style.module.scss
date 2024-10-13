@@ -169,20 +169,8 @@
 
       &>ol {
         &>li {
-          outline-width: 0;
+          outline-width: 0.1em;
           overflow: visible;
-
-          &.hash-hit {
-            &::before {
-              content: '';
-              display: block;
-              z-index: -1;
-              position: absolute;
-              inset: -0.1em;
-              inset-inline-start: -1.6em;
-              background-color: inherit;
-            }
-          }
         }
       }
     }
@@ -208,6 +196,7 @@
       & > figcaption {
         display: grid;
         grid-template-columns: 1fr max-content;
+        align-items: end;
         block-size: 0;
         font-size: 80%;
         line-height: 1.25em;
@@ -217,6 +206,10 @@
         /* stylelint-disable-next-line no-descending-specificity */
         & > .fragment-ref {
           opacity: 0;
+
+          &:focus {
+            opacity: 1;
+          }
 
           &::before {
             content: attr(href);
@@ -356,6 +349,7 @@
               --gjColorText: var(--gjGray5);
               --gjColorBackground: var(--gjColorFocus2);
               border-inline-end-color: var(--gjColorFocus1);
+              outline-width: unset;
 
               & + span {
                 --gjColorBackground: var(--gjColorFocus2);
