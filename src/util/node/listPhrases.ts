@@ -43,7 +43,6 @@ export const listPhrases = function* (
 	let buffer: Array<IpadicFeatures> = [];
 	for (const item of tokenizer.tokenize(source)) {
 		const text = item.surface_form;
-		console.info(item);
 		if (isTrailing(item, buffer[buffer.length - 1])) {
 			buffer.push(item);
 		} else {
