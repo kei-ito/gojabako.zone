@@ -3,7 +3,7 @@
 	"rules": {
 		"declaration-empty-line-before": ["never", {}],
 		"unit-allowed-list": [
-			["em", "ms", "deg", "%", "fr", "vh"],
+			["em", "ms", "deg", "%", "fr", "vh", "lh"],
 			{
 				"ignoreProperties": {
 					"px": [
