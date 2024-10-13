@@ -8,8 +8,8 @@ import {
 	parseRangeListString,
 	toRangeListString,
 } from "../../util/range.ts";
+import { hashHitClassName } from "../HighlightHash";
 import { useHash } from "./Hash.ts";
-import { hashHitClassName } from "./HighlightAndScroll.ts";
 
 export const useLineLinkHandlers = (root: Element | null) => {
 	const [, syncHash] = useHash();
