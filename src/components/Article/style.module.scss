@@ -38,7 +38,9 @@
     }
 
     .hash-hit {
-      background-color: var(--gjYellow1);
+      --gjBackgroundColor: var(--gjYellow1);
+      background-color: var(--gjBackgroundColor);
+      outline: 0.5em solid var(--gjBackgroundColor);
     }
 
     h2 {
@@ -62,10 +64,6 @@
     h6 {
       margin-block-start: 2em;
       margin-block-end: 0.5em;
-
-      &.hash-hit {
-        box-shadow: 0 0 0 0.5em var(--gjYellow1);
-      }
     }
 
     h2 + h3,
@@ -101,10 +99,8 @@
 
     td,
     th {
-      padding-block-start: 0.4em;
-      padding-block-end: 0.2em;
-      padding-inline-start: 0.5em;
-      padding-inline-end: 0.5em;
+      padding-block: 0.3em;
+      padding-inline: 0.5em;
       border-style: solid;
       border-color: var(--gjGray4);
       font-size: 90%;
@@ -113,6 +109,7 @@
 
     th {
       text-align: center;
+      background-color: var(--gjGray2);
     }
 
     blockquote {
@@ -132,6 +129,7 @@
       &.footnote-ref {
         font-size: 80%;
         overflow: visible;
+        outline-width: 0;
 
         & > a {
           padding-inline: 0.2em;
@@ -168,6 +166,13 @@
       p {
         margin-block-end: 0;
       }
+
+      &>ol {
+        &>li {
+          outline-width: 0.1em;
+          overflow: visible;
+        }
+      }
     }
 
     .katex-html {
@@ -191,14 +196,20 @@
       & > figcaption {
         display: grid;
         grid-template-columns: 1fr max-content;
+        align-items: end;
         block-size: 0;
         font-size: 80%;
         line-height: 1.25em;
         overflow: visible;
+        transform: translateY(-1lh);
 
         /* stylelint-disable-next-line no-descending-specificity */
         & > .fragment-ref {
           opacity: 0;
+
+          &:focus {
+            opacity: 1;
+          }
 
           &::before {
             content: attr(href);
@@ -217,16 +228,7 @@
       &.caption {
         & > figcaption {
           block-size: unset;
-        }
-      }
-
-      &.hash-hit {
-        outline: 0.5em solid var(--gjColorFocus2);
-
-        /* stylelint-disable-next-line no-descending-specificity */
-        .fragment-ref {
-          opacity: 1;
-          color: var(--gjColorText1);
+          transform: none;
         }
       }
 
@@ -246,7 +248,7 @@
         }
 
         & > img {
-          max-inline-size: max-content;
+          background-color: var(--gjGray2);
         }
       }
 
@@ -347,6 +349,7 @@
               --gjColorText: var(--gjGray5);
               --gjColorBackground: var(--gjColorFocus2);
               border-inline-end-color: var(--gjColorFocus1);
+              outline-width: unset;
 
               & + span {
                 --gjColorBackground: var(--gjColorFocus2);

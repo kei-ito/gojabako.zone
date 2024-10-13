@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+"use client";
+import { useEffect, useMemo, useState } from "react";
 import { getCurrentUrl } from "../../util/getCurrentUrl.ts";
 import { minmax } from "../../util/minmax.ts";
 import { noop } from "../../util/noop.ts";
@@ -9,9 +10,20 @@ import {
 	toRangeListString,
 } from "../../util/range.ts";
 import { hashHitClassName } from "../HighlightHash";
-import { useHash } from "./Hash.ts";
+import { useHash } from "../use/Hash";
 
-export const useLineLinkHandlers = (root: Element | null) => {
+/**
+ * コードブロックの行番号の処理を行うコンポーネントです。
+ */
+export const CodeLineHandlers = () => {
+	const [div, setDiv] = useState<Element | null>(null);
+	const article = useMemo(() => div?.closest("article") ?? null, [div]);
+	useLineLinkHandlers(article);
+	useHighlightCodeLines(article);
+	return <div ref={setDiv} style={{ display: "none" }} />;
+};
+
+const useLineLinkHandlers = (root: Element | null) => {
 	const [, syncHash] = useHash();
 	useEffect(() => {
 		let timerId = setTimeout(noop);
@@ -24,12 +36,11 @@ export const useLineLinkHandlers = (root: Element | null) => {
 				event.preventDefault();
 				event.stopPropagation();
 				const a = event.currentTarget as HTMLAnchorElement;
-				syncHash(
-					calculateHash(new URL(a.href).hash, {
-						add: event.metaKey || event.ctrlKey,
-						expand: event.shiftKey,
-					}),
-				);
+				const newHash = calculateNewHash(new URL(a.href).hash, {
+					add: event.metaKey || event.ctrlKey,
+					expand: event.shiftKey,
+				});
+				syncHash(newHash);
 			};
 			for (const a of root.querySelectorAll<HTMLAnchorElement>("a.hljs-ln")) {
 				a.addEventListener("click", onClick, { signal: abc.signal });
@@ -56,7 +67,7 @@ export const useLineLinkHandlers = (root: Element | null) => {
 	}, [root, syncHash]);
 };
 
-const calculateHash = (
+const calculateNewHash = (
 	requestedHash: string,
 	mode: { add: boolean; expand: boolean },
 ): string => {
@@ -91,7 +102,7 @@ const calculateHash = (
 	return `#${requestedCodeId}L${toRangeListString(ranges)}`;
 };
 
-export const useHighlightCodeLines = (root: Element | null) => {
+const useHighlightCodeLines = (root: Element | null) => {
 	const [hash] = useHash();
 	useEffect(() => {
 		const [codeId, lineId] = parseHash(hash);

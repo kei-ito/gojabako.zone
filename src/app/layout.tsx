@@ -3,6 +3,7 @@ import type { PropsWithChildren } from "react";
 import { site } from "../util/site.ts";
 import "./globals.css";
 import "./hljs.css";
+import { HighlightHash } from "../components/HighlightHash";
 
 export const metadata: Metadata = {
 	metadataBase: site.baseUrl,
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
 				<style>{".material-symbols-rounded{font-size: inherit}"}</style>
 			</head>
 			<body>{children}</body>
+			<HighlightHash />
 		</html>
 	);
 }

@@ -103,7 +103,6 @@
 	line-height: var(--gjLineHeight);
 	text-rendering: optimizespeed;
 	color: var(--gjColorText1);
-	scroll-behavior: smooth;
 
 	/* stylelint-disable-next-line unit-allowed-list */
 	@media (width <= 667px) {
