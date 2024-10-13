@@ -3,6 +3,7 @@ import type { PropsWithChildren } from "react";
 import { site } from "../util/site.ts";
 import "./globals.css";
 import "./hljs.css";
+import { HandleAnchorClick } from "../components/HandleAnchorClick";
 import { HighlightHash } from "../components/HighlightHash";
 
 export const metadata: Metadata = {
@@ -44,6 +45,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
 			</head>
 			<body>{children}</body>
 			<HighlightHash />
+			<HandleAnchorClick />
 		</html>
 	);
 }

@@ -4,6 +4,10 @@ import { useHash } from "../use/Hash";
 
 export const hashHitClassName = "hash-hit";
 
+/**
+ * 表示中のURLを監視し、ハッシュが変更された場合に該当する要素に対してhashHitClassNameを
+ * 付与します。また、該当する要素が画面外にある場合はスクロールします。
+ */
 export const HighlightHash = () => {
 	const [hash] = useHash();
 	const targetElement = useMemo<HTMLElement | null>(() => {
@@ -19,7 +23,7 @@ export const HighlightHash = () => {
 			targetElement.classList.add(hashHitClassName);
 			if (isNotInViewport(targetElement)) {
 				targetElement.scrollIntoView({
-					behavior: "instant",
+					behavior: "smooth",
 					block: "center",
 					inline: "center",
 				});
@@ -31,11 +35,6 @@ export const HighlightHash = () => {
 };
 
 const isNotInViewport = (element: HTMLElement) => {
-	const rect = element.getBoundingClientRect();
-	return (
-		rect.top < 0 ||
-		innerHeight < rect.bottom ||
-		rect.left < 0 ||
-		innerWidth < rect.right
-	);
+	const { top, left, bottom, right } = element.getBoundingClientRect();
+	return top < 0 || innerHeight < bottom || left < 0 || innerWidth < right;
 };
