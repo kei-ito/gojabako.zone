@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { pageList } from "../src/util/pageList.ts";
 import { site } from "../src/util/site.ts";
 
-const baseUrl = new URL("http://127.0.0.1:3000");
+const baseUrl = new URL(process.env.BASE_URL || "http://127.0.0.1:3000");
 
 for (const pageData of pageList) {
 	test(pageData.path, async ({ page }, testInfo) => {

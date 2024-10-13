@@ -8,6 +8,14 @@ import { defineConfig, devices } from "@playwright/test";
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+const webServer = process.env.BASE_URL
+	? undefined
+	: {
+			command: "npm run dev",
+			url: "http://127.0.0.1:3000",
+			reuseExistingServer: true,
+		};
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -41,9 +49,5 @@ export default defineConfig({
 	],
 
 	/* Run your local dev server before starting the tests */
-	webServer: {
-		command: "npm run dev",
-		url: "http://127.0.0.1:3000",
-		reuseExistingServer: !process.env.CI,
-	},
+	webServer,
 });
