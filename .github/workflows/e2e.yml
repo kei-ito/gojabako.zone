@@ -1,7 +1,7 @@
 on:
   deployment_status:
 jobs:
-  Availability:
+  SiteAvailability:
     if: github.event_name == 'deployment_status' && github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 6
