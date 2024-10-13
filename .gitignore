@@ -1,19 +1,19 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
+node_modules
+.pnp
 .pnp.js
 
 # testing
-/coverage
+coverage
 
 # next.js
-/.next/
-/out/
+.next
+out
 
 # production
-/build
+build
 
 # misc
 .DS_Store
@@ -41,7 +41,11 @@ tsconfig.tsbuildinfo
 # CSS
 *.scss.d.ts
 
-next-env.d.ts
 *.component.tsx
+next-env.d.ts
 .cache
 public/fonts
+test-results
+playwright-report
+blob-report
+playwright/.cache

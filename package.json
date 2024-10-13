@@ -7,6 +7,7 @@
 		"test": "run-s test:*",
 		"test:type": "tsc --noEmit",
 		"test:unit": "tsm-test src",
+		"playwright": "playwright test",
 		"dev": "run-p build:meta dev:*",
 		"dev:css": "node --import=@nlib/tsm src/cli/scssTypes.ts --watch",
 		"dev:stories": "node --import=@nlib/tsm src/cli/stories.ts --watch",
@@ -20,7 +21,7 @@
 		"build:meta:scssTypes": "node --import=@nlib/tsm src/cli/scssTypes.ts",
 		"build:meta:stories": "node --import=@nlib/tsm src/cli/stories.ts",
 		"build:next": "NODE_OPTIONS='--import=@nlib/tsm' next build",
-		"start": "NODE_ENV=production NODE_OPTIONS='--import=@nlib/tsm' node server.mjs",
+		"start": "NODE_ENV=production NODE_OPTIONS='--import=@nlib/tsm' node server.ts",
 		"lint": "run-s lint:*",
 		"lint:biome": "npx @biomejs/biome check",
 		"lint:css": "stylelint 'src/**/*.scss'"
@@ -75,6 +76,7 @@
 		"@biomejs/biome": "1.9.3",
 		"@biomejs/js-api": "0.7.1",
 		"@biomejs/wasm-nodejs": "1.9.3",
-		"@nlib/githooks": "0.2.0"
+		"@nlib/githooks": "0.2.0",
+		"@playwright/test": "^1.48.0"
 	}
 }
