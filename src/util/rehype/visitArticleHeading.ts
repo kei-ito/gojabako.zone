@@ -14,7 +14,20 @@ export const visitArticleHeading =
 		if (!isString(id)) {
 			return null;
 		}
-		e.children.unshift(createFragmentTarget(id), createFragmentRef(id));
+		e.children.unshift(
+			createFragmentTarget(id),
+			createFragmentRef(id, getHashLabel(e.tagName)),
+			{ type: "text", value: " " },
+		);
 		e.properties.id = undefined;
 		return SKIP;
 	};
+
+const getHashLabel = (tagName: string): string | null => {
+	const matched = tagName.match(/^h(\d+)$/);
+	const headingLevel = matched ? Number.parseInt(matched[1], 10) : 0;
+	if (0 < headingLevel) {
+		return "#".repeat(headingLevel);
+	}
+	return null;
+};
