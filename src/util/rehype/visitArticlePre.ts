@@ -22,7 +22,6 @@ export const visitArticlePre = (
 		if (!isHastElement(codeElement, "code", "hljs")) {
 			return null;
 		}
-		const codeLanguage = getCodeLanguage(codeElement.properties.className);
 		const caption = isObject(codeElement.data) && codeElement.data.meta;
 		const elementId = `code${++count}`;
 		parent.children.splice(
@@ -38,6 +37,7 @@ export const visitArticlePre = (
 				createHastElement(
 					"figcaption",
 					{},
+					// FragmentRefを右に表示するためこのspanは必須
 					createHastElement(
 						"span",
 						{},
@@ -50,14 +50,4 @@ export const visitArticlePre = (
 		);
 		return SKIP;
 	};
-};
-
-const getCodeLanguage = (classNameList: Array<string>): string => {
-	const prefix = "language-";
-	for (const className of classNameList) {
-		if (className.startsWith(prefix)) {
-			return className.slice(prefix.length);
-		}
-	}
-	return "text";
 };
