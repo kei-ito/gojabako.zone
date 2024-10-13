@@ -29,6 +29,7 @@
     .fragment-ref {
       color: var(--gjColorText2);
       text-decoration: none;
+      transition: opacity 50ms;
 
       &:hover {
         color: var(--gjColorText1);
@@ -64,11 +65,6 @@
 
       &.hash-hit {
         box-shadow: 0 0 0 0.5em var(--gjYellow1);
-      }
-
-      /* stylelint-disable-next-line no-descending-specificity */
-      & > .fragment-ref {
-        margin-inline-end: 0.5em;
       }
     }
 
@@ -183,29 +179,6 @@
       }
     }
 
-    figcaption {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-end;
-      block-size: 0;
-      font-size: 80%;
-      line-height: 1.25em;
-      overflow: visible;
-
-      & > * {
-        margin-inline-start: 0.5em;
-      }
-
-      & > :first-child {
-        flex-grow: 1;
-        margin-inline-start: 0;
-      }
-
-      & > .fragment-ref::before {
-        content: attr(href);
-      }
-    }
-
     figure {
       margin-block: 1em;
       inline-size: unset;
@@ -215,9 +188,45 @@
         margin-inline: auto;
       }
 
+      & > figcaption {
+        display: grid;
+        grid-template-columns: 1fr max-content;
+        block-size: 0;
+        font-size: 80%;
+        line-height: 1.25em;
+        overflow: visible;
+
+        /* stylelint-disable-next-line no-descending-specificity */
+        & > .fragment-ref {
+          opacity: 0;
+
+          &::before {
+            content: attr(href);
+          }
+        }
+      }
+
+      &:hover {
+        & > figcaption {
+          & > .fragment-ref {
+            opacity: 1;
+          }
+        }
+      }
+
       &.caption {
         & > figcaption {
           block-size: unset;
+        }
+      }
+
+      &.hash-hit {
+        outline: 0.5em solid var(--gjColorFocus2);
+
+        /* stylelint-disable-next-line no-descending-specificity */
+        .fragment-ref {
+          opacity: 1;
+          color: var(--gjColorText1);
         }
       }
 
@@ -236,10 +245,6 @@
           max-inline-size: var(--gjBaseWidth);
         }
 
-        & > figcaption {
-          inline-size: 100%;
-        }
-
         & > img {
           max-inline-size: max-content;
         }
@@ -248,10 +253,6 @@
       &[data-type='math'] {
         justify-content: center;
         padding-inline: 0.4em;
-
-        & > .fragment-ref {
-          display: none;
-        }
 
         & > .katex-html {
           inline-size: 100%;
@@ -352,16 +353,6 @@
               }
             }
           }
-        }
-
-      }
-
-      &.hash-hit {
-        outline: 0.5em solid var(--gjColorFocus2);
-
-        /* stylelint-disable-next-line no-descending-specificity */
-        .fragment-ref {
-          color: var(--gjColorText1);
         }
       }
     }
