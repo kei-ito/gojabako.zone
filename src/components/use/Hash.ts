@@ -2,7 +2,7 @@ import { isString } from "@nlib/typing";
 import { useCallback, useEffect, useState } from "react";
 import { getCurrentUrl } from "../../util/getCurrentUrl.ts";
 
-const eventName = "_hashchange";
+const eventName = "gjHashchange";
 const get = () => decodeURIComponent(getCurrentUrl().hash);
 
 export const useHash = (): [string, (newHash?: string) => void] => {
