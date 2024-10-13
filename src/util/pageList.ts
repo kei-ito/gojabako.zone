@@ -1,7 +1,7 @@
 import type { PageData } from "./type.ts";
 export const pageList: Array<PageData> = [
 	{
-		title: ["分散", "型", "リバー", "シ"],
+		title: ["分散型", "リバーシ"],
 		description: "マス目同士の通信でゲームが進行するリバーシです。",
 		keywords: [],
 		publishedAt: "2023-10-07T16:19:15.000Z",
@@ -35,7 +35,7 @@ export const pageList: Array<PageData> = [
 		filePath: "src/app/app/mdx/page.mdx",
 	},
 	{
-		title: ["CSSの", "色の", "見え", "方"],
+		title: ["CSSの", "色の", "見え方"],
 		description: "hsl, hwb, lch, oklch, lab, oklabの見え方を確認できます。",
 		publishedAt: "2023-10-09T15:07:41.000Z",
 		updatedAt: "2024-10-05T02:47:47.000Z",
@@ -56,7 +56,7 @@ export const pageList: Array<PageData> = [
 		filePath: "src/app/(blog)/2023/next13/page.mdx",
 	},
 	{
-		title: ["CSS", " ", "Modulesの", ":", "globalと", ":", "localの", "効果"],
+		title: ["CSS", " ", "Modulesの", ":globalと", ":localの", "効果"],
 		publishedAt: "2023-09-19T16:42:34.000Z",
 		updatedAt: "2024-10-13T11:09:54.000Z",
 		commits: 2,
@@ -66,7 +66,7 @@ export const pageList: Array<PageData> = [
 		filePath: "src/app/(blog)/2023/css-modules/page.mdx",
 	},
 	{
-		title: ["disabledな", "フォーム", "要素は", "submit", "さ", "れない"],
+		title: ["disabledな", "フォーム", "要素は", "submit", "されない"],
 		publishedAt: "2023-09-18T10:16:16.000Z",
 		updatedAt: "2023-09-21T03:56:09.000Z",
 		commits: 2,
@@ -86,7 +86,7 @@ export const pageList: Array<PageData> = [
 		filePath: "src/app/(blog)/2022/dpop/page.mdx",
 	},
 	{
-		title: ["AG06に", "マイクを", "GoPro", "マウント", "する"],
+		title: ["AG06に", "マイクを", "GoPro", "マウントする"],
 		publishedAt: "2022-04-09T04:59:15.000Z",
 		updatedAt: "2023-09-18T10:16:16.000Z",
 		commits: 3,
@@ -99,15 +99,13 @@ export const pageList: Array<PageData> = [
 		title: [
 			"Appleで",
 			"オンライン",
-			"購入",
-			"した",
+			"購入した",
 			"iPhone",
 			" ",
 			"12が",
 			"au",
 			"回線で",
-			"使える",
-			"ように",
+			"使えるように",
 			"なるまで",
 		],
 		publishedAt: "2022-02-13T09:21:58.000Z",
@@ -119,7 +117,7 @@ export const pageList: Array<PageData> = [
 		filePath: "src/app/(blog)/2022/iphone12/page.mdx",
 	},
 	{
-		title: ["ブログ", "記事の", "画像を", "生成", "する"],
+		title: ["ブログ", "記事の", "画像を", "生成する"],
 		publishedAt: "2022-02-11T14:48:29.000Z",
 		updatedAt: "2023-09-18T10:16:16.000Z",
 		commits: 6,
@@ -159,7 +157,7 @@ export const pageList: Array<PageData> = [
 		filePath: "src/app/(blog)/2021/ipad-case/page.mdx",
 	},
 	{
-		title: ["au", "でん", "きの", "使用", "量を", "CSVに", "する"],
+		title: ["au", "でんきの", "使用量を", "CSVにする"],
 		publishedAt: "2021-11-30T15:59:21.000Z",
 		updatedAt: "2023-09-18T10:16:16.000Z",
 		commits: 7,
@@ -169,7 +167,7 @@ export const pageList: Array<PageData> = [
 		filePath: "src/app/(blog)/2021/au-denki/page.mdx",
 	},
 	{
-		title: ["サイトを", "Next.js", " ", "+", " ", "Vercelに", "移行", "した"],
+		title: ["サイトを", "Next.js", " ", "+", " ", "Vercelに", "移行した"],
 		publishedAt: "2021-10-05T14:51:46.000Z",
 		updatedAt: "2023-09-22T06:09:48.000Z",
 		commits: 16,
@@ -203,7 +201,7 @@ export const pageList: Array<PageData> = [
 		filePath: "src/app/(blog)/2019/gitlab-runner/page.mdx",
 	},
 	{
-		title: ["加重", "平均の", "誤差", "伝播"],
+		title: ["加重平均の", "誤差伝播"],
 		other: {
 			originalLocation: "https://kei-itof.goat.me/heZeNIQCCQ",
 			originalPublishedAt: "2019-04-26T18:46:08Z",
@@ -217,7 +215,7 @@ export const pageList: Array<PageData> = [
 		filePath: "src/app/(blog)/2019/error-propagation/page.mdx",
 	},
 	{
-		title: ["モニター", "スタンドに", "棚を", "つける", "DIY", "記録"],
+		title: ["モニタースタンドに", "棚を", "つける", "DIY", "記録"],
 		other: {
 			originalLocation: "https://kei-itof.goat.me/di7WvuuNG0",
 			originalPublishedAt: "2018-11-29T17:01:41Z",

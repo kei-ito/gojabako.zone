@@ -24,7 +24,36 @@ const testCases: Array<{ input: string; expected: Array<string> }> = [
 	},
 	{
 		input: "利用料は、$10/時以下です。",
-		expected: ["利用", "料は、", "$10/時", "以下です。"],
+		expected: ["利用料は、", "$10/時以下です。"],
+	},
+	{ input: "分散型リバーシ", expected: ["分散型", "リバーシ"] },
+	{ input: "CSSの色の見え方", expected: ["CSSの", "色の", "見え方"] },
+	{
+		input: "disabledなフォーム要素はsubmitされない",
+		expected: ["disabledな", "フォーム", "要素は", "submit", "されない"],
+	},
+	{
+		input: "Appleでオンライン購入したiPhone 12がau回線で使えるようになるまで",
+		expected: [
+			"Appleで",
+			"オンライン",
+			"購入した",
+			"iPhone",
+			" ",
+			"12が",
+			"au",
+			"回線で",
+			"使えるように",
+			"なるまで",
+		],
+	},
+	{
+		input: "Next.js 13にしました",
+		expected: ["Next.js", " ", "13に", "しました"],
+	},
+	{
+		input: "ブログ記事の画像を生成する",
+		expected: ["ブログ", "記事の", "画像を", "生成する"],
 	},
 ];
 
