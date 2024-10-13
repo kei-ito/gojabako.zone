@@ -2,7 +2,7 @@ export const metadata = {
   title: 'CSS Modulesの:globalと:localの効果',
 };
 
-import { View } from './View';
+import { ValueFigure } from '../../../../components/ValueFigure';
 
 CSS Modulesで特定のクラスをインポート対象にせずクラス名をそのまま使いたい場合があります。以下のExceptionsの節で説明されている部分です：
 
@@ -28,7 +28,7 @@ Exampleの通りではあるのですが、Next.jsのSCSSで使う場合につ�
 
 import sample1 from './sample1.module.scss';
 
-<View
+<ValueFigure
   id="sample1"
   style={sample1}
   caption="sample1.module.scssのインポート結果"
@@ -48,7 +48,7 @@ import sample1 from './sample1.module.scss';
 
 import sample2 from './sample2.module.scss';
 
-<View
+<ValueFigure
   id="sample2"
   style={sample2}
   caption="sample2.module.scssのインポート結果"
@@ -68,7 +68,7 @@ import sample2 from './sample2.module.scss';
 
 import sample3 from './sample3.module.scss';
 
-<View
+<ValueFigure
   id="sample3"
   style={sample3}
   caption="sample3.module.scssのインポート結果"
@@ -99,7 +99,7 @@ import sample3 from './sample3.module.scss';
 
 import sample4 from './sample4.module.scss';
 
-<View
+<ValueFigure
   id="sample4"
   style={sample4}
   caption="sample4.module.scssのインポート結果"
