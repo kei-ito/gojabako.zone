@@ -13,10 +13,10 @@ if (process.env.CI) {
 
 const listPageFiles = async function* (): AsyncGenerator<URL> {
 	let count = 0;
-	for await (const file of walkFiles(appDir)) {
-		if (/\/page\.\w+$/.test(file.pathname)) {
+	for await (const fileUrl of walkFiles(appDir)) {
+		if (/\/page\.\w+$/.test(fileUrl.pathname)) {
 			count += 1;
-			yield file;
+			yield fileUrl;
 		}
 	}
 	console.info(`build/pageList: ${count} pages`);
@@ -24,8 +24,8 @@ const listPageFiles = async function* (): AsyncGenerator<URL> {
 
 const generateCode = async function* () {
 	const tasks: Array<Promise<PageData>> = [];
-	for await (const file of listPageFiles()) {
-		tasks.push(getPageData(file));
+	for await (const fileUrl of listPageFiles()) {
+		tasks.push(getPageData(fileUrl));
 	}
 	const pageList = await Promise.all(tasks);
 	pageList.sort((a, b) => {
