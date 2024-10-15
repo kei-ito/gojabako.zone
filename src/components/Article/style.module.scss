@@ -240,8 +240,6 @@
       &[data-type='image'] {
         display: grid;
         grid-auto-flow: row;
-        justify-content: center;
-        justify-items: stretch;
 
         & > * {
           max-inline-size: var(--gjBaseWidth);
