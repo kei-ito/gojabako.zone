@@ -35,6 +35,16 @@ export const pageList: Array<PageData> = [
 		filePath: "src/app/app/mdx/page.mdx",
 	},
 	{
+		title: ["塗られた", "マス目の", "境界を", "描く"],
+		publishedAt: "2024-10-15T02:44:28.877Z",
+		updatedAt: "1970-01-01T00:00:00.000Z",
+		commits: 0,
+		path: "/2024/boundary-tracing",
+		iri: "gjbkz://gojabako.zone/2024/boundary-tracing",
+		group: "2024",
+		filePath: "src/app/(blog)/2024/boundary-tracing/page.mdx",
+	},
+	{
 		title: ["CSSの", "色の", "見え方"],
 		description: "hsl, hwb, lch, oklch, lab, oklabの見え方を確認できます。",
 		publishedAt: "2023-10-09T15:07:41.000Z",
@@ -58,8 +68,8 @@ export const pageList: Array<PageData> = [
 	{
 		title: ["CSS", " ", "Modulesの", ":globalと", ":localの", "効果"],
 		publishedAt: "2023-09-19T16:42:34.000Z",
-		updatedAt: "2024-10-13T11:09:54.000Z",
-		commits: 2,
+		updatedAt: "2024-10-14T12:44:56.000Z",
+		commits: 3,
 		path: "/2023/css-modules",
 		iri: "gjbkz://gojabako.zone/2023/css-modules",
 		group: "2023",
