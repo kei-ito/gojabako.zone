@@ -294,7 +294,7 @@
       }
 
       &[data-type='code'] {
-        --gjColorBackground: var(--gjGray1);
+        --gjColorBackground: var(--gjGray2);
         overflow: visible;
 
         & > .hljs {
@@ -315,7 +315,7 @@
           }
 
           & > .hljs-ln {
-            --gjColorText: var(--gjGray4);
+            --gjColorText: var(--gjGray5);
             z-index: 1;
             position: sticky;
             inset-inline-start: 0;
@@ -326,7 +326,7 @@
             text-decoration: none;
             user-select: none;
             text-align: end;
-            border-inline-end: solid var(--gj1px) var(--gjGray3);
+            border-inline-end: solid var(--gj1px) var(--gjGray4);
             background-color: var(--gjColorBackground);
 
             & > span {
@@ -339,12 +339,12 @@
             }
 
             &:hover {
-              --gjColorText: var(--gjGray5);
+              --gjColorText: var(--gjGray6);
               text-decoration: underline;
             }
 
             &.hash-hit {
-              --gjColorText: var(--gjGray5);
+              --gjColorText: var(--gjGray6);
               --gjColorBackground: var(--gjColorFocus2);
               border-inline-end-color: var(--gjColorFocus1);
               outline-width: unset;
@@ -362,8 +362,7 @@
       display: block;
     }
 
-    iframe[src^="https://codesandbox.io/"]
-    {
+    iframe[src^="https://codesandbox.io/"] {
       block-size: 30em;
     }
   }
