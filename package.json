@@ -30,7 +30,7 @@
 		"@fontsource/noto-sans-jp": "5.1.0",
 		"@mdx-js/loader": "3.0.1",
 		"@next/mdx": "14.2.15",
-		"@nlib/tsm": "1.0.1",
+		"@nlib/tsm": "1.1.0",
 		"@nlib/typing": "3.0.1",
 		"@storybook/csf": "0.1.11",
 		"@types/kuromoji": "0.1.3",
