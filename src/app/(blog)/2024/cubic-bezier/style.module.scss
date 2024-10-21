@@ -1,0 +1,113 @@
+.app {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  column-gap: 0.5em;
+  row-gap: 0.25em;
+
+  &>.svg {
+    inline-size: 100%;
+    grid-column: 1 / -1;
+    margin-inline: 0;
+    background-color: var(--gjGray2);
+
+    &.hasControl {
+      touch-action: none;
+    }
+  }
+}
+
+.spacer {
+  grid-column: 1 / -1;
+  block-size: 0.5em;
+}
+
+.grid {
+  fill: none;
+  stroke: var(--gjGray3);
+  stroke-width: var(--gjPx);
+}
+
+.curve {
+  fill: none;
+  stroke: var(--gjGray9);
+  stroke-width: var(--gjPx);
+}
+
+.handleLine {
+  fill: none;
+  stroke: var(--gjGray9);
+  stroke-dasharray: calc(var(--gjPx) * 4) calc(var(--gjPx) * 4);
+  stroke-width: var(--gjPx);
+}
+
+.handle {
+  fill: var(--gjGray5);
+  stroke: var(--gjGray4);
+  stroke-width: calc(var(--gjPx) * 5);
+  cursor: grab;
+  outline: none;
+
+  &[data-index="0"],
+  &[data-index="3"] {
+    fill: var(--gjGray1);
+    stroke: var(--gjGray5);
+  }
+
+  &:focus {
+    stroke: var(--gjBlue6);
+  }
+
+  &:active {
+    cursor: grabbing;
+    fill: var(--gjBlue4);
+  }
+}
+
+.ruler {
+  fill: var(--gjGray9);
+  stroke: var(--gjGray1);
+  stroke-width: calc(var(--gjPx) * 2);
+}
+
+.guide {
+  fill: none;
+  stroke: var(--gjGray4);
+  stroke-width: var(--gjPx);
+}
+
+.point {
+  fill: var(--gjRed5);
+}
+
+.area {
+  fill: var(--gjGray1);
+}
+
+.areaRect {
+  fill: none;
+  stroke: var(--gjGray6);
+  stroke-width: var(--gjPx);
+}
+
+.table {
+  fill: none;
+  stroke: var(--gjRed6);
+  stroke-width: var(--gjPx);
+}
+
+.animated {
+  fill: var(--gjGray7);
+}
+
+.text {
+  fill: currentcolor;
+
+  &.math {
+    font-size: calc(var(--gjPx) * 22);
+  }
+
+  &.mono {
+    font-size: calc(var(--gjPx) * 16);
+    font-family: var(--gjFontMonospace);
+  }
+}
