@@ -1,0 +1,118 @@
+export const metadata = {
+  title: 'ベジエ曲線の描画',
+};
+import { Figure } from '../../../../components/Figure';
+import { CubicBezierApp, TimingFunctionApp } from './App';
+
+別の記事でアニメーションをつけるのにベジエ曲線が必要だったので、つくりがてら記事にすることにしました。
+
+ベジエ曲線はいくつかの制御点から得られる曲線で、制御点の数によって3つなら2次ベジエ曲線、4つなら3次ベジエ曲線などと呼ばれます。私がほしかったのは3次なのでこれ以降は3次限定です。
+
+## 3次ベジエ曲線
+
+3次ベジエ曲線は4つの制御点からなります。それぞれ位置を $\bm{B}_0, \bm{B}_1, \bm{B}_2, \bm{B}_3$ とすると曲線上の点 $\bm{P}(t)$ は次式で表されます。
+
+```math
+\begin{align}
+\bm{P}(t) &= (1 - t)^3 \bm{B}_0 + 3(1 - t)^2 t \bm{B}_1 + 3(1 - t) t^2 \bm{B}_2 + t^3 \bm{B}_3
+\end{align}
+```
+
+ただし $0 \le t \le 1$ です。$P(0)$ は $B_0$ で $P(1)$ は $B_3$ になります。
+
+`(t: number) => [number, number]` を返す `getCubicBezierFunction` は次のように書けます。
+
+```typescript
+type Point = [number, number];
+const getCubicBezierFunction = (
+  [x0, y0]: Point,
+  [x1, y1]: Point,
+  [x2, y2]: Point,
+  [x3, y3]: Point,
+) => (t1: number): Point => {
+  const t2 = t1 ** 2, t3 = t1 ** 3;
+  const u1 = 1 - t1, u2 = u1 ** 2, u3 = u1 ** 3;
+  return [
+    u3 * x0 + 3 * u2 * t1 * x1 + 3 * u1 * t2 * x2 + t3 * x3,
+    u3 * y0 + 3 * u2 * t1 * y1 + 3 * u1 * t2 * y2 + t3 * y3,
+  ];
+};
+```
+
+次のサンプルは上記の関数を使っており、 $t$ に対応する $(x,y)$ を確認できます。
+
+<Figure id="app1" type="image" caption="制御点はマウスまたは矢印キーで移動できます。t は下のスライダーで変更できます。">
+  <CubicBezierApp />
+</Figure>
+
+これで $(B_0,B_1,B_2,B_3,t) $ から $(x,y)$ が求められるようになりましたが、私がほしかったのは
+CSS の [`cubic-bezier(0.42,0,0.58,1)`](https://developer.mozilla.org/ja/docs/Web/CSS/easing-function)
+のように使えるもので、以下のようにアニメーションの進み方を指定するものです。
+
+<Figure id="app2" type="image" caption="cubic-bezier(0.42, 0, 0.58, 1) は最初と最後がゆっくり動きます。">
+  <TimingFunctionApp noControl />
+</Figure>
+
+$x$ が時間で、曲線との交点の $y$ 座標がアニメーションの進捗になっています。つまり、ほしいのは $(B_0,B_1,B_2,B_3,x) $ から $y$ を求める関数です。
+
+$B_0=(0,0)$ と $B_3=(1,1)$ は固定なので、$(x(t), y(t))$ は次のようになります。
+
+```math
+\begin{align}
+x(t) &= 3(1 - t)^2 t x_1 + 3(1 - t) t^2 x_2 + t^3\\
+y(t) &= 3(1 - t)^2 t y_1 + 3(1 - t) t^2 y_2 + t^3
+\end{align}
+```
+
+これを$y$ について解こうとすると $x$ が一意に定まらないケースがあって困ります。仕方がないので
+$N$ 個の $t$ で $(x,y)$ を求めておいて、内分点で近似することにしました。
+
+```typescript
+type Point = [number, number];
+const getTimingFunction = (p1: Point, p2: Point, N = 20) => {
+  const samples: Array<Point> = [
+    [0, 0], // p0
+    ...(function* () {
+      const bezier = getCubicBezierFunction([0, 0], p1, p2, [1, 1]);
+      const step = 1 / N;
+      for (let t = step; t < 1; t += step) {
+        yield bezier(t);
+      }
+    })(),
+    [1, 1], // p3
+  ];
+  return (x: number): number => {
+    if (x <= 0) {
+      return 0; // p0[0]
+    }
+    if (1 <= x) {
+      return 1; // p3[0]
+    }
+    let index = samples.findIndex((point) => x < point[0]);
+    const [x1, y1] = samples[index - 1];
+    const [x2, y2] = samples[index];
+    const r = (x - x1) / (x2 - x1);
+    return y1 * (1 - r) + y2 * r;
+  };
+};
+```
+
+ちょうどいい $N$ はいくつなのかという問題ですが、$N=20$で良さそうでした。$N=10$
+だと両端の動きにぎこちなさがありますが、アニメーションの周期 $T$ が小さければ気にならないですね。以下では
+$N$ と $T$ を変更できるようにしているので試してみてください。
+
+<Figure id="app3" type="image" caption="制御点はマウスまたは矢印キーで移動できます。">
+  <TimingFunctionApp />
+</Figure>
+
+[`<easing-function>`](https://developer.mozilla.org/ja/docs/Web/CSS/easing-function)
+の ease, ease-in, ease-out, ease-in-out は次のように書けます。
+
+```typescript
+const ease      = getTimingFunction([0.25, 0.1], [0.25, 1.0]);
+const easeIn    = getTimingFunction([0.42, 0.0], [1.00, 1.0]);
+const easeOut   = getTimingFunction([0.00, 0.0], [0.58, 1.0]);
+const easeInOut = getTimingFunction([0.42, 0.0], [0.58, 1.0]);
+```
+
+以上です。

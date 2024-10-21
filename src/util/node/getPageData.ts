@@ -11,20 +11,20 @@ import { getTokenizer, listPhrases } from "./listPhrases.ts";
 const knownTitles = new Map<string, string>();
 knownTitles.set("/", "Home");
 
-export const getPageData = async (file: URL): Promise<PageData> => {
-	let pagePath = file.pathname.slice(appDir.pathname.length - 1);
+export const getPageData = async (fileUrl: URL): Promise<PageData> => {
+	let pagePath = fileUrl.pathname.slice(appDir.pathname.length - 1);
 	pagePath = pagePath.replace(/\/page\.\w+$/, "");
 	pagePath = pagePath.replace(/\([^/]+\)\//, "");
 	pagePath = pagePath.replace(/\/\[+[^\]]*\]+/, "");
 	pagePath = pagePath || "/";
 	const [history, metadata, tokenizer] = await Promise.all([
-		getCommits(file),
-		getMetadata(file),
+		getCommits(fileUrl),
+		getMetadata(fileUrl),
 		getTokenizer(),
 	]);
 	let title = metadata?.title ?? knownTitles.get(pagePath);
 	if (!isString(title)) {
-		const relativePath = file.pathname.slice(rootDir.pathname.length);
+		const relativePath = fileUrl.pathname.slice(rootDir.pathname.length);
 		console.warn(
 			new Error(`${title ? "Invalid" : "No"}Title: ${relativePath}`),
 		);
@@ -38,7 +38,7 @@ export const getPageData = async (file: URL): Promise<PageData> => {
 		path: pagePath,
 		iri: site.iri(pagePath),
 		group: getGroup(pagePath),
-		filePath: file.pathname.slice(rootDir.pathname.length),
+		filePath: fileUrl.pathname.slice(rootDir.pathname.length),
 	};
 };
 
@@ -52,23 +52,24 @@ const getGroup = (pagePath: string): string => {
 	}
 };
 
-export const getMetadata = async (file: URL): Promise<Metadata | null> => {
-	switch (file.pathname.slice(file.pathname.lastIndexOf("."))) {
+export const getMetadata = async (fileUrl: URL): Promise<Metadata | null> => {
+	switch (fileUrl.pathname.slice(fileUrl.pathname.lastIndexOf("."))) {
 		case ".mdx":
-			return await getMetadataFromMdx(file);
+			return await getMetadataFromMdx(fileUrl);
 		case ".ts":
 		case ".tsx":
-			return await getMetadataFromScript(file);
+			return await getMetadataFromScript(fileUrl);
 		default:
 			return null;
 	}
 };
 
-const getCommits = async (file: URL) => {
+const getCommits = async (fileUrl: URL) => {
 	let publishedAt = Date.now();
 	let updatedAt = 0;
 	const commits = new Set<string>();
-	for await (const { commit, aDate } of listCommits(file)) {
+	const dirUrl = new URL(".", fileUrl);
+	for await (const { commit, aDate } of listCommits(dirUrl)) {
 		commits.add(commit);
 		if (aDate < publishedAt) {
 			publishedAt = aDate;
