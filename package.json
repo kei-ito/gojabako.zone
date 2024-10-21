@@ -69,12 +69,8 @@
 		"vlq": "2.0.4"
 	},
 	"renovate": {
-		"extends": [
-			"github>nlibjs/renovate-config"
-		],
-		"ignoreDeps": [
-			"next"
-		]
+		"extends": ["github>nlibjs/renovate-config"],
+		"ignoreDeps": ["next"]
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
