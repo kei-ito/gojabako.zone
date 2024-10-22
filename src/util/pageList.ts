@@ -37,8 +37,8 @@ export const pageList: Array<PageData> = [
 	{
 		title: ["ベジエ", "曲線の", "描画"],
 		publishedAt: "2024-10-21T13:44:54.000Z",
-		updatedAt: "2024-10-21T13:44:54.000Z",
-		commits: 1,
+		updatedAt: "2024-10-22T15:33:25.000Z",
+		commits: 2,
 		path: "/2024/cubic-bezier",
 		iri: "gjbkz://gojabako.zone/2024/cubic-bezier",
 		group: "2024",
@@ -250,8 +250,8 @@ export const pageList: Array<PageData> = [
 	},
 	{
 		publishedAt: "2023-09-18T10:16:16.000Z",
-		updatedAt: "2024-10-21T13:44:54.000Z",
-		commits: 66,
+		updatedAt: "2024-10-22T15:33:25.000Z",
+		commits: 67,
 		title: ["Home"],
 		path: "/",
 		iri: "gjbkz://gojabako.zone/",
