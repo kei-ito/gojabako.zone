@@ -1,6 +1,7 @@
-import type { PropsWithChildren, ReactNode } from "react";
+import type { HTMLAttributes, PropsWithChildren, ReactNode } from "react";
+import { classnames } from "../../util/classnames";
 
-interface FigureProps {
+interface FigureProps extends HTMLAttributes<HTMLElement> {
 	id: string;
 	type: string;
 	caption?: ReactNode;
@@ -11,8 +12,13 @@ export const Figure = ({
 	type,
 	caption,
 	children,
+	...props
 }: PropsWithChildren<FigureProps>) => (
-	<figure className={caption ? "caption" : undefined} data-type={type}>
+	<figure
+		{...props}
+		className={classnames(caption ? "caption" : undefined, props.className)}
+		data-type={type}
+	>
 		<span id={id} className="fragment-target" />
 		<figcaption>
 			<span>{caption}</span>
