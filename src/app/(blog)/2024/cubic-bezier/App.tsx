@@ -8,10 +8,12 @@ import {
 	type KeyboardEvent as ReactKeyboardEvent,
 	type ReactNode,
 	type PointerEvent as ReactPointerEvent,
+	type SVGAttributes,
 	createContext,
 	useCallback,
 	useContext,
 	useEffect,
+	useMemo,
 	useReducer,
 	useState,
 } from "react";
@@ -20,11 +22,9 @@ import { useIsInView } from "../../../../components/use/IsInView";
 import { useRect } from "../../../../components/use/Rect";
 import { clamp } from "../../../../util/clamp";
 import { classnames } from "../../../../util/classnames";
+import { getObjectId } from "../../../../util/getObjectId";
 import { noop } from "../../../../util/noop";
 import * as style from "./style.module.scss";
-
-type Point = Nominal<[number, number], "Point">;
-const toPoint = (x: number, y: number): Point => [x, y] as Point;
 
 const getCubicBezierFunction =
 	([x0, y0]: Point, [x1, y1]: Point, [x2, y2]: Point, [x3, y3]: Point) =>
@@ -79,17 +79,18 @@ const getTimingFunction = (
 	);
 };
 
+type Point = Nominal<[number, number], "Point">;
+const toPoint = (x: number, y: number): Point => [x, y] as Point;
 type Vector = Nominal<[number, number], "Vector">;
 const toVector = (x: number, y: number): Vector => [x, y] as Vector;
+type Point4 = [Point, Point, Point, Point];
+type Vector4 = [Vector, Vector, Vector, Vector];
 interface ViewBox {
 	minX: number;
 	maxX: number;
 	minY: number;
 	maxY: number;
 }
-type Point4 = [Point, Point, Point, Point];
-type Vector4 = [Vector, Vector, Vector, Vector];
-
 interface Context {
 	viewBox: ViewBox;
 	points: Point4;
@@ -102,15 +103,6 @@ interface Context {
 }
 type ControlPointIndex = 0 | 1 | 2 | 3;
 
-const getDiffLimits = (viewBox: ViewBox, point: Point, pxScale: number) => {
-	const minX = (viewBox.minX - point[0]) / pxScale;
-	const maxX = (viewBox.maxX - point[0]) / pxScale;
-	const minY = (viewBox.minY - point[1]) / pxScale;
-	const maxY = (viewBox.maxY - point[1]) / pxScale;
-	return { minX, maxX, minY, maxY };
-};
-const r = (value: number, digits = 2) =>
-	value.toFixed(digits).replace(/\.?0+$/, "");
 interface ApplyMoveAction {
 	type: "applyMove";
 	index: ControlPointIndex;
@@ -144,6 +136,15 @@ type Action =
 	| SetTAction
 	| SetUAction
 	| SetIsInViewAction;
+
+const getDiffLimits = (viewBox: ViewBox, point: Point, pxScale: number) => {
+	const minX = (viewBox.minX - point[0]) / pxScale;
+	const maxX = (viewBox.maxX - point[0]) / pxScale;
+	const minY = (viewBox.minY - point[1]) / pxScale;
+	const maxY = (viewBox.maxY - point[1]) / pxScale;
+	return { minX, maxX, minY, maxY };
+};
+
 const reducer = (current: Context, action: Action): Context => {
 	switch (action.type) {
 		case "applyMove": {
@@ -202,13 +203,15 @@ const DispatchContext = createContext<Dispatch<Action>>(noop);
 
 interface AppProps {
 	initialContext: Context;
-	title: ReactNode;
+	svgTitle: ReactNode;
 	footer: ReactNode;
 }
 
+const r = (x: number, digits = 5) => x.toFixed(digits).replace(/\.?0+$/, "");
+
 const App = ({
 	initialContext,
-	title,
+	svgTitle,
 	children,
 	footer,
 }: PropsWithChildren<AppProps>) => {
@@ -246,7 +249,7 @@ const App = ({
 						style={svgStyle}
 						ref={setSvg}
 					>
-						<title>{title}</title>
+						<title>{svgTitle}</title>
 						{0 < isInViewCount && children}
 					</svg>
 					<div className={style.spacer} />
@@ -260,8 +263,8 @@ const App = ({
 export const CubicBezierApp = () => (
 	<App
 		initialContext={context1}
-		title="cubicBezierの動作確認"
-		footer={<Config1 />}
+		svgTitle="cubicBezierの動作確認アプリケーション"
+		footer={<CubicBezierAppConfig />}
 	>
 		<GridAndCurves step={5} />
 		<ControlPointHandle index={0} />
@@ -272,7 +275,7 @@ export const CubicBezierApp = () => (
 	</App>
 );
 
-const Config1 = () => {
+const CubicBezierAppConfig = () => {
 	const dispatch = useContext(DispatchContext);
 	const onChange = useCallback(
 		(event: ReactChangeEvent<HTMLInputElement>) => {
@@ -298,10 +301,13 @@ const Config1 = () => {
 	);
 };
 
-const GridAndCurves = ({ step }: { step: number }) => {
-	const {
-		viewBox: { minX, maxX, minY, maxY },
-	} = useContext(Context);
+interface GridAndCurvesProps {
+	step: number;
+	gridClipPathId?: string;
+}
+
+const GridAndCurves = ({ step, gridClipPathId }: GridAndCurvesProps) => {
+	const { minX, maxX, minY, maxY } = useContext(Context).viewBox;
 	const [p0, p1, p2, p3] = useActualControlPoints();
 	const p0x = r(p0[0]);
 	const p0y = r(p0[1]);
@@ -326,6 +332,7 @@ const GridAndCurves = ({ step }: { step: number }) => {
 					})(),
 				].join("")}
 				className={style.grid}
+				clipPath={gridClipPathId ? `url(#${gridClipPathId})` : undefined}
 			/>
 			<line x1={p0x} y1={p0y} x2={p1x} y2={p1y} className={style.handleLine} />
 			<line x1={p2x} y1={p2y} x2={p3x} y2={p3y} className={style.handleLine} />
@@ -360,7 +367,7 @@ const ControlPointHandle = ({ index }: { index: ControlPointIndex }) => {
 		},
 		[index, dispatch],
 	);
-	const { pxScale } = useContext(Context);
+	const { pxScale, noControl } = useContext(Context);
 	const onKeyDown = useCallback(
 		(event: ReactKeyboardEvent<SVGCircleElement>) => {
 			const d = toVector(0, 0);
@@ -388,16 +395,26 @@ const ControlPointHandle = ({ index }: { index: ControlPointIndex }) => {
 	);
 	const [x, y] = useActualControlPoints()[index];
 	return (
-		<circle
-			cx={r(x)}
-			cy={r(y)}
-			r={r(10 * pxScale)}
-			className={style.handle}
-			data-index={index}
-			tabIndex={0}
-			onPointerDown={onPointerDown}
-			onKeyDown={onKeyDown}
-		/>
+		<>
+			<circle
+				cx={r(x)}
+				cy={r(y)}
+				r={r((noControl ? 6 : 10) * pxScale)}
+				className={classnames(style.handle, !noControl && style.control)}
+				data-index={index}
+			/>
+			{!noControl && (
+				<circle
+					cx={r(x)}
+					cy={r(y)}
+					r={r(24 * pxScale)}
+					className={classnames(style.handle, style.cover)}
+					tabIndex={0}
+					onPointerDown={onPointerDown}
+					onKeyDown={onKeyDown}
+				/>
+			)}
+		</>
 	);
 };
 
@@ -430,26 +447,70 @@ const context2: Context = {
 	noControl: false,
 };
 
+interface TimingFunctionAppProps {
+	noControl?: boolean;
+	p1?: Point;
+	p2?: Point;
+}
+
 export const TimingFunctionApp = ({
-	noControl = false,
-}: { noControl?: boolean }) => (
-	<App
-		initialContext={{ ...context2, noControl }}
-		title="cubic-bezierのサンプル"
-		footer={!noControl && <Config2 />}
-	>
-		<rect x="0" y="0" width="100" height="100" className={style.area} />
-		<GridAndCurves step={10} />
-		<rect x="0" y="0" width="100" height="100" className={style.areaRect} />
-		<AnimatedShapes />
-		{!noControl && (
-			<>
-				<ControlPointHandle index={1} />
-				<ControlPointHandle index={2} />
-			</>
-		)}
-	</App>
-);
+	noControl,
+	p1 = context2.points[1],
+	p2 = context2.points[2],
+}: TimingFunctionAppProps) => {
+	const [clipPath, setClipPath] = useState<SVGClipPathElement | null>();
+	const clipPathId = clipPath ? `clipPath_${getObjectId(clipPath)}` : undefined;
+	return (
+		<App
+			initialContext={{
+				...context2,
+				noControl: Boolean(noControl),
+				points: [toPoint(0, 100), p1, p2, toPoint(100, 0)],
+			}}
+			footer={!noControl && <TimingFunctionAppConfig />}
+			svgTitle="timingFunctionの動作確認アプリケーション"
+		>
+			<clipPath id={clipPathId} ref={setClipPath}>
+				<ClipPath />
+			</clipPath>
+			<rect x="0" y="0" width="100" height="100" className={style.area} />
+			<GridAndCurves step={10} gridClipPathId={clipPathId} />
+			<AnimatedShapes />
+			<ControlPointHandle index={1} />
+			<ControlPointHandle index={2} />
+		</App>
+	);
+};
+
+const ClipPath = (props: SVGAttributes<SVGPathElement>) => {
+	const { minX, maxX, minY, maxY } = useContext(Context).viewBox;
+	const d = useMemo(
+		() =>
+			[
+				...(function* () {
+					const u = 2;
+					const size = 100;
+					yield `M${r(minX)} ${r(minY)}`;
+					yield `H${r(maxX)}`;
+					yield `V${r(maxY)}`;
+					yield `H${r(minX)}`;
+					yield "z";
+					yield `M${r(-u)} ${r(-u)}`;
+					yield `V${r(size + u)}`;
+					yield `H${r(size + u)}`;
+					yield `V${r(-u)}`;
+					yield "z";
+					yield `M${r(u)} ${r(u)}`;
+					yield `H${r(size - u)}`;
+					yield `V${r(size - u)}`;
+					yield `H${r(u)}`;
+					yield "z";
+				})(),
+			].join(""),
+		[minX, maxX, minY, maxY],
+	);
+	return <path {...props} d={d} />;
+};
 
 const AnimatedShapes = () => {
 	const { t, moves, pxScale, isInView } = useContext(Context);
@@ -474,7 +535,7 @@ const AnimatedShapes = () => {
 				textAnchor="middle"
 			>
 				{pxScale < 0.6 ? "cubic-bezier" : ""}
-				{`(${r(p1[0] / 100)},${r(p1[1] / 100)},${r(p2[0] / 100)},${r(p2[1] / 100)})`}
+				{`(${[...p1, ...p2].map((n) => (n / 100).toFixed(2)).join(",")})`}
 			</text>
 		</>
 	);
@@ -535,12 +596,12 @@ const AnimatedPoint = ({ getY }: { getY: (x: number) => number }) => {
 			</text>
 			<g className={style.animated}>
 				<RotatingRect phase={phase} x={-40} y={-10} times={1} />
-				<RotatingRect phase={phase} x={-40} y={30} times={4} />
-				<ScalingRect phase={phase} x={-40} y={70} rx={1} ry={0} />
-				<ScalingRect phase={phase} x={-40} y={110} rx={0} ry={2} />
+				<ScalingRect phase={phase} x={-40} y={30} rx={1} ry={0} />
+				<ScalingRect phase={phase} x={-40} y={70} rx={0} ry={2} />
+				<RotatingRect phase={phase} x={-40} y={110} times={4} />
 				<ScalingCircle phase={phase} x={140} y={-10} />
-				<MovingRect phase={phase} x={140} y={30} dx={30} dy={0} />
-				<MovingRect phase={phase} x={140} y={95} dx={0} dy={90} />
+				<MovingRect phase={phase} x={140} y={50} dx={0} dy={-60} />
+				<MovingRect phase={phase} x={140} y={110} dx={30} dy={0} />
 			</g>
 		</>
 	);
@@ -620,7 +681,7 @@ const MovingRect = ({
 	);
 };
 
-const Config2 = () => {
+const TimingFunctionAppConfig = () => {
 	const dispatch = useContext(DispatchContext);
 	const onChangeT = useCallback(
 		(t: number) => dispatch({ type: "setT", t }),
