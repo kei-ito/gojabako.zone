@@ -3,6 +3,7 @@
   grid-template-columns: 1fr max-content;
   column-gap: 0.5em;
   row-gap: 0.25em;
+  user-select: none;
 
   &>.svg {
     inline-size: 100%;
@@ -42,10 +43,8 @@
 
 .handle {
   fill: var(--gjGray5);
-  stroke: var(--gjGray4);
+  stroke: none;
   stroke-width: calc(var(--gjPx) * 5);
-  cursor: grab;
-  outline: none;
 
   &[data-index="0"],
   &[data-index="3"] {
@@ -53,13 +52,25 @@
     stroke: var(--gjGray5);
   }
 
-  &:focus {
-    stroke: var(--gjBlue6);
+  &.control {
+    stroke: var(--gjGray4);
   }
 
-  &:active {
-    cursor: grabbing;
-    fill: var(--gjBlue4);
+  &.cover {
+    fill: transparent;
+    outline: 0;
+    cursor: grab;
+    pointer-events: auto;
+
+    &:focus {
+      stroke: var(--gjBlue4);
+    }
+
+    &:active {
+      stroke: var(--gjBlue6);
+      cursor: grabbing;
+    }
+
   }
 }
 
@@ -81,10 +92,6 @@
 
 .area {
   fill: var(--gjGray1);
-}
-
-.areaRect {
-  fill: none;
   stroke: var(--gjGray6);
   stroke-width: var(--gjPx);
 }
