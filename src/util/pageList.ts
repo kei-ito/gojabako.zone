@@ -35,6 +35,16 @@ export const pageList: Array<PageData> = [
 		filePath: "src/app/app/mdx/page.mdx",
 	},
 	{
+		title: ["塗られた", "マス目の", "境界を", "描く"],
+		publishedAt: "2024-11-02T17:15:58.000Z",
+		updatedAt: "2024-11-02T17:15:58.000Z",
+		commits: 1,
+		path: "/2024/boundary-tracing",
+		iri: "gjbkz://gojabako.zone/2024/boundary-tracing",
+		group: "2024",
+		filePath: "src/app/(blog)/2024/boundary-tracing/page.mdx",
+	},
+	{
 		title: ["ベジエ", "曲線の", "描画"],
 		publishedAt: "2024-10-21T13:44:54.000Z",
 		updatedAt: "2024-10-22T15:33:25.000Z",
@@ -250,8 +260,8 @@ export const pageList: Array<PageData> = [
 	},
 	{
 		publishedAt: "2023-09-18T10:16:16.000Z",
-		updatedAt: "2024-10-22T15:33:25.000Z",
-		commits: 67,
+		updatedAt: "2024-11-02T17:15:58.000Z",
+		commits: 68,
 		title: ["Home"],
 		path: "/",
 		iri: "gjbkz://gojabako.zone/",
