@@ -1,0 +1,100 @@
+export const metadata = {
+  title: '塗られたマス目の境界を描く',
+};
+import { Figure } from '../../../../components/Figure';
+import * as BoundaryTracing from './App';
+import { cells2024, cellsWithHoles } from './constants';
+import * as style from "./style.module.scss";
+
+以下のように格子状の面があり、マス目のいくつかが塗られているとします。
+
+<Figure id="svg1" type="image" caption="塗られたマス目">
+  <BoundaryTracing.Svg cells={cells2024}>
+    <BoundaryTracing.Grid strokePx={2} style={{color: 'var(--gjGray3)'}} />
+    <BoundaryTracing.Cells style={{color: 'var(--gjGray5)'}} />
+  </BoundaryTracing.Svg>
+</Figure>
+
+この塗られたマスについて、下図の境界を描く方法を考えます。
+
+<Figure id="svg2" type="image" caption="描きたい境界線">
+  <BoundaryTracing.Svg cells={cells2024}>
+    <BoundaryTracing.Grid strokePx={2} style={{color: 'var(--gjGray3)'}} />
+    <BoundaryTracing.Boundary strokePx={4} style={{color: 'var(--gjRed6)'}} />
+  </BoundaryTracing.Svg>
+</Figure>
+
+まず、塗られたマス目の周囲を時計回りに囲む4本の矢印を考えます。塗られたマス目が隣接していれば、その境界では2本の矢印が逆向きで重なります。このようなペアを消していくと境界だけが残ります。
+
+<Figure id="svg3" type="image" caption="マス目を時計回りに一周する4本の矢印を考えます。">
+  <BoundaryTracing.Svg cells={cells2024} viewBox="-0.5 -0.5 4 2">
+    <BoundaryTracing.Grid strokePx={2} style={{color: 'var(--gjGray3)'}} />
+    <BoundaryTracing.Cells style={{color: 'var(--gjGray3)'}} />
+    <BoundaryTracing.AllEdges strokePx={4} modulo={2} remainder={0} style={{color: 'var(--gjGreen6)'}} />
+    <BoundaryTracing.AllEdges strokePx={4} modulo={2} remainder={1} style={{color: 'var(--gjBlue6)'}} />
+  </BoundaryTracing.Svg>
+</Figure>
+
+<Figure id="svg4" type="image" caption="重なる矢印を消すと境界だけ残ります。">
+  <BoundaryTracing.Svg cells={cells2024} viewBox="-0.5 -0.5 4 2">
+    <BoundaryTracing.Grid strokePx={2} style={{color: 'var(--gjGray3)'}} />
+    <BoundaryTracing.Cells style={{color: 'var(--gjGray3)'}} />
+    <BoundaryTracing.BoundaryEdges strokePx={4} style={{color: 'var(--gjBlue6)'}} />
+    <BoundaryTracing.NonBoundaryEdges strokePx={4} style={{color: 'var(--gjRed6)'}} className={style.blink} />
+  </BoundaryTracing.Svg>
+  <BoundaryTracing.Svg cells={cells2024}>
+    <BoundaryTracing.Grid strokePx={2} style={{color: 'var(--gjGray3)'}} />
+    <BoundaryTracing.Cells style={{color: 'var(--gjGray3)'}} />
+    <BoundaryTracing.BoundaryEdges strokePx={4} style={{color: 'var(--gjBlue6)'}} />
+    <BoundaryTracing.CellDelimiters strokePx={4} style={{color: 'var(--gjRed6)'}} className={style.blink} />
+  </BoundaryTracing.Svg>
+</Figure>
+
+これを実装すると次のようになります。座標は左方向と下方向を正とし、 $(x,y)$ の位置のマス目は左上が
+$(x,y)$ 、右下が $(x+1,y+1)$ の正方形とします。
+
+```typescript
+type Point = [number, number];
+const isSamePoint = (a: Point, b: Point) => a.every((v, i) => v === b[i]);
+
+type Edge = [Point, Point];
+const isSameEdge = (a: Edge, b: Edge) => a.every((v, i) => isSamePoint(v, b[i]));
+
+const getBoundaryEdgeList = (cellList: Array<Point>): Array<Edge> => {
+  const edgeList: Array<Edge> = [];
+  for (const [x, y] of cellList) {
+    const vertices = [
+      [x, y],          // (x,y)------>(x+1,y)
+      [x + 1, y],      //  |               |
+      [x + 1, y + 1],  //  |               |
+      [x, y + 1],      // (x,y+1)<--(x+1,y+1)
+    ];
+    for (let i = 0; i < 4; i++) {
+      const p1 = vertices[i];
+      const p2 = vertices[(i + 1) % 4];
+      const reversed = [p2, p1];
+      const index = edgeList.findIndex(e => isSameEdge(e, reversed));
+      if (index < 0) {
+        edgeList.push(edge);
+      } else {
+        edgeList.splice(index, 1);
+      }
+    }
+  }
+  return edgeList;
+}
+```
+
+これで終わりでもいいのですが、つなげられる矢印はつなぎましょう。`<path>`の`d`は短い方が気持ちがいいですよね。
+
+<Figure id="svg5" type="image" caption="矢印を連結します。">
+  <BoundaryTracing.NormalizeAnimationApp cells={cells2024} />
+</Figure>
+
+つなげる処理は境界の矢印リストから1つ取り出して、その終点が始点の矢印を探すようにしました。左折と右折の両方が見つかる場合にどちらを優先するかはあらかじめ決めておきます。この決め方によって、角が接触している場合のつながり方が変わります。
+
+<Figure id="svg6" type="image" caption="右下で左折優先と右折優先を切り替えられます。つながり方が変わります。">
+  <BoundaryTracing.NormalizeAnimationApp cells={cellsWithHoles} displayTurnType/>
+</Figure>
+
+以上です。
