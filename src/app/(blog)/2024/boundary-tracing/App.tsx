@@ -14,7 +14,6 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { Select } from "../../../../components/Select";
 import { useIsInView } from "../../../../components/use/IsInView";
 import { useRect } from "../../../../components/use/Rect.ts";
 import { clamp } from "../../../../util/clamp";
