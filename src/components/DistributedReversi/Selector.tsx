@@ -1,7 +1,6 @@
 import { isString } from "@nlib/typing";
 import type { ChangeEvent, ReactNode } from "react";
 import { useCallback } from "react";
-import { Select } from "../Select";
 import * as style from "./style.module.scss";
 
 export interface DRSelectorProps<T extends number | string> {
@@ -31,7 +30,7 @@ export const DRSelector = <T extends number | string>({
 	return (
 		<section className={style.selector}>
 			<label htmlFor={id}>{label}</label>
-			<Select onChange={onChange} defaultValue={defaultValue}>
+			<select onChange={onChange} defaultValue={defaultValue}>
 				{[
 					...(function* () {
 						for (const value of values) {
@@ -43,7 +42,7 @@ export const DRSelector = <T extends number | string>({
 						}
 					})(),
 				]}
-			</Select>
+			</select>
 		</section>
 	);
 };
