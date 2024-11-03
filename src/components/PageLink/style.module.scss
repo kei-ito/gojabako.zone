@@ -1,6 +1,14 @@
 .container {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: start;
   text-decoration: none;
   color: inherit;
+
+  &>* {
+    margin-inline-end: 0.25em;
+  }
 
   &:hover {
     text-decoration: underline;

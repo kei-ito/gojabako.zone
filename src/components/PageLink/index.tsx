@@ -6,50 +6,64 @@ import * as style from "./style.module.scss";
 
 interface PageLinkProps {
 	page: PageData;
-	showUpdatedAt?: boolean;
 	showDescription?: boolean;
 }
 
-export const PageLink = ({
-	page,
-	showUpdatedAt,
-	showDescription,
-}: PageLinkProps) => {
+export const PageLink = ({ page, showDescription }: PageLinkProps) => {
 	let { publishedAt } = page;
 	if (isString(page.other?.originalPublishedAt)) {
 		publishedAt = page.other?.originalPublishedAt;
 	}
+	const isUpdated =
+		getDateString(page.publishedAt) !== getDateString(page.updatedAt);
 	return (
 		<>
 			<Link href={page.path} className={style.container}>
-				<span>{page.title}</span>{" "}
-				{showUpdatedAt && (
-					<>
-						<PageDate dateTime={page.updatedAt}>更新</PageDate>{" "}
-					</>
-				)}
+				<span>{page.title}</span>
 				<PageDate dateTime={publishedAt}>公開</PageDate>
+				{isUpdated && (
+					<PageDate dateTime={page.updatedAt} bracket>
+						更新
+					</PageDate>
+				)}
 				{showDescription && page.description && (
-					<>
-						<br />
 						<span className={style.description}>{page.description}</span>
-					</>
 				)}
 			</Link>
 		</>
 	);
 };
 
+interface PageDateProps {
+	dateTime: string;
+	bracket?: boolean;
+}
+
 const PageDate = ({
 	dateTime,
+	bracket = false,
 	children,
-}: PropsWithChildren<{ dateTime: string }>) => {
+}: PropsWithChildren<PageDateProps>) => {
 	const date = new Date(dateTime);
-	const dateString = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
 	return (
-		<time className={style.time} dateTime={date.toISOString()}>
-			{dateString}
+		<time
+			className={style.time}
+			dateTime={date.toISOString()}
+			title={getJstString(date)}
+		>
+			{bracket && "("}
+			{getDateString(dateTime)}
 			{children}
+			{bracket && ")"}
 		</time>
 	);
+};
+
+const getDateString = (dateTime: string | Date) => {
+	const date = new Date(dateTime);
+	return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
+};
+
+const getJstString = (date: Date) => {
+	return `${date.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })} JST`;
 };

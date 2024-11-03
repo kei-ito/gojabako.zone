@@ -39,7 +39,7 @@ const listRecentPages = function* (
 		.slice(0, limit)) {
 		yield (
 			<li key={page.path}>
-				<PageLink page={page} showUpdatedAt={key === "updatedAt"} />
+				<PageLink page={page} />
 			</li>
 		);
 	}
