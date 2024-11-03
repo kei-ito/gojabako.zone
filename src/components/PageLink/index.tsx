@@ -1,6 +1,5 @@
 import { isString } from "@nlib/typing";
 import Link from "next/link";
-import type { PropsWithChildren } from "react";
 import type { PageData } from "../../util/type.ts";
 import * as style from "./style.module.scss";
 
@@ -20,11 +19,9 @@ export const PageLink = ({ page, showDescription }: PageLinkProps) => {
 		<>
 			<Link href={page.path} className={style.container}>
 				<span>{page.title.join("")}</span>
-				<PageDate dateTime={publishedAt}>公開</PageDate>
+				<PageDate dateTime={publishedAt} suffix="公開" />
 				{isUpdated && (
-					<PageDate dateTime={page.updatedAt} bracket>
-						更新
-					</PageDate>
+					<PageDate dateTime={page.updatedAt} suffix="更新" bracket />
 				)}
 				{showDescription && page.description && (
 					<span className={style.description}>{page.description}</span>
@@ -36,14 +33,11 @@ export const PageLink = ({ page, showDescription }: PageLinkProps) => {
 
 interface PageDateProps {
 	dateTime: string;
+	suffix?: string;
 	bracket?: boolean;
 }
 
-const PageDate = ({
-	dateTime,
-	bracket = false,
-	children,
-}: PropsWithChildren<PageDateProps>) => {
+const PageDate = ({ dateTime, suffix, bracket = false }: PageDateProps) => {
 	const date = new Date(dateTime);
 	return (
 		<time
@@ -51,10 +45,20 @@ const PageDate = ({
 			dateTime={date.toISOString()}
 			title={getJstString(date)}
 		>
-			{bracket && "("}
-			{getDateString(dateTime)}
-			{children}
-			{bracket && ")"}
+			{[
+				...(function* () {
+					if (bracket) {
+						yield "(";
+					}
+					yield getDateString(dateTime);
+					if (suffix) {
+						yield suffix;
+					}
+					if (bracket) {
+						yield ")";
+					}
+				})(),
+			].join("")}
 		</time>
 	);
 };
