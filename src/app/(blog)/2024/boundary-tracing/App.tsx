@@ -748,7 +748,7 @@ const listNormalizedEdges = function* (
 			Direction.Left,
 			Direction.Up,
 		];
-		if (turnType === TurnType.Right) {
+		if (turnType === TurnType.Left) {
 			directionPriority.reverse();
 		}
 		directionPriority.push(...directionPriority);
