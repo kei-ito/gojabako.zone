@@ -41,14 +41,15 @@
   margin-block-start: 0.5em;
 
   & > button {
-    font-size: 150%;
+    font-size: 200%;
   }
 
   & > .turnType {
     grid-column: 1 / -1;
     display: grid;
     grid-auto-flow: column;
-    justify-content: end;
+    justify-content: center;
+    align-items: center;
     column-gap: 0.25em;
 
     &>input {
