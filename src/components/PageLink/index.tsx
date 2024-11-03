@@ -19,7 +19,7 @@ export const PageLink = ({ page, showDescription }: PageLinkProps) => {
 	return (
 		<>
 			<Link href={page.path} className={style.container}>
-				<span>{page.title}</span>
+				<span>{page.title.join("")}</span>
 				<PageDate dateTime={publishedAt}>公開</PageDate>
 				{isUpdated && (
 					<PageDate dateTime={page.updatedAt} bracket>
@@ -27,7 +27,7 @@ export const PageLink = ({ page, showDescription }: PageLinkProps) => {
 					</PageDate>
 				)}
 				{showDescription && page.description && (
-						<span className={style.description}>{page.description}</span>
+					<span className={style.description}>{page.description}</span>
 				)}
 			</Link>
 		</>
