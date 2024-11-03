@@ -40,4 +40,4 @@ await writeFile(
 	dest,
 	await formatCode(code, { filePath: fileURLToPath(dest) }),
 );
-console.info(`${cliName}: done`, dest.pathname.slice(rootDir.pathname.length));
+console.info(`${cliName}: done`);

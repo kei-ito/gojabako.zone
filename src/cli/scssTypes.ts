@@ -7,18 +7,19 @@ import { generateCssModuleType } from "../util/node/generateCssModuleType.ts";
 import { ignoreENOENT } from "../util/node/ignoreENOENT.ts";
 import { walkFiles } from "../util/node/walkFiles.ts";
 
+const cliName = import.meta.url.slice(rootDir.href.length);
 const scssSuffix = ".module.scss";
 const rootPath = fileURLToPath(rootDir);
 
 const generate = async (scssFilePath: string) => {
 	const dest = await generateCssModuleType(scssFilePath);
-	console.info(`Generated ${dest.slice(rootPath.length)}`);
+	console.info(`${cliName}: Generated ${dest.slice(rootPath.length)}`);
 	return dest;
 };
 
 const cleanup = async (dtsFilePath: string) => {
 	await unlink(dtsFilePath);
-	console.info(`Removed ${dtsFilePath.slice(rootPath.length)}`);
+	console.info(`${cliName}: Removed ${dtsFilePath.slice(rootPath.length)}`);
 };
 
 if (process.argv.includes("--watch")) {
@@ -52,4 +53,5 @@ if (process.argv.includes("--watch")) {
 			await cleanup(filePath).catch(ignoreENOENT());
 		}
 	}
+	console.info(`${cliName}: done`);
 }

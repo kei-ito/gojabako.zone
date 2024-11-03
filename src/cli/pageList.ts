@@ -6,8 +6,10 @@ import { getPageData } from "../util/node/getPageData.ts";
 import { walkFiles } from "../util/node/walkFiles.ts";
 import type { PageData } from "../util/type.ts";
 
+const cliName = import.meta.url.slice(rootDir.href.length);
+
 if (process.env.CI) {
-	console.info("build/pageList.ts: skipped");
+	console.info(`${cliName}: skipped`);
 	process.exit();
 }
 
@@ -19,7 +21,7 @@ const listPageFiles = async function* (): AsyncGenerator<URL> {
 			yield fileUrl;
 		}
 	}
-	console.info(`build/pageList: ${count} pages`);
+	console.info(`${cliName}: ${count} pages`);
 };
 
 const generateCode = async function* () {
@@ -49,7 +51,4 @@ await writeFile(
 	dest,
 	await formatCode(code, { filePath: fileURLToPath(dest) }),
 );
-console.info(
-	"build/pageList: done",
-	dest.pathname.slice(rootDir.pathname.length),
-);
+console.info(`${cliName}: done`);
