@@ -42,7 +42,10 @@
 	--gjBasePadding: 0.8rem;
 	/* stylelint-disable-next-line unit-allowed-list */
 	--gjBaseFullWidth: calc(100vw - var(--gjBasePadding) * 2);
-	--gjHeaderHeight: 2.4em;
+	/* stylelint-disable-next-line unit-allowed-list */
+	--gjHeaderHeight: 2.4rem;
+	/* stylelint-disable-next-line unit-allowed-list */
+	--gjBorderRadius: 0.2rem;
 	/* stylelint-disable-next-line unit-allowed-list */
 	--gjFullScreenAvailableHeight: calc(100vh - var(--gjHeaderHeight));
 	--gjGray0: #fff;
@@ -145,7 +148,7 @@ a {
 p {
 	code {
 		padding-inline: 0.3em;
-		border-radius: 0.3em;
+		border-radius: var(--gjBorderRadius);
 		background-color: var(--gjGray2);
 	}
 }

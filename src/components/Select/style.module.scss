@@ -5,7 +5,7 @@
   background-position: right 0.2em center;
   background-size: 1em 1em;
   border-style: solid;
-  border-radius: 0.3em;
+  border-radius: var(--gjBorderRadius);
   cursor: pointer;
   font-size: 90%;
   font-weight: 600;
