@@ -96,6 +96,23 @@ const getArrowD = ([x1, y1, x2, y2]: Edge, l: number, da = Math.PI / 6) => {
 	).slice();
 	return d;
 };
+const getMidArrowD = ([x1, y1, x2, y2]: Edge, l: number, da = Math.PI / 6) => {
+	let d = getLineD(x1, y1, x2, y2);
+	const t = Math.atan2(y2 - y1, x2 - x1);
+	const x3 = (x1 + x2 + l * Math.cos(t)) / 2;
+	const y3 = (y1 + y2 + l * Math.sin(t)) / 2;
+	const a1 = t + da;
+	d += getLineD(x3 - l * Math.cos(a1), y3 - l * Math.sin(a1), x3, y3);
+	const a2 = t - da;
+	d += getNextDFragment(
+		x3,
+		y3,
+		x3 - l * Math.cos(a2),
+		y3 - l * Math.sin(a2),
+	).slice();
+	d += `M${r(x2)} ${r(y2)}`;
+	return d;
+};
 
 const isPointInView = (bb: BoundingBox, x: number, y: number) =>
 	bb.minX <= x && x <= bb.maxX && bb.minY <= y && y <= bb.maxY;
@@ -463,6 +480,26 @@ const getEdgesInViewD = (
 	return d;
 };
 
+const getEdgesWithMidArrayInViewD = (
+	edges: Array<Edge>,
+	vb: BoundingBox,
+	arrowSize: number,
+	offset1: number,
+	offset2: number,
+) => {
+	const offsetMap: Record<Direction, Edge> = {
+		[Direction.Right]: [offset2, offset1, -offset2, offset1],
+		[Direction.Down]: [-offset1, offset2, -offset1, -offset2],
+		[Direction.Left]: [-offset2, -offset1, offset2, -offset1],
+		[Direction.Up]: [offset1, -offset2, offset1, offset2],
+	};
+	let d = "";
+	for (const edge of listEdgesInView(edges, offsetMap, vb)) {
+		d += (d ? "L" : "M") + getMidArrowD(edge, arrowSize).slice(1);
+	}
+	return d;
+};
+
 const listEdgesInView = function* (
 	edges: Iterable<Edge>,
 	offsetMap: Record<Direction, Edge>,
@@ -502,7 +539,8 @@ interface EdgeData {
 }
 
 export const NormalizeAnimationApp = ({
-	durationMs = 8000,
+	cells,
+	durationMs = cells.length * 150,
 	repeatDelayMs = 100,
 	autoPlay: initialAutoPlay = true,
 	displayTurnType = false,
@@ -529,10 +567,17 @@ export const NormalizeAnimationApp = ({
 			frameId = requestAnimationFrame((t0) => {
 				const totalMs = repeatDelayMs + durationMs;
 				const startedAt = t0 - phraseRef.current * durationMs;
+				let previousP = 0;
 				const animate = (timestamp: number) => {
 					const p = ((timestamp - startedAt) % totalMs) / durationMs;
+					if (p < previousP) {
+						setTurnType((v) =>
+							v === TurnType.Left ? TurnType.Right : TurnType.Left,
+						);
+					}
 					setPhase(clamp(p, 0, 1));
 					frameId = requestAnimationFrame(animate);
+					previousP = p;
 				};
 				frameId = requestAnimationFrame(animate);
 			});
@@ -540,7 +585,7 @@ export const NormalizeAnimationApp = ({
 		return () => cancelAnimationFrame(frameId);
 	}, [isPlaying, durationMs, repeatDelayMs]);
 	const onClickPlay = useCallback(() => setAutoPlay((v) => !v), []);
-	const { boundary } = getUnitEdges(props.cells);
+	const { boundary } = getUnitEdges(cells);
 	const consumeLimit = Math.floor((boundary.length + 1) * phase);
 	const edges = useMemo(() => {
 		let consumeCount = 0;
@@ -586,7 +631,7 @@ export const NormalizeAnimationApp = ({
 	} as CSSProperties;
 	return (
 		<>
-			<Svg {...props} style={totalCountStyle}>
+			<Svg {...props} cells={cells} style={totalCountStyle}>
 				<Grid strokePx={2} style={{ color: "var(--gjGray3)" }} />
 				<Cells style={{ color: "var(--gjGray3)" }} />
 				<NormalizedPath edges={edges} />
@@ -700,7 +745,7 @@ const NormalizedPath = ({ edges }: NormalizedPathProps) => {
 	return (
 		<>
 			{edges.normalized.map((edgeList, index) => {
-				const d = getEdgesInViewD(edgeList, vb, dpx * 8, 0, 0.1);
+				const d = getEdgesWithMidArrayInViewD(edgeList, vb, dpx * 8, 0, 0.1);
 				const pathStyle = { strokeWidth: 4 * dpx, "--gjIndex": `${index}` };
 				return (
 					<path
