@@ -1,6 +1,6 @@
 .form {
   padding-block: 1em;
-  border-radius: 0.2em;
+  border-radius: var(--gjBorderRadius);
   border-style: solid;
   border-color: var(--gjGray4);
   background-color: var(--gjGray0);

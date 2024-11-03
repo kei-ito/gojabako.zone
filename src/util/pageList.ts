@@ -37,8 +37,8 @@ export const pageList: Array<PageData> = [
 	{
 		title: ["塗られた", "マス目の", "境界を", "描く"],
 		publishedAt: "2024-11-02T17:15:58.000Z",
-		updatedAt: "2024-11-03T10:36:44.000Z",
-		commits: 5,
+		updatedAt: "2024-11-03T10:55:06.000Z",
+		commits: 6,
 		path: "/2024/boundary-tracing",
 		iri: "gjbkz://gojabako.zone/2024/boundary-tracing",
 		group: "2024",
@@ -260,8 +260,8 @@ export const pageList: Array<PageData> = [
 	},
 	{
 		publishedAt: "2023-09-18T10:16:16.000Z",
-		updatedAt: "2024-11-03T10:36:44.000Z",
-		commits: 75,
+		updatedAt: "2024-11-03T10:55:06.000Z",
+		commits: 76,
 		title: ["Home"],
 		path: "/",
 		iri: "gjbkz://gojabako.zone/",
