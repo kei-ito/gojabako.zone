@@ -7,6 +7,7 @@ import { formatCode } from "../util/node/formatCode.ts";
 import { walkFiles } from "../util/node/walkFiles.ts";
 import { noop } from "../util/noop.ts";
 
+const cliName = import.meta.url.slice(rootDir.href.length);
 const dest = new URL("Storybook/all.ts", componentsDir);
 const storySuffix = "/index.stories.tsx";
 const storyFiles = new Set<string>();
@@ -37,7 +38,9 @@ const generate = async () => {
 		dest,
 		await formatCode(code, { filePath: fileURLToPath(dest) }),
 	);
-	console.info(`Generated ${dest.pathname.slice(rootDir.pathname.length)}`);
+	console.info(
+		`${cliName}: Generated ${dest.pathname.slice(rootDir.pathname.length)}`,
+	);
 	return dest;
 };
 
@@ -73,4 +76,5 @@ if (process.argv.includes("--watch")) {
 		}
 	}
 	await generate();
+	console.info(`${cliName}: done`);
 }

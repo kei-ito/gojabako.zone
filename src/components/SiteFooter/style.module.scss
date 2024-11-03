@@ -17,14 +17,48 @@
       inline-size: var(--gjBaseWidth);
     }
 
-    &:last-child {
-      display: grid;
-      grid-auto-flow: column;
-      text-align: end;
+    &.author {
+      &>div {
+        display: grid;
+        grid-auto-flow: column;
+        justify-content: end;
+        align-items: center;
+        gap: 0.25em;
+      }
+
+      @media print {
+        display: revert-layer;
+      }
+    }
+
+    @media print {
+      display: none;
     }
   }
+}
 
-  @media print {
-    display: none;
+.links {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+
+  &>a {
+    display: grid;
+    place-items: center;
+    padding: 0.2em;
+    border-radius: 0.2em;
+    color: inherit;
+    transition: background-color 100ms;
+
+    &>svg {
+      --gjSize: 1.2em;
+      inline-size: var(--gjSize);
+      block-size: var(--gjSize);
+      fill: currentcolor;
+    }
+
+    &:hover {
+      background-color: var(--gjGray3);
+    }
   }
 }
