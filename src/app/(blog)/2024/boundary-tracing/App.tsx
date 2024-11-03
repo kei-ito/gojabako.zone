@@ -745,7 +745,7 @@ const NormalizedPath = ({ edges }: NormalizedPathProps) => {
 	return (
 		<>
 			{edges.normalized.map((edgeList, index) => {
-				const d = getEdgesWithMidArrayInViewD(edgeList, vb, dpx * 8, 0, 0.1);
+				const d = getEdgesWithMidArrayInViewD(edgeList, vb, dpx * 8, 0, 0.15);
 				const pathStyle = { strokeWidth: 4 * dpx, "--gjIndex": `${index}` };
 				return (
 					<path
