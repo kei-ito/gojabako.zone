@@ -5,7 +5,6 @@ import { IconClass } from "../../util/classnames.ts";
 import { isClient } from "../../util/env.ts";
 import { getCurrentUrl } from "../../util/getCurrentUrl.ts";
 import { noop } from "../../util/noop.ts";
-import { Select } from "../Select";
 import * as style from "./style.module.scss";
 
 export const ElementInspector = () => {
@@ -70,12 +69,12 @@ const BaseWidthSelector = ({ parent }: BaseWidthSelectorProps) => {
 			<label className={IconClass} htmlFor="BaseWidthSelector">
 				width
 			</label>
-			<Select id="BaseWidthSelector" onChange={onChange} value={baseWidth}>
+			<select id="BaseWidthSelector" onChange={onChange} value={baseWidth}>
 				<option value="default">default</option>
 				<option value="full">full</option>
 				<option value="500">500px</option>
 				<option value="300">300px</option>
-			</Select>
+			</select>
 		</>
 	);
 };

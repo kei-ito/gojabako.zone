@@ -98,6 +98,11 @@
     grid-template-columns: 1fr auto;
     column-gap: 0.5em;
     align-items: center;
+
+    & > select {
+      border-style: solid;
+      border-radius: var(--gjBorderRadius);
+    }
   }
 
   & > .number {
@@ -113,7 +118,7 @@
     & > input {
       text-align: end;
       border-style: solid;
-      border-radius: 0.3em;
+      border-radius: var(--gjBorderRadius);
     }
   }
 
@@ -171,7 +176,7 @@ path.buffer {
   background-color: rgb(255 255 255 / 70%);
   backdrop-filter: blur(3px);
   box-shadow: 0 1px 0.5em var(--gjGray6);
-  border-radius: 0.3em;
+  border-radius: var(--gjBorderRadius);
   font-size: 80%;
   font-family: var(--gjFontMonospace);
   font-weight: 700;
@@ -183,7 +188,7 @@ path.buffer {
 .messenger {
   border-style: solid;
   border-color: var(--gjGray5);
-  border-radius: 0.3em;
+  border-radius: var(--gjBorderRadius);
 
   & > summary {
     padding-inline: 0.5em;
