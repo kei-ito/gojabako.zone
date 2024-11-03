@@ -1,55 +1,73 @@
 import { isString } from "@nlib/typing";
 import Link from "next/link";
-import type { PropsWithChildren } from "react";
 import type { PageData } from "../../util/type.ts";
 import * as style from "./style.module.scss";
 
 interface PageLinkProps {
 	page: PageData;
-	showUpdatedAt?: boolean;
 	showDescription?: boolean;
 }
 
-export const PageLink = ({
-	page,
-	showUpdatedAt,
-	showDescription,
-}: PageLinkProps) => {
+export const PageLink = ({ page, showDescription }: PageLinkProps) => {
 	let { publishedAt } = page;
 	if (isString(page.other?.originalPublishedAt)) {
 		publishedAt = page.other?.originalPublishedAt;
 	}
+	const isUpdated =
+		getDateString(page.publishedAt) !== getDateString(page.updatedAt);
 	return (
 		<>
 			<Link href={page.path} className={style.container}>
-				<span>{page.title}</span>{" "}
-				{showUpdatedAt && (
-					<>
-						<PageDate dateTime={page.updatedAt}>更新</PageDate>{" "}
-					</>
+				<span>{page.title.join("")}</span>
+				<PageDate dateTime={publishedAt} suffix="公開" />
+				{isUpdated && (
+					<PageDate dateTime={page.updatedAt} suffix="更新" bracket />
 				)}
-				<PageDate dateTime={publishedAt}>公開</PageDate>
 				{showDescription && page.description && (
-					<>
-						<br />
-						<span className={style.description}>{page.description}</span>
-					</>
+					<span className={style.description}>{page.description}</span>
 				)}
 			</Link>
 		</>
 	);
 };
 
-const PageDate = ({
-	dateTime,
-	children,
-}: PropsWithChildren<{ dateTime: string }>) => {
+interface PageDateProps {
+	dateTime: string;
+	suffix?: string;
+	bracket?: boolean;
+}
+
+const PageDate = ({ dateTime, suffix, bracket = false }: PageDateProps) => {
 	const date = new Date(dateTime);
-	const dateString = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
 	return (
-		<time className={style.time} dateTime={date.toISOString()}>
-			{dateString}
-			{children}
+		<time
+			className={style.time}
+			dateTime={date.toISOString()}
+			title={getJstString(date)}
+		>
+			{[
+				...(function* () {
+					if (bracket) {
+						yield "(";
+					}
+					yield getDateString(dateTime);
+					if (suffix) {
+						yield suffix;
+					}
+					if (bracket) {
+						yield ")";
+					}
+				})(),
+			].join("")}
 		</time>
 	);
+};
+
+const getDateString = (dateTime: string | Date) => {
+	const date = new Date(dateTime);
+	return `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`;
+};
+
+const getJstString = (date: Date) => {
+	return `${date.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })} JST`;
 };

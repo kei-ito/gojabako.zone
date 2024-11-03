@@ -27,7 +27,7 @@ const selialize = function* () {
 	for (const page of pageList) {
 		yield "  <entry>\n";
 		yield `    <id>${page.iri}</id>\n`;
-		yield `    <title>${page.title}</title>\n`;
+		yield `    <title>${page.title.join("")}</title>\n`;
 		yield `    <link href="${new URL(page.path, site.baseUrl)}"/>\n`;
 		yield `    <updated>${page.updatedAt}</updated>\n`;
 		yield `    <published>${page.publishedAt}</published>\n`;

@@ -45,6 +45,7 @@ export const cells2024: Array<[number, number]> = [
 ];
 
 export const cellsWithHoles: Array<[number, number]> = [
+	[0, 0],
 	[1, 1],
 	[2, 1],
 	[3, 1],
@@ -57,7 +58,6 @@ export const cellsWithHoles: Array<[number, number]> = [
 	[4, 4],
 	[0, 4],
 	[4, 0],
-	[0, 0],
 	[7, 0],
 	[8, 0],
 	[9, 0],
