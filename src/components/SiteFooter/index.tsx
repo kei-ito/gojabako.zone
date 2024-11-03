@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { HTMLAttributes } from "react";
+import type { FC, HTMLAttributes } from "react";
 import IconGitHub from "../../svg/fa-6.6.0/brands/github.svg";
 import IconXTwitter from "../../svg/fa-6.6.0/brands/x-twitter.svg";
 import IconRss from "../../svg/rss.svg";
@@ -8,7 +8,7 @@ import { site } from "../../util/site.ts";
 import { SiteMap } from "../SiteMap";
 import * as style from "./style.module.scss";
 
-const links = [
+const links: Array<[FC, string]> = [
 	[IconRss, "/feed.atom"],
 	[IconGitHub, "https://github.com/gjbkz"],
 	[IconXTwitter, "https://x.com/gjbkz"],
