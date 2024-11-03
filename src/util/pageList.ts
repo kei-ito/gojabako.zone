@@ -251,8 +251,8 @@ export const pageList: Array<PageData> = [
 	{
 		title: ["伊藤", " ", "慶", " ", "-", " ", "Kei", " ", "Ito"],
 		publishedAt: "2023-09-18T10:16:16.000Z",
-		updatedAt: "2023-09-18T10:16:16.000Z",
-		commits: 1,
+		updatedAt: "2024-11-03T07:58:24.000Z",
+		commits: 2,
 		path: "/author",
 		iri: "gjbkz://gojabako.zone/author",
 		group: "",
@@ -260,8 +260,8 @@ export const pageList: Array<PageData> = [
 	},
 	{
 		publishedAt: "2023-09-18T10:16:16.000Z",
-		updatedAt: "2024-11-03T02:23:32.000Z",
-		commits: 72,
+		updatedAt: "2024-11-03T07:58:24.000Z",
+		commits: 73,
 		title: ["Home"],
 		path: "/",
 		iri: "gjbkz://gojabako.zone/",
