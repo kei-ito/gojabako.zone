@@ -1,7 +1,7 @@
 type ClassNameEntry = Array<ClassNameEntry> | string | false | null | undefined;
 
 export const classnames = (...args: Array<ClassNameEntry>) =>
-	[...list(args)].join(" ");
+	[...new Set(list(args))].join(" ");
 
 const list = function* (entries: Array<ClassNameEntry>): Generator<string> {
 	for (const entry of entries) {

@@ -1,10 +1,20 @@
 import * as assert from "node:assert";
-import { test } from "node:test";
+import { describe, test } from "node:test";
 import { classnames } from "./classnames.ts";
 
-test("returns a string for className", () => {
-	assert.strictEqual(
-		classnames("c1   c2 ", [" c3  c4", null, false, " c5"], undefined),
-		"c1 c2 c3 c4 c5",
-	);
+describe("classnames", () => {
+	const cases: Array<[Parameters<typeof classnames>, string]> = [
+		[[""], ""],
+		[["c1"], "c1"],
+		[["c1 c2"], "c1 c2"],
+		[["c1 c2 c1"], "c1 c2"],
+		[["c1 c2", "c3"], "c1 c2 c3"],
+		[["c1 c2", ["c3", undefined, null, false]], "c1 c2 c3"],
+		[["c1 c2", ["c3", undefined, null, false, ["c1 c2", "c4"]]], "c1 c2 c3 c4"],
+	];
+	for (const [args, expected] of cases) {
+		test(`${JSON.stringify(args).slice(1, -1)} → ${expected}`, () => {
+			assert.strictEqual(classnames(...args), expected);
+		});
+	}
 });
