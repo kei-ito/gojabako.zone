@@ -36,9 +36,11 @@ export const pageList: Array<PageData> = [
 	},
 	{
 		title: ["塗られた", "マス目の", "境界を", "描く"],
+		description:
+			"塗られたマス目の境界線をSVGのpath要素でいい感じに描けるようにしました。",
 		publishedAt: "2024-11-02T17:15:58.000Z",
-		updatedAt: "2024-11-04T13:37:00.000Z",
-		commits: 17,
+		updatedAt: "2024-11-04T13:44:12.000Z",
+		commits: 18,
 		path: "/2024/boundary-tracing",
 		iri: "gjbkz://gojabako.zone/2024/boundary-tracing",
 		group: "2024",
@@ -46,9 +48,11 @@ export const pageList: Array<PageData> = [
 	},
 	{
 		title: ["ベジエ", "曲線の", "描画"],
+		description:
+			"3次ベジエ曲線の定義からCSSのcubic-bezier関数のようなタイミング関数をつくりました。",
 		publishedAt: "2024-10-21T13:44:54.000Z",
-		updatedAt: "2024-11-04T13:37:00.000Z",
-		commits: 3,
+		updatedAt: "2024-11-04T13:44:12.000Z",
+		commits: 4,
 		path: "/2024/cubic-bezier",
 		iri: "gjbkz://gojabako.zone/2024/cubic-bezier",
 		group: "2024",
@@ -67,9 +71,11 @@ export const pageList: Array<PageData> = [
 	},
 	{
 		title: ["Next.js", " ", "13に", "しました"],
+		description:
+			"このサイトをNext.js 13にアップデートしました。記事やサイトの画像生成をできるようにしました。",
 		publishedAt: "2023-09-22T06:09:19.000Z",
-		updatedAt: "2024-10-13T01:43:17.000Z",
-		commits: 5,
+		updatedAt: "2024-11-04T13:44:12.000Z",
+		commits: 6,
 		path: "/2023/next13",
 		iri: "gjbkz://gojabako.zone/2023/next13",
 		group: "2023",
@@ -260,8 +266,8 @@ export const pageList: Array<PageData> = [
 	},
 	{
 		publishedAt: "2023-09-18T10:16:16.000Z",
-		updatedAt: "2024-11-04T13:37:00.000Z",
-		commits: 88,
+		updatedAt: "2024-11-04T13:44:12.000Z",
+		commits: 89,
 		title: ["Home"],
 		path: "/",
 		iri: "gjbkz://gojabako.zone/",
