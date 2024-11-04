@@ -8,11 +8,10 @@ if [ -z "$diff_files" ]; then
   exit 0
 fi
 
-if [ "$diff_files" = "src/util/pageList.ts" ]; then
-  git add src/util/pageList.ts
-  git commit -m "chore: update pageList.ts"
-  exit 0
-fi
+# if [ "$diff_files" = "src/util/pageList.ts" ]; then
+#   git add src/util/pageList.ts
+#   git commit -m "chore: update pageList.ts"
+# fi
 
 echo "Please commit the changes."
 exit 1
