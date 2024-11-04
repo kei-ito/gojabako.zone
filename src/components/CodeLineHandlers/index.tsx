@@ -106,7 +106,7 @@ const useHighlightCodeLines = (root: Element | null) => {
 	const [hash] = useHash();
 	useEffect(() => {
 		const [codeId, lineId] = parseHash(hash);
-		const code = getCodeElement(codeId, root);
+		const code = codeId && root?.querySelector(`#${codeId}>code`);
 		const targets = new Set<Element>();
 		if (codeId && code) {
 			const normalizedRanges = [
@@ -136,14 +136,6 @@ const useHighlightCodeLines = (root: Element | null) => {
 			}
 		};
 	}, [hash, root]);
-};
-
-const getCodeElement = (codeId: string, root: Element | null) => {
-	let code = codeId && root ? root.querySelector(`#${codeId}`) : null;
-	while (code && code.tagName.toLowerCase() !== "code") {
-		code = code.nextElementSibling;
-	}
-	return code;
 };
 
 const parseHash = (hash: string) => {

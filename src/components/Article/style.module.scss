@@ -137,16 +137,6 @@
       }
     }
 
-    .fragment-target {
-      position: absolute;
-      inline-size: 0;
-      block-size: 0;
-      inset-inline-start: 0;
-      /* stylelint-disable-next-line unit-allowed-list */
-      inset-block-start: max(-16em, -20vh);
-      pointer-events: none;
-    }
-
     .footnotes {
       display: grid;
       grid-auto-flow: row;

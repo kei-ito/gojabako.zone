@@ -11,11 +11,7 @@ import { filePathToFileUrl } from "../node/filePathToFileUrl.ts";
 import { mdToInlineHast } from "../node/mdToHast.ts";
 import type { VFileLike } from "../unified.ts";
 import { addClass } from "./className.ts";
-import {
-	createFragmentRef,
-	createFragmentTarget,
-	createHastElement,
-} from "./createHastElement.ts";
+import { createHastElement } from "./createHastElement.ts";
 import { createMdxEsm } from "./createMdxJsEsm.ts";
 import { createMdxJsxTextElement } from "./createMdxJsxTextElement.ts";
 import { isHastElement } from "./isHastElement.ts";
@@ -63,10 +59,18 @@ export const visitArticleImg = (
 				tasks.push(parseAlt(parent, alt, sourcePromise, e.position));
 			}
 			parent.tagName = "figure";
+			parent.properties.id = id;
 			parent.properties.dataType = "image";
 			elements.push(
-				createFragmentTarget(id),
-				createHastElement("figcaption", {}, alt, createFragmentRef(id)),
+				createHastElement(
+					"figcaption",
+					{},
+					alt,
+					createHastElement("a", {
+						href: `#${id}`,
+						className: ["fragment-ref"],
+					}),
+				),
 			);
 		}
 		elements.push(

@@ -3,11 +3,7 @@ import { fromHtml } from "hast-util-from-html";
 import { toString as hastToString } from "hast-util-to-string";
 import { EXIT } from "unist-util-visit";
 import { fetchYouTubeVideoData } from "../node/fetchYouTubeVideoData.ts";
-import {
-	createFragmentRef,
-	createFragmentTarget,
-	createHastElement,
-} from "./createHastElement.ts";
+import { createHastElement } from "./createHastElement.ts";
 import { visitHastElement } from "./visitHastElement.ts";
 
 export const embedYouTube = async function* (
@@ -31,8 +27,7 @@ export const embedYouTube = async function* (
 				const id = `yt-${videoId}`;
 				return createHastElement(
 					"figure",
-					{ dataType: "youtube", className: ["caption"] },
-					createFragmentTarget(id),
+					{ id, dataType: "youtube", className: ["caption"] },
 					createHastElement(
 						"figcaption",
 						{},
@@ -43,7 +38,10 @@ export const embedYouTube = async function* (
 									data.title,
 								)
 							: createHastElement("span", {}),
-						createFragmentRef(id),
+						createHastElement("a", {
+							href: `#${id}`,
+							className: ["fragment-ref"],
+						}),
 					),
 					iframe,
 				);

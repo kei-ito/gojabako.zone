@@ -3,8 +3,7 @@ import { FieldSet, Form } from "../../../../components/Form";
 import { Query } from "./Query";
 
 export const Form2 = () => (
-	<Form action="#form2" method="GET">
-		<span id="form2" className="fragment-target" />
+	<Form id="form2" action="#form2" method="GET">
 		<h3>disabledなfieldsetのあるフォーム</h3>
 		<p>
 			このページにGETするので送信するとアドレスバーのクエリ文字列で値を確認できます。

@@ -16,10 +16,10 @@ export const Figure = ({
 }: PropsWithChildren<FigureProps>) => (
 	<figure
 		{...props}
+		id={id}
 		className={classnames(caption ? "caption" : undefined, props.className)}
 		data-type={type}
 	>
-		<span id={id} className="fragment-target" />
 		<figcaption>
 			<span>{caption}</span>
 			{/* biome-ignore lint/a11y/useAnchorContent: 他の<figure>と挙動を合わせるため */}

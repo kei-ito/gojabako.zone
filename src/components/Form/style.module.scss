@@ -15,7 +15,6 @@
     }
   }
 
-  & > :global(.fragment-target) + *,
   & > legend:first-child + *,
   & > :first-child {
     margin-block-start: 0;

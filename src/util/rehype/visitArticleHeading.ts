@@ -1,10 +1,7 @@
 import { isString } from "@nlib/typing";
 import { SKIP } from "unist-util-visit";
 import type { VFileLike } from "../unified.ts";
-import {
-	createFragmentRef,
-	createFragmentTarget,
-} from "./createHastElement.ts";
+import { createHastElement } from "./createHastElement.ts";
 import type { HastElementVisitor } from "./visitHastElement.ts";
 
 export const visitArticleHeading =
@@ -15,11 +12,13 @@ export const visitArticleHeading =
 			return null;
 		}
 		e.children.unshift(
-			createFragmentTarget(id),
-			createFragmentRef(id, getHashLabel(e.tagName)),
+			createHastElement(
+				"a",
+				{ href: `#${id}`, className: ["fragment-ref"] },
+				getHashLabel(e.tagName),
+			),
 			{ type: "text", value: " " },
 		);
-		e.properties.id = undefined;
 		return SKIP;
 	};
 

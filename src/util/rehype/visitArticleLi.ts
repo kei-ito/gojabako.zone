@@ -3,10 +3,7 @@ import { EXIT, SKIP } from "unist-util-visit";
 import { IconClass } from "../classnames.ts";
 import type { VFileLike } from "../unified.ts";
 import { addClass } from "./className.ts";
-import {
-	createFragmentTarget,
-	createHastElement,
-} from "./createHastElement.ts";
+import { createHastElement } from "./createHastElement.ts";
 import type { HastElementVisitor } from "./visitHastElement.ts";
 import { visitHastElement } from "./visitHastElement.ts";
 
@@ -33,7 +30,5 @@ export const visitArticleLi =
 				return EXIT;
 			},
 		});
-		li.children.unshift(createFragmentTarget(id));
-		li.properties.id = undefined;
 		return SKIP;
 	};

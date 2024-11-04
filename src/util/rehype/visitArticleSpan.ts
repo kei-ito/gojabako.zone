@@ -3,11 +3,7 @@ import { find } from "unist-util-find";
 import { SKIP } from "unist-util-visit";
 import type { VFileLike } from "../unified.ts";
 import { addClass, hasClass } from "./className.ts";
-import {
-	createFragmentRef,
-	createFragmentTarget,
-	createHastElement,
-} from "./createHastElement.ts";
+import { createHastElement } from "./createHastElement.ts";
 import { isHastElement } from "./isHastElement.ts";
 import type { HastElementVisitor } from "./visitHastElement.ts";
 import { visitHastElement } from "./visitHastElement.ts";
@@ -35,13 +31,15 @@ export const visitArticleSpan = (
 					1,
 					createHastElement(
 						"figure",
-						{ dataType: "math" },
-						createFragmentTarget(id),
+						{ id, dataType: "math" },
 						createHastElement(
 							"figcaption",
 							{},
 							createHastElement("span", {}),
-							createFragmentRef(id),
+							createHastElement("a", {
+								href: `#${id}`,
+								className: ["fragment-ref"],
+							}),
 						),
 						katexHtml,
 					),
@@ -50,9 +48,13 @@ export const visitArticleSpan = (
 					span: (e) => {
 						if (isHastElement(e, "span", "eqn-num")) {
 							const equationId = `eq${++equationCount}`;
+							e.properties.id = equationId;
 							e.children.push(
-								createFragmentTarget(equationId),
-								createFragmentRef(equationId, `(${equationCount})`),
+								createHastElement(
+									"a",
+									{ href: `#${equationId}`, className: ["fragment-ref"] },
+									`(${equationCount})`,
+								),
 							);
 						}
 					},

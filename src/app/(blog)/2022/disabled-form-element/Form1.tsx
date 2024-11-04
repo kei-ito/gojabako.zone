@@ -3,8 +3,7 @@ import { Form } from "../../../../components/Form";
 import { Query } from "./Query";
 
 export const Form1 = () => (
-	<Form action="#form1" method="GET">
-		<span id="form1" className="fragment-target" />
+	<Form id="form1" action="#form1" method="GET">
 		<p>
 			現在のクエリ文字列: <Query />
 		</p>

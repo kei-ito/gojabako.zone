@@ -3,11 +3,7 @@ import { SKIP } from "unist-util-visit";
 import { getSingle } from "../getSingle.ts";
 import { mdToInlineHast } from "../node/mdToHast.ts";
 import type { VFileLike } from "../unified.ts";
-import {
-	createFragmentRef,
-	createFragmentTarget,
-	createHastElement,
-} from "./createHastElement.ts";
+import { createHastElement } from "./createHastElement.ts";
 import { insertLineNumbers } from "./insertLineNumbers.ts";
 import { isHastElement } from "./isHastElement.ts";
 import type { HastElementVisitor } from "./visitHastElement.ts";
@@ -30,10 +26,10 @@ export const visitArticlePre = (
 			createHastElement(
 				"figure",
 				{
+					id: elementId,
 					dataType: "code",
 					...(isString(caption) ? { className: ["caption"] } : {}),
 				},
-				createFragmentTarget(elementId),
 				createHastElement(
 					"figcaption",
 					{},
@@ -43,7 +39,10 @@ export const visitArticlePre = (
 						{},
 						...(isString(caption) ? mdToInlineHast(caption) : []),
 					),
-					createFragmentRef(elementId),
+					createHastElement("a", {
+						href: `#${elementId}`,
+						className: ["fragment-ref"],
+					}),
 				),
 				insertLineNumbers(codeElement, elementId),
 			),

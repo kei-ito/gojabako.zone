@@ -102,6 +102,8 @@
 	--gjColorText2: var(--gjGray6);
 	--gjColorFocus1: var(--gjYellow3);
 	--gjColorFocus2: var(--gjYellow1);
+	scroll-padding-block-start: 25vh;
+	scroll-behavior: smooth;
 	font-size: 15px;
 	font-family: var(--gjFontSans);
 	line-height: var(--gjLineHeight);

@@ -1,10 +1,6 @@
 import { SKIP } from "unist-util-visit";
 import type { VFileLike } from "../unified.ts";
-import {
-	createFragmentRef,
-	createFragmentTarget,
-	createHastElement,
-} from "./createHastElement.ts";
+import { createHastElement } from "./createHastElement.ts";
 import type { HastElementVisitor } from "./visitHastElement.ts";
 
 export const visitArticleTable = (
@@ -19,13 +15,15 @@ export const visitArticleTable = (
 			1,
 			createHastElement(
 				"figure",
-				{ dataType: "table" },
-				createFragmentTarget(id),
+				{ id, dataType: "table" },
 				createHastElement(
 					"figcaption",
 					{},
 					createHastElement("span", {}),
-					createFragmentRef(id),
+					createHastElement("a", {
+						href: `#${id}`,
+						className: ["fragment-ref"],
+					}),
 				),
 				e,
 			),
