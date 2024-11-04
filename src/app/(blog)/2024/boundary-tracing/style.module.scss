@@ -122,7 +122,7 @@ button.reset {
   padding-inline: 0.1em 0.2em;
   font-size: 80%;
   font-weight: bold;
-  background-color: var(--gjColorBackground);
+  background-color: var(--gjGray0);
   border-style: solid;
   border-radius: var(--gjBorderRadius);
 
@@ -130,7 +130,21 @@ button.reset {
     font-size: 150%;
   }
 
+  &:hover {
+    background-color: var(--gjGray2);
+  }
+
   @media print {
     display: none;
   }
+}
+
+.app {
+  cursor: pointer;
+}
+
+.target {
+  fill: currentcolor;
+  stroke: none;
+  opacity: 0.1;
 }

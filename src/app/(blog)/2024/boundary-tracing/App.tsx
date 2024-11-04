@@ -4,9 +4,11 @@ import { useSearchParams } from "next/navigation";
 import {
 	type CSSProperties,
 	type ChangeEvent,
+	type Dispatch,
 	Fragment,
 	type PropsWithChildren,
 	type SVGAttributes,
+	type SetStateAction,
 	createContext,
 	useCallback,
 	useContext,
@@ -580,7 +582,7 @@ export const NormalizeAnimationApp = ({
 		[cells, defaultUniqueCells],
 	);
 	const durationMs = defaultDurationMs || cells.length * 150;
-	const [svg, setSvgElement] = useState<SVGSVGElement | null>();
+	const [svg, setSvgElement] = useState<SVGSVGElement | null>(null);
 	const isInView = useIsInView(svg, "-20% 0px -40% 0px");
 	const [turnType, setTurnType] = useState<TurnType>(TurnType.Left);
 	const onRepeat = useCallback(
@@ -606,33 +608,8 @@ export const NormalizeAnimationApp = ({
 		}
 		return edgeData;
 	}, [turnType, boundary, consumeLimit]);
-	useEffect(() => {
-		const abc = new AbortController();
-		if (svg) {
-			const getCell = (clientX: number, clientY: number): Cell => {
-				const rect = svg.getBoundingClientRect();
-				const vb = svg.viewBox.baseVal;
-				const x = vb.x + ((clientX - rect.left) * vb.width) / rect.width;
-				const y = vb.y + ((clientY - rect.top) * vb.height) / rect.height;
-				return [Math.floor(x), Math.floor(y)];
-			};
-			svg.addEventListener(
-				"click",
-				(event) => {
-					const target = getCell(event.clientX, event.clientY);
-					setCells((current) => {
-						const index = current.findIndex((cell) => isSameCell(cell, target));
-						if (index < 0) {
-							return getUniqueCells([...current, target]);
-						}
-						return [...current.slice(0, index), ...current.slice(index + 1)];
-					});
-				},
-				{ signal: abc.signal },
-			);
-		}
-		return () => abc.abort();
-	}, [svg]);
+	const [targetCell, setTargetCell] = useState<Cell | null>(null);
+	useTargetCell(svg, setCells, setTargetCell);
 	useEffect(() => {
 		if (!cells.initial && appId) {
 			// マス目の状態をURLに保存します。
@@ -665,6 +642,7 @@ export const NormalizeAnimationApp = ({
 		<>
 			<Svg
 				{...props}
+				className={style.app}
 				cells={cells}
 				style={varStyle}
 				setSvgElement={setSvgElement}
@@ -672,6 +650,7 @@ export const NormalizeAnimationApp = ({
 				<Grid strokePx={2} style={{ color: "var(--gjGray3)" }} />
 				<Cells style={{ color: "var(--gjGray3)" }} />
 				<NormalizedPath edges={edges} />
+				<TargetCell cell={targetCell} />
 			</Svg>
 			<PhaseControl
 				defaultAutoPlay={defaultAutoPlay}
@@ -701,6 +680,42 @@ export const NormalizeAnimationApp = ({
 	);
 };
 
+const useTargetCell = (
+	svg: SVGSVGElement | null,
+	setCells: Dispatch<SetStateAction<Array<Cell>>>,
+	setTargetCell: Dispatch<SetStateAction<Cell | null>>,
+) => {
+	useEffect(() => {
+		const abc = new AbortController();
+		if (svg) {
+			type ClientPosition = { clientX: number; clientY: number };
+			const getCell = (e: ClientPosition): Cell => {
+				const rect = svg.getBoundingClientRect();
+				const vb = svg.viewBox.baseVal;
+				const x = vb.x + ((e.clientX - rect.left) * vb.width) / rect.width;
+				const y = vb.y + ((e.clientY - rect.top) * vb.height) / rect.height;
+				return [Math.floor(x), Math.floor(y)];
+			};
+			const onMove = (event: ClientPosition) => setTargetCell(getCell(event));
+			svg.addEventListener("pointermove", onMove, { signal: abc.signal });
+			const onLeave = () => setTargetCell(null);
+			svg.addEventListener("pointerleave", onLeave, { signal: abc.signal });
+			const onClick = (event: ClientPosition) => {
+				const target = getCell(event);
+				setCells((current) => {
+					const index = current.findIndex((cell) => isSameCell(cell, target));
+					if (index < 0) {
+						return getUniqueCells([...current, target]);
+					}
+					return [...current.slice(0, index), ...current.slice(index + 1)];
+				});
+			};
+			svg.addEventListener("click", onClick, { signal: abc.signal });
+		}
+		return () => abc.abort();
+	}, [svg, setCells, setTargetCell]);
+};
+
 interface PhaseControlProps {
 	defaultAutoPlay?: boolean;
 	disabled?: boolean;
@@ -710,6 +725,30 @@ interface PhaseControlProps {
 	onChangeValue: (phase: number) => void;
 	onRepeat?: (repeatCount: number) => void;
 }
+
+const TargetCell = ({ cell }: { cell: Cell | null }) => {
+	const { cells, dpx } = useContext(BoundaryTracingContext);
+	if (!cell) {
+		return null;
+	}
+	const isDeletion = cells.some((c) => isSameCell(c, cell));
+	return (
+		<>
+			<rect
+				x={r(cell[0])}
+				y={r(cell[1])}
+				width={1}
+				height={1}
+				className={style.target}
+				style={{ strokeWidth: 4 * dpx }}
+			>
+				<title>
+					({cell.join(",")})を{isDeletion ? "削除" : "追加"}
+				</title>
+			</rect>
+		</>
+	);
+};
 
 const PhaseControl = ({
 	defaultAutoPlay = true,
