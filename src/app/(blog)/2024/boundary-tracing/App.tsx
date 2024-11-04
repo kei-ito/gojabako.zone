@@ -1,11 +1,14 @@
 "use client";
 import type { ValueOf } from "@nlib/typing";
+import { useSearchParams } from "next/navigation";
 import {
 	type CSSProperties,
 	type ChangeEvent,
+	type Dispatch,
 	Fragment,
 	type PropsWithChildren,
 	type SVGAttributes,
+	type SetStateAction,
 	createContext,
 	useCallback,
 	useContext,
@@ -16,11 +19,13 @@ import {
 } from "react";
 import { useIsInView } from "../../../../components/use/IsInView";
 import { useRect } from "../../../../components/use/Rect.ts";
+import { decodeCellList, encodeCellList } from "../../../../util/cellList";
 import { clamp } from "../../../../util/clamp";
 import { IconClass, classnames } from "../../../../util/classnames.ts";
-import { memoize } from "../../../../util/memoize.ts";
+import { getCurrentUrl } from "../../../../util/getCurrentUrl";
 import * as style from "./style.module.scss";
 
+type Cell = [number, number];
 type Edge = [number, number, number, number];
 type CellEdge = Edge & { x: number; y: number };
 const Direction = { Right: 0, Down: 1, Left: 2, Up: 3 } as const;
@@ -33,7 +38,9 @@ interface BoundingBox {
 	maxY: number;
 }
 
-const isSameEdge = (a: Edge, b: Edge) => a.every((v, i) => v === b[i]);
+const isSameCell = (a: Cell, b: Cell) => a[0] === b[0] && a[1] === b[1];
+const isSameEdge = (a: Edge, b: Edge) =>
+	a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
 const getOppositeEdge = (e: Edge): Edge => [e[2], e[3], e[0], e[1]];
 const getDirection = (e: Edge): Direction => {
 	const dx = e[2] - e[0];
@@ -125,7 +132,7 @@ interface BoundaryTracingProps {
 	/** Y方向の余白 (格子座標系での距離) */
 	py: number;
 	/** 塗りのあるマス目のリスト */
-	cells: Array<[number, number]>;
+	cells: Array<Cell>;
 }
 
 interface BoundaryTracingContext extends BoundaryTracingProps {
@@ -151,7 +158,7 @@ const BoundaryTracingContext = createContext<BoundaryTracingContext>({
 
 interface SvgProps extends Partial<BoundaryTracingProps> {
 	title?: string;
-	cells: Array<[number, number]>;
+	cells: Array<Cell>;
 	setSvgElement?: (svg: SVGSVGElement) => void;
 }
 
@@ -172,7 +179,7 @@ export const Svg = ({
 		}
 	}, [svg, setSvgElement]);
 	const rect = useRect(svg);
-	const cells = getUniqueCells(rawCells);
+	const cells = useMemo(() => getUniqueCells(rawCells), [rawCells]);
 	const bb = getBoundingBox(cells);
 	const sizeX = bb.maxX - bb.minX;
 	const sizeY = bb.maxY - bb.minY;
@@ -181,8 +188,8 @@ export const Svg = ({
 		if (givenViewBox) {
 			return [...parseViewBox(givenViewBox)] as ViewBox;
 		}
-		return [0.5 - px, 0.5 - py, baseWidth, sizeY + py * 2];
-	}, [givenViewBox, baseWidth, sizeY, px, py]);
+		return [bb.minX + 0.5 - px, bb.minY + 0.5 - py, baseWidth, sizeY + py * 2];
+	}, [bb, givenViewBox, baseWidth, sizeY, px, py]);
 	const [vMinX, vMinY, vSizeX, vSizeY] = viewBox;
 	const vb = getBoundingBox([
 		[vMinX, vMinY],
@@ -294,8 +301,9 @@ export const Boundary = ({
 	...props
 }: PathProps & SVGAttributes<SVGPathElement>) => {
 	const { cells, dpx } = useContext(BoundaryTracingContext);
+	const unitEdges = useMemo(() => getUnitEdges(cells), [cells]);
 	let d = "";
-	for (const [x1, y1, x2, y2] of getUnitEdges(cells).boundary) {
+	for (const [x1, y1, x2, y2] of unitEdges.boundary) {
 		d += getLineD(x1, y1, x2, y2);
 	}
 	return (
@@ -322,7 +330,7 @@ export const AllEdges = ({
 	...props
 }: AllEdgesProps & SVGAttributes<SVGPathElement>) => {
 	const { cells, dpx, vb } = useContext(BoundaryTracingContext);
-	const allEdges = getAllUnitEdges(cells);
+	const allEdges = useMemo(() => getAllUnitEdges(cells), [cells]);
 	const edges = useMemo(
 		() =>
 			allEdges.filter(
@@ -347,18 +355,13 @@ export const BoundaryEdges = ({
 }: EdgeProps & SVGAttributes<SVGPathElement>) => {
 	const { cells, dpx, vb } = useContext(BoundaryTracingContext);
 	const arrowSize = dpx * 8;
+	const unitEdges = useMemo(() => getUnitEdges(cells), [cells]);
 	return (
 		<path
 			{...props}
 			className={classnames(style.stroke, props.className)}
 			style={{ strokeWidth: strokePx * dpx, ...props.style }}
-			d={getEdgesInViewD(
-				getUnitEdges(cells).boundary,
-				vb,
-				arrowSize,
-				0.1,
-				0.15,
-			)}
+			d={getEdgesInViewD(unitEdges.boundary, vb, arrowSize, 0.1, 0.15)}
 		/>
 	);
 };
@@ -369,18 +372,13 @@ export const NonBoundaryEdges = ({
 }: EdgeProps & SVGAttributes<SVGPathElement>) => {
 	const { cells, dpx, vb } = useContext(BoundaryTracingContext);
 	const arrowSize = dpx * 8;
+	const unitEdges = useMemo(() => getUnitEdges(cells), [cells]);
 	return (
 		<path
 			{...props}
 			className={classnames(style.stroke, props.className)}
 			style={{ strokeWidth: strokePx * dpx, ...props.style }}
-			d={getEdgesInViewD(
-				getUnitEdges(cells).nonBoundary,
-				vb,
-				arrowSize,
-				0.1,
-				0.15,
-			)}
+			d={getEdgesInViewD(unitEdges.nonBoundary, vb, arrowSize, 0.1, 0.15)}
 		/>
 	);
 };
@@ -390,45 +388,40 @@ export const CellDelimiters = ({
 	...props
 }: EdgeProps & SVGAttributes<SVGPathElement>) => {
 	const { cells, dpx, vb } = useContext(BoundaryTracingContext);
+	const unitEdges = useMemo(() => getUnitEdges(cells), [cells]);
 	return (
 		<path
 			{...props}
 			className={classnames(style.stroke, props.className)}
 			style={{ strokeWidth: strokePx * dpx, ...props.style }}
-			d={getEdgesInViewD(getUnitEdges(cells).cellDelimiter, vb, 0, 0, 0.2)}
+			d={getEdgesInViewD(unitEdges.cellDelimiter, vb, 0, 0, 0.2)}
 		/>
 	);
 };
 
-const getBoundingBox = memoize(
-	(cells: Array<[number, number]>): BoundingBox => {
-		let minX = Number.POSITIVE_INFINITY;
-		let minY = Number.POSITIVE_INFINITY;
-		let maxX = Number.NEGATIVE_INFINITY;
-		let maxY = Number.NEGATIVE_INFINITY;
-		for (const [x, y] of cells) {
-			minX = Math.min(minX, x);
-			minY = Math.min(minY, y);
-			maxX = Math.max(maxX, x);
-			maxY = Math.max(maxY, y);
-		}
-		return { minX, minY, maxX, maxY };
-	},
-);
+const getBoundingBox = (cells: Array<Cell>): BoundingBox => {
+	let minX = Number.POSITIVE_INFINITY;
+	let minY = Number.POSITIVE_INFINITY;
+	let maxX = Number.NEGATIVE_INFINITY;
+	let maxY = Number.NEGATIVE_INFINITY;
+	for (const [x, y] of cells) {
+		minX = Math.min(minX, x);
+		minY = Math.min(minY, y);
+		maxX = Math.max(maxX, x);
+		maxY = Math.max(maxY, y);
+	}
+	return { minX, minY, maxX, maxY };
+};
 
-const getUniqueCells = memoize(
-	(cells: Array<[number, number]>): Array<[number, number]> =>
-		cells
-			.filter(
-				(a, i) => i === cells.findIndex((b) => a[0] === b[0] && a[1] === b[1]),
-			)
-			.sort((c1, c2) => {
-				const d = c1[0] + c1[1] - (c2[0] + c2[1]);
-				return d === 0 ? c1[1] - c2[1] : d;
-			}),
-);
+const getUniqueCells = (cells: Array<Cell>): Array<Cell> =>
+	cells
+		.filter((a, i) => i === cells.findIndex((b) => isSameCell(a, b)))
+		.sort((c1, c2) => {
+			const d = c1[0] + c1[1] - (c2[0] + c2[1]);
+			return d === 0 ? c1[1] - c2[1] : d;
+		});
 
-const getAllUnitEdges = memoize((cells: Array<[number, number]>) => [
+const getAllUnitEdges = (cells: Array<Cell>) => [
 	...(function* (): Generator<CellEdge> {
 		const cellEdge = (edge: Edge, x: number, y: number): CellEdge =>
 			Object.assign(edge, { x, y });
@@ -439,9 +432,9 @@ const getAllUnitEdges = memoize((cells: Array<[number, number]>) => [
 			yield cellEdge([x, y + 1, x, y], x, y);
 		}
 	})(),
-]);
+];
 
-const getUnitEdges = memoize((cells: Array<[number, number]>) => {
+const getUnitEdges = (cells: Array<Cell>) => {
 	const allEdges = getAllUnitEdges(cells);
 	const edgesToBeIgnored = new Set<Edge>();
 	const boundary: Array<Edge> = [];
@@ -459,7 +452,7 @@ const getUnitEdges = memoize((cells: Array<[number, number]>) => {
 		}
 	}
 	return { boundary, nonBoundary, cellDelimiter: [...edgesToBeIgnored] };
-});
+};
 
 const getEdgesInViewD = (
 	edges: Array<Edge>,
@@ -527,6 +520,8 @@ const listEdgesInView = function* (
 };
 
 interface NormalizeAnimationAppProps extends SvgProps {
+	/** アプリ識別子 (searchParamsで使います) */
+	appId: string;
 	/** アニメーション1周の長さ(ms)  */
 	durationMs?: number;
 	/** リピートまでの遅延(ms) */
@@ -548,15 +543,46 @@ interface EdgeData {
 }
 
 export const NormalizeAnimationApp = ({
-	cells,
-	durationMs = cells.length * 150,
+	appId,
+	cells: defaultCells,
+	durationMs: defaultDurationMs,
 	repeatDelayMs = 100,
 	initialPhase = 0,
 	autoPlay: defaultAutoPlay,
 	displayTurnType = false,
 	...props
 }: NormalizeAnimationAppProps) => {
-	const [svg, setSvgElement] = useState<SVGSVGElement | null>();
+	getCurrentUrl.defaultSearchParams = useSearchParams();
+	const defaultUniqueCells = useMemo(
+		() => getUniqueCells(defaultCells),
+		[defaultCells],
+	);
+	const [cells, setCells] = useState<Array<Cell> & { initial?: boolean }>(
+		() => {
+			const initialCells: Array<Cell> = [];
+			const encoded = appId && getCurrentUrl().searchParams.get(appId);
+			if (encoded) {
+				// URLにマス目の状態があればそれを使います。
+				try {
+					initialCells.push(...decodeCellList(encoded));
+				} catch (error) {
+					console.error(error);
+				}
+			}
+			if (initialCells.length === 0) {
+				initialCells.push(...defaultUniqueCells);
+			}
+			return Object.assign(initialCells, { initial: true });
+		},
+	);
+	const isDefaultCells = useMemo(
+		() =>
+			cells.length === defaultUniqueCells.length &&
+			cells.every((cell, index) => isSameCell(cell, defaultUniqueCells[index])),
+		[cells, defaultUniqueCells],
+	);
+	const durationMs = defaultDurationMs || cells.length * 150;
+	const [svg, setSvgElement] = useState<SVGSVGElement | null>(null);
 	const isInView = useIsInView(svg, "-20% 0px -40% 0px");
 	const [turnType, setTurnType] = useState<TurnType>(TurnType.Left);
 	const onRepeat = useCallback(
@@ -582,18 +608,41 @@ export const NormalizeAnimationApp = ({
 		}
 		return edgeData;
 	}, [turnType, boundary, consumeLimit]);
-	const partsCount = useMemo(() => {
-		let lastEdgeData: EdgeData = { normalized: [], remainder: [] };
-		for (const result of listNormalizedEdges(boundary, turnType)) {
-			lastEdgeData = result;
+	const [targetCell, setTargetCell] = useState<Cell | null>(null);
+	useTargetCell(svg, setCells, setTargetCell);
+	useEffect(() => {
+		if (!cells.initial && appId) {
+			// マス目の状態をURLに保存します。
+			const url = getCurrentUrl();
+			if (isDefaultCells) {
+				url.searchParams.delete(appId);
+			} else {
+				url.searchParams.set(appId, encodeCellList(cells));
+			}
+			history.replaceState(null, "", url);
 		}
-		return lastEdgeData.normalized.length;
-	}, [turnType, boundary]);
+	}, [appId, cells, isDefaultCells]);
+	const reset = useCallback(
+		() => setCells(defaultUniqueCells),
+		[defaultUniqueCells],
+	);
+	const partsCount = useMemo(
+		() =>
+			[TurnType.Left, TurnType.Right].reduce((count, type) => {
+				let lastEdgeData: EdgeData = { normalized: [], remainder: [] };
+				for (const result of listNormalizedEdges(boundary, type)) {
+					lastEdgeData = result;
+				}
+				return Math.max(count, lastEdgeData.normalized.length);
+			}, 0),
+		[boundary],
+	);
 	const varStyle = { "--gjTotalCount": `${partsCount}` } as CSSProperties;
 	return (
 		<>
 			<Svg
 				{...props}
+				className={style.app}
 				cells={cells}
 				style={varStyle}
 				setSvgElement={setSvgElement}
@@ -601,6 +650,7 @@ export const NormalizeAnimationApp = ({
 				<Grid strokePx={2} style={{ color: "var(--gjGray3)" }} />
 				<Cells style={{ color: "var(--gjGray3)" }} />
 				<NormalizedPath edges={edges} />
+				<TargetCell cell={targetCell} />
 			</Svg>
 			<PhaseControl
 				defaultAutoPlay={defaultAutoPlay}
@@ -610,13 +660,60 @@ export const NormalizeAnimationApp = ({
 				value={phase}
 				onChangeValue={setPhase}
 				onRepeat={onRepeat}
-			/>
+			>
+				{!isDefaultCells && (
+					<button type="button" className={style.reset} onClick={reset}>
+						<span className={classnames(style.icon, IconClass)}>delete</span>
+						<span>リセット</span>
+					</button>
+				)}
+			</PhaseControl>
 			{displayTurnType && (
-				<TurnTypeSelector turnType={turnType} onChangeValue={setTurnType} />
+				<TurnTypeSelector
+					turnType={turnType}
+					appId={appId}
+					onChangeValue={setTurnType}
+				/>
 			)}
 			<DList edges={edges} partsCount={partsCount} />
 		</>
 	);
+};
+
+const useTargetCell = (
+	svg: SVGSVGElement | null,
+	setCells: Dispatch<SetStateAction<Array<Cell>>>,
+	setTargetCell: Dispatch<SetStateAction<Cell | null>>,
+) => {
+	useEffect(() => {
+		const abc = new AbortController();
+		if (svg) {
+			type ClientPosition = { clientX: number; clientY: number };
+			const getCell = (e: ClientPosition): Cell => {
+				const rect = svg.getBoundingClientRect();
+				const vb = svg.viewBox.baseVal;
+				const x = vb.x + ((e.clientX - rect.left) * vb.width) / rect.width;
+				const y = vb.y + ((e.clientY - rect.top) * vb.height) / rect.height;
+				return [Math.floor(x), Math.floor(y)];
+			};
+			const onMove = (event: ClientPosition) => setTargetCell(getCell(event));
+			svg.addEventListener("pointermove", onMove, { signal: abc.signal });
+			const onLeave = () => setTargetCell(null);
+			svg.addEventListener("pointerleave", onLeave, { signal: abc.signal });
+			const onClick = (event: ClientPosition) => {
+				const target = getCell(event);
+				setCells((current) => {
+					const index = current.findIndex((cell) => isSameCell(cell, target));
+					if (index < 0) {
+						return getUniqueCells([...current, target]);
+					}
+					return [...current.slice(0, index), ...current.slice(index + 1)];
+				});
+			};
+			svg.addEventListener("click", onClick, { signal: abc.signal });
+		}
+		return () => abc.abort();
+	}, [svg, setCells, setTargetCell]);
 };
 
 interface PhaseControlProps {
@@ -629,6 +726,30 @@ interface PhaseControlProps {
 	onRepeat?: (repeatCount: number) => void;
 }
 
+const TargetCell = ({ cell }: { cell: Cell | null }) => {
+	const { cells, dpx } = useContext(BoundaryTracingContext);
+	if (!cell) {
+		return null;
+	}
+	const isDeletion = cells.some((c) => isSameCell(c, cell));
+	return (
+		<>
+			<rect
+				x={r(cell[0])}
+				y={r(cell[1])}
+				width={1}
+				height={1}
+				className={style.target}
+				style={{ strokeWidth: 4 * dpx }}
+			>
+				<title>
+					({cell.join(",")})を{isDeletion ? "削除" : "追加"}
+				</title>
+			</rect>
+		</>
+	);
+};
+
 const PhaseControl = ({
 	defaultAutoPlay = true,
 	disabled,
@@ -637,7 +758,8 @@ const PhaseControl = ({
 	value,
 	onChangeValue,
 	onRepeat,
-}: PhaseControlProps) => {
+	children,
+}: PropsWithChildren<PhaseControlProps>) => {
 	const valueRef = useRef(value);
 	valueRef.current = value;
 	const [autoPlay, setAutoPlay] = useState<boolean>(defaultAutoPlay);
@@ -690,24 +812,22 @@ const PhaseControl = ({
 				type="range"
 				onChange={onChange}
 			/>
+			{children}
 		</div>
 	);
 };
 
 interface TurnTypeSelectorProps {
 	turnType: TurnType;
+	appId: string;
 	onChangeValue: (value: TurnType) => void;
 }
 
 const TurnTypeSelector = ({
 	turnType,
+	appId,
 	onChangeValue,
 }: TurnTypeSelectorProps) => {
-	const [div, setDiv] = useState<HTMLDivElement | null>(null);
-	const figureId = useMemo(
-		() => div?.closest("figure")?.querySelector(".fragment-target")?.id || "_",
-		[div],
-	);
 	const onChange = useCallback(
 		({ currentTarget: { value } }: ChangeEvent<HTMLInputElement>) => {
 			for (const type of Object.values(TurnType)) {
@@ -720,16 +840,14 @@ const TurnTypeSelector = ({
 		[onChangeValue],
 	);
 	return (
-		<div className={style.turnType} ref={setDiv}>
+		<div className={style.turnType}>
 			{[...Object.values(TurnType)].map((type) => {
-				const name = `${figureId}TurnType`;
-				const id = `${figureId}TurnType${type}`;
+				const name = `${appId}TurnType`;
 				return (
-					<label key={id}>
+					<label key={`${appId}TurnType${type}`}>
 						<input
 							type="radio"
 							name={name}
-							id={id}
 							value={type}
 							onChange={onChange}
 							checked={type === turnType}

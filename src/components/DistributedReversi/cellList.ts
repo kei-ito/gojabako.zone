@@ -36,7 +36,7 @@ export const decodeCellList = function* (encoded: string): Generator<DRCellId> {
 			pos = endPos;
 			state = !state;
 		}
-		{
+		if (state) {
 			const endPos = w * h;
 			while (pos < endPos) {
 				yield toDRCellId(x + (pos % w), y + Math.floor(pos / w));
