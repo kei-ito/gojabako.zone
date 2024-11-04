@@ -200,10 +200,6 @@
           &:focus {
             opacity: 1;
           }
-
-          &::before {
-            content: attr(href);
-          }
         }
       }
 
@@ -284,7 +280,7 @@
       }
 
       &[data-type='code'] {
-        --gjColorBackground: var(--gjGray2);
+        --gjColorBackground: var(--gjGray1);
         overflow: visible;
 
         & > .hljs {
@@ -305,7 +301,7 @@
           }
 
           & > .hljs-ln {
-            --gjColorText: var(--gjGray5);
+            --gjColorText: var(--gjGray6);
             z-index: 1;
             position: sticky;
             inset-inline-start: 0;

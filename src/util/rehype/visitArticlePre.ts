@@ -39,10 +39,11 @@ export const visitArticlePre = (
 						{},
 						...(isString(caption) ? mdToInlineHast(caption) : []),
 					),
-					createHastElement("a", {
-						href: `#${elementId}`,
-						className: ["fragment-ref"],
-					}),
+					createHastElement(
+						"a",
+						{ href: `#${elementId}`, className: ["fragment-ref"] },
+						`#${elementId}`,
+					),
 				),
 				insertLineNumbers(codeElement, elementId),
 			),

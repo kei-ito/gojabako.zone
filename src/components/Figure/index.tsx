@@ -22,8 +22,9 @@ export const Figure = ({
 	>
 		<figcaption>
 			<span>{caption}</span>
-			{/* biome-ignore lint/a11y/useAnchorContent: 他の<figure>と挙動を合わせるため */}
-			<a href={`#${id}`} className="fragment-ref" />
+			<a href={`#${id}`} className="fragment-ref">
+				#{id}
+			</a>
 		</figcaption>
 		{children}
 	</figure>

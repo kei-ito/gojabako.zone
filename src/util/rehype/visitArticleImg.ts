@@ -66,10 +66,11 @@ export const visitArticleImg = (
 					"figcaption",
 					{},
 					alt,
-					createHastElement("a", {
-						href: `#${id}`,
-						className: ["fragment-ref"],
-					}),
+					createHastElement(
+						"a",
+						{ href: `#${id}`, className: ["fragment-ref"] },
+						`#${id}`,
+					),
 				),
 			);
 		}

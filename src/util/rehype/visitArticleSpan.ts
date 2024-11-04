@@ -25,6 +25,7 @@ export const visitArticleSpan = (
 			const id = `math${++mathCount}`;
 			const katexHtml = findKatexHtml(span);
 			if (katexHtml) {
+				katexHtml.properties.ariaHidden = undefined;
 				addClass(katexHtml, "katex");
 				parent.children.splice(
 					index,
@@ -36,10 +37,11 @@ export const visitArticleSpan = (
 							"figcaption",
 							{},
 							createHastElement("span", {}),
-							createHastElement("a", {
-								href: `#${id}`,
-								className: ["fragment-ref"],
-							}),
+							createHastElement(
+								"a",
+								{ href: `#${id}`, className: ["fragment-ref"] },
+								`#${id}`,
+							),
 						),
 						katexHtml,
 					),
@@ -66,6 +68,7 @@ export const visitArticleSpan = (
 			const katexHtml = findKatexHtml(span);
 			if (katexHtml) {
 				addClass(katexHtml, "katex");
+				katexHtml.properties.ariaHidden = undefined;
 				parent.children.splice(index, 1, katexHtml);
 			}
 			return SKIP;

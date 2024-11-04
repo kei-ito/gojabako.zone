@@ -20,10 +20,11 @@ export const visitArticleTable = (
 					"figcaption",
 					{},
 					createHastElement("span", {}),
-					createHastElement("a", {
-						href: `#${id}`,
-						className: ["fragment-ref"],
-					}),
+					createHastElement(
+						"a",
+						{ href: `#${id}`, className: ["fragment-ref"] },
+						`#${id}`,
+					),
 				),
 				e,
 			),

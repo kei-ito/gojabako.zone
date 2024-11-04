@@ -38,10 +38,11 @@ export const embedYouTube = async function* (
 									data.title,
 								)
 							: createHastElement("span", {}),
-						createHastElement("a", {
-							href: `#${id}`,
-							className: ["fragment-ref"],
-						}),
+						createHastElement(
+							"a",
+							{ href: `#${id}`, className: ["fragment-ref"] },
+							`#${id}`,
+						),
 					),
 					iframe,
 				);
