@@ -22,8 +22,8 @@ export const decodeCellList = function* (encoded: string): Generator<Cell> {
 			wh[i] = value;
 		}
 		const [w, h] = wh;
-		const x = Math.round(w / -2);
-		const y = Math.round(h / -2);
+		const x = 0;
+		const y = 0;
 		let state = true;
 		let pos = 0;
 		for (const length of decode(matched[3])) {
@@ -37,7 +37,7 @@ export const decodeCellList = function* (encoded: string): Generator<Cell> {
 			pos = endPos;
 			state = !state;
 		}
-		{
+		if (state) {
 			const endPos = w * h;
 			while (pos < endPos) {
 				yield [x + (pos % w), y + Math.floor(pos / w)];
