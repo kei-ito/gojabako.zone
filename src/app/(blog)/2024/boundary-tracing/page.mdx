@@ -1,6 +1,7 @@
 export const metadata = {
   title: '塗られたマス目の境界を描く',
 };
+import { Suspense } from "react";
 import { Figure } from '../../../../components/Figure';
 import * as BoundaryTracing from './App';
 import { cells2024, cellsWithHoles } from './constants';
@@ -88,13 +89,17 @@ const getBoundaryEdgeList = (cellList: Array<Point>): Array<Edge> => {
 これで終わりでもいいのですが、つなげられる矢印はつなぎましょう。`<path>`の`d`は短い方が気持ちがいいですよね。
 
 <Figure id="svg5" type="image" caption="矢印を連結します。">
-  <BoundaryTracing.NormalizeAnimationApp appId="p1" cells={cells2024} />
+  <Suspense>
+    <BoundaryTracing.NormalizeAnimationApp appId="p1" cells={cells2024} />
+  </Suspense>
 </Figure>
 
 つなげる処理は境界の矢印リストから1つ取り出して、その終点が始点の矢印を探すようにしました。左折と右折の両方が見つかる場合にどちらを優先するかはあらかじめ決めておきます。この決め方によって、角が接触している場合のつながり方が変わります。
 
 <Figure id="svg6" type="image" caption="左折優先と右折優先でつながり方が変わります。クリックで塗りを編集できます。">
-  <BoundaryTracing.NormalizeAnimationApp appId="p2" cells={cellsWithHoles} displayTurnType/>
+  <Suspense>
+    <BoundaryTracing.NormalizeAnimationApp appId="p2" cells={cellsWithHoles} displayTurnType/>
+  </Suspense>
 </Figure>
 
 以上です。
