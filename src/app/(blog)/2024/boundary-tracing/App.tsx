@@ -626,18 +626,20 @@ export const NormalizeAnimationApp = ({
 		() => setCells(defaultUniqueCells),
 		[defaultUniqueCells],
 	);
-	const partsCount = useMemo(
-		() =>
-			[TurnType.Left, TurnType.Right].reduce((count, type) => {
-				let lastEdgeData: EdgeData = { normalized: [], remainder: [] };
-				for (const result of listNormalizedEdges(boundary, type)) {
-					lastEdgeData = result;
-				}
-				return Math.max(count, lastEdgeData.normalized.length);
-			}, 0),
-		[boundary],
-	);
-	const varStyle = { "--gjTotalCount": `${partsCount}` } as CSSProperties;
+	const partsCount = useMemo(() => {
+		const getCount = (type: TurnType) => {
+			let lastEdgeData: EdgeData = { normalized: [], remainder: [] };
+			for (const result of listNormalizedEdges(boundary, type)) {
+				lastEdgeData = result;
+			}
+			return lastEdgeData.normalized.length;
+		};
+		return {
+			[TurnType.Left]: getCount(TurnType.Left),
+			[TurnType.Right]: getCount(TurnType.Right),
+		};
+	}, [boundary]);
+	const varStyle = { "--gjTotalCount": partsCount[turnType] } as CSSProperties;
 	return (
 		<>
 			<Svg
@@ -675,7 +677,11 @@ export const NormalizeAnimationApp = ({
 					onChangeValue={setTurnType}
 				/>
 			)}
-			<DList edges={edges} partsCount={partsCount} />
+			<DList
+				edges={edges}
+				partsCount={partsCount[turnType]}
+				maxPartsCount={Math.max(...Object.values(partsCount))}
+			/>
 		</>
 	);
 };
@@ -957,9 +963,10 @@ const listNormalizedEdges = function* (
 interface DListProps {
 	edges: EdgeData;
 	partsCount: number;
+	maxPartsCount: number;
 }
 
-const DList = ({ edges, partsCount }: DListProps) => {
+const DList = ({ edges, partsCount, maxPartsCount }: DListProps) => {
 	const dList = useMemo(
 		() => [
 			...(function* () {
@@ -972,12 +979,12 @@ const DList = ({ edges, partsCount }: DListProps) => {
 				for (const d of listEdgesD(edges.remainder)) {
 					yield { d, key: count++, remainder: true };
 				}
-				while (count <= partsCount) {
+				while (count <= maxPartsCount) {
 					yield { d: "", key: count++ };
 				}
 			})(),
 		],
-		[edges, partsCount],
+		[edges, maxPartsCount],
 	);
 	const varStyle = { "--gjTotalCount": `${partsCount}` } as CSSProperties;
 	return (
