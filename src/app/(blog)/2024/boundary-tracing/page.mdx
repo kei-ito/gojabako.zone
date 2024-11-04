@@ -88,13 +88,13 @@ const getBoundaryEdgeList = (cellList: Array<Point>): Array<Edge> => {
 これで終わりでもいいのですが、つなげられる矢印はつなぎましょう。`<path>`の`d`は短い方が気持ちがいいですよね。
 
 <Figure id="svg5" type="image" caption="矢印を連結します。">
-  <BoundaryTracing.NormalizeAnimationApp cells={cells2024} />
+  <BoundaryTracing.NormalizeAnimationApp appId="p1" cells={cells2024} />
 </Figure>
 
 つなげる処理は境界の矢印リストから1つ取り出して、その終点が始点の矢印を探すようにしました。左折と右折の両方が見つかる場合にどちらを優先するかはあらかじめ決めておきます。この決め方によって、角が接触している場合のつながり方が変わります。
 
 <Figure id="svg6" type="image" caption="下のボタンで左折優先と右折優先を切り替えられます。つながり方が変わります。">
-  <BoundaryTracing.NormalizeAnimationApp cells={cellsWithHoles} displayTurnType/>
+  <BoundaryTracing.NormalizeAnimationApp appId="p2" cells={cellsWithHoles} displayTurnType/>
 </Figure>
 
 以上です。

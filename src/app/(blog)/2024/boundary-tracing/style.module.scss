@@ -71,7 +71,7 @@
 
   &>.badge {
     justify-self: stretch;
-    inline-size: 1em;
+    inline-size: 1.1em;
     block-size: 100%;
     border-radius: var(--gjBorderRadius);
     border-style: solid;
@@ -109,4 +109,28 @@
 
 .indexColor {
   color: oklch(60% 100% calc(360deg * (var(--gjIndex) + 1) / var(--gjTotalCount)));
+}
+
+button.reset {
+  position: absolute;
+  inset-block-end: 100%;
+  inset-inline-end: 0;
+  display: grid;
+  grid-template-columns: max-content max-content;
+  align-items: center;
+  inline-size: auto;
+  padding-inline: 0.1em 0.2em;
+  font-size: 80%;
+  font-weight: bold;
+  background-color: var(--gjColorBackground);
+  border-style: solid;
+  border-radius: var(--gjBorderRadius);
+
+  &>.icon {
+    font-size: 150%;
+  }
+
+  @media print {
+    display: none;
+  }
 }

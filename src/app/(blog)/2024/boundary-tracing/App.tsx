@@ -1,5 +1,6 @@
 "use client";
 import type { ValueOf } from "@nlib/typing";
+import { useSearchParams } from "next/navigation";
 import {
 	type CSSProperties,
 	type ChangeEvent,
@@ -16,10 +17,13 @@ import {
 } from "react";
 import { useIsInView } from "../../../../components/use/IsInView";
 import { useRect } from "../../../../components/use/Rect.ts";
+import { decodeCellList, encodeCellList } from "../../../../util/cellList";
 import { clamp } from "../../../../util/clamp";
 import { IconClass, classnames } from "../../../../util/classnames.ts";
+import { getCurrentUrl } from "../../../../util/getCurrentUrl";
 import * as style from "./style.module.scss";
 
+type Cell = [number, number];
 type Edge = [number, number, number, number];
 type CellEdge = Edge & { x: number; y: number };
 const Direction = { Right: 0, Down: 1, Left: 2, Up: 3 } as const;
@@ -32,7 +36,9 @@ interface BoundingBox {
 	maxY: number;
 }
 
-const isSameEdge = (a: Edge, b: Edge) => a.every((v, i) => v === b[i]);
+const isSameCell = (a: Cell, b: Cell) => a[0] === b[0] && a[1] === b[1];
+const isSameEdge = (a: Edge, b: Edge) =>
+	a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
 const getOppositeEdge = (e: Edge): Edge => [e[2], e[3], e[0], e[1]];
 const getDirection = (e: Edge): Direction => {
 	const dx = e[2] - e[0];
@@ -124,7 +130,7 @@ interface BoundaryTracingProps {
 	/** Y方向の余白 (格子座標系での距離) */
 	py: number;
 	/** 塗りのあるマス目のリスト */
-	cells: Array<[number, number]>;
+	cells: Array<Cell>;
 }
 
 interface BoundaryTracingContext extends BoundaryTracingProps {
@@ -150,7 +156,7 @@ const BoundaryTracingContext = createContext<BoundaryTracingContext>({
 
 interface SvgProps extends Partial<BoundaryTracingProps> {
 	title?: string;
-	cells: Array<[number, number]>;
+	cells: Array<Cell>;
 	setSvgElement?: (svg: SVGSVGElement) => void;
 }
 
@@ -180,8 +186,8 @@ export const Svg = ({
 		if (givenViewBox) {
 			return [...parseViewBox(givenViewBox)] as ViewBox;
 		}
-		return [0.5 - px, 0.5 - py, baseWidth, sizeY + py * 2];
-	}, [givenViewBox, baseWidth, sizeY, px, py]);
+		return [bb.minX + 0.5 - px, bb.minY + 0.5 - py, baseWidth, sizeY + py * 2];
+	}, [bb, givenViewBox, baseWidth, sizeY, px, py]);
 	const [vMinX, vMinY, vSizeX, vSizeY] = viewBox;
 	const vb = getBoundingBox([
 		[vMinX, vMinY],
@@ -391,7 +397,7 @@ export const CellDelimiters = ({
 	);
 };
 
-const getBoundingBox = (cells: Array<[number, number]>): BoundingBox => {
+const getBoundingBox = (cells: Array<Cell>): BoundingBox => {
 	let minX = Number.POSITIVE_INFINITY;
 	let minY = Number.POSITIVE_INFINITY;
 	let maxX = Number.NEGATIVE_INFINITY;
@@ -405,19 +411,15 @@ const getBoundingBox = (cells: Array<[number, number]>): BoundingBox => {
 	return { minX, minY, maxX, maxY };
 };
 
-const getUniqueCells = (
-	cells: Array<[number, number]>,
-): Array<[number, number]> =>
+const getUniqueCells = (cells: Array<Cell>): Array<Cell> =>
 	cells
-		.filter(
-			(a, i) => i === cells.findIndex((b) => a[0] === b[0] && a[1] === b[1]),
-		)
+		.filter((a, i) => i === cells.findIndex((b) => isSameCell(a, b)))
 		.sort((c1, c2) => {
 			const d = c1[0] + c1[1] - (c2[0] + c2[1]);
 			return d === 0 ? c1[1] - c2[1] : d;
 		});
 
-const getAllUnitEdges = (cells: Array<[number, number]>) => [
+const getAllUnitEdges = (cells: Array<Cell>) => [
 	...(function* (): Generator<CellEdge> {
 		const cellEdge = (edge: Edge, x: number, y: number): CellEdge =>
 			Object.assign(edge, { x, y });
@@ -430,7 +432,7 @@ const getAllUnitEdges = (cells: Array<[number, number]>) => [
 	})(),
 ];
 
-const getUnitEdges = (cells: Array<[number, number]>) => {
+const getUnitEdges = (cells: Array<Cell>) => {
 	const allEdges = getAllUnitEdges(cells);
 	const edgesToBeIgnored = new Set<Edge>();
 	const boundary: Array<Edge> = [];
@@ -516,6 +518,8 @@ const listEdgesInView = function* (
 };
 
 interface NormalizeAnimationAppProps extends SvgProps {
+	/** アプリ識別子 (searchParamsで使います) */
+	appId: string;
 	/** アニメーション1周の長さ(ms)  */
 	durationMs?: number;
 	/** リピートまでの遅延(ms) */
@@ -537,14 +541,45 @@ interface EdgeData {
 }
 
 export const NormalizeAnimationApp = ({
-	cells,
-	durationMs = cells.length * 150,
+	appId,
+	cells: defaultCells,
+	durationMs: defaultDurationMs,
 	repeatDelayMs = 100,
 	initialPhase = 0,
 	autoPlay: defaultAutoPlay,
 	displayTurnType = false,
 	...props
 }: NormalizeAnimationAppProps) => {
+	getCurrentUrl.defaultSearchParams = useSearchParams();
+	const defaultUniqueCells = useMemo(
+		() => getUniqueCells(defaultCells),
+		[defaultCells],
+	);
+	const [cells, setCells] = useState<Array<Cell> & { initial?: boolean }>(
+		() => {
+			const initialCells: Array<Cell> = [];
+			const encoded = appId && getCurrentUrl().searchParams.get(appId);
+			if (encoded) {
+				// URLにマス目の状態があればそれを使います。
+				try {
+					initialCells.push(...decodeCellList(encoded));
+				} catch (error) {
+					console.error(error);
+				}
+			}
+			if (initialCells.length === 0) {
+				initialCells.push(...defaultUniqueCells);
+			}
+			return Object.assign(initialCells, { initial: true });
+		},
+	);
+	const isDefaultCells = useMemo(
+		() =>
+			cells.length === defaultUniqueCells.length &&
+			cells.every((cell, index) => isSameCell(cell, defaultUniqueCells[index])),
+		[cells, defaultUniqueCells],
+	);
+	const durationMs = defaultDurationMs || cells.length * 150;
 	const [svg, setSvgElement] = useState<SVGSVGElement | null>();
 	const isInView = useIsInView(svg, "-20% 0px -40% 0px");
 	const [turnType, setTurnType] = useState<TurnType>(TurnType.Left);
@@ -579,6 +614,49 @@ export const NormalizeAnimationApp = ({
 		return lastEdgeData.normalized.length;
 	}, [turnType, boundary]);
 	const varStyle = { "--gjTotalCount": `${partsCount}` } as CSSProperties;
+	useEffect(() => {
+		const abc = new AbortController();
+		if (svg) {
+			const getCell = (clientX: number, clientY: number): Cell => {
+				const rect = svg.getBoundingClientRect();
+				const vb = svg.viewBox.baseVal;
+				const x = vb.x + ((clientX - rect.left) * vb.width) / rect.width;
+				const y = vb.y + ((clientY - rect.top) * vb.height) / rect.height;
+				return [Math.floor(x), Math.floor(y)];
+			};
+			svg.addEventListener(
+				"click",
+				(event) => {
+					const target = getCell(event.clientX, event.clientY);
+					setCells((current) => {
+						const index = current.findIndex((cell) => isSameCell(cell, target));
+						if (index < 0) {
+							return getUniqueCells([...current, target]);
+						}
+						return [...current.slice(0, index), ...current.slice(index + 1)];
+					});
+				},
+				{ signal: abc.signal },
+			);
+		}
+		return () => abc.abort();
+	}, [svg]);
+	useEffect(() => {
+		if (!cells.initial && appId) {
+			// マス目の状態をURLに保存します。
+			const url = getCurrentUrl();
+			if (isDefaultCells) {
+				url.searchParams.delete(appId);
+			} else {
+				url.searchParams.set(appId, encodeCellList(cells));
+			}
+			history.replaceState(null, "", url);
+		}
+	}, [appId, cells, isDefaultCells]);
+	const reset = useCallback(
+		() => setCells(defaultUniqueCells),
+		[defaultUniqueCells],
+	);
 	return (
 		<>
 			<Svg
@@ -599,9 +677,20 @@ export const NormalizeAnimationApp = ({
 				value={phase}
 				onChangeValue={setPhase}
 				onRepeat={onRepeat}
-			/>
+			>
+				{!isDefaultCells && (
+					<button type="button" className={style.reset} onClick={reset}>
+						<span className={classnames(style.icon, IconClass)}>delete</span>
+						<span>リセット</span>
+					</button>
+				)}
+			</PhaseControl>
 			{displayTurnType && (
-				<TurnTypeSelector turnType={turnType} onChangeValue={setTurnType} />
+				<TurnTypeSelector
+					turnType={turnType}
+					appId={appId}
+					onChangeValue={setTurnType}
+				/>
 			)}
 			<DList edges={edges} partsCount={partsCount} />
 		</>
@@ -626,7 +715,8 @@ const PhaseControl = ({
 	value,
 	onChangeValue,
 	onRepeat,
-}: PhaseControlProps) => {
+	children,
+}: PropsWithChildren<PhaseControlProps>) => {
 	const valueRef = useRef(value);
 	valueRef.current = value;
 	const [autoPlay, setAutoPlay] = useState<boolean>(defaultAutoPlay);
@@ -679,24 +769,22 @@ const PhaseControl = ({
 				type="range"
 				onChange={onChange}
 			/>
+			{children}
 		</div>
 	);
 };
 
 interface TurnTypeSelectorProps {
 	turnType: TurnType;
+	appId: string;
 	onChangeValue: (value: TurnType) => void;
 }
 
 const TurnTypeSelector = ({
 	turnType,
+	appId,
 	onChangeValue,
 }: TurnTypeSelectorProps) => {
-	const [div, setDiv] = useState<HTMLDivElement | null>(null);
-	const figureId = useMemo(
-		() => div?.closest("figure")?.querySelector(".fragment-target")?.id || "_",
-		[div],
-	);
 	const onChange = useCallback(
 		({ currentTarget: { value } }: ChangeEvent<HTMLInputElement>) => {
 			for (const type of Object.values(TurnType)) {
@@ -709,16 +797,14 @@ const TurnTypeSelector = ({
 		[onChangeValue],
 	);
 	return (
-		<div className={style.turnType} ref={setDiv}>
+		<div className={style.turnType}>
 			{[...Object.values(TurnType)].map((type) => {
-				const name = `${figureId}TurnType`;
-				const id = `${figureId}TurnType${type}`;
+				const name = `${appId}TurnType`;
 				return (
-					<label key={id}>
+					<label key={`${appId}TurnType${type}`}>
 						<input
 							type="radio"
 							name={name}
-							id={id}
 							value={type}
 							onChange={onChange}
 							checked={type === turnType}
