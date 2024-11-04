@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { noop } from "../../util/noop";
 
-export const useIsInView = (element: Element | null | undefined): boolean => {
+export const useIsInView = (
+	element: Element | null | undefined,
+	rootMargin?: string,
+): boolean => {
 	const [isIntersecting, setIsIntersecting] = useState<boolean>(false);
 	useEffect(() => {
 		if (!element) {
@@ -13,12 +16,12 @@ export const useIsInView = (element: Element | null | undefined): boolean => {
 					setIsIntersecting(entry.isIntersecting);
 				}
 			},
-			{ root: null },
+			{ root: null, rootMargin },
 		);
 		observer.observe(element);
 		return () => {
 			observer.disconnect();
 		};
-	}, [element]);
+	}, [element, rootMargin]);
 	return isIntersecting;
 };
