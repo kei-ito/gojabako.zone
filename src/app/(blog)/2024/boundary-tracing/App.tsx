@@ -606,14 +606,6 @@ export const NormalizeAnimationApp = ({
 		}
 		return edgeData;
 	}, [turnType, boundary, consumeLimit]);
-	const partsCount = useMemo(() => {
-		let lastEdgeData: EdgeData = { normalized: [], remainder: [] };
-		for (const result of listNormalizedEdges(boundary, turnType)) {
-			lastEdgeData = result;
-		}
-		return lastEdgeData.normalized.length;
-	}, [turnType, boundary]);
-	const varStyle = { "--gjTotalCount": `${partsCount}` } as CSSProperties;
 	useEffect(() => {
 		const abc = new AbortController();
 		if (svg) {
@@ -657,6 +649,18 @@ export const NormalizeAnimationApp = ({
 		() => setCells(defaultUniqueCells),
 		[defaultUniqueCells],
 	);
+	const partsCount = useMemo(
+		() =>
+			[TurnType.Left, TurnType.Right].reduce((count, type) => {
+				let lastEdgeData: EdgeData = { normalized: [], remainder: [] };
+				for (const result of listNormalizedEdges(boundary, type)) {
+					lastEdgeData = result;
+				}
+				return Math.max(count, lastEdgeData.normalized.length);
+			}, 0),
+		[boundary],
+	);
+	const varStyle = { "--gjTotalCount": `${partsCount}` } as CSSProperties;
 	return (
 		<>
 			<Svg
