@@ -804,6 +804,7 @@ const PhaseControl = ({
 		<div className={style.control}>
 			<button
 				type="button"
+				title="再生/一時停止"
 				className={IconClass}
 				value="-"
 				onClick={onClickPlay}
@@ -811,6 +812,7 @@ const PhaseControl = ({
 				{isPlaying ? "pause_circle" : "play_circle"}
 			</button>
 			<input
+				title="アニメーションの進行度"
 				min={0}
 				max={1}
 				step={0.001}

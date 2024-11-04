@@ -8,10 +8,18 @@ import { site } from "../../util/site.ts";
 import { SiteMap } from "../SiteMap";
 import * as style from "./style.module.scss";
 
-const links: Array<[FC, string]> = [
-	[IconRss, "/feed.atom"],
-	[IconGitHub, "https://github.com/gjbkz"],
-	[IconXTwitter, "https://x.com/gjbkz"],
+const links: Array<{ Icon: FC; href: string; title: string }> = [
+	{ Icon: IconRss, href: "/feed.atom", title: "更新情報 (Atom)" },
+	{
+		Icon: IconGitHub,
+		href: "https://github.com/gjbkz",
+		title: "GitHub @gjbkz",
+	},
+	{
+		Icon: IconXTwitter,
+		href: "https://x.com/gjbkz",
+		title: "Twitter/X @gjbkz",
+	},
 ];
 
 export const SiteFooter = (props: HTMLAttributes<HTMLElement>) => (
@@ -23,8 +31,8 @@ export const SiteFooter = (props: HTMLAttributes<HTMLElement>) => (
 			<div>
 				© 2013- <Link href="/author">{site.author.name}</Link>
 				<div className={style.links}>
-					{links.map(([Icon, href]) => (
-						<Link key={href} href={href} target="_blank">
+					{links.map(({ Icon, href, title }) => (
+						<Link key={href} href={href} title={title} target="_blank">
 							<Icon />
 						</Link>
 					))}

@@ -34,11 +34,11 @@
   display: grid;
   grid-template-columns: max-content 1fr;
   column-gap: 0.5em;
+  margin-block-start: 0.5em;
 
   & > button {
     font-size: 200%;
   }
-
 }
 
 .turnType {
@@ -47,15 +47,21 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  column-gap: 0.5em;
+  column-gap: 1em;
   padding-block: 0.25em;
 
   &>label {
     display: grid;
     grid-auto-flow: column;
     align-items: center;
-    column-gap: 0.25em;
+    column-gap: 0.3em;
     line-height: 1;
+
+    &>input {
+      --gjSize: 1.25em;
+      inline-size: var(--gjSize);
+      block-size: var(--gjSize);
+    }
   }
 }
 

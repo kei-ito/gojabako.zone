@@ -287,6 +287,7 @@ const CubicBezierAppConfig = () => {
 	return (
 		<>
 			<input
+				title="tの値"
 				type="range"
 				min="0"
 				max="1"
@@ -695,6 +696,7 @@ const TimingFunctionAppConfig = () => {
 	return (
 		<>
 			<LogSlider
+				title="Tの値"
 				min={200}
 				max={5000}
 				defaultValue={u}
@@ -703,7 +705,13 @@ const TimingFunctionAppConfig = () => {
 			<div className="katex">
 				<span className="mord mathnormal">T</span> = {u.toFixed(0)} ms
 			</div>
-			<LogSlider min={2} max={50} defaultValue={t} onChangeValue={onChangeT} />
+			<LogSlider
+				title="Nの値"
+				min={2}
+				max={50}
+				defaultValue={t}
+				onChangeValue={onChangeT}
+			/>
 			<div className="katex">
 				<span className="mord mathnormal">N</span> = {t.toFixed(0)}
 			</div>
