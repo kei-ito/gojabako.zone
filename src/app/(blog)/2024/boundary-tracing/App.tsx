@@ -18,7 +18,6 @@ import { useIsInView } from "../../../../components/use/IsInView";
 import { useRect } from "../../../../components/use/Rect.ts";
 import { clamp } from "../../../../util/clamp";
 import { IconClass, classnames } from "../../../../util/classnames.ts";
-import { memoize } from "../../../../util/memoize.ts";
 import * as style from "./style.module.scss";
 
 type Edge = [number, number, number, number];
@@ -172,7 +171,7 @@ export const Svg = ({
 		}
 	}, [svg, setSvgElement]);
 	const rect = useRect(svg);
-	const cells = getUniqueCells(rawCells);
+	const cells = useMemo(() => getUniqueCells(rawCells), [rawCells]);
 	const bb = getBoundingBox(cells);
 	const sizeX = bb.maxX - bb.minX;
 	const sizeY = bb.maxY - bb.minY;
@@ -294,8 +293,9 @@ export const Boundary = ({
 	...props
 }: PathProps & SVGAttributes<SVGPathElement>) => {
 	const { cells, dpx } = useContext(BoundaryTracingContext);
+	const unitEdges = useMemo(() => getUnitEdges(cells), [cells]);
 	let d = "";
-	for (const [x1, y1, x2, y2] of getUnitEdges(cells).boundary) {
+	for (const [x1, y1, x2, y2] of unitEdges.boundary) {
 		d += getLineD(x1, y1, x2, y2);
 	}
 	return (
@@ -322,7 +322,7 @@ export const AllEdges = ({
 	...props
 }: AllEdgesProps & SVGAttributes<SVGPathElement>) => {
 	const { cells, dpx, vb } = useContext(BoundaryTracingContext);
-	const allEdges = getAllUnitEdges(cells);
+	const allEdges = useMemo(() => getAllUnitEdges(cells), [cells]);
 	const edges = useMemo(
 		() =>
 			allEdges.filter(
@@ -347,18 +347,13 @@ export const BoundaryEdges = ({
 }: EdgeProps & SVGAttributes<SVGPathElement>) => {
 	const { cells, dpx, vb } = useContext(BoundaryTracingContext);
 	const arrowSize = dpx * 8;
+	const unitEdges = useMemo(() => getUnitEdges(cells), [cells]);
 	return (
 		<path
 			{...props}
 			className={classnames(style.stroke, props.className)}
 			style={{ strokeWidth: strokePx * dpx, ...props.style }}
-			d={getEdgesInViewD(
-				getUnitEdges(cells).boundary,
-				vb,
-				arrowSize,
-				0.1,
-				0.15,
-			)}
+			d={getEdgesInViewD(unitEdges.boundary, vb, arrowSize, 0.1, 0.15)}
 		/>
 	);
 };
@@ -369,18 +364,13 @@ export const NonBoundaryEdges = ({
 }: EdgeProps & SVGAttributes<SVGPathElement>) => {
 	const { cells, dpx, vb } = useContext(BoundaryTracingContext);
 	const arrowSize = dpx * 8;
+	const unitEdges = useMemo(() => getUnitEdges(cells), [cells]);
 	return (
 		<path
 			{...props}
 			className={classnames(style.stroke, props.className)}
 			style={{ strokeWidth: strokePx * dpx, ...props.style }}
-			d={getEdgesInViewD(
-				getUnitEdges(cells).nonBoundary,
-				vb,
-				arrowSize,
-				0.1,
-				0.15,
-			)}
+			d={getEdgesInViewD(unitEdges.nonBoundary, vb, arrowSize, 0.1, 0.15)}
 		/>
 	);
 };
@@ -390,45 +380,44 @@ export const CellDelimiters = ({
 	...props
 }: EdgeProps & SVGAttributes<SVGPathElement>) => {
 	const { cells, dpx, vb } = useContext(BoundaryTracingContext);
+	const unitEdges = useMemo(() => getUnitEdges(cells), [cells]);
 	return (
 		<path
 			{...props}
 			className={classnames(style.stroke, props.className)}
 			style={{ strokeWidth: strokePx * dpx, ...props.style }}
-			d={getEdgesInViewD(getUnitEdges(cells).cellDelimiter, vb, 0, 0, 0.2)}
+			d={getEdgesInViewD(unitEdges.cellDelimiter, vb, 0, 0, 0.2)}
 		/>
 	);
 };
 
-const getBoundingBox = memoize(
-	(cells: Array<[number, number]>): BoundingBox => {
-		let minX = Number.POSITIVE_INFINITY;
-		let minY = Number.POSITIVE_INFINITY;
-		let maxX = Number.NEGATIVE_INFINITY;
-		let maxY = Number.NEGATIVE_INFINITY;
-		for (const [x, y] of cells) {
-			minX = Math.min(minX, x);
-			minY = Math.min(minY, y);
-			maxX = Math.max(maxX, x);
-			maxY = Math.max(maxY, y);
-		}
-		return { minX, minY, maxX, maxY };
-	},
-);
+const getBoundingBox = (cells: Array<[number, number]>): BoundingBox => {
+	let minX = Number.POSITIVE_INFINITY;
+	let minY = Number.POSITIVE_INFINITY;
+	let maxX = Number.NEGATIVE_INFINITY;
+	let maxY = Number.NEGATIVE_INFINITY;
+	for (const [x, y] of cells) {
+		minX = Math.min(minX, x);
+		minY = Math.min(minY, y);
+		maxX = Math.max(maxX, x);
+		maxY = Math.max(maxY, y);
+	}
+	return { minX, minY, maxX, maxY };
+};
 
-const getUniqueCells = memoize(
-	(cells: Array<[number, number]>): Array<[number, number]> =>
-		cells
-			.filter(
-				(a, i) => i === cells.findIndex((b) => a[0] === b[0] && a[1] === b[1]),
-			)
-			.sort((c1, c2) => {
-				const d = c1[0] + c1[1] - (c2[0] + c2[1]);
-				return d === 0 ? c1[1] - c2[1] : d;
-			}),
-);
+const getUniqueCells = (
+	cells: Array<[number, number]>,
+): Array<[number, number]> =>
+	cells
+		.filter(
+			(a, i) => i === cells.findIndex((b) => a[0] === b[0] && a[1] === b[1]),
+		)
+		.sort((c1, c2) => {
+			const d = c1[0] + c1[1] - (c2[0] + c2[1]);
+			return d === 0 ? c1[1] - c2[1] : d;
+		});
 
-const getAllUnitEdges = memoize((cells: Array<[number, number]>) => [
+const getAllUnitEdges = (cells: Array<[number, number]>) => [
 	...(function* (): Generator<CellEdge> {
 		const cellEdge = (edge: Edge, x: number, y: number): CellEdge =>
 			Object.assign(edge, { x, y });
@@ -439,9 +428,9 @@ const getAllUnitEdges = memoize((cells: Array<[number, number]>) => [
 			yield cellEdge([x, y + 1, x, y], x, y);
 		}
 	})(),
-]);
+];
 
-const getUnitEdges = memoize((cells: Array<[number, number]>) => {
+const getUnitEdges = (cells: Array<[number, number]>) => {
 	const allEdges = getAllUnitEdges(cells);
 	const edgesToBeIgnored = new Set<Edge>();
 	const boundary: Array<Edge> = [];
@@ -459,7 +448,7 @@ const getUnitEdges = memoize((cells: Array<[number, number]>) => {
 		}
 	}
 	return { boundary, nonBoundary, cellDelimiter: [...edgesToBeIgnored] };
-});
+};
 
 const getEdgesInViewD = (
 	edges: Array<Edge>,
