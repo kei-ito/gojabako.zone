@@ -152,6 +152,7 @@ const BoundaryTracingContext = createContext<BoundaryTracingContext>({
 interface SvgProps extends Partial<BoundaryTracingProps> {
 	title?: string;
 	cells: Array<[number, number]>;
+	setSvgElement?: (svg: SVGSVGElement) => void;
 }
 
 export const Svg = ({
@@ -160,10 +161,16 @@ export const Svg = ({
 	cells: rawCells = [],
 	title = "BoundaryTracing",
 	viewBox: givenViewBox,
+	setSvgElement,
 	children,
 	...props
 }: PropsWithChildren<SvgProps & SVGAttributes<SVGSVGElement>>) => {
 	const [svg, setSvg] = useState<SVGSVGElement | null>();
+	useEffect(() => {
+		if (setSvgElement && svg) {
+			setSvgElement(svg);
+		}
+	}, [svg, setSvgElement]);
 	const rect = useRect(svg);
 	const cells = getUniqueCells(rawCells);
 	const bb = getBoundingBox(cells);
@@ -524,13 +531,15 @@ interface NormalizeAnimationAppProps extends SvgProps {
 	durationMs?: number;
 	/** リピートまでの遅延(ms) */
 	repeatDelayMs?: number;
+	/** フェーズの初期値 (範囲:[0,1]) */
+	initialPhase?: number;
 	/** 自動再生する場合にtrue */
 	autoPlay?: boolean;
 	/** 方向パターン選択肢を表示する場合にtrue */
 	displayTurnType?: boolean;
 }
 
-const TurnType = { Left: 0, Right: 1 } as const;
+const TurnType = { Left: "左折優先", Right: "右折優先" } as const;
 type TurnType = ValueOf<typeof TurnType>;
 
 interface EdgeData {
@@ -542,49 +551,22 @@ export const NormalizeAnimationApp = ({
 	cells,
 	durationMs = cells.length * 150,
 	repeatDelayMs = 100,
-	autoPlay: initialAutoPlay = true,
+	initialPhase = 0,
+	autoPlay: defaultAutoPlay,
 	displayTurnType = false,
 	...props
 }: NormalizeAnimationAppProps) => {
+	const [svg, setSvgElement] = useState<SVGSVGElement | null>();
+	const isInView = useIsInView(svg, "-20% 0px -40% 0px");
 	const [turnType, setTurnType] = useState<TurnType>(TurnType.Left);
-	const [pre, setPre] = useState<HTMLPreElement | null>();
-	const figureId = useMemo(() => {
-		return pre?.closest("figure")?.querySelector(".fragment-target")?.id || "_";
-	}, [pre]);
-	const [phase, setPhase] = useState<number>(0);
-	const [autoPlay, setAutoPlay] = useState<boolean>(initialAutoPlay);
-	const phraseRef = useRef(phase);
-	phraseRef.current = phase;
-	const onChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-		setPhase(Number.parseFloat(event.currentTarget.value));
-		setAutoPlay(false);
-	}, []);
-	const isInView = useIsInView(pre);
-	const isPlaying = autoPlay && isInView;
-	useEffect(() => {
-		let frameId = 0;
-		if (isPlaying) {
-			frameId = requestAnimationFrame((t0) => {
-				const totalMs = repeatDelayMs + durationMs;
-				const startedAt = t0 - phraseRef.current * durationMs;
-				let previousP = 0;
-				const animate = (timestamp: number) => {
-					const p = ((timestamp - startedAt) % totalMs) / durationMs;
-					if (p < previousP) {
-						setTurnType((v) =>
-							v === TurnType.Left ? TurnType.Right : TurnType.Left,
-						);
-					}
-					setPhase(clamp(p, 0, 1));
-					frameId = requestAnimationFrame(animate);
-					previousP = p;
-				};
-				frameId = requestAnimationFrame(animate);
-			});
-		}
-		return () => cancelAnimationFrame(frameId);
-	}, [isPlaying, durationMs, repeatDelayMs]);
-	const onClickPlay = useCallback(() => setAutoPlay((v) => !v), []);
+	const onRepeat = useCallback(
+		() =>
+			setTurnType((t) =>
+				t === TurnType.Left ? TurnType.Right : TurnType.Left,
+			),
+		[],
+	);
+	const [phase, setPhase] = useState<number>(initialPhase);
 	const { boundary } = getUnitEdges(cells);
 	const consumeLimit = Math.floor((boundary.length + 1) * phase);
 	const edges = useMemo(() => {
@@ -600,103 +582,134 @@ export const NormalizeAnimationApp = ({
 		}
 		return edgeData;
 	}, [turnType, boundary, consumeLimit]);
-	const pathPartsCount = useMemo(() => {
+	const partsCount = useMemo(() => {
 		let lastEdgeData: EdgeData = { normalized: [], remainder: [] };
 		for (const result of listNormalizedEdges(boundary, turnType)) {
 			lastEdgeData = result;
 		}
 		return lastEdgeData.normalized.length;
 	}, [turnType, boundary]);
-	const dList = useMemo(
-		() => [
-			...(function* () {
-				let count = 0;
-				for (const edgeList of edges.normalized) {
-					for (const d of listEdgesD(edgeList, true)) {
-						yield { d, key: count++ };
-					}
-				}
-				for (const d of listEdgesD(edges.remainder)) {
-					yield { d, key: count++ };
-				}
-				while (count <= pathPartsCount) {
-					yield { d: " ", key: count++ };
-				}
-			})(),
-		],
-		[edges, pathPartsCount],
-	);
-	const totalCountStyle = {
-		"--gjTotalCount": `${pathPartsCount}`,
-	} as CSSProperties;
+	const varStyle = { "--gjTotalCount": `${partsCount}` } as CSSProperties;
 	return (
 		<>
-			<Svg {...props} cells={cells} style={totalCountStyle}>
+			<Svg
+				{...props}
+				cells={cells}
+				style={varStyle}
+				setSvgElement={setSvgElement}
+			>
 				<Grid strokePx={2} style={{ color: "var(--gjGray3)" }} />
 				<Cells style={{ color: "var(--gjGray3)" }} />
 				<NormalizedPath edges={edges} />
 			</Svg>
-			<div className={style.control}>
-				<button
-					type="button"
-					className={IconClass}
-					value="-"
-					onClick={onClickPlay}
-				>
-					{isPlaying ? "stop_circle" : "play_circle"}
-				</button>
-				<input
-					min={0}
-					max={1}
-					step={0.001}
-					value={phase.toFixed(4)}
-					type="range"
-					onChange={onChange}
-				/>
-				{displayTurnType && (
-					<TurnTypeSelector
-						turnType={turnType}
-						figureId={figureId}
-						onChangeValue={setTurnType}
-					/>
-				)}
-				<pre ref={setPre} style={totalCountStyle}>
-					{dList.map(({ d, key }, index) => {
-						const isNormalized = index < edges.normalized.length;
-						const codeStyle = { "--gjIndex": `${index}` } as CSSProperties;
-						return (
-							<code
-								key={key}
-								className={classnames(
-									isNormalized && style.indexColor,
-									!d.trim() && style.empty,
-								)}
-								style={isNormalized ? codeStyle : undefined}
-							>
-								<span>{d}</span>
-							</code>
-						);
-					})}
-				</pre>
-			</div>
+			<PhaseControl
+				defaultAutoPlay={defaultAutoPlay}
+				disabled={!isInView}
+				durationMs={durationMs}
+				repeatDelayMs={repeatDelayMs}
+				value={phase}
+				onChangeValue={setPhase}
+				onRepeat={onRepeat}
+			/>
+			{displayTurnType && (
+				<TurnTypeSelector turnType={turnType} onChangeValue={setTurnType} />
+			)}
+			<DList edges={edges} partsCount={partsCount} />
 		</>
+	);
+};
+
+interface PhaseControlProps {
+	defaultAutoPlay?: boolean;
+	disabled?: boolean;
+	durationMs: number;
+	repeatDelayMs: number;
+	value: number;
+	onChangeValue: (phase: number) => void;
+	onRepeat?: (repeatCount: number) => void;
+}
+
+const PhaseControl = ({
+	defaultAutoPlay = true,
+	disabled,
+	durationMs,
+	repeatDelayMs,
+	value,
+	onChangeValue,
+	onRepeat,
+}: PhaseControlProps) => {
+	const valueRef = useRef(value);
+	valueRef.current = value;
+	const [autoPlay, setAutoPlay] = useState<boolean>(defaultAutoPlay);
+	const onChange = useCallback(
+		(event: ChangeEvent<HTMLInputElement>) => {
+			onChangeValue(Number.parseFloat(event.currentTarget.value));
+			setAutoPlay(false);
+		},
+		[onChangeValue],
+	);
+	const isPlaying = !disabled && autoPlay;
+	useEffect(() => {
+		let frameId = 0;
+		if (isPlaying) {
+			frameId = requestAnimationFrame((t0) => {
+				const totalMs = repeatDelayMs + durationMs;
+				const startedAt = t0 - valueRef.current * durationMs;
+				let previousP = 0;
+				let repeatCount = 0;
+				const animate = (timestamp: number) => {
+					const p = ((timestamp - startedAt) % totalMs) / durationMs;
+					if (onRepeat && p < previousP) {
+						onRepeat(++repeatCount);
+					}
+					onChangeValue(clamp(p, 0, 1));
+					frameId = requestAnimationFrame(animate);
+					previousP = p;
+				};
+				frameId = requestAnimationFrame(animate);
+			});
+		}
+		return () => cancelAnimationFrame(frameId);
+	}, [isPlaying, durationMs, repeatDelayMs, onChangeValue, onRepeat]);
+	const onClickPlay = useCallback(() => setAutoPlay((v) => !v), []);
+	return (
+		<div className={style.control}>
+			<button
+				type="button"
+				className={IconClass}
+				value="-"
+				onClick={onClickPlay}
+			>
+				{isPlaying ? "pause_circle" : "play_circle"}
+			</button>
+			<input
+				min={0}
+				max={1}
+				step={0.001}
+				value={value.toFixed(4)}
+				type="range"
+				onChange={onChange}
+			/>
+		</div>
 	);
 };
 
 interface TurnTypeSelectorProps {
 	turnType: TurnType;
-	figureId: string;
 	onChangeValue: (value: TurnType) => void;
 }
 
 const TurnTypeSelector = ({
 	turnType,
-	figureId,
 	onChangeValue,
 }: TurnTypeSelectorProps) => {
+	const [div, setDiv] = useState<HTMLDivElement | null>(null);
+	const figureId = useMemo(
+		() => div?.closest("figure")?.querySelector(".fragment-target")?.id || "_",
+		[div],
+	);
 	const onChange = useCallback(
-		(event: ChangeEvent<HTMLInputElement>) => {
-			const value = Number.parseInt(event.currentTarget.value, 10);
+		({ currentTarget: { value } }: ChangeEvent<HTMLInputElement>) => {
 			for (const type of Object.values(TurnType)) {
 				if (value === type) {
 					onChangeValue(type);
@@ -707,12 +720,12 @@ const TurnTypeSelector = ({
 		[onChangeValue],
 	);
 	return (
-		<div className={style.turnType}>
+		<div className={style.turnType} ref={setDiv}>
 			{[...Object.values(TurnType)].map((type) => {
 				const name = `${figureId}TurnType`;
 				const id = `${figureId}TurnType${type}`;
 				return (
-					<Fragment key={id}>
+					<label key={id}>
 						<input
 							type="radio"
 							name={name}
@@ -721,15 +734,8 @@ const TurnTypeSelector = ({
 							onChange={onChange}
 							checked={type === turnType}
 						/>
-						<label htmlFor={id}>
-							{
-								{
-									[TurnType.Left]: "左折優先",
-									[TurnType.Right]: "右折優先",
-								}[type]
-							}
-						</label>
-					</Fragment>
+						{type}
+					</label>
 				);
 			})}
 		</div>
@@ -828,6 +834,57 @@ const listNormalizedEdges = function* (
 			edge = remainder.shift();
 		}
 	}
+};
+
+interface DListProps {
+	edges: EdgeData;
+	partsCount: number;
+}
+
+const DList = ({ edges, partsCount }: DListProps) => {
+	const dList = useMemo(
+		() => [
+			...(function* () {
+				let count = 0;
+				for (const edgeList of edges.normalized) {
+					for (const d of listEdgesD(edgeList, true)) {
+						yield { d, key: count++, normalized: true };
+					}
+				}
+				for (const d of listEdgesD(edges.remainder)) {
+					yield { d, key: count++, remainder: true };
+				}
+				while (count <= partsCount) {
+					yield { d: "", key: count++ };
+				}
+			})(),
+		],
+		[edges, partsCount],
+	);
+	const varStyle = { "--gjTotalCount": `${partsCount}` } as CSSProperties;
+	return (
+		<div className={style.dList} style={varStyle}>
+			{dList.map(({ key, d, normalized, remainder }, index) => {
+				const indexStyle = { "--gjIndex": index } as CSSProperties;
+				return (
+					<Fragment key={key}>
+						<div
+							className={classnames(
+								style.badge,
+								normalized && style.indexColor,
+								remainder && style.remainder,
+								!d && style.empty,
+							)}
+							style={indexStyle}
+						/>
+						<code className={classnames(!d && style.empty)} tabIndex={0}>
+							{d}
+						</code>
+					</Fragment>
+				);
+			})}
+		</div>
+	);
 };
 
 const listEdgesD = function* (
