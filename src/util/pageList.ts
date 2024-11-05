@@ -39,8 +39,8 @@ export const pageList: Array<PageData> = [
 		description:
 			"塗られたマス目の境界線をSVGのpath要素でいい感じに描けるようにしました。",
 		publishedAt: "2024-11-02T17:15:58.000Z",
-		updatedAt: "2024-11-05T15:31:45.000Z",
-		commits: 19,
+		updatedAt: "2024-11-05T23:54:13.000Z",
+		commits: 20,
 		path: "/2024/boundary-tracing",
 		iri: "gjbkz://gojabako.zone/2024/boundary-tracing",
 		group: "2024",
@@ -266,8 +266,8 @@ export const pageList: Array<PageData> = [
 	},
 	{
 		publishedAt: "2023-09-18T10:16:16.000Z",
-		updatedAt: "2024-11-05T15:31:45.000Z",
-		commits: 90,
+		updatedAt: "2024-11-05T23:54:13.000Z",
+		commits: 91,
 		title: ["Home"],
 		path: "/",
 		iri: "gjbkz://gojabako.zone/",
