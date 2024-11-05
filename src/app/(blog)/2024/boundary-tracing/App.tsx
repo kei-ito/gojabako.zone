@@ -547,7 +547,7 @@ export const NormalizeAnimationApp = ({
 	cells: defaultCells,
 	durationMs: defaultDurationMs,
 	repeatDelayMs = 100,
-	initialPhase = 0,
+	initialPhase = 1,
 	autoPlay: defaultAutoPlay,
 	displayTurnType = false,
 	...props
