@@ -757,7 +757,6 @@ const TargetCell = ({ cell }: { cell: Cell | null }) => {
 };
 
 const PhaseControl = ({
-	defaultAutoPlay = true,
 	disabled,
 	durationMs,
 	repeatDelayMs,
@@ -765,6 +764,7 @@ const PhaseControl = ({
 	onChangeValue,
 	onRepeat,
 	children,
+	defaultAutoPlay = false,
 }: PropsWithChildren<PhaseControlProps>) => {
 	const valueRef = useRef(value);
 	valueRef.current = value;
