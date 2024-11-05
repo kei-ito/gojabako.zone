@@ -23,6 +23,7 @@ const withMDX = mdx({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	productionBrowserSourceMaps: true,
 	pageExtensions: ["tsx", "ts", "mdx"],
 	reactStrictMode: true,
 	webpack: (config, _options) => {
