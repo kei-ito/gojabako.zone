@@ -1,6 +1,6 @@
 #!/bin/sh
 
-npm run build:meta
+npm run pageList
 
 diff_files=$(git diff --name-only)
 
