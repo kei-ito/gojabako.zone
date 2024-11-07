@@ -21,7 +21,7 @@
 		"build:meta:scssTypes": "node --import=@nlib/tsm src/cli/scssTypes.ts",
 		"build:meta:stories": "node --import=@nlib/tsm src/cli/stories.ts",
 		"build:next": "NODE_OPTIONS='--import=@nlib/tsm' next build",
-		"start": "NODE_ENV=production NODE_OPTIONS='--import=@nlib/tsm' node server.ts",
+		"start": "next start",
 		"lint": "run-s lint:*",
 		"lint:biome": "npx @biomejs/biome check",
 		"lint:css": "stylelint 'src/**/*.scss'"
