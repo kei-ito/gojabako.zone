@@ -11,7 +11,7 @@
 		"dev": "run-p build:meta dev:*",
 		"dev:css": "node --import=@nlib/tsm src/cli/scssTypes.ts --watch",
 		"dev:stories": "node --import=@nlib/tsm src/cli/stories.ts --watch",
-		"dev:next": "NODE_OPTIONS='--import=@nlib/tsm' next",
+		"dev:next": "NODE_OPTIONS='--import=@nlib/tsm --import=./instrumentation.ts' next",
 		"https": "run-p build:meta dev:css dev:stories https:*",
 		"https:next": "node --import=@nlib/tsm server.ts",
 		"build": "run-s build:*",
@@ -21,12 +21,13 @@
 		"build:meta:stories": "node --import=@nlib/tsm src/cli/stories.ts",
 		"build:next": "NODE_OPTIONS='--import=@nlib/tsm' next build",
 		"pageList": "node --import=@nlib/tsm src/cli/pageList.ts",
-		"start": "NODE_OPTIONS='--import=@nlib/tsm' next start",
+		"start": "NODE_OPTIONS='--import=@nlib/tsm --import=./instrumentation.ts' next start",
 		"lint": "run-s lint:*",
 		"lint:biome": "npx @biomejs/biome check",
 		"lint:css": "stylelint 'src/**/*.scss'"
 	},
 	"dependencies": {
+		"@dotenvx/dotenvx": "1.22.0",
 		"@fontsource/noto-sans-jp": "5.1.0",
 		"@mdx-js/loader": "3.1.0",
 		"@next/mdx": "15.0.2",

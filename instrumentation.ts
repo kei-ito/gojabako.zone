@@ -1,6 +1,5 @@
-//@ts-check
-import "@nlib/tsm";
 import { readFileSync } from "node:fs";
+import { config } from "@dotenvx/dotenvx";
 import { ensure, isString } from "@nlib/typing";
 import { DiagConsoleLogger, DiagLogLevel, diag } from "@opentelemetry/api";
 import { OTLPMetricExporter } from "@opentelemetry/exporter-metrics-otlp-http";
@@ -14,13 +13,12 @@ import {
 	ATTR_SERVICE_VERSION,
 } from "@opentelemetry/semantic-conventions";
 
+config();
 diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO);
-
 const packageJson = ensure(
 	JSON.parse(readFileSync(new URL("package.json", import.meta.url), "utf8")),
 	{ name: isString, version: isString },
 );
-
 const sdk = new NodeSDK({
 	resource: new Resource({
 		[ATTR_SERVICE_NAME]: packageJson.name,
@@ -32,5 +30,4 @@ const sdk = new NodeSDK({
 	}),
 	instrumentations: [new HttpInstrumentation()],
 });
-
 sdk.start();
