@@ -3,9 +3,9 @@ import "@nlib/tsm";
 import { readFileSync } from "node:fs";
 import { ensure, isString } from "@nlib/typing";
 import { DiagConsoleLogger, DiagLogLevel, diag } from "@opentelemetry/api";
-import { getNodeAutoInstrumentations } from "@opentelemetry/auto-instrumentations-node";
 import { OTLPMetricExporter } from "@opentelemetry/exporter-metrics-otlp-http";
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
+import { HttpInstrumentation } from "@opentelemetry/instrumentation-http";
 import { Resource } from "@opentelemetry/resources";
 import { PeriodicExportingMetricReader } from "@opentelemetry/sdk-metrics";
 import { NodeSDK } from "@opentelemetry/sdk-node";
@@ -30,11 +30,7 @@ const sdk = new NodeSDK({
 	metricReader: new PeriodicExportingMetricReader({
 		exporter: new OTLPMetricExporter(),
 	}),
-	instrumentations: [
-		getNodeAutoInstrumentations({
-			"@opentelemetry/instrumentation-fs": { enabled: false },
-		}),
-	],
+	instrumentations: [new HttpInstrumentation()],
 });
 
 sdk.start();
