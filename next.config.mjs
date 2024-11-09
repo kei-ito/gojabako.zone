@@ -1,3 +1,4 @@
+import "./instrumentation.mjs";
 import mdx from "@next/mdx";
 import { all } from "lowlight";
 import rehypeHighlight from "rehype-highlight";
