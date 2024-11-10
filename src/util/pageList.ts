@@ -266,8 +266,8 @@ export const pageList: Array<PageData> = [
 	},
 	{
 		publishedAt: "2023-09-18T10:16:16.000Z",
-		updatedAt: "2024-11-10T12:50:21.000Z",
-		commits: 92,
+		updatedAt: "2024-11-10T15:51:27.000Z",
+		commits: 93,
 		title: ["Home"],
 		path: "/",
 		iri: "gjbkz://gojabako.zone/",
