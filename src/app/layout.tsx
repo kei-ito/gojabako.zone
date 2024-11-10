@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import type { PropsWithChildren } from "react";
 import { HighlightHash } from "../components/HighlightHash";
+import { getSpan } from "../util/node/getSpan";
 import { site } from "../util/site.ts";
 import "./globals.css";
 import "./hljs.css";
@@ -15,6 +16,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { themeColor: "hsl(0,0%,100%)" };
 
 export default function RootLayout({ children }: PropsWithChildren) {
+	const span = getSpan("layout");
+	span.end();
 	return (
 		<html lang="ja">
 			<head>

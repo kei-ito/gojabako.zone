@@ -1,4 +1,4 @@
-import "./opentelemetry.config.ts";
+import { config } from "@dotenvx/dotenvx";
 import mdx from "@next/mdx";
 import { all } from "lowlight";
 import rehypeHighlight from "rehype-highlight";
@@ -8,6 +8,8 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import { rehypeArticle } from "./src/unified/rehypeArticle.ts";
 import { rehypeEmbed } from "./src/unified/rehypeEmbed.ts";
+
+config();
 
 const withMDX = mdx({
 	options: {
