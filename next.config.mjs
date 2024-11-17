@@ -26,7 +26,10 @@ const nextConfig = {
 	productionBrowserSourceMaps: true,
 	pageExtensions: ["tsx", "ts", "mdx"],
 	reactStrictMode: true,
-	env: { OTEL_EXPORTER_OTLP_HEADERS: process.env.OTEL_EXPORTER_OTLP_HEADERS },
+	env: {
+		OTEL_EXPORTER_OTLP_HEADERS: process.env.OTEL_EXPORTER_OTLP_HEADERS,
+		AWS_APP_ID: process.env.AWS_APP_ID,
+	},
 	webpack: (config, _options) => {
 		config.module.rules.push({
 			test: /\.ts$/,
