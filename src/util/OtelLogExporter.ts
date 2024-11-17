@@ -48,18 +48,21 @@ export class OtelLogExporter implements LogRecordExporter {
 
 	public constructor(resource: Resource) {
 		this.resource = resource;
-		const { OTEL_EXPORTER_OTLP_LOGS_ENDPOINT, OTEL_EXPORTER_OTLP_HEADERS } =
-			process.env;
-		if (OTEL_EXPORTER_OTLP_LOGS_ENDPOINT && OTEL_EXPORTER_OTLP_HEADERS) {
-			this.endpoint = new URL(OTEL_EXPORTER_OTLP_LOGS_ENDPOINT);
+		const endpointString = process.env.OTEL_EXPORTER_OTLP_LOGS_ENDPOINT;
+		const headersString = process.env.OTEL_EXPORTER_OTLP_HEADERS;
+		if (endpointString && headersString) {
+			this.endpoint = new URL(endpointString);
 			const headers = new Headers();
-			for (const match of OTEL_EXPORTER_OTLP_HEADERS.matchAll(
-				/(\S+?)=(\S+?)\s*(?:,|$)/g,
-			)) {
+			for (const match of headersString.matchAll(/(\S+?)=(\S+?)\s*(?:,|$)/g)) {
 				headers.set(match[1], match[2]);
 			}
 			headers.set("content-type", "application/json");
 			this.commonHeaders = headers;
+		} else {
+			console.warn("missing otel exporter configurations", {
+				endpointString,
+				headersString,
+			});
 		}
 	}
 
