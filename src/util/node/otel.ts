@@ -5,7 +5,7 @@ import {
 } from "@opentelemetry/sdk-logs";
 import { OtelLogExporter } from "../OtelLogExporter";
 import { isNode } from "../env";
-import { appAttributes } from "./env";
+import { appAttributes } from "./appAttributes";
 
 const workers = new Set<{ shutdown: () => Promise<void> }>();
 if (isNode) {

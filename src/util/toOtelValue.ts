@@ -28,7 +28,7 @@ type OtelValue =
 	| OtelDouble
 	| OtelArray;
 
-export const toOtelValue = (value: unknown): OtelValue => {
+export const toOtelValue = (value: unknown): OtelValue | null => {
 	if (isString(value)) {
 		return { stringValue: value };
 	}
@@ -44,17 +44,29 @@ export const toOtelValue = (value: unknown): OtelValue => {
 	if (Array.isArray(value)) {
 		return {
 			arrayValue: {
-				values: value.map((item) => toOtelValue(item)),
+				values: [
+					...(function* () {
+						for (const item of value) {
+							const otelValue = toOtelValue(item);
+							if (otelValue) {
+								yield otelValue;
+							}
+						}
+					})(),
+				],
 			},
 		};
 	}
-	throw new Error(`Unsupported value: ${value}`);
+	return null;
 };
 
 export const listOtelKeyValues = function* (record: unknown) {
 	if (isObject(record)) {
 		for (const [key, value] of Object.entries(record)) {
-			yield { key, value: toOtelValue(value) };
+			const otelValue = toOtelValue(value);
+			if (otelValue) {
+				yield { key, value: otelValue };
+			}
 		}
 	}
 };
