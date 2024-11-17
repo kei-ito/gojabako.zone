@@ -9,18 +9,17 @@ import { appVersion } from "../version";
 const namespace = "gjbkz";
 export type AppHost = "vercel" | "netlify" | "gcp" | "aws" | "local";
 
-const { env } = process;
 const getAppHost = () => {
-	if (env.VERCEL) {
+	if (process.env.VERCEL) {
 		return "vercel";
 	}
-	if (env.NETLIFY) {
+	if (process.env.NETLIFY) {
 		return "netlify";
 	}
-	if (env.K_SERVICE) {
+	if (process.env.K_SERVICE) {
 		return "gcp";
 	}
-	if (env.AWS_APP_ID) {
+	if (process.env.AWS_APP_ID) {
 		return "aws";
 	}
 	return "local";
