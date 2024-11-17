@@ -28,7 +28,6 @@
 		"encrypt-env": "dotenvx encrypt"
 	},
 	"dependencies": {
-		"@dotenvx/dotenvx": "1.22.0",
 		"@fontsource/noto-sans-jp": "5.1.0",
 		"@mdx-js/loader": "3.1.0",
 		"@next/mdx": "15.0.3",
