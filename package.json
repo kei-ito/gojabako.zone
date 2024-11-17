@@ -1,7 +1,7 @@
 {
 	"name": "@gjbkz/gojabako.zone",
 	"homepage": "https://gojabako.zone/",
-	"version": "0.0.1",
+	"version": "0.0.0",
 	"private": true,
 	"scripts": {
 		"test": "run-s test:*",
@@ -16,6 +16,7 @@
 		"https:next": "node --import=@nlib/tsm server.ts",
 		"build": "run-s build:*",
 		"build:meta": "run-p build:meta:*",
+		"build:meta:version": "node --import=@nlib/tsm src/cli/version.ts",
 		"build:meta:fonts": "node --import=@nlib/tsm src/cli/fonts.ts",
 		"build:meta:scssTypes": "node --import=@nlib/tsm src/cli/scssTypes.ts",
 		"build:meta:stories": "node --import=@nlib/tsm src/cli/stories.ts",
@@ -33,6 +34,7 @@
 		"@next/mdx": "15.0.3",
 		"@nlib/tsm": "1.1.0",
 		"@nlib/typing": "3.0.1",
+		"@opentelemetry/exporter-logs-otlp-http": "0.54.2",
 		"@opentelemetry/exporter-metrics-otlp-http": "0.54.2",
 		"@opentelemetry/exporter-trace-otlp-http": "0.54.2",
 		"@opentelemetry/sdk-metrics": "1.27.0",

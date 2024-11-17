@@ -44,7 +44,8 @@ blob-report
 playwright/.cache
 newrelic_agent.log
 
-.env.keys
+.env.local
 .flaskenv*
 !.env.project
 !.env.vault
+src/util/version.ts
