@@ -4,9 +4,6 @@ import { HighlightHash } from "../components/HighlightHash";
 import { site } from "../util/site.ts";
 import "./globals.css";
 import "./hljs.css";
-import { headers } from "next/headers";
-import { logger } from "../util/node/otel";
-import { getAttributesFromHeaders } from "../util/node/otelHttp";
 
 export const metadata: Metadata = {
 	metadataBase: site.baseUrl,
@@ -18,11 +15,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { themeColor: "hsl(0,0%,100%)" };
 
 export default function RootLayout({ children }: PropsWithChildren) {
-	const reqHeaders = headers();
-	logger.emit({
-		body: "RootLayout",
-		attributes: getAttributesFromHeaders(reqHeaders),
-	});
 	return (
 		<html lang="ja">
 			<head>
