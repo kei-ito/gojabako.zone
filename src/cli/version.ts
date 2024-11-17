@@ -11,22 +11,8 @@ const getCommitInfo = () => {
 	return execSync(command).toString().trim();
 };
 
-const getAppHost = () => {
-	if (process.env.VERCEL) {
-		return "vercel";
-	}
-	if (process.env.NETLIFY) {
-		return "netlify";
-	}
-	return "local";
-};
-
-const getNodeEnv = () => process.env.NODE_ENV ?? "development";
-
 const generateCode = async function* () {
 	yield `export const appVersion = '${getCommitInfo()}';`;
-	yield `export const appHost = '${getAppHost()}';`;
-	yield `export const nodeEnv = '${getNodeEnv()}';`;
 };
 
 let code = "";

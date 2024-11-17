@@ -1,4 +1,3 @@
-import { SeverityNumber } from "@opentelemetry/api-logs";
 import type { Metadata, Viewport } from "next";
 import type { PropsWithChildren } from "react";
 import { HighlightHash } from "../components/HighlightHash";
@@ -6,10 +5,8 @@ import { site } from "../util/site.ts";
 import "./globals.css";
 import "./hljs.css";
 import { headers } from "next/headers";
-import {
-	getAttributeKeyFromRequestHeaderName,
-	logger,
-} from "../util/node/otel";
+import { logger } from "../util/node/otel";
+import { getAttributesFromHeaders } from "../util/node/otelHttp";
 
 export const metadata: Metadata = {
 	metadataBase: site.baseUrl,
@@ -22,18 +19,9 @@ export const viewport: Viewport = { themeColor: "hsl(0,0%,100%)" };
 
 export default function RootLayout({ children }: PropsWithChildren) {
 	const reqHeaders = headers();
-	const attributes: Record<string, string> = {};
-	for (const [headerName, value] of reqHeaders.entries()) {
-		const key = getAttributeKeyFromRequestHeaderName(headerName);
-		if (key) {
-			attributes[key] = value;
-		}
-	}
 	logger.emit({
-		severityNumber: SeverityNumber.INFO,
-		severityText: "info",
 		body: "RootLayout",
-		attributes,
+		attributes: getAttributesFromHeaders(reqHeaders),
 	});
 	return (
 		<html lang="ja">
