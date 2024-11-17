@@ -28,6 +28,9 @@ const nextConfig = {
 	reactStrictMode: true,
 	env: {
 		OTEL_EXPORTER_OTLP_HEADERS: process.env.OTEL_EXPORTER_OTLP_HEADERS,
+		VERCEL: process.env.VERCEL,
+		NETLIFY: process.env.NETLIFY,
+		K_SERVICE: process.env.K_SERVICE,
 		AWS_APP_ID: process.env.AWS_APP_ID,
 	},
 	webpack: (config, _options) => {
