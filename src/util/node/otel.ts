@@ -1,6 +1,4 @@
-import { metrics } from "@opentelemetry/api";
 import { type ExportResult, ExportResultCode } from "@opentelemetry/core";
-import { OTLPMetricExporter } from "@opentelemetry/exporter-metrics-otlp-http";
 import { Resource } from "@opentelemetry/resources";
 import {
 	type LogRecordExporter,
@@ -8,10 +6,6 @@ import {
 	type ReadableLogRecord,
 	SimpleLogRecordProcessor,
 } from "@opentelemetry/sdk-logs";
-import {
-	MeterProvider,
-	PeriodicExportingMetricReader,
-} from "@opentelemetry/sdk-metrics";
 import { isNode } from "../env";
 import { appAttributes } from "./env";
 import { listOtelKeyValues, toOtelValue } from "./toOtelValue";
@@ -127,53 +121,4 @@ const loggerProvider = new LoggerProvider({ resource, logRecordLimits: {} });
 workers.add(loggerProvider);
 loggerProvider.addLogRecordProcessor(new SimpleLogRecordProcessor(logExporter));
 export const logger = loggerProvider.getLogger("app");
-
-if (isNode) {
-	const metricExporter = new OTLPMetricExporter();
-	workers.add(metricExporter);
-	const metricProvider = new MeterProvider({
-		resource,
-		readers: [
-			new PeriodicExportingMetricReader({
-				exporter: metricExporter,
-				exportIntervalMillis: 60000,
-			}),
-		],
-	});
-	workers.add(metricProvider);
-	metrics.setGlobalMeterProvider(metricProvider);
-	const meter = metrics.getMeter("runtime");
-	const cpuUsageGauge = meter.createObservableGauge("process_cpu_usage", {
-		description: "CPU usage of the Node.js process",
-		unit: "microseconds",
-	});
-	cpuUsageGauge.addCallback((observableResult) => {
-		const usage = process.cpuUsage();
-		console.log(usage);
-		type Type = keyof typeof usage;
-		for (const type of Object.keys(usage)) {
-			observableResult.observe(usage[type as Type], { type });
-		}
-	});
-	const memoryUsageGauge = meter.createObservableGauge("process_memory_usage", {
-		description: "Memory usage of the Node.js process",
-		unit: "MiB",
-	});
-	memoryUsageGauge.addCallback((observableResult) => {
-		const usage = process.memoryUsage();
-		type Type = keyof typeof usage;
-		const unit = 1024 * 1024;
-		for (const type of Object.keys(usage)) {
-			observableResult.observe(usage[type as Type] / unit, { type });
-		}
-	});
-	const uptimeGauge = meter.createObservableGauge("process_uptime", {
-		description: "Uptime of the Node.js process",
-		unit: "seconds",
-	});
-	uptimeGauge.addCallback((observableResult) => {
-		observableResult.observe(process.uptime());
-	});
-}
-
 logger.emit({ body: "started: otel" });
