@@ -16,6 +16,7 @@
 		"https:next": "node --import=@nlib/tsm server.ts",
 		"build": "run-s build:*",
 		"build:meta": "run-p build:meta:*",
+		"build:meta:version": "node --import=@nlib/tsm src/cli/version.ts",
 		"build:meta:fonts": "node --import=@nlib/tsm src/cli/fonts.ts",
 		"build:meta:scssTypes": "node --import=@nlib/tsm src/cli/scssTypes.ts",
 		"build:meta:stories": "node --import=@nlib/tsm src/cli/stories.ts",
@@ -24,7 +25,8 @@
 		"start": "NODE_OPTIONS='--import=@nlib/tsm' next start",
 		"lint": "run-s lint:*",
 		"lint:biome": "npx @biomejs/biome check",
-		"lint:css": "stylelint 'src/**/*.scss'"
+		"lint:css": "stylelint 'src/**/*.scss'",
+		"encrypt-env": "dotenvx encrypt"
 	},
 	"dependencies": {
 		"@fontsource/noto-sans-jp": "5.1.0",
@@ -32,6 +34,11 @@
 		"@next/mdx": "15.0.3",
 		"@nlib/tsm": "1.1.0",
 		"@nlib/typing": "3.0.1",
+		"@opentelemetry/exporter-logs-otlp-http": "0.54.2",
+		"@opentelemetry/exporter-metrics-otlp-http": "0.54.2",
+		"@opentelemetry/exporter-trace-otlp-http": "0.54.2",
+		"@opentelemetry/sdk-metrics": "1.27.0",
+		"@opentelemetry/sdk-trace-base": "1.27.0",
 		"@storybook/csf": "0.1.11",
 		"@svgr/webpack": "8.1.0",
 		"@types/kuromoji": "0.1.3",
@@ -48,6 +55,7 @@
 		"mdast-util-from-markdown": "2.0.2",
 		"mdast-util-to-hast": "13.2.0",
 		"mdast-util-to-string": "4.0.0",
+		"newrelic": "12.6.1",
 		"next": "14.2.15",
 		"npm-run-all": "4.1.5",
 		"postcss": "8.4.49",
