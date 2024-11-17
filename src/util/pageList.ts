@@ -266,7 +266,7 @@ export const pageList: Array<PageData> = [
 	},
 	{
 		publishedAt: "2023-09-18T10:16:16.000Z",
-		updatedAt: "2024-11-17T16:12:30.000Z",
+		updatedAt: "2024-11-17T16:42:38.000Z",
 		commits: 94,
 		title: ["Home"],
 		path: "/",
