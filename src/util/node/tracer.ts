@@ -23,7 +23,7 @@ import {
 
 const tracerName = "app-tracer";
 const meterName = "app-meter";
-diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO);
+diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
 
 const resource = new Resource({
 	[ATTR_SERVICE_NAME]: process.env.npm_package_name ?? "",
