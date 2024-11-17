@@ -10,6 +10,7 @@ export const middleware = async (req: NextRequest) => {
 	requestProps.set("url-scheme", req.nextUrl.protocol.slice(0, -1));
 	requestProps.set("url-pathname", req.nextUrl.pathname);
 	requestProps.set("url-search", req.nextUrl.search);
+	requestProps.set("url-full", req.nextUrl.href);
 	requestProps.set("ip", req.ip ?? "");
 	requestProps.set("mode", req.mode);
 	if (req.geo) {
