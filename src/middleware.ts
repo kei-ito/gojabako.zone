@@ -1,26 +1,39 @@
+import {
+	ATTR_CLIENT_ADDRESS,
+	ATTR_HTTP_REQUEST_METHOD,
+	ATTR_URL_FULL,
+	ATTR_URL_PATH,
+	ATTR_URL_QUERY,
+	ATTR_URL_SCHEME,
+} from "@opentelemetry/semantic-conventions";
 import { type NextRequest, NextResponse } from "next/server";
+import { logger } from "./util/node/otel";
 
 export const config = {
 	matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
 
+const NA = "n/a";
+const ATTR_APP = (key: string) => `gjbkz.${key}`;
+const ATTR_APP_REQ = (key: string) => ATTR_APP(`req.${key}`);
+const ATTR_APP_REQ_GEO = (key: string) => ATTR_APP_REQ(`geo.${key}`);
+
 export const middleware = async (req: NextRequest) => {
-	const requestProps = new Map<string, string>();
-	requestProps.set("method", req.method);
-	requestProps.set("url-scheme", req.nextUrl.protocol.slice(0, -1));
-	requestProps.set("url-pathname", req.nextUrl.pathname);
-	requestProps.set("url-search", req.nextUrl.search);
-	requestProps.set("url-full", req.nextUrl.href);
-	requestProps.set("ip", req.ip ?? "");
-	requestProps.set("mode", req.mode);
+	const attributes: Record<string, string> = {
+		[ATTR_CLIENT_ADDRESS]: req.ip ?? NA,
+		[ATTR_HTTP_REQUEST_METHOD]: req.method,
+		[ATTR_URL_FULL]: req.nextUrl.href,
+		[ATTR_URL_PATH]: req.nextUrl.pathname,
+		[ATTR_URL_QUERY]: req.nextUrl.search,
+		[ATTR_URL_SCHEME]: req.nextUrl.protocol.slice(0, -1),
+		[ATTR_APP_REQ("mode")]: req.mode,
+		[ATTR_APP_REQ("referer")]: req.referrer ?? NA,
+	};
 	if (req.geo) {
 		for (const [key, value] of Object.entries(req.geo)) {
-			requestProps.set(`geo-${key}`, value);
+			attributes[ATTR_APP_REQ_GEO(key)] = value;
 		}
 	}
-	const response = NextResponse.next();
-	for (const [key, value] of requestProps) {
-		response.headers.set(`x-req-${key}`, value);
-	}
-	return response;
+	logger.emit({ body: `${req.method} ${req.nextUrl}`, attributes });
+	return NextResponse.next();
 };
