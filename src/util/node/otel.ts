@@ -1,3 +1,4 @@
+import { getHttpConfigurationFromEnvironment } from "@opentelemetry/otlp-exporter-base/build/esm/configuration/otlp-http-env-configuration";
 import { Resource } from "@opentelemetry/resources";
 import {
 	LoggerProvider,
@@ -17,9 +18,11 @@ if (isNode) {
 	process.on("SIGTERM", gracefulShutdown);
 }
 
-const resource = new Resource(appAttributes);
-const logExporter = new OtelLogExporter(resource);
+const logExporter = new OtelLogExporter(
+	getHttpConfigurationFromEnvironment("LOGS", "/v1/logs"),
+);
 workers.add(logExporter);
+const resource = new Resource(appAttributes);
 const loggerProvider = new LoggerProvider({ resource, logRecordLimits: {} });
 workers.add(loggerProvider);
 loggerProvider.addLogRecordProcessor(new SimpleLogRecordProcessor(logExporter));
