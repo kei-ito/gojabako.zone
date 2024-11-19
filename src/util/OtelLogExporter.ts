@@ -1,11 +1,32 @@
 import { type ExportResult, ExportResultCode } from "@opentelemetry/core";
 import type { OtlpHttpConfiguration } from "@opentelemetry/otlp-exporter-base/build/esm/configuration/otlp-http-configuration";
-import { JsonLogsSerializer } from "@opentelemetry/otlp-transformer";
 import type {
 	LogRecordExporter,
 	ReadableLogRecord,
 } from "@opentelemetry/sdk-logs";
+import { listOtelKeyValues, toOtelValue } from "./toOtelValue";
 
+const getPayload = (scopeLogs: Array<ReadableLogRecord>) => {
+	return {
+		resourceLogs: [
+			{
+				scopeLogs: scopeLogs.map((log) => ({
+					scope: {},
+					logRecords: [
+						{
+							timeUnixNano: log.hrTime[0] * 1e9 + log.hrTime[1],
+							severityNumber: log.severityNumber,
+							severityText: log.severityText,
+							body: toOtelValue(log.body),
+							attributes: [...listOtelKeyValues(log.attributes)],
+							droppedAttributesCount: log.droppedAttributesCount,
+						},
+					],
+				})),
+			},
+		],
+	};
+};
 export class OtelLogExporter implements LogRecordExporter {
 	private readonly endpoint?: URL;
 
@@ -32,10 +53,7 @@ export class OtelLogExporter implements LogRecordExporter {
 		if (endpoint && commonHeaders) {
 			const promise = Promise.resolve()
 				.then(async () => {
-					const body = JsonLogsSerializer.serializeRequest(logs);
-					if (!body) {
-						return;
-					}
+					const body = JSON.stringify(getPayload(logs));
 					const headers = new Headers(commonHeaders);
 					const res = await fetch(endpoint, { method: "POST", body, headers });
 					if (res.ok) {
