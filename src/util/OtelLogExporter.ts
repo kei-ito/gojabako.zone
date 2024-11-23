@@ -1,32 +1,11 @@
 import { type ExportResult, ExportResultCode } from "@opentelemetry/core";
-import type { OtlpHttpConfiguration } from "@opentelemetry/otlp-exporter-base/build/esm/configuration/otlp-http-configuration";
+import type { OtlpHttpConfiguration } from "@opentelemetry/otlp-exporter-base/build/src/configuration/otlp-http-configuration";
+import { createExportLogsServiceRequest } from "@opentelemetry/otlp-transformer/build/src/logs";
 import type {
 	LogRecordExporter,
 	ReadableLogRecord,
 } from "@opentelemetry/sdk-logs";
-import { listOtelKeyValues, toOtelValue } from "./toOtelValue";
 
-const getPayload = (scopeLogs: Array<ReadableLogRecord>) => {
-	return {
-		resourceLogs: [
-			{
-				scopeLogs: scopeLogs.map((log) => ({
-					scope: {},
-					logRecords: [
-						{
-							timeUnixNano: log.hrTime[0] * 1e9 + log.hrTime[1],
-							severityNumber: log.severityNumber,
-							severityText: log.severityText,
-							body: toOtelValue(log.body),
-							attributes: [...listOtelKeyValues(log.attributes)],
-							droppedAttributesCount: log.droppedAttributesCount,
-						},
-					],
-				})),
-			},
-		],
-	};
-};
 export class OtelLogExporter implements LogRecordExporter {
 	private readonly endpoint?: URL;
 
@@ -51,26 +30,13 @@ export class OtelLogExporter implements LogRecordExporter {
 	): void {
 		const { endpoint, commonHeaders } = this;
 		if (endpoint && commonHeaders) {
-			const promise = Promise.resolve()
-				.then(async () => {
-					const body = JSON.stringify(getPayload(logs));
-					const headers = new Headers(commonHeaders);
-					const res = await fetch(endpoint, { method: "POST", body, headers });
-					if (res.ok) {
-						resultCallback({ code: ExportResultCode.SUCCESS });
-					} else {
-						const fallback = "Failed to read response body";
-						const message = await res.text().catch(() => fallback);
-						resultCallback({
-							code: ExportResultCode.FAILED,
-							error: new Error(`${res.status} ${res.statusText}: ${message}`),
-						});
-					}
-				})
-				.catch((error) => {
-					console.error(error);
-					resultCallback({ code: ExportResultCode.FAILED, error });
-				})
+			const promise = fetch(endpoint, {
+				method: "POST",
+				body: serializeLogs(logs),
+				headers: new Headers(commonHeaders),
+			})
+				.then((res) => handleResponse(resultCallback, res))
+				.catch((error) => handleError(resultCallback, error))
 				.finally(() => this.promises.delete(promise));
 			this.promises.add(promise);
 		} else {
@@ -85,3 +51,36 @@ export class OtelLogExporter implements LogRecordExporter {
 		await Promise.all([...this.promises]);
 	}
 }
+
+const serializeLogs = (logs: Array<ReadableLogRecord>): Uint8Array => {
+	const encoder = new TextEncoder();
+	const request = createExportLogsServiceRequest(logs, {
+		useHex: true,
+		useLongBits: false,
+	});
+	return encoder.encode(JSON.stringify(request));
+};
+
+const handleResponse = async (
+	resultCallback: (result: ExportResult) => void,
+	res: Response,
+) => {
+	if (res.ok) {
+		resultCallback({ code: ExportResultCode.SUCCESS });
+	} else {
+		const fallback = "Failed to read response body";
+		const message = await res.text().catch(() => fallback);
+		resultCallback({
+			code: ExportResultCode.FAILED,
+			error: new Error(`${res.status} ${res.statusText}: ${message}`),
+		});
+	}
+};
+
+const handleError = (
+	resultCallback: (result: ExportResult) => void,
+	error?: Error,
+) => {
+	console.error(error);
+	resultCallback({ code: ExportResultCode.FAILED, error });
+};

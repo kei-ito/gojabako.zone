@@ -32,6 +32,7 @@ export const middleware = async (req: NextRequest) => {
 		[ATTR_URL_SCHEME]: req.nextUrl.protocol.slice(0, -1),
 		[ATTR_APP_REQ("mode")]: req.mode,
 		[ATTR_APP_REQ("referer")]: req.referrer ?? NA,
+		[ATTR_APP_REQ("user_agent")]: req.headers.get("user-agent") ?? NA,
 	};
 	if (req.geo) {
 		for (const [key, value] of Object.entries(req.geo)) {
