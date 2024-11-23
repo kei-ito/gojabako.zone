@@ -20,7 +20,19 @@ const ATTR_APP = (key: string) => `gjbkz.${key}`;
 const ATTR_APP_REQ = (key: string) => ATTR_APP(`req.${key}`);
 const ATTR_APP_REQ_GEO = (key: string) => ATTR_APP_REQ(`geo.${key}`);
 
+const forbiddenExtensions = [".php", ".exe", ".sh", ".bat"];
+const forbiddenPaths = ["/admin", "/debug"];
+const isForbiddenPath = (pathname: string) =>
+	forbiddenPaths.some((path) => pathname.startsWith(path)) ||
+	forbiddenExtensions.some((ext) => pathname.endsWith(ext));
+
 export const middleware = async (req: NextRequest) => {
+	if (isForbiddenPath(req.nextUrl.pathname)) {
+		return new NextResponse(null, { status: 403 });
+	}
+	if (req.nextUrl.pathname === "/health") {
+		return new NextResponse(null, { status: 200 });
+	}
 	const attributes: Record<string, string> = {
 		[ATTR_CLIENT_ADDRESS]: req.ip ?? NA,
 		[ATTR_HTTP_REQUEST_METHOD]: req.method,
