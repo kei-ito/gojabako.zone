@@ -14,7 +14,7 @@ export const appHost = (() => {
 	if (env.K_SERVICE) {
 		return "gcp" as const;
 	}
-	if (env.AWS_APP_ID) {
+	if (env.AWS_REGION) {
 		return "aws" as const;
 	}
 	return "local" as const;
