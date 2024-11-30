@@ -1,5 +1,6 @@
 import mdx from "@next/mdx";
 import { all } from "lowlight";
+import type { NextConfig } from "next";
 import rehypeHighlight from "rehype-highlight";
 import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
@@ -21,8 +22,7 @@ const withMDX = mdx({
 	},
 });
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
 	productionBrowserSourceMaps: true,
 	pageExtensions: ["tsx", "ts", "mdx"],
 	reactStrictMode: true,
@@ -34,17 +34,13 @@ const nextConfig = {
 		AWS_APP_ID: process.env.AWS_APP_ID,
 	},
 	webpack: (config, _options) => {
-		config.module.rules.push({
-			test: /\.ts$/,
-			loader: "esbuild-loader",
-			options: { loader: "ts" },
-		});
 		config.module.rules.push(
 			...(function* () {
 				// https://react-svgr.com/docs/next/#usage
 				// 既存のSVG読み込みルールを取得
-				const fileLoaderRule = config.module.rules.find((rule) =>
-					rule.test?.test?.(".svg"),
+				const fileLoaderRule = config.module.rules.find(
+					(rule: { test?: { test?: (s: string) => boolean } }) =>
+						rule.test?.test?.(".svg"),
 				);
 				if (fileLoaderRule) {
 					// ?urlが付いている場合は既存ルールで読む

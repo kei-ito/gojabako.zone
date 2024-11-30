@@ -1,4 +1,5 @@
 import { isString } from "@nlib/typing";
+import { Resource } from "@opentelemetry/resources";
 import {
 	ATTR_SERVICE_NAME,
 	ATTR_SERVICE_VERSION,
@@ -6,24 +7,6 @@ import {
 import { site } from "../site";
 import { appVersion } from "../version";
 
-const namespace = "gjbkz";
-export type AppHost = "vercel" | "netlify" | "gcp" | "aws" | "local";
-
-const getAppHost = () => {
-	if (process.env.VERCEL) {
-		return "vercel";
-	}
-	if (process.env.NETLIFY) {
-		return "netlify";
-	}
-	if (process.env.K_SERVICE) {
-		return "gcp";
-	}
-	if (process.env.AWS_APP_ID) {
-		return "aws";
-	}
-	return "local";
-};
 const listRuntimeAttributes = function* (
 	appHost: AppHost,
 ): Generator<[string, string | undefined]> {
@@ -48,12 +31,32 @@ const listRuntimeAttributes = function* (
 	yield ["aws.region", process.env.AWS_REGION];
 	yield ["aws.execution_env", process.env.AWS_EXECUTION_ENV];
 };
-export const appAttributes: Record<string, string> = (() => {
-	const attributes: Record<string, string> = {};
-	for (const [key, value] of listRuntimeAttributes(getAppHost())) {
-		if (isString(value)) {
-			attributes[`${namespace}.${key}`] = value;
-		}
+
+type AppHost = "vercel" | "netlify" | "gcp" | "aws" | "local";
+const getAppHost = (): AppHost => {
+	if (process.env.VERCEL) {
+		return "vercel";
 	}
-	return attributes;
-})();
+	if (process.env.NETLIFY) {
+		return "netlify";
+	}
+	if (process.env.K_SERVICE) {
+		return "gcp";
+	}
+	if (process.env.AWS_APP_ID) {
+		return "aws";
+	}
+	return "local";
+};
+
+export const otelResource = new Resource(
+	(() => {
+		const attributes: Record<string, string> = {};
+		for (const [key, value] of listRuntimeAttributes(getAppHost())) {
+			if (isString(value)) {
+				attributes[`${site.namespace}.${key}`] = value;
+			}
+		}
+		return attributes;
+	})(),
+);

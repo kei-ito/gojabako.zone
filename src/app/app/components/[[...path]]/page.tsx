@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 };
 
 interface PageProps {
-	params: {
+	params: Promise<{
 		path?: Array<string>;
-	};
-	searchParams: object;
+	}>;
 }
 
-export default function Page({ params: { path = [] } }: PageProps) {
+export default async function Page(props: PageProps) {
+	const { path = [] } = await props.params;
 	if (path.length === 0) {
 		redirect("/app/components/Button");
 	}

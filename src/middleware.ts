@@ -1,56 +1,55 @@
-import {
-	ATTR_CLIENT_ADDRESS,
-	ATTR_HTTP_REQUEST_METHOD,
-	ATTR_SERVER_ADDRESS,
-	ATTR_SERVER_PORT,
-	ATTR_URL_FULL,
-	ATTR_URL_PATH,
-	ATTR_URL_QUERY,
-	ATTR_URL_SCHEME,
-} from "@opentelemetry/semantic-conventions";
 import { type NextRequest, NextResponse } from "next/server";
-import { logger } from "./util/node/otel";
+import { getOtelAttributesFromNextRequest } from "./util/otel/getOtelAttributesFromNextRequest";
+import { otelLogger } from "./util/otel/otelLogger";
 
-export const config = {
-	matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+interface Handler {
+	isResponsibleFor: (request: NextRequest) => boolean;
+	handle: (request: NextRequest) => NextResponse;
+}
+
+const handlers: Array<Handler> = [
+	{
+		isResponsibleFor: (request) => request.nextUrl.pathname === "/health",
+		handle: () => new NextResponse(null, { status: 200 }),
+	},
+	{
+		isResponsibleFor: ({ nextUrl: { pathname } }) =>
+			[".php", ".exe", ".sh", ".bat"].some((v) => pathname.endsWith(v)) ||
+			["/admin", "/debug"].some((v) => pathname.startsWith(v)),
+		handle: () => new NextResponse(null, { status: 403 }),
+	},
+	{
+		isResponsibleFor: ({ nextUrl: { pathname } }) =>
+			pathname === "/favicon.ico",
+		handle: (req) => NextResponse.redirect(new URL("/icon", req.nextUrl)),
+	},
+	{
+		isResponsibleFor: ({ nextUrl: { pathname } }) =>
+			["/icon"].includes(pathname) ||
+			["/_next/static", "/_next/image"].some((v) => pathname.startsWith(v)),
+		handle: () => NextResponse.next(),
+	},
+	{
+		isResponsibleFor: () => true,
+		handle: (request) => {
+			logRequest(request);
+			return NextResponse.next();
+		},
+	},
+];
+
+const logRequest = (request: NextRequest) => {
+	otelLogger.emit({
+		body: `${request.method} ${request.nextUrl.pathname}`,
+		attributes: getOtelAttributesFromNextRequest(request),
+	});
 };
 
-const NA = "n/a";
-const ATTR_APP = (key: string) => `gjbkz.${key}`;
-const ATTR_APP_REQ = (key: string) => ATTR_APP(`req.${key}`);
-const ATTR_APP_REQ_GEO = (key: string) => ATTR_APP_REQ(`geo.${key}`);
-
-const forbiddenExtensions = [".php", ".exe", ".sh", ".bat"];
-const forbiddenPaths = ["/admin", "/debug"];
-const isForbiddenPath = (pathname: string) =>
-	forbiddenPaths.some((path) => pathname.startsWith(path)) ||
-	forbiddenExtensions.some((ext) => pathname.endsWith(ext));
-
-export const middleware = async (req: NextRequest) => {
-	if (isForbiddenPath(req.nextUrl.pathname)) {
-		return new NextResponse(null, { status: 403 });
-	}
-	if (req.nextUrl.pathname === "/health") {
-		return new NextResponse(null, { status: 200 });
-	}
-	const attributes: Record<string, string> = {
-		[ATTR_CLIENT_ADDRESS]: req.ip ?? NA,
-		[ATTR_HTTP_REQUEST_METHOD]: req.method,
-		[ATTR_SERVER_ADDRESS]: req.nextUrl.hostname,
-		[ATTR_SERVER_PORT]: req.nextUrl.port ?? NA,
-		[ATTR_URL_FULL]: req.nextUrl.href,
-		[ATTR_URL_PATH]: req.nextUrl.pathname,
-		[ATTR_URL_QUERY]: req.nextUrl.search,
-		[ATTR_URL_SCHEME]: req.nextUrl.protocol.slice(0, -1),
-		[ATTR_APP_REQ("mode")]: req.mode,
-		[ATTR_APP_REQ("referer")]: req.referrer ?? NA,
-		[ATTR_APP_REQ("user_agent")]: req.headers.get("user-agent") ?? NA,
-	};
-	if (req.geo) {
-		for (const [key, value] of Object.entries(req.geo)) {
-			attributes[ATTR_APP_REQ_GEO(key)] = value;
+export const middleware = async (request: NextRequest) => {
+	for (const handler of handlers) {
+		if (handler.isResponsibleFor(request)) {
+			return handler.handle(request);
 		}
 	}
-	logger.emit({ body: `${req.method} ${req.nextUrl.pathname}`, attributes });
-	return NextResponse.next();
+	return NextResponse.rewrite(new URL("/not-found", request.nextUrl));
 };
