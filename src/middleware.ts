@@ -1,6 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server";
+import { appHost } from "./util/env";
 import { getOtelAttributesFromNextRequest } from "./util/otel/getOtelAttributesFromNextRequest";
 import { otelLogger } from "./util/otel/otelLogger";
+
+const proceed = (): NextResponse => {
+	const response = NextResponse.next();
+	response.headers.set("X-App-Host", appHost);
+	return response;
+};
 
 interface Handler {
 	isResponsibleFor: (request: NextRequest) => boolean;
@@ -27,13 +34,13 @@ const handlers: Array<Handler> = [
 		isResponsibleFor: ({ nextUrl: { pathname } }) =>
 			["/icon"].includes(pathname) ||
 			["/_next/static", "/_next/image"].some((v) => pathname.startsWith(v)),
-		handle: () => NextResponse.next(),
+		handle: proceed,
 	},
 	{
 		isResponsibleFor: () => true,
 		handle: (request) => {
 			logRequest(request);
-			return NextResponse.next();
+			return proceed();
 		},
 	},
 ];
