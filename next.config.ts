@@ -31,7 +31,7 @@ const nextConfig: NextConfig = {
 		VERCEL: process.env.VERCEL,
 		NETLIFY: process.env.NETLIFY,
 		K_SERVICE: process.env.K_SERVICE,
-		AWS_APP_ID: process.env.AWS_APP_ID,
+		AWS_REGION: process.env.AWS_REGION,
 	},
 	webpack: (config, _options) => {
 		config.module.rules.push(

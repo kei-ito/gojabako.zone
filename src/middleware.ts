@@ -31,7 +31,8 @@ const handlers: Array<Handler> = [
 		handle: (req) => NextResponse.redirect(new URL("/icon", req.nextUrl)),
 	},
 	{
-		isResponsibleFor: ({ nextUrl: { pathname } }) =>
+		isResponsibleFor: ({ headers, nextUrl: { pathname } }) =>
+			headers.get("sec-fetch-dest") === "empty" ||
 			["/icon"].includes(pathname) ||
 			["/_next/static", "/_next/image"].some((v) => pathname.startsWith(v)),
 		handle: proceed,
