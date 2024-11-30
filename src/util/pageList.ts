@@ -114,8 +114,8 @@ export const pageList: Array<PageData> = [
 	{
 		title: ["DPoPの", "ブラウザ", "実装"],
 		publishedAt: "2023-09-18T10:16:16.000Z",
-		updatedAt: "2024-10-05T14:35:55.000Z",
-		commits: 5,
+		updatedAt: "2024-11-30T09:07:04.000Z",
+		commits: 6,
 		path: "/2022/dpop",
 		iri: "gjbkz://gojabako.zone/2022/dpop",
 		group: "2022",
@@ -266,8 +266,8 @@ export const pageList: Array<PageData> = [
 	},
 	{
 		publishedAt: "2023-09-18T10:16:16.000Z",
-		updatedAt: "2024-11-30T09:03:24.000Z",
-		commits: 96,
+		updatedAt: "2024-11-30T09:07:04.000Z",
+		commits: 97,
 		title: ["Home"],
 		path: "/",
 		iri: "gjbkz://gojabako.zone/",
