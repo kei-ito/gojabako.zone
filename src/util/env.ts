@@ -5,17 +5,20 @@ export const isNode =
 export const env =
 	(typeof process !== "undefined" && process.env) || ({} as NodeJS.ProcessEnv);
 export const appHost = (() => {
+	if (env.APP_HOST) {
+		return env.APP_HOST;
+	}
 	if (env.VERCEL) {
-		return "vercel" as const;
+		return "Vercel";
 	}
 	if (env.NETLIFY) {
-		return "netlify" as const;
+		return "Netlify";
 	}
 	if (env.K_SERVICE) {
-		return "gcp" as const;
+		return "GCP";
 	}
 	if (env.AWS_REGION) {
-		return "aws" as const;
+		return "AWS";
 	}
-	return "local" as const;
+	return "Unknown";
 })();
