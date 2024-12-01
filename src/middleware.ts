@@ -3,10 +3,11 @@ import { type NextRequest, NextResponse } from "next/server";
 import { appHost } from "./util/env";
 import { getOtelAttributesFromNextRequest } from "./util/otel/getOtelAttributesFromNextRequest";
 import { otelLogger } from "./util/otel/otelLogger";
+import { site } from "./util/site";
 
 const proceed = (): NextResponse => {
 	const response = NextResponse.next();
-	response.headers.set("X-App-Host", appHost);
+	response.headers.set(site.headers.appHost, appHost);
 	return response;
 };
 

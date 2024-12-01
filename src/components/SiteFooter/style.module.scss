@@ -37,6 +37,12 @@
   grid-auto-flow: column;
   gap: 0.25em;
   align-items: center;
+  user-select: none;
+  font-size: 90%;
+
+  &>code {
+    font-size: 90%;
+  }
 }
 
 .links {

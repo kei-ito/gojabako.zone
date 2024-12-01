@@ -17,4 +17,7 @@ export const site = {
 		d: "M0 0H2V1H1V2H2V4H0zM3 0H5V4H3V2H4V1H3zM6 0H8V4H7V3H6z",
 	},
 	iri: (pagePath: string) => `${namespace}://${baseUrl.hostname}${pagePath}`,
+	headers: {
+		appHost: "X-App-Host",
+	},
 };
