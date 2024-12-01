@@ -32,11 +32,11 @@ export const SiteFooter = (props: HTMLAttributes<HTMLElement>) => (
 			<div>
 				<div className={style.host}>
 					<span className={IconClass}>host</span>
-					<code>{appHost}</code>
+					<span>{appHost}</span>
 				</div>
 			</div>
 			<div>
-				<div>© 2013-</div>
+				<div>©</div>
 				<Link href="/author">{site.author.name}</Link>
 				<div className={style.links}>
 					{links.map(({ Icon, href, title }) => (
