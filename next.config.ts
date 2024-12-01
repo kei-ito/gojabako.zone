@@ -28,6 +28,7 @@ const nextConfig: NextConfig = {
 	reactStrictMode: true,
 	env: {
 		OTEL_EXPORTER_OTLP_HEADERS: process.env.OTEL_EXPORTER_OTLP_HEADERS,
+		APP_HOST: process.env.APP_HOST,
 		VERCEL: process.env.VERCEL,
 		NETLIFY: process.env.NETLIFY,
 		K_SERVICE: process.env.K_SERVICE,
