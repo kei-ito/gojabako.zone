@@ -25,10 +25,33 @@ const handlers: Array<Handler> = [
 	},
 	{
 		isResponsibleFor: ({ nextUrl: { pathname } }) =>
-			[".php", ".php7", ".exe", ".sh", ".bat"].some((v) =>
-				pathname.endsWith(v),
-			) ||
-			["/admin", "/wp-admin", "/debug"].some((v) => pathname.startsWith(v)),
+			/\.php\d*$/.test(pathname) ||
+			/^\/wp-\w+$/.test(pathname) ||
+			[
+				".exe",
+				".sh",
+				".bat",
+				".pwd",
+				".sql",
+				".db",
+				".yml",
+				".key",
+				".pem",
+				".zip",
+			].some((v) => pathname.endsWith(v)) ||
+			[
+				"/admin",
+				"/debug",
+				"/.aws",
+				"/.ssh",
+				"/.svn",
+				"/.env",
+				"/.git",
+				"/.vscode",
+				"/.kube",
+				"/config",
+				"/_vti_pvt",
+			].some((v) => pathname.startsWith(v)),
 		handle: () => new NextResponse(null, { status: HttpStatusCode.Forbidden }),
 	},
 	{
@@ -40,7 +63,9 @@ const handlers: Array<Handler> = [
 		isResponsibleFor: ({ headers, nextUrl: { pathname } }) =>
 			headers.get("sec-fetch-dest") === "empty" ||
 			["/icon"].includes(pathname) ||
-			["/_next/static", "/_next/image"].some((v) => pathname.startsWith(v)),
+			["/_next/static", "/_next/image", "/.netlify/verification"].some((v) =>
+				pathname.startsWith(v),
+			),
 		handle: proceed,
 	},
 	{
