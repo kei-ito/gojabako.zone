@@ -1,0 +1,22 @@
+export const metadata = {
+  title: 'Cloud Run, Amplify, Netlify, VercelにNext.jsをデプロイ',
+  description: 'このブログを複数のサービスでホストするようにしました。',
+};
+
+このブログをCloud Run, Amplify, Netlify, Vercelでホストするようにしました。DNS (Route 53) でリクエストを振り分けています。
+
+このページがどのホストから提供されているかはページ最下部左側を確認してください。
+
+## GCP Cloud Run
+
+![ヘッダーの「リポジトリを接続」をクリックします。](./cloudrun01.webp)
+
+![GitHubのアカウントを接続して、リポジトリを選びます。](./cloudrun02.webp)
+
+![ビルドタイプはBuildpacksの方を選びます。](./cloudrun03.webp)
+
+![今回のアプリはこのブログなので未認証の呼び出しを許可して、作成をクリックします。](./cloudrun04.webp)
+
+![しばらく待ったらデプロイ完了して表示できました。簡単でした。](./cloudrun05.webp)
+
+## AWS Amplify

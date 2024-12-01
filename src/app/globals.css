@@ -109,6 +109,7 @@
 	line-height: var(--gjLineHeight);
 	text-rendering: optimizespeed;
 	color: var(--gjColorText1);
+	background-color: var(--gjColorBackground);
 
 	/* stylelint-disable-next-line unit-allowed-list */
 	@media (width <= 651px) {
