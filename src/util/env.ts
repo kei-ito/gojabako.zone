@@ -20,5 +20,5 @@ export const appHost = (() => {
 	if (env.AWS_REGION) {
 		return "AWS";
 	}
-	return "Unknown";
+	return null;
 })();

@@ -5,6 +5,7 @@ import IconGitHub from "../../svg/fa-6.6.0/brands/github.svg";
 import IconXTwitter from "../../svg/fa-6.6.0/brands/x-twitter.svg";
 import IconRss from "../../svg/rss.svg";
 import { IconClass, classnames } from "../../util/classnames.ts";
+import { appHost } from "../../util/env";
 import { site } from "../../util/site.ts";
 import { SiteMap } from "../SiteMap";
 import * as style from "./style.module.scss";
@@ -25,7 +26,7 @@ const links: Array<{ Icon: FC; href: string; title: string }> = [
 
 export const SiteFooter = async (props: HTMLAttributes<HTMLElement>) => {
 	const headersList = await headers();
-	const appHost = headersList.get(site.headers.appHost);
+	const host = headersList.get(site.headers.appHost) || appHost;
 	return (
 		<footer {...props} className={classnames(style.container, props.className)}>
 			<section className={style.sitemap}>
@@ -33,10 +34,10 @@ export const SiteFooter = async (props: HTMLAttributes<HTMLElement>) => {
 			</section>
 			<section className={style.info}>
 				<div>
-					{appHost && (
+					{host && (
 						<div className={style.host}>
 							<span className={IconClass}>host</span>
-							<code>{appHost}</code>
+							<code>{host}</code>
 						</div>
 					)}
 				</div>
