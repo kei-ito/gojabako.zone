@@ -26,7 +26,8 @@ const links: Array<{ Icon: FC; href: string; title: string }> = [
 
 export const SiteFooter = async (props: HTMLAttributes<HTMLElement>) => {
 	const headersList = await headers();
-	const host = headersList.get(site.headers.appHost) || appHost;
+	const hostFromHeaders = headersList.get(site.headers.appHost);
+	const host = hostFromHeaders || appHost;
 	return (
 		<footer {...props} className={classnames(style.container, props.className)}>
 			<section className={style.sitemap}>
@@ -36,7 +37,9 @@ export const SiteFooter = async (props: HTMLAttributes<HTMLElement>) => {
 				<div>
 					{host && (
 						<div className={style.host}>
-							<span className={IconClass}>host</span>
+							<span className={IconClass}>
+								{hostFromHeaders ? "cloud_done" : "cloud"}
+							</span>
 							<code>{host}</code>
 						</div>
 					)}
