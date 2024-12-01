@@ -1,3 +1,4 @@
+import { HttpStatusCode } from "@nlib/typing";
 import { type NextRequest, NextResponse } from "next/server";
 import { appHost } from "./util/env";
 import { getOtelAttributesFromNextRequest } from "./util/otel/getOtelAttributesFromNextRequest";
@@ -17,13 +18,15 @@ interface Handler {
 const handlers: Array<Handler> = [
 	{
 		isResponsibleFor: (request) => request.nextUrl.pathname === "/health",
-		handle: () => new NextResponse(null, { status: 200 }),
+		handle: () => new NextResponse("OK", { status: HttpStatusCode.OK }),
 	},
 	{
 		isResponsibleFor: ({ nextUrl: { pathname } }) =>
-			[".php", ".exe", ".sh", ".bat"].some((v) => pathname.endsWith(v)) ||
-			["/admin", "/debug"].some((v) => pathname.startsWith(v)),
-		handle: () => new NextResponse(null, { status: 403 }),
+			[".php", ".php7", ".exe", ".sh", ".bat"].some((v) =>
+				pathname.endsWith(v),
+			) ||
+			["/admin", "/wp-admin", "/debug"].some((v) => pathname.startsWith(v)),
+		handle: () => new NextResponse(null, { status: HttpStatusCode.Forbidden }),
 	},
 	{
 		isResponsibleFor: ({ nextUrl: { pathname } }) =>
