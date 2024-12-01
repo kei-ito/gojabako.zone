@@ -7,7 +7,9 @@ import { site } from "./util/site";
 
 const proceed = (): NextResponse => {
 	const response = NextResponse.next();
-	response.headers.set(site.headers.appHost, appHost);
+	if (appHost) {
+		response.headers.set(site.headers.appHost, appHost);
+	}
 	return response;
 };
 

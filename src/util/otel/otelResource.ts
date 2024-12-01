@@ -9,7 +9,7 @@ import { site } from "../site";
 import { appVersion } from "../version";
 
 const listRuntimeAttributes = function* (): Generator<
-	[string, string | undefined]
+	[string, string | undefined | null]
 > {
 	const ns = site.namespace;
 	yield [ATTR_SERVICE_NAME, site.name];
