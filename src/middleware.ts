@@ -1,9 +1,12 @@
 import { HttpStatusCode } from "@nlib/typing";
 import { type NextRequest, NextResponse } from "next/server";
 import { appHost } from "./util/env";
+import { getTestEnv } from "./util/getTestEnv";
 import { getOtelAttributesFromNextRequest } from "./util/otel/getOtelAttributesFromNextRequest";
 import { otelLogger } from "./util/otel/otelLogger";
 import { site } from "./util/site";
+
+console.info("TestEnv:middleware", getTestEnv());
 
 const proceed = (): NextResponse => {
 	const response = NextResponse.next();
