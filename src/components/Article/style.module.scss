@@ -233,6 +233,8 @@
 
         & > img {
           background-color: var(--gjGray2);
+          /* stylelint-disable-next-line unit-allowed-list */
+          border: solid 1px var(--gjGray4);
         }
       }
 
