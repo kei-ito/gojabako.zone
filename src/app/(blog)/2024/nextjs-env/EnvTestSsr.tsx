@@ -1,6 +1,6 @@
-import { DataViewer } from "../../../../components/DataViewer";
-import { getTestEnv } from "../../../../util/getTestEnv";
+import { listEnvTestEntries } from "../../../../util/testEnv";
+import { EnvTestData } from "./EnvTestData";
 
-export const EnvTestSsr = () => {
-	return <DataViewer value={getTestEnv()} />;
-};
+export const EnvTestSsr = () => (
+	<EnvTestData data={[...listEnvTestEntries()]} columnName="SSR" />
+);

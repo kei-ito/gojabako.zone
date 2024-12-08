@@ -1,18 +1,23 @@
 import { HttpStatusCode } from "@nlib/typing";
 import { type NextRequest, NextResponse } from "next/server";
 import { appHost } from "./util/env";
-import { getTestEnv, listTestEnvEntries } from "./util/getTestEnv";
 import { getOtelAttributesFromNextRequest } from "./util/otel/getOtelAttributesFromNextRequest";
 import { otelLogger } from "./util/otel/otelLogger";
 import { site } from "./util/site";
+import {
+	EnvTestCsvHeader,
+	getEnvTestCsv,
+	listEnvTestEntries,
+} from "./util/testEnv";
 
-console.info("TestEnv:middleware", getTestEnv());
+console.info("EnvTest:middleware", [...listEnvTestEntries()]);
 
 const proceed = (): NextResponse => {
 	const response = NextResponse.next();
 	if (appHost) {
 		response.headers.set(site.headers.appHost, appHost);
 	}
+	response.headers.set(EnvTestCsvHeader, getEnvTestCsv());
 	return response;
 };
 
@@ -70,21 +75,6 @@ const handlers: Array<Handler> = [
 				pathname.startsWith(v),
 			),
 		handle: proceed,
-	},
-	{
-		isResponsibleFor: ({ nextUrl: { pathname } }) => {
-			return pathname === "/2024/nextjs-env";
-		},
-		handle: (request) => {
-			logRequest(request);
-			const res = proceed();
-			for (const [key, value] of listTestEnvEntries()) {
-				if (value) {
-					res.headers.set(`X-${key}`, value);
-				}
-			}
-			return res;
-		},
 	},
 	{
 		isResponsibleFor: () => true,

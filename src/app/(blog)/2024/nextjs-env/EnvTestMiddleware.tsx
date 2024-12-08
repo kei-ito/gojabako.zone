@@ -1,20 +1,10 @@
 import { headers } from "next/headers";
-import { DataViewer } from "../../../../components/DataViewer";
+import { EnvTestCsvHeader, parseEnvTestCsv } from "../../../../util/testEnv";
+import { EnvTestData } from "./EnvTestData";
 
-export const EnvTestMiddleware = async () => {
-	const readonlyHeaders = await headers();
-	const prefixList = ["X-EVTEST_", "X-NEXT_PUBLIC_EVTEST_"];
-	const list: Array<[string, string]> = [];
-	for (const [key, value] of readonlyHeaders) {
-		const upperKey = key.toUpperCase();
-		if (prefixList.some((prefix) => upperKey.startsWith(prefix))) {
-			list.push([upperKey.slice(2), value]);
-		}
-	}
-	list.sort(([a], [b]) => (a.endsWith("2") ? 1 : b.endsWith("2") ? -1 : 0));
-	const result: Record<string, string> = {};
-	for (const [key, value] of list) {
-		result[key] = value;
-	}
-	return <DataViewer value={result} />;
-};
+export const EnvTestMiddleware = async () => (
+	<EnvTestData
+		data={[...parseEnvTestCsv((await headers()).get(EnvTestCsvHeader) ?? "")]}
+		columnName="Middleware"
+	/>
+);

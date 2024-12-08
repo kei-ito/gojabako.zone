@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { DataViewer } from "../../../../components/DataViewer";
-import { getTestEnv } from "../../../../util/getTestEnv";
+import { listEnvTestEntries } from "../../../../util/testEnv";
+import { EnvTestData } from "./EnvTestData";
 
 export const EnvTestClient = () => {
-	const [value, setValue] = useState<Record<string, string | undefined>>({});
-	useEffect(() => setValue(getTestEnv()), []);
-	return <DataViewer value={value} />;
+	const [data, setData] = useState<Array<[string, string | undefined]>>([]);
+	useEffect(() => setData([...listEnvTestEntries()]), []);
+	return <EnvTestData data={data} columnName="Client" />;
 };

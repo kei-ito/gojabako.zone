@@ -5,8 +5,8 @@ import {
 	ATTR_SERVICE_VERSION,
 } from "@opentelemetry/semantic-conventions";
 import { appHost, hasProcess } from "../env";
-import { listTestEnvEntries } from "../getTestEnv";
 import { site } from "../site";
+import { listEnvTestEntries } from "../testEnv";
 import { appVersion } from "../version";
 
 const listRuntimeAttributes = function* (): Generator<
@@ -34,7 +34,7 @@ const listRuntimeAttributes = function* (): Generator<
 		yield [`${ns}.aws.app_id`, process.env.AWS_APP_ID];
 		yield [`${ns}.aws.region`, process.env.AWS_REGION];
 		yield [`${ns}.aws.execution_env`, process.env.AWS_EXECUTION_ENV];
-		for (const [key, value] of listTestEnvEntries()) {
+		for (const [key, value] of listEnvTestEntries()) {
 			yield [`${ns}.env.${key.toLowerCase()}`, value];
 		}
 	}

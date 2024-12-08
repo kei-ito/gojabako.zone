@@ -1,4 +1,4 @@
-export const listTestEnvEntries = function* (): Generator<
+export const listEnvTestEntries = function* (): Generator<
 	[string, string | undefined]
 > {
 	yield ["EVTEST_ENV", process.env.EVTEST_ENV];
@@ -39,12 +39,31 @@ export const listTestEnvEntries = function* (): Generator<
 	];
 };
 
-export const getTestEnv = (): Record<string, string | undefined> => {
-	const result: Record<string, string | undefined> = {};
-	for (const [key, value] of listTestEnvEntries()) {
-		if (value) {
-			result[key] = value;
-		}
+export const EnvTestCsvHeader = "X-EVTEST";
+
+export const getEnvTestCsv = (): string => {
+	const result: string[] = [];
+	for (const [, value] of listEnvTestEntries()) {
+		result.push(value ?? "");
 	}
-	return result;
+	return result.join(",");
+};
+
+export const parseEnvTestCsv = function* (
+	csv: string,
+): Generator<[string, string | undefined]> {
+	const values = csv.split(",");
+	for (const [key] of listEnvTestEntries()) {
+		yield [key, values.shift() || undefined];
+	}
+};
+
+export const serializeEnvTest = (
+	iterable: Iterable<[string, string | undefined]>,
+): string => {
+	const lines: Array<string> = [];
+	for (const [key, value] of iterable) {
+		lines.push(`${key}=${value ?? ""}`);
+	}
+	return lines.join("\n");
 };
