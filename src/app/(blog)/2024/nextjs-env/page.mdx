@@ -14,7 +14,7 @@ import { EnvTestTable } from "./EnvTestTable.tsx";
 以下の2点を検証します。
 
 1. Vercel等の設定画面、[.envファイル]、[next.config.js]の設定値はどれが勝つのか？
-2. ビルド、middleware、SSR、クライアントの処理のタイミングでどの環境変数が使えるのか？
+2. ビルド、middleware、SSR、クライアントでどの環境変数が使えるのか？
 
 [.envファイル]: https://nextjs.org/docs/app/building-your-application/configuring/environment-variables
 [next.config.js]: https://nextjs.org/docs/app/api-reference/next-config-js/env
@@ -125,7 +125,7 @@ export const listEnvTestEntries = function* (): Generator<[string, string | unde
 |タイミング|値の処理|
 |---|---|
 |ビルド時|next.config.tsで呼んでconsole.logしてビルドのログを見て結果をまとめます。|
-|このページのMiddleware処理時|レスポンスヘッダに入れます。SSRでヘッダーを読むコンポーネントを作って出力します。|
+|このページのMiddleware処理時|[`/envtest`](/envtest)で結果を返すようにし、リクエストを送るコンポーネントを作って出力します。|
 |このページのSSR処理時|SSRのコンポーネントを作って出力します。|
 |このページのクライアント処理時|`"use client"` なコンポーネントを作って出力します。|
 

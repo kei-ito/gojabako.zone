@@ -4,11 +4,7 @@ import { appHost } from "./util/env";
 import { getOtelAttributesFromNextRequest } from "./util/otel/getOtelAttributesFromNextRequest";
 import { otelLogger } from "./util/otel/otelLogger";
 import { site } from "./util/site";
-import {
-	EnvTestCsvHeader,
-	getEnvTestCsv,
-	listEnvTestEntries,
-} from "./util/testEnv";
+import { listEnvTestEntries } from "./util/testEnv";
 
 console.info("EnvTest:middleware", [...listEnvTestEntries()]);
 
@@ -17,7 +13,6 @@ const proceed = (): NextResponse => {
 	if (appHost) {
 		response.headers.set(site.headers.appHost, appHost);
 	}
-	response.headers.set(EnvTestCsvHeader, getEnvTestCsv());
 	return response;
 };
 
@@ -68,12 +63,17 @@ const handlers: Array<Handler> = [
 		handle: (req) => NextResponse.redirect(new URL("/icon", req.nextUrl)),
 	},
 	{
+		isResponsibleFor: ({ nextUrl: { pathname } }) => pathname === "/envtest",
+		handle: () => NextResponse.json([...listEnvTestEntries()]),
+	},
+	{
 		isResponsibleFor: ({ headers, nextUrl: { pathname } }) =>
 			headers.get("sec-fetch-dest") === "empty" ||
 			["/icon"].includes(pathname) ||
 			["/_next/static", "/_next/image", "/.netlify/verification"].some((v) =>
 				pathname.startsWith(v),
-			),
+			) ||
+			[".js", ".css", ".woff", ".woff2"].some((v) => pathname.endsWith(v)),
 		handle: proceed,
 	},
 	{
