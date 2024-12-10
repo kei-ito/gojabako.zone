@@ -70,6 +70,21 @@ export const EnvTestTable = ({ id }: EnvTestTableProps) => {
 					{[...serializeToMarkdown(result)].join("\n")}
 				</pre>
 			</details>
+			<details>
+				<summary>JSON</summary>
+				<pre className={style.md}>
+					{JSON.stringify(
+						(() => {
+							const keys = [...listEnvTestEntries()].map(([key]) => key);
+							const output: Record<string, Array<string>> = {};
+							for (const { columnName, data } of result) {
+								output[columnName] = keys.map((key) => data.get(key) ?? "");
+							}
+							return output;
+						})(),
+					)}
+				</pre>
+			</details>
 		</>
 	);
 };

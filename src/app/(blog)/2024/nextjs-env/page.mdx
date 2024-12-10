@@ -124,10 +124,11 @@ export const listEnvTestEntries = function* (): Generator<[string, string | unde
 
 |タイミング|値の処理|
 |---|---|
-|ビルド時|next.config.tsで呼んでconsole.logしてビルドのログを見て結果をまとめます。|
-|このページのMiddleware処理時|[`/envtest`](/envtest)で結果を返すようにし、リクエストを送るコンポーネントを作って出力します。|
-|このページのSSR処理時|SSRのコンポーネントを作って出力します。|
-|このページのクライアント処理時|`"use client"` なコンポーネントを作って出力します。|
+|ビルド時|next.config.ts内で実行結果をconsole.logしてビルドのログを見て結果をまとめます。|
+|このページのMiddleware処理時|[`/envtest`](/envtest)でMiddlewareでの実行結果を返すようにし、リクエスト結果を表示するコンポーネントで表示します。|
+|このページのSSR処理時|SSR時の実行結果を表示するコンポーネントを作って出力します。|
+|route.tsの処理時|[`./api`](./api)で実行結果を返すようにし、リクエスト結果を表示するコンポーネントで表示します。|
+|このページのクライアント処理時|`"use client"` なコンポーネントを作ってブラウザ上での実行結果を出力します。|
 
 ## 結果
 
