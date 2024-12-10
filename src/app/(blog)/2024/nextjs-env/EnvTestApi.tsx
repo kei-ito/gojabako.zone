@@ -17,11 +17,18 @@ type Result = Array<ResultItem>;
 const isResult = (input: unknown): input is Result =>
 	isArray(input) && input.every((item) => isResultItem(item));
 
-export const EnvTestMiddleware = () => {
+interface EnvTestApiProps {
+	columnName: string;
+	path: string;
+}
+
+export const EnvTestApi = ({ path, columnName }: EnvTestApiProps) => {
 	const [data, setData] = useState<Result>([]);
 	useEffect(() => {
 		const abc = new AbortController();
-		const url = new URL("/envtest", getCurrentUrl());
+		const currentUrl = getCurrentUrl();
+		currentUrl.pathname = currentUrl.pathname.replace(/\/*$/, "/");
+		const url = new URL(path, currentUrl);
 		fetch(url, { signal: abc.signal })
 			.then(async (res) => {
 				if (!res.ok) {
@@ -38,6 +45,6 @@ export const EnvTestMiddleware = () => {
 				setData([["Error", `${error}`]]);
 			});
 		return () => abc.abort();
-	}, []);
-	return <EnvTestData data={data} columnName="Middleware" />;
+	}, [path]);
+	return <EnvTestData data={data} columnName={columnName} />;
 };

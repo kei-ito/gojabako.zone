@@ -16,8 +16,9 @@ interface EnvTestTableProps {
 export const EnvTestTable = ({ id }: EnvTestTableProps) => {
 	const [result, setResult] = useState<Array<EnvTestResult>>([
 		{ columnName: "Middleware", data: new Map() },
-		{ columnName: "Client", data: new Map() },
 		{ columnName: "SSR", data: new Map() },
+		{ columnName: "API Route", data: new Map() },
+		{ columnName: "Client", data: new Map() },
 	]);
 	const getResult = useCallback(() => setResult([...listEnvTestResult()]), []);
 	return (

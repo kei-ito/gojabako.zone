@@ -2,7 +2,7 @@ export const metadata = {
   title: 'Cloud Run, Amplify, Netlify, Vercel上のNext.js環境変数事情',
   description: '環境変数はどのタイミングで何が使えるのかを検証しました。',
 };
-import { EnvTestMiddleware } from "./EnvTestMiddleware.tsx";
+import { EnvTestApi } from "./EnvTestApi.tsx";
 import { EnvTestSsr } from "./EnvTestSsr.tsx";
 import { EnvTestClient } from "./EnvTestClient.tsx";
 import { EnvTestTable } from "./EnvTestTable.tsx";
@@ -131,10 +131,6 @@ export const listEnvTestEntries = function* (): Generator<[string, string | unde
 
 ## 結果
 
-### ビルド時
-
-TBW
-
 ## このページでの結果
 
 <EnvTestTable id="envtest-result"/>
@@ -144,11 +140,15 @@ TBW
 
 ### Middleware
 
-<EnvTestMiddleware/>
+<EnvTestApi path="/envtest" columnName="Middleware"/>
 
 ### SSR
 
 <EnvTestSsr/>
+
+### API Route
+
+<EnvTestApi path="./api" columnName="API Route"/>
 
 ### Client
 
