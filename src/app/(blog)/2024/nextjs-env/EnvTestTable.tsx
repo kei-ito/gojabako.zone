@@ -76,9 +76,11 @@ export const EnvTestTable = ({ id }: EnvTestTableProps) => {
 					{JSON.stringify(
 						(() => {
 							const keys = [...listEnvTestEntries()].map(([key]) => key);
-							const output: Record<string, Array<string>> = {};
+							const output: Record<string, string> = {};
 							for (const { columnName, data } of result) {
-								output[columnName] = keys.map((key) => data.get(key) ?? "");
+								output[columnName] = keys
+									.map((key) => data.get(key) ?? "")
+									.join(",");
 							}
 							return output;
 						})(),
