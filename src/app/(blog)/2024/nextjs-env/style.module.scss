@@ -16,3 +16,35 @@
 .center {
   text-align: center;
 }
+
+.table {
+  counter-reset: env;
+
+  .firstColumn {
+    z-index: 1;
+    position: sticky;
+    inset-inline-start: 0;
+    white-space: nowrap;
+  }
+
+  &>tbody {
+    .firstColumn {
+      counter-increment: env;
+
+      &::before {
+        content: counter(env) ".";
+        display: inline-block;
+        inline-size: 1.7em;
+        text-align: end;
+        margin-inline-end: 0.3em;
+        font-size: 90%;
+      }
+    }
+
+    th {
+      &:first-child {
+        text-align: start;
+      }
+    }
+  }
+}

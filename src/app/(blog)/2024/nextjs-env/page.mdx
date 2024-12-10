@@ -6,15 +6,20 @@ import { EnvTestApi } from "./EnvTestApi.tsx";
 import { EnvTestSsr } from "./EnvTestSsr.tsx";
 import { EnvTestClient } from "./EnvTestClient.tsx";
 import { EnvTestTable } from "./EnvTestTable.tsx";
+import { EnvTestSummary } from "./EnvTestSummary.tsx";
 
 [前の記事](./multi-cloud)で環境が複数になったのでログをNewRelicに集めようとしたら環境変数が素直に渡らないことがあったので検証することにしました。
+
+## TL;DR
+
+[#結果](#table-summary)を見てください。
 
 ## 検証したいこと
 
 以下の2点を検証します。
 
 1. Vercel等の設定画面、[.envファイル]、[next.config.js]の設定値はどれが勝つのか？
-2. ビルド、middleware、SSR、クライアントでどの環境変数が使えるのか？
+2. middleware、サーバー、クライアントでどの環境変数が使えるのか？
 
 [.envファイル]: https://nextjs.org/docs/app/building-your-application/configuring/environment-variables
 [next.config.js]: https://nextjs.org/docs/app/api-reference/next-config-js/env
@@ -124,13 +129,39 @@ export const listEnvTestEntries = function* (): Generator<[string, string | unde
 
 |タイミング|値の処理|
 |---|---|
-|ビルド時|next.config.ts内で実行結果をconsole.logしてビルドのログを見て結果をまとめます。|
 |このページのMiddleware処理時|[`/envtest`](/envtest)でMiddlewareでの実行結果を返すようにし、リクエスト結果を表示するコンポーネントで表示します。|
 |このページのSSR処理時|SSR時の実行結果を表示するコンポーネントを作って出力します。|
 |route.tsの処理時|[`./api`](./api)で実行結果を返すようにし、リクエスト結果を表示するコンポーネントで表示します。|
 |このページのクライアント処理時|`"use client"` なコンポーネントを作ってブラウザ上での実行結果を出力します。|
 
 ## 結果
+
+注意: これは2024年12月9日ごろの結果です。
+
+<EnvTestSummary/>
+
+1. .envで設定した環境変数はどこで使えるのか (1)
+   1. サーバーで使える。`NEXT_PUBLIC_`がついていればクライアントでも使える。
+   2. Cloud RunとAmplifyではMiddlewareでも使える。
+   3. VercelとNetlifyのMiddlewareでは使えない。`NEXT_PUBLIC_`がついていれば使える。
+2. next.config.jsで設定した環境変数はどこで使えるのか (2)
+   1. どこでも使える。`NEXT_PUBLIC_`がついていなくてもクライアントで使える。
+3. Cloud Runで設定した環境変数はどこで使えるのか (3)
+   1. クライアント以外で使える。`NEXT_PUBLIC_`がついていてもクライアントでは使えない。
+4. Amplifyで設定した環境変数はどこで使えるのか (3)
+   1. 使えない。`NEXT_PUBLIC_`がついていれば使える。
+   2. next.config.jsで中継すると使える。クライアントでも使える。
+5. Netlify, Vercelで設定した環境変数はどこで使えるのか (3)
+   1. クライアント以外で使える。`NEXT_PUBLIC_`がついていればクライアントでも使える。
+6. .env (E) とnext.config.js (N) とVercel (V) の環境設定変数の優先順位 (4, 5, 6, 10, 11, 12)
+   1. (E, N) はNが勝つ。
+   2. (E, V) は ...
+      - `NEXT_PUBLIC_`がないとき、AmplifyではEが勝つ。それ以外はVが勝つ。
+      - `NEXT_PUBLIC_`があるとき、Cloud RunではEが勝つ。それ以外はVが勝つ。
+   3. (N, V) は N が勝つ。
+7. next.config.js で中継するとどうなるか (13以降)
+   1. Cloud Runでは.envにある値以外は中継されず、既存の値も隠れてしまう。中継しない方がいい。
+   2. Amplify, Netlify, Vercelでは中継される。クライアントでも使える。
 
 ## このページでの結果
 
@@ -156,3 +187,4 @@ export const listEnvTestEntries = function* (): Generator<[string, string | unde
 <EnvTestClient/>
 </details>
 
+以上です。MiddlewareからOpenTelemetryでログを送るところはまた別の記事で書きます。

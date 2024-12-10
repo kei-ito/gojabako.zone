@@ -30,10 +30,10 @@ export const EnvTestTable = ({ id }: EnvTestTableProps) => {
 						#{id}
 					</a>
 				</figcaption>
-				<table>
+				<table className={style.table}>
 					<thead>
 						<tr>
-							<th>
+							<th className={style.firstColumn}>
 								環境変数名
 								<button
 									type="button"
@@ -49,18 +49,16 @@ export const EnvTestTable = ({ id }: EnvTestTableProps) => {
 						</tr>
 					</thead>
 					<tbody>
-						{[...listEnvTestEntries()].map(([key]) => {
-							return (
-								<tr key={key}>
-									<td>{key}</td>
-									{result.map((c) => (
-										<td key={c.columnName} className={style.center}>
-											{c.data.get(key) ?? ""}
-										</td>
-									))}
-								</tr>
-							);
-						})}
+						{[...listEnvTestEntries()].map(([key]) => (
+							<tr key={key}>
+								<th className={style.firstColumn}>{key}</th>
+								{result.map((c) => (
+									<td key={c.columnName} className={style.center}>
+										{c.data.get(key) ?? ""}
+									</td>
+								))}
+							</tr>
+						))}
 					</tbody>
 				</table>
 			</figure>
