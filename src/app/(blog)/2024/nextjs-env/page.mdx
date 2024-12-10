@@ -1,0 +1,190 @@
+export const metadata = {
+  title: 'Cloud Run, Amplify, Netlify, Vercel上のNext.js環境変数事情',
+  description: '環境変数はどのタイミングで何が使えるのかを検証しました。',
+};
+import { EnvTestApi } from "./EnvTestApi.tsx";
+import { EnvTestSsr } from "./EnvTestSsr.tsx";
+import { EnvTestClient } from "./EnvTestClient.tsx";
+import { EnvTestTable } from "./EnvTestTable.tsx";
+import { EnvTestSummary } from "./EnvTestSummary.tsx";
+
+[前の記事](./multi-cloud)で環境を複数にしたのでログをNewRelicに集めようとしたら環境変数が素直に渡らないことがあったので実験しました。
+
+## TL;DR
+
+[#結果](#table-summary)を見てください。
+
+## 検証したいこと
+
+以下の2点です。
+
+1. [.envファイル]、[next.config.js]、Vercel等の設定画面の設定値はどれが勝つのか？
+2. middleware、サーバー、クライアントでどの環境変数が使えるのか？
+
+[.envファイル]: https://nextjs.org/docs/app/building-your-application/configuring/environment-variables
+[next.config.js]: https://nextjs.org/docs/app/api-reference/next-config-js/env
+
+## 検証方法
+
+以下のラインナップで環境変数を設定します。説明のためVercelを例にします。
+
+- E: [.envファイル]での設定値
+- N: [next.config.js]での設定値
+- V: [Vercelの設定画面]での設定値
+
+[Vercelの設定画面]: https://vercel.com/docs/projects/environment-variables
+
+|環境変数名|E|N|V|観点|
+|---|:---:|:---:|:---:|---|
+|EVTEST_ENV                |env|      |      |どこで使えるか|
+|EVTEST_CNF                |   |config|      |どこで使えるか|
+|EVTEST_HST                |   |      |vercel|どこで使えるか|
+|EVTEST_ENV_CNF            |env|config|      |どっちが勝つか|
+|EVTEST_ENV_HST            |env|      |vercel|どっちが勝つか|
+|EVTEST_CNF_HST            |   |config|vercel|どっちが勝つか|
+|NEXT_PUBLIC_EVTEST_ENV    |env|      |      |どこで使えるか|
+|NEXT_PUBLIC_EVTEST_CNF    |   |config|      |どこで使えるか|
+|NEXT_PUBLIC_EVTEST_HST    |   |      |vercel|どこで使えるか|
+|NEXT_PUBLIC_EVTEST_ENV_CNF|env|config|      |どっちが勝つか|
+|NEXT_PUBLIC_EVTEST_ENV_HST|env|      |vercel|どっちが勝つか|
+|NEXT_PUBLIC_EVTEST_CNF_HST|   |config|vercel|どっちが勝つか|
+
+### .envファイルでの設定
+
+```sh
+EVTEST_ENV=env
+EVTEST_ENV_CNF=env
+EVTEST_ENV_HST=env
+NEXT_PUBLIC_EVTEST_ENV=env
+NEXT_PUBLIC_EVTEST_ENV_CNF=env
+NEXT_PUBLIC_EVTEST_ENV_HST=env
+```
+
+### next.config.js (next.config.ts) での設定
+
+```ts
+const nextConfig: NextConfig = {
+  env: {
+    EVTEST_CNF: "config",
+    EVTEST_ENV_CNF: "config",
+    EVTEST_CNF_HST: "config",
+    NEXT_PUBLIC_EVTEST_CNF: "config",
+    NEXT_PUBLIC_EVTEST_ENV_CNF: "config",
+    NEXT_PUBLIC_EVTEST_CNF_HST: "config",
+    // 以下はここで中継してみるテスト
+    EVTEST_ENV2: process.env.EVTEST_ENV,
+    EVTEST_CNF2: process.env.EVTEST_CNF,
+    EVTEST_HST2: process.env.EVTEST_HST,
+    EVTEST_ENV_CNF2: process.env.EVTEST_ENV_CNF,
+    EVTEST_ENV_HST2: process.env.EVTEST_ENV_HST,
+    EVTEST_CNF_HST2: process.env.EVTEST_CNF_HST,
+    NEXT_PUBLIC_EVTEST_ENV2: process.env.NEXT_PUBLIC_EVTEST_ENV,
+    NEXT_PUBLIC_EVTEST_CNF2: process.env.NEXT_PUBLIC_EVTEST_CNF,
+    NEXT_PUBLIC_EVTEST_HST2: process.env.NEXT_PUBLIC_EVTEST_HST,
+    NEXT_PUBLIC_EVTEST_ENV_CNF2: process.env.NEXT_PUBLIC_EVTEST_ENV_CNF,
+    NEXT_PUBLIC_EVTEST_ENV_HST2: process.env.NEXT_PUBLIC_EVTEST_ENV_HST,
+    NEXT_PUBLIC_EVTEST_CNF_HST2: process.env.NEXT_PUBLIC_EVTEST_CNF_HST,
+  },
+};
+```
+
+### Vercelの設定画面での設定
+
+![Vercelの環境変数設定画面](./vercel01.webp)
+
+### 確認方法
+
+まず、以下の関数を用意しました。
+
+```ts
+export const listEnvTestEntries = function* (): Generator<[string, string | undefined]> {
+  yield ["EVTEST_ENV", process.env.EVTEST_ENV];
+  yield ["EVTEST_CNF", process.env.EVTEST_CNF];
+  yield ["EVTEST_HST", process.env.EVTEST_HST];
+  yield ["EVTEST_ENV_CNF", process.env.EVTEST_ENV_CNF];
+  yield ["EVTEST_ENV_HST", process.env.EVTEST_ENV_HST];
+  yield ["EVTEST_CNF_HST", process.env.EVTEST_CNF_HST];
+  yield ["NEXT_PUBLIC_EVTEST_ENV", process.env.NEXT_PUBLIC_EVTEST_ENV];
+  yield ["NEXT_PUBLIC_EVTEST_CNF", process.env.NEXT_PUBLIC_EVTEST_CNF];
+  yield ["NEXT_PUBLIC_EVTEST_HST", process.env.NEXT_PUBLIC_EVTEST_HST];
+  yield ["NEXT_PUBLIC_EVTEST_ENV_CNF", process.env.NEXT_PUBLIC_EVTEST_ENV_CNF];
+  yield ["NEXT_PUBLIC_EVTEST_ENV_HST", process.env.NEXT_PUBLIC_EVTEST_ENV_HST];
+  yield ["NEXT_PUBLIC_EVTEST_CNF_HST", process.env.NEXT_PUBLIC_EVTEST_CNF_HST];
+  yield ["EVTEST_ENV2", process.env.EVTEST_ENV2];
+  yield ["EVTEST_CNF2", process.env.EVTEST_CNF2];
+  yield ["EVTEST_HST2", process.env.EVTEST_HST2];
+  yield ["EVTEST_ENV_CNF2", process.env.EVTEST_ENV_CNF2];
+  yield ["EVTEST_ENV_HST2", process.env.EVTEST_ENV_HST2];
+  yield ["EVTEST_CNF_HST2", process.env.EVTEST_CNF_HST2];
+  yield ["NEXT_PUBLIC_EVTEST_ENV2", process.env.NEXT_PUBLIC_EVTEST_ENV2];
+  yield ["NEXT_PUBLIC_EVTEST_CNF2", process.env.NEXT_PUBLIC_EVTEST_CNF2];
+  yield ["NEXT_PUBLIC_EVTEST_HST2", process.env.NEXT_PUBLIC_EVTEST_HST2];
+  yield ["NEXT_PUBLIC_EVTEST_ENV_CNF2", process.env.NEXT_PUBLIC_EVTEST_ENV_CNF2];
+  yield ["NEXT_PUBLIC_EVTEST_ENV_HST2", process.env.NEXT_PUBLIC_EVTEST_ENV_HST2];
+  yield ["NEXT_PUBLIC_EVTEST_CNF_HST2", process.env.NEXT_PUBLIC_EVTEST_CNF_HST2];
+};
+```
+
+で、これを以下の部分で呼びます。
+
+|タイミング|値の処理|
+|---|---|
+|このページのMiddleware処理時|[`/envtest`](/envtest)でMiddlewareでの実行結果を返すようにし、リクエスト結果を表示するコンポーネントで表示します。|
+|このページのSSR処理時|SSR時の実行結果を表示するコンポーネントを作って出力します。|
+|route.tsの処理時|[`./api`](./api)で実行結果を返すようにし、リクエスト結果を表示するコンポーネントで表示します。|
+|このページのクライアント処理時|`"use client"` なコンポーネントを作ってブラウザ上での実行結果を出力します。|
+
+## 結果
+
+注意: これは2024年12月9日ごろの結果です。
+
+<EnvTestSummary/>
+
+1. .envで設定した環境変数はどこで使えるのか (1行目)
+   1. サーバーで使える。`NEXT_PUBLIC_`がついていればクライアントでも使える。
+   2. Cloud RunとAmplifyではMiddlewareでも使える。
+   3. VercelとNetlifyのMiddlewareでは使えない。`NEXT_PUBLIC_`がついていれば使える。
+2. next.config.jsで設定した環境変数はどこで使えるのか (2)
+   1. どこでも使える。`NEXT_PUBLIC_`がついていなくてもクライアントで使える。
+3. Cloud Runで設定した環境変数はどこで使えるのか (3)
+   1. クライアント以外で使える。`NEXT_PUBLIC_`がついていてもクライアントでは使えない。
+4. Amplifyで設定した環境変数はどこで使えるのか (3)
+   1. 使えない。`NEXT_PUBLIC_`がついていれば使える。
+   2. next.config.jsで中継すると使える。クライアントでも使える。
+5. Netlify, Vercelで設定した環境変数はどこで使えるのか (3)
+   1. クライアント以外で使える。`NEXT_PUBLIC_`がついていればクライアントでも使える。
+6. .env (E) とnext.config.js (N) とVercel (V) の環境設定変数の優先順位 (4, 5, 6, 10, 11, 12)
+   1. (E, N) はNが勝つ。
+   2. (E, V) は ...
+      - `NEXT_PUBLIC_`がないとき、AmplifyではEが勝つ。それ以外はVが勝つ。
+      - `NEXT_PUBLIC_`があるとき、Cloud RunではEが勝つ。それ以外はVが勝つ。
+   3. (N, V) は N が勝つ。
+7. next.config.js で中継するとどうなるか (13-24)
+   1. Cloud Runでは.envにある値以外は中継されず、既存の値も隠れてしまう。中継しない方がいい。
+   2. Amplify, Netlify, Vercelでは中継される。クライアントでも使える。
+
+## このページでの結果
+
+<EnvTestTable id="envtest-result"/>
+
+<details>
+<summary>元データ</summary>
+
+### Middleware
+
+<EnvTestApi path="/envtest" columnName="Middleware"/>
+
+### SSR
+
+<EnvTestSsr/>
+
+### API Route
+
+<EnvTestApi path="./api" columnName="API Route"/>
+
+### Client
+
+<EnvTestClient/>
+</details>
+
+以上です。MiddlewareからOpenTelemetryでログを送るところはまた別の記事で書きます。
