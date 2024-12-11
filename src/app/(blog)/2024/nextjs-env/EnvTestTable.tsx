@@ -22,7 +22,6 @@ export const EnvTestTable = ({ id }: EnvTestTableProps) => {
 		{ columnName: "Client", data: new Map() },
 	]);
 	const getResult = useCallback(() => setResult([...listEnvTestResult()]), []);
-	const publicPrefix = "NEXT_PUBLIC_";
 	return (
 		<>
 			<figure id={id} data-type="table">

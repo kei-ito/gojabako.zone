@@ -65,7 +65,6 @@ const tableData: Array<Array<[number, string]>> = [
 
 export const EnvTestSummary = () => {
 	const id = "table-summary";
-	const publicPrefix = "NEXT_PUBLIC_";
 	return (
 		<figure id={id} data-type="table">
 			<figcaption>
