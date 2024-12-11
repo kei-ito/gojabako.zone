@@ -1,4 +1,5 @@
 import { listEnvTestEntries } from "../../../../util/testEnv";
+import { EnvTestEnvName } from "./EnvTestEnvName";
 import style from "./style.module.scss";
 
 const allResult: Array<[string, Record<string, string>]> = [
@@ -64,6 +65,7 @@ const tableData: Array<Array<[number, string]>> = [
 
 export const EnvTestSummary = () => {
 	const id = "table-summary";
+	const publicPrefix = "NEXT_PUBLIC_";
 	return (
 		<figure id={id} data-type="table">
 			<figcaption>
@@ -72,39 +74,41 @@ export const EnvTestSummary = () => {
 					#{id}
 				</a>
 			</figcaption>
-			<table className={style.table}>
-				<thead>
-					<tr>
-						<th rowSpan={2} className={style.firstColumn}>
-							環境変数名
-						</th>
-						{allResult.map(([title, result]) => (
-							<th key={title} colSpan={Object.keys(result).length}>
-								{title}
+			<div className={style.wrapper}>
+				<table className={style.table}>
+					<thead>
+						<tr>
+							<th rowSpan={2} className={style.firstColumn}>
+								環境変数名
 							</th>
-						))}
-					</tr>
-					<tr>
-						{allResult.flatMap(([title, result]) =>
-							Object.keys(result).map((c) => (
-								<th key={`${title}-${c}`}>{c}</th>
-							)),
-						)}
-					</tr>
-				</thead>
-				<tbody>
-					{[...listEnvTestEntries()].map(([envName], i) => (
-						<tr key={envName}>
-							<th className={style.firstColumn}>{envName}</th>
-							{tableData[i].map(([key, value]) => (
-								<td key={`${envName}-${key}`} className={style.center}>
-									{value}
-								</td>
+							{allResult.map(([title, result]) => (
+								<th key={title} colSpan={Object.keys(result).length}>
+									{title}
+								</th>
 							))}
 						</tr>
-					))}
-				</tbody>
-			</table>
+						<tr>
+							{allResult.flatMap(([title, result]) =>
+								Object.keys(result).map((c) => (
+									<th key={`${title}-${c}`}>{c}</th>
+								)),
+							)}
+						</tr>
+					</thead>
+					<tbody>
+						{[...listEnvTestEntries()].map(([envName], i) => (
+							<tr key={envName}>
+								<EnvTestEnvName name={envName} index={i} />
+								{tableData[i].map(([key, value]) => (
+									<td key={`${envName}-${key}`} className={style.center}>
+										{value}
+									</td>
+								))}
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
 		</figure>
 	);
 };

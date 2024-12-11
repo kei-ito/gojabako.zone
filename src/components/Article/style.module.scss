@@ -236,7 +236,6 @@
         display: grid;
         grid-auto-flow: row;
         padding-inline: 1em;
-        overflow-x: auto;
       }
 
       &[data-type='image'] {

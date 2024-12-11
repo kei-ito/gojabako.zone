@@ -2,6 +2,7 @@
 import { useCallback, useState } from "react";
 import { hasWindow } from "../../../../util/env";
 import { listEnvTestEntries } from "../../../../util/testEnv";
+import { EnvTestEnvName } from "./EnvTestEnvName";
 import style from "./style.module.scss";
 
 interface EnvTestResult {
@@ -21,6 +22,7 @@ export const EnvTestTable = ({ id }: EnvTestTableProps) => {
 		{ columnName: "Client", data: new Map() },
 	]);
 	const getResult = useCallback(() => setResult([...listEnvTestResult()]), []);
+	const publicPrefix = "NEXT_PUBLIC_";
 	return (
 		<>
 			<figure id={id} data-type="table">
@@ -30,37 +32,39 @@ export const EnvTestTable = ({ id }: EnvTestTableProps) => {
 						#{id}
 					</a>
 				</figcaption>
-				<table className={style.table}>
-					<thead>
-						<tr>
-							<th className={style.firstColumn}>
-								環境変数名
-								<button
-									type="button"
-									onClick={getResult}
-									className={style.button}
-								>
-									更新
-								</button>
-							</th>
-							{result.map((c) => (
-								<th key={c.columnName}>{c.columnName}</th>
-							))}
-						</tr>
-					</thead>
-					<tbody>
-						{[...listEnvTestEntries()].map(([key]) => (
-							<tr key={key}>
-								<th className={style.firstColumn}>{key}</th>
+				<div className={style.wrapper}>
+					<table className={style.table}>
+						<thead>
+							<tr>
+								<th className={style.firstColumn}>
+									環境変数名
+									<button
+										type="button"
+										onClick={getResult}
+										className={style.button}
+									>
+										更新
+									</button>
+								</th>
 								{result.map((c) => (
-									<td key={c.columnName} className={style.center}>
-										{c.data.get(key) ?? ""}
-									</td>
+									<th key={c.columnName}>{c.columnName}</th>
 								))}
 							</tr>
-						))}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{[...listEnvTestEntries()].map(([envName], i) => (
+								<tr key={envName}>
+									<EnvTestEnvName name={envName} index={i} />
+									{result.map((c) => (
+										<td key={c.columnName} className={style.center}>
+											{c.data.get(envName) ?? ""}
+										</td>
+									))}
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
 			</figure>
 			<details>
 				<summary>Markdown</summary>

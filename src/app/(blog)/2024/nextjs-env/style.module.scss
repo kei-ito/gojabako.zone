@@ -17,31 +17,39 @@
   text-align: center;
 }
 
+.wrapper {
+  overflow-x: auto;
+}
+
 .table {
+  min-inline-size: 100%;
   counter-reset: env;
 
   .firstColumn {
     z-index: 1;
     position: sticky;
     inset-inline-start: 0;
-    white-space: nowrap;
   }
 
   &>tbody {
     .firstColumn {
-      counter-increment: env;
+      white-space: nowrap;
 
-      &::before {
-        content: counter(env) ".";
-        display: inline-block;
-        inline-size: 1.7em;
-        text-align: end;
-        margin-inline-end: 0.3em;
-        font-size: 90%;
+      &.public {
+        &::before {
+          content: "NEXT_PUBLIC_";
+
+          /* stylelint-disable-next-line unit-allowed-list */
+          @media screen and (width <= 640px) {
+            content: "N.P ";
+          }
+        }
       }
     }
 
     th {
+      font-size: 80%;
+
       &:first-child {
         text-align: start;
       }
