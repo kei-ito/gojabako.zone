@@ -57,6 +57,10 @@ const handlers: Array<Handler> = [
 		handle: () => NextResponse.json([...listEnvTestEntries()]),
 	},
 	{
+		isResponsibleFor: ({ nextUrl: { pathname } }) => pathname === "/apphost",
+		handle: () => NextResponse.json(process.env.NEXT_PUBLIC_APP_HOST),
+	},
+	{
 		isResponsibleFor: ({ headers, nextUrl: { pathname } }) =>
 			headers.get("sec-fetch-dest") === "empty" ||
 			["/icon"].includes(pathname) ||

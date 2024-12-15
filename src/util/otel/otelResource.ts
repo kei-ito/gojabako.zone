@@ -4,7 +4,7 @@ import {
 	ATTR_SERVICE_NAME,
 	ATTR_SERVICE_VERSION,
 } from "@opentelemetry/semantic-conventions";
-import { appHost, hasProcess } from "../env";
+import { hasProcess } from "../env";
 import { site } from "../site";
 import { listEnvTestEntries } from "../testEnv";
 import { appVersion } from "../version";
@@ -15,7 +15,7 @@ const listRuntimeAttributes = function* (): Generator<
 	const ns = site.namespace;
 	yield [ATTR_SERVICE_NAME, site.name];
 	yield [ATTR_SERVICE_VERSION, appVersion];
-	yield [`${ns}.app_host`, appHost];
+	yield [`${ns}.app_host`, process.env.NEXT_PUBLIC_APP_HOST];
 	if (hasProcess) {
 		yield [`${ns}.node_env`, process.env.NODE_ENV || process.env.VERCEL_ENV];
 		yield [`${ns}.node_version`, process.version];

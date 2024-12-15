@@ -3,9 +3,9 @@ import type { FC, HTMLAttributes } from "react";
 import IconGitHub from "../../svg/fa-6.6.0/brands/github.svg";
 import IconXTwitter from "../../svg/fa-6.6.0/brands/x-twitter.svg";
 import IconRss from "../../svg/rss.svg";
-import { IconClass, classnames } from "../../util/classnames.ts";
-import { appHost } from "../../util/env";
+import { classnames } from "../../util/classnames.ts";
 import { site } from "../../util/site.ts";
+import { AppHost } from "../AppHost";
 import { SiteMap } from "../SiteMap";
 import * as style from "./style.module.scss";
 
@@ -30,10 +30,7 @@ export const SiteFooter = async (props: HTMLAttributes<HTMLElement>) => (
 		</section>
 		<section className={style.info}>
 			<div>
-				<div className={style.host}>
-					<span className={IconClass}>cloud_done</span>
-					<code>{appHost}</code>
-				</div>
+				<AppHost />
 			</div>
 			<div>
 				<div>©</div>
