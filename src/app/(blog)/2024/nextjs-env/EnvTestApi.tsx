@@ -18,11 +18,11 @@ const isResult = (input: unknown): input is Result =>
 	isArray(input) && input.every((item) => isResultItem(item));
 
 interface EnvTestApiProps {
-	columnName: string;
+	refId: string;
 	path: string;
 }
 
-export const EnvTestApi = ({ path, columnName }: EnvTestApiProps) => {
+export const EnvTestApi = ({ path, refId }: EnvTestApiProps) => {
 	const [data, setData] = useState<Result>([]);
 	useEffect(() => {
 		const abc = new AbortController();
@@ -46,5 +46,5 @@ export const EnvTestApi = ({ path, columnName }: EnvTestApiProps) => {
 			});
 		return () => abc.abort();
 	}, [path]);
-	return <EnvTestData data={data} columnName={columnName} />;
+	return <EnvTestData data={data} refId={refId} />;
 };

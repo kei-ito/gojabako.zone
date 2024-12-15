@@ -7,12 +7,10 @@ import { EnvTestSsr } from "./EnvTestSsr.tsx";
 import { EnvTestClient } from "./EnvTestClient.tsx";
 import { EnvTestTable } from "./EnvTestTable.tsx";
 import { EnvTestSummary } from "./EnvTestSummary.tsx";
+import { RefId } from "./refId.ts";
+import * as style from "./style.module.scss";
 
 [前の記事](./multi-cloud)で環境を複数にしたのでログをNewRelicに集めようとしたら環境変数が素直に渡らないことがあったので実験しました。
-
-## TL;DR
-
-[#結果](#table-summary)を見てください。
 
 ## 検証したいこと
 
@@ -28,36 +26,35 @@ import { EnvTestSummary } from "./EnvTestSummary.tsx";
 
 以下のラインナップで環境変数を設定します。説明のためVercelを例にします。
 
-- E: [.envファイル]での設定値
-- N: [next.config.js]での設定値
-- V: [Vercelの設定画面]での設定値
+- $X_\mathrm{env}$ [.envファイル]での設定値
+- $X_\mathrm{conf}$ [next.config.js]での設定値
+- $X_\mathrm{host}$ [Vercelの設定画面]での設定値 (サービス名に合わせます)
 
 [Vercelの設定画面]: https://vercel.com/docs/projects/environment-variables
 
-|環境変数名|E|N|V|観点|
+|環境変数 ※1|$X_\mathrm{env}$|$X_\mathrm{conf}$|$X_\mathrm{host}$|観点|
 |---|:---:|:---:|:---:|---|
-|EVTEST_ENV                |env|      |      |どこで使えるか|
-|EVTEST_CNF                |   |config|      |どこで使えるか|
-|EVTEST_HST                |   |      |vercel|どこで使えるか|
-|EVTEST_ENV_CNF            |env|config|      |どっちが勝つか|
-|EVTEST_ENV_HST            |env|      |vercel|どっちが勝つか|
-|EVTEST_CNF_HST            |   |config|vercel|どっちが勝つか|
-|NEXT_PUBLIC_<wbr/>EVTEST_ENV    |env|      |      |どこで使えるか|
-|NEXT_PUBLIC_<wbr/>EVTEST_CNF    |   |config|      |どこで使えるか|
-|NEXT_PUBLIC_<wbr/>EVTEST_HST    |   |      |vercel|どこで使えるか|
-|NEXT_PUBLIC_<wbr/>EVTEST_ENV_CNF|env|config|      |どっちが勝つか|
-|NEXT_PUBLIC_<wbr/>EVTEST_ENV_HST|env|      |vercel|どっちが勝つか|
-|NEXT_PUBLIC_<wbr/>EVTEST_CNF_HST|   |config|vercel|どっちが勝つか|
+|EVTEST_ENV    |E| | |どこで使えるか|
+|EVTEST_CNF    | |C| |どこで使えるか|
+|EVTEST_HST    | | |H|どこで使えるか|
+|EVTEST_ENV_CNF|E|C| |どちらの値が見えるのか|
+|EVTEST_ENV_HST|E| |H|どちらの値が見えるのか|
+|EVTEST_CNF_HST| |C|H|どちらの値が見えるのか|
+
+※1 `NEXT_PUBLIC_EVTEST_ENV` のように `NEXT_PUBLIC_` をつけたものも用意します。
+
+<details>
+<summary>値の設定方法</summary>
 
 ### .envファイルでの設定
 
 ```sh
-EVTEST_ENV=env
-EVTEST_ENV_CNF=env
-EVTEST_ENV_HST=env
-NEXT_PUBLIC_EVTEST_ENV=env
-NEXT_PUBLIC_EVTEST_ENV_CNF=env
-NEXT_PUBLIC_EVTEST_ENV_HST=env
+EVTEST_ENV=E
+EVTEST_ENV_CNF=E
+EVTEST_ENV_HST=E
+NEXT_PUBLIC_EVTEST_ENV=E
+NEXT_PUBLIC_EVTEST_ENV_CNF=E
+NEXT_PUBLIC_EVTEST_ENV_HST=E
 ```
 
 ### next.config.js (next.config.ts) での設定
@@ -65,13 +62,13 @@ NEXT_PUBLIC_EVTEST_ENV_HST=env
 ```ts
 const nextConfig: NextConfig = {
   env: {
-    EVTEST_CNF: "config",
-    EVTEST_ENV_CNF: "config",
-    EVTEST_CNF_HST: "config",
-    NEXT_PUBLIC_EVTEST_CNF: "config",
-    NEXT_PUBLIC_EVTEST_ENV_CNF: "config",
-    NEXT_PUBLIC_EVTEST_CNF_HST: "config",
-    // 以下はここで中継してみるテスト
+    EVTEST_CNF: "C",
+    EVTEST_ENV_CNF: "C",
+    EVTEST_CNF_HST: "C",
+    NEXT_PUBLIC_EVTEST_CNF: "C",
+    NEXT_PUBLIC_EVTEST_ENV_CNF: "C",
+    NEXT_PUBLIC_EVTEST_CNF_HST: "C",
+    // 以下はここで中継してみるテストです。
     EVTEST_ENV2: process.env.EVTEST_ENV,
     EVTEST_CNF2: process.env.EVTEST_CNF,
     EVTEST_HST2: process.env.EVTEST_HST,
@@ -92,11 +89,33 @@ const nextConfig: NextConfig = {
 
 ![Vercelの環境変数設定画面](./vercel01.webp)
 
-### 確認方法
+### Cloud Runの設定画面での設定
 
-まず、以下の関数を用意しました。
+![Cloud Runの環境変数設定画面](./cloudrun01.webp)
 
-```ts
+### Amplifyの設定画面での設定
+
+![Amplifyの環境変数設定画面](./amplify01.webp)
+
+### Netlifyの設定画面での設定
+
+![Netlifyの環境変数設定画面 (値が見えないですがHに設定しています。)](./netlify01.webp)
+
+</details>
+
+$(X_\mathrm{env}, X_\mathrm{conf}, X_\mathrm{host})$ の設定に対して、以下のタイミングで値を確認します。
+
+- $Y_\mathrm{mid}$ Middleware処理時
+- $Y_\mathrm{ssr}$ このページのSSR処理時
+- $Y_\mathrm{route}$ [/2024/nextjs-env/api/route.ts](/2024/nextjs-env/api) の処理時
+- $Y_\mathrm{client}$ このページのクライアント処理時
+
+<details>
+<summary>値の確認方法</summary>
+
+まず以下の関数を用意しました。
+
+```ts 環境変数を列挙する関数 listEnvTestEntries
 export const listEnvTestEntries = function* (): Generator<[string, string | undefined]> {
   yield ["EVTEST_ENV", process.env.EVTEST_ENV];
   yield ["EVTEST_CNF", process.env.EVTEST_CNF];
@@ -125,66 +144,102 @@ export const listEnvTestEntries = function* (): Generator<[string, string | unde
 };
 ```
 
-で、これを以下の部分で呼びます。
+### Middleware処理時
 
-|タイミング|値の処理|
-|---|---|
-|このページのMiddleware処理時|[`/envtest`](/envtest)でMiddlewareでの実行結果を返すようにし、リクエスト結果を表示するコンポーネントで表示します。|
-|このページのSSR処理時|SSR時の実行結果を表示するコンポーネントを作って出力します。|
-|route.tsの処理時|[`./api`](./api)で実行結果を返すようにし、リクエスト結果を表示するコンポーネントで表示します。|
-|このページのクライアント処理時|`"use client"` なコンポーネントを作ってブラウザ上での実行結果を出力します。|
+middleware.tsで [/envtest](/envtest) へのリクエストに上記関数の結果を返すようにします。このページでの結果は以下の通りです。
 
-## 結果
+<EnvTestApi path="/envtest" refId={RefId.middleware}/>
 
-注意: これは2024年12月9日ごろの結果です。
+### このページのSSR処理時
 
+SSRなコンポーネントで上記関数の結果を返すようにします。
+
+```tsx EnvTestSsr.tsx
+import { listEnvTestEntries } from "./path/to/listEnvTestEntries";
+import { EnvTestData } from "./EnvTestData";
+export const EnvTestSsr = () => (
+  <EnvTestData data={[...listEnvTestEntries()]} columnName="SSR" />
+);
+```
+
+`EnvTestData`は`EVTEST_ENV=env`のように変数名とその値を1行ずつ出力します。このページでの結果は以下の通りです。
+
+<EnvTestSsr/>
+
+### [/2024/nextjs-env/api/route.ts](/2024/nextjs-env/api) の処理時
+
+SSRと同じ結果と予想したのですが、念のため用意しました。
+
+```ts route.ts
+import { NextResponse } from "next/server";
+import { listEnvTestEntries } from "./path/to/listEnvTestEntries";
+export const GET = () => NextResponse.json([...listEnvTestEntries()]);
+```
+
+このページでの結果は以下の通りです。
+
+<EnvTestApi path="./api" refId={RefId.route} />
+
+### このページのクライアント処理時
+
+EnvTestSsr.tsx を "use client" にしたものです。Hydrationを避けるためuseEffect内で値を取得しています。
+
+```tsx EnvTestClient.tsx
+"use client";
+import { useEffect, useState } from "react";
+import { listEnvTestEntries } from "./path/to/listEnvTestEntries";
+import { EnvTestData } from "./EnvTestData";
+export const EnvTestClient = () => {
+	const [data, setData] = useState<Array<[string, string | undefined]>>([]);
+	useEffect(() => setData([...listEnvTestEntries()]), []);
+	return <EnvTestData data={data} columnName="Client" />;
+};
+```
+
+このページでの結果は以下の通りです。
+
+<EnvTestClient/>
+
+</details>
+
+## 2024年12月9日の結果
+
+※1 チェックがあるのは `NEXT_PUBLIC_` をつけた場合です。
+
+<div className={style.mathRef} id="Xenv">$X_\mathrm{env}$</div>
+<div className={style.mathRef} id="Xconf">$X_\mathrm{conf}$</div>
+<div className={style.mathRef} id="Xhost">$X_\mathrm{host}$</div>
+<div className={style.mathRef} id="Ymiddle">$Y_\mathrm{mid}$</div>
+<div className={style.mathRef} id="Yserver">$Y_\mathrm{ssr}$</div>
+<div className={style.mathRef} id="Yroute">$Y_\mathrm{route}$</div>
+<div className={style.mathRef} id="Yclient">$Y_\mathrm{client}$</div>
 <EnvTestSummary/>
 
 1. .envで設定した環境変数はどこで使えるのか (1行目)
-   1. サーバーで使える。`NEXT_PUBLIC_`がついていればクライアントでも使える。
+   1. サーバーで使える。`NEXT_PUBLIC_` がついていればクライアントでも使える。
    2. Cloud RunとAmplifyではMiddlewareでも使える。
-   3. VercelとNetlifyのMiddlewareでは使えない。`NEXT_PUBLIC_`がついていれば使える。
+   3. VercelとNetlifyのMiddlewareでは使えない。`NEXT_PUBLIC_` がついていれば使える。
 2. next.config.jsで設定した環境変数はどこで使えるのか (2)
-   1. どこでも使える。`NEXT_PUBLIC_`がついていなくてもクライアントで使える。
+   1. どこでも使える。`NEXT_PUBLIC_` がついていなくてもクライアントで使える。
 3. Cloud Runで設定した環境変数はどこで使えるのか (3)
-   1. クライアント以外で使える。`NEXT_PUBLIC_`がついていてもクライアントでは使えない。
+   1. クライアント以外で使える。`NEXT_PUBLIC_` がついていてもクライアントでは使えない。
 4. Amplifyで設定した環境変数はどこで使えるのか (3)
-   1. 使えない。`NEXT_PUBLIC_`がついていれば使える。
+   1. 使えない。`NEXT_PUBLIC_` がついていれば使える。
    2. next.config.jsで中継すると使える。クライアントでも使える。
 5. Netlify, Vercelで設定した環境変数はどこで使えるのか (3)
-   1. クライアント以外で使える。`NEXT_PUBLIC_`がついていればクライアントでも使える。
+   1. クライアント以外で使える。`NEXT_PUBLIC_` がついていればクライアントでも使える。
 6. .env (E) とnext.config.js (N) とVercel (V) の環境設定変数の優先順位 (4, 5, 6, 10, 11, 12)
    1. (E, N) はNが勝つ。
    2. (E, V) は ...
-      - `NEXT_PUBLIC_`がないとき、AmplifyではEが勝つ。それ以外はVが勝つ。
-      - `NEXT_PUBLIC_`があるとき、Cloud RunではEが勝つ。それ以外はVが勝つ。
+      - `NEXT_PUBLIC_` がないとき、AmplifyではEが勝つ。それ以外はVが勝つ。
+      - `NEXT_PUBLIC_` があるとき、Cloud RunではEが勝つ。それ以外はVが勝つ。
    3. (N, V) は N が勝つ。
 7. next.config.js で中継するとどうなるか (13-24)
    1. Cloud Runでは.envにある値以外は中継されず、既存の値も隠れてしまう。中継しない方がいい。
    2. Amplify, Netlify, Vercelでは中継される。クライアントでも使える。
 
-## このページでの結果
+## このページでの結果まとめ
 
 <EnvTestTable id="envtest-result"/>
-
-<details>
-<summary>元データ</summary>
-
-### Middleware
-
-<EnvTestApi path="/envtest" columnName="Middleware"/>
-
-### SSR
-
-<EnvTestSsr/>
-
-### API Route
-
-<EnvTestApi path="./api" columnName="API Route"/>
-
-### Client
-
-<EnvTestClient/>
-</details>
 
 以上です。MiddlewareからOpenTelemetryでログを送るところはまた別の記事で書きます。
