@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import { IconClass, classnames } from "../../../../util/classnames";
 import { gridArea } from "../../../../util/gridArea";
 import { listEnvTestEntries } from "../../../../util/testEnv";
@@ -54,7 +53,7 @@ export const EnvTestSummary = () => {
 		})(),
 	];
 	const headingRowCount = 2;
-	const headingColumnCount = 5;
+	const headingColumnCount = 1;
 	return (
 		<figure id={id} data-type="table">
 			<figcaption>
@@ -65,62 +64,55 @@ export const EnvTestSummary = () => {
 			</figcaption>
 			<div className={style.wrapper}>
 				<div className={style.table}>
-					<div className={style.heading} style={gridArea(1, 1, 3, 2)} />
 					<div
-						className={classnames(style.heading, style.label)}
-						style={gridArea(1, 2, 2, headingColumnCount + 1)}
+						className={classnames(
+							style.firstColumn,
+							style.heading,
+							style.label,
+						)}
+						style={gridArea(1, 1, 2, 2)}
 					>
-						環境変数の設定値
+						環境変数の設定
 					</div>
-					<div className={style.heading} style={gridArea(2, 2, 3, 3)}>
-						※1
+					<div
+						className={classnames(style.firstColumn, style.heading)}
+						style={gridArea(2, 1, 3, 2)}
+					>
+						{["Xenv", "Xconf", "Xhost"].map((refId) => (
+							<MathRef key={`heading2-${refId}`} refId={refId} />
+						))}
 					</div>
-					{["Xenv", "Xconf", "Xhost"].map((refId, i) => (
-						<MathRef
-							key={`heading2-${refId}`}
-							className={style.heading}
-							style={gridArea(2, i + 3, 3, i + 4)}
-							refId={refId}
-						/>
-					))}
 					{envNameList.map((envName, i) => {
 						const row = i + 1 + headingRowCount;
+						const isPublic = envName.startsWith("NEXT_PUBLIC_");
+						const hasEnv = envName.includes("_ENV");
+						const hasCnf = envName.includes("_CNF");
+						const hasHst = envName.includes("_HST");
 						return (
-							<Fragment key={`heading_${envName}`}>
-								<div
-									title={envName}
-									className={classnames(style.heading, style.label, style.no)}
-									style={gridArea(row, 1, row + 1, 2)}
-								>{`${i + 1}`}</div>
-								<div
-									title={envName}
-									className={classnames(style.heading, IconClass, style.icon)}
-									style={gridArea(row, 2, row + 1, 3)}
-								>
-									{envName.startsWith("NEXT_PUBLIC_") ? "check" : ""}
-								</div>
-								<div
-									title={envName}
-									className={classnames(style.heading)}
-									style={gridArea(row, 3, row + 1, 4)}
-								>
-									{envName.includes("_ENV") ? "E" : ""}
-								</div>
-								<div
-									title={envName}
-									className={classnames(style.heading)}
-									style={gridArea(row, 4, row + 1, 5)}
-								>
-									{envName.includes("_CNF") ? "C" : ""}
-								</div>
-								<div
-									title={envName}
-									className={classnames(style.heading)}
-									style={gridArea(row, 5, row + 1, 6)}
-								>
-									{envName.includes("_HST") ? "H" : ""}
-								</div>
-							</Fragment>
+							<div
+								key={`heading_${envName}`}
+								title={envName}
+								className={classnames(
+									style.firstColumn,
+									style.heading,
+									style.input,
+								)}
+								style={gridArea(row, 1, row + 1, 2)}
+							>
+								<span className={style.no}>{i + 1}.</span>
+								<span className={classnames(IconClass)}>
+									{isPublic ? "public" : "remove"}
+								</span>
+								<span className={classnames(!hasEnv && IconClass)}>
+									{hasEnv ? "E" : "remove"}
+								</span>
+								<span className={classnames(!hasCnf && IconClass)}>
+									{hasCnf ? "C" : "remove"}
+								</span>
+								<span className={classnames(!hasHst && IconClass)}>
+									{hasHst ? "H" : "remove"}
+								</span>
+							</div>
 						);
 					})}
 					{[

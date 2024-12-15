@@ -1,10 +1,14 @@
 import { type ExportResult, ExportResultCode } from "@opentelemetry/core";
-import type { OtlpHttpConfiguration } from "@opentelemetry/otlp-exporter-base/build/src/configuration/otlp-http-configuration";
 import { createExportLogsServiceRequest } from "@opentelemetry/otlp-transformer/build/src/logs";
 import type {
 	LogRecordExporter,
 	ReadableLogRecord,
 } from "@opentelemetry/sdk-logs";
+
+interface OtelLogExporterConstructorOptions {
+	url?: string | URL;
+	headers?: HeadersInit;
+}
 
 export class OtelLogExporter implements LogRecordExporter {
 	private readonly endpoint?: URL;
@@ -13,7 +17,7 @@ export class OtelLogExporter implements LogRecordExporter {
 
 	private readonly promises = new Set<Promise<void>>();
 
-	public constructor({ url, headers }: Partial<OtlpHttpConfiguration>) {
+	public constructor({ url, headers }: OtelLogExporterConstructorOptions) {
 		if (url && headers) {
 			this.endpoint = new URL(url);
 			const commonHeaders = new Headers(headers);

@@ -1,4 +1,4 @@
-import { getHttpConfigurationFromEnvironment } from "@opentelemetry/otlp-exporter-base/build/esm/configuration/otlp-http-env-configuration";
+import { baggageUtils } from "@opentelemetry/core";
 import {
 	LoggerProvider,
 	SimpleLogRecordProcessor,
@@ -7,9 +7,17 @@ import { OtelLogExporter } from "./OtelLogExporter";
 import { otelResource } from "./otelResource";
 import { otelWorkers } from "./otelWorkers";
 
-const logExporter = new OtelLogExporter(
-	getHttpConfigurationFromEnvironment("LOGS", "/v1/logs"),
-);
+const logExporter = new OtelLogExporter({
+	url: process.env.OTEL_EXPORTER_OTLP_LOGS_ENDPOINT,
+	headers: {
+		...baggageUtils.parseKeyPairsIntoRecord(
+			process.env.OTEL_EXPORTER_OTLP_LOGS_HEADERS?.trim(),
+		),
+		...baggageUtils.parseKeyPairsIntoRecord(
+			process.env.OTEL_EXPORTER_OTLP_HEADERS?.trim(),
+		),
+	},
+});
 otelWorkers.add(logExporter);
 
 const loggerProvider = new LoggerProvider({
