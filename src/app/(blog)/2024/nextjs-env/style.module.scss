@@ -23,7 +23,6 @@ figure {
     max-inline-size: 100%;
     inline-size: auto;
     overflow-x: auto;
-    background-color: var(--gjGray4);
   }
 }
 
@@ -34,6 +33,7 @@ figure {
   gap: 1px;
   /* stylelint-disable-next-line unit-allowed-list */
   padding: 1px;
+  inline-size: max-content;
   min-inline-size: 100%;
 
   & > div {
@@ -42,27 +42,43 @@ figure {
     place-content: center;
     padding: 0.2em 0.3em;
     background-color: var(--gjColorBackground);
+    box-shadow: 0 0 0 1px var(--gjGray4);
+
+    .icon {
+      font-size: 120%;
+    }
 
     &.heading {
       background-color: var(--gjGray2);
+
+      &.firstColumn {
+        z-index: 1;
+        position: sticky;
+        /* stylelint-disable-next-line unit-allowed-list */
+        inset-inline-start: 1px;
+      }
 
       &.label {
         font-size: 90%;
       }
 
+      &.input {
+        display: grid;
+        grid-template-columns: 1.8em repeat(4, 1.2em);
+        place-content: center;
+        place-items: center;
+
+        &>.no {
+          inline-size: 1.8em;
+          margin-inline-end: 0.5em;
+          font-variant-numeric: tabular-nums;
+          text-align: end;
+        }
+      }
+
       &.name {
         justify-content: start;
         padding-inline: 0.5em;
-      }
-
-      &.no {
-        inline-size: 2em;
-        font-variant-numeric: tabular-nums;
-        justify-content: end;
-      }
-
-      &.icon {
-        font-size: 140%;
       }
 
       &.odd {

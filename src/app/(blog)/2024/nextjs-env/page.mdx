@@ -8,6 +8,7 @@ import { EnvTestClient } from "./EnvTestClient.tsx";
 import { EnvTestTable } from "./EnvTestTable.tsx";
 import { EnvTestSummary } from "./EnvTestSummary.tsx";
 import { RefId } from "./refId.ts";
+import { IconClass } from "../../../../util/classnames";
 import * as style from "./style.module.scss";
 
 [前の記事](./multi-cloud)で環境を複数にしたのでログをNewRelicに集めようとしたら環境変数が素直に渡らないことがあったので実験しました。
@@ -204,7 +205,7 @@ export const EnvTestClient = () => {
 
 ## 2024年12月9日の結果
 
-※1 チェックがあるのは `NEXT_PUBLIC_` をつけた場合です。
+<span className={IconClass}>public</span> は `NEXT_PUBLIC_` をつけた場合です。
 
 <div className={style.mathRef} id="Xenv">$X_\mathrm{env}$</div>
 <div className={style.mathRef} id="Xconf">$X_\mathrm{conf}$</div>
