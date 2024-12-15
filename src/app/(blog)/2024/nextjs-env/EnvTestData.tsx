@@ -2,11 +2,11 @@ import style from "./style.module.scss";
 
 interface EnvTestDataProps {
 	data: Array<[string, string | undefined]>;
-	columnName: string;
+	refId: string;
 }
 
-export const EnvTestData = ({ data, columnName }: EnvTestDataProps) => (
-	<pre className={style.data} data-column-name={columnName}>
+export const EnvTestData = ({ data, refId }: EnvTestDataProps) => (
+	<pre className={style.data} data-ref-id={refId}>
 		{[
 			...(function* () {
 				for (const [k, v] of data) {
