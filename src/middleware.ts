@@ -1,18 +1,10 @@
 import { HttpStatusCode } from "@nlib/typing";
 import { type NextRequest, NextResponse } from "next/server";
-import { appHost } from "./util/env";
 import { getOtelAttributesFromNextRequest } from "./util/otel/getOtelAttributesFromNextRequest";
 import { otelLogger } from "./util/otel/otelLogger";
-import { site } from "./util/site";
 import { listEnvTestEntries } from "./util/testEnv";
 
-const proceed = (): NextResponse => {
-	const response = NextResponse.next();
-	if (appHost) {
-		response.headers.set(site.headers.appHost, appHost);
-	}
-	return response;
-};
+const proceed = (): NextResponse => NextResponse.next();
 
 interface Handler {
 	isResponsibleFor: (request: NextRequest) => boolean;
