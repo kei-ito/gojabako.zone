@@ -1,4 +1,3 @@
-import { headers } from "next/headers";
 import Link from "next/link";
 import type { FC, HTMLAttributes } from "react";
 import IconGitHub from "../../svg/fa-6.6.0/brands/github.svg";
@@ -24,38 +23,29 @@ const links: Array<{ Icon: FC; href: string; title: string }> = [
 	},
 ];
 
-export const SiteFooter = async (props: HTMLAttributes<HTMLElement>) => {
-	const headersList = await headers();
-	const hostFromHeaders = headersList.get(site.headers.appHost);
-	const host = hostFromHeaders || appHost;
-	return (
-		<footer {...props} className={classnames(style.container, props.className)}>
-			<section className={style.sitemap}>
-				<SiteMap />
-			</section>
-			<section className={style.info}>
-				<div>
-					{host && (
-						<div className={style.host}>
-							<span className={IconClass}>
-								{hostFromHeaders ? "cloud_done" : "cloud"}
-							</span>
-							<code>{host}</code>
-						</div>
-					)}
+export const SiteFooter = async (props: HTMLAttributes<HTMLElement>) => (
+	<footer {...props} className={classnames(style.container, props.className)}>
+		<section className={style.sitemap}>
+			<SiteMap />
+		</section>
+		<section className={style.info}>
+			<div>
+				<div className={style.host}>
+					<span className={IconClass}>cloud_done</span>
+					<code>{appHost}</code>
 				</div>
-				<div>
-					<div>©</div>
-					<Link href="/author">{site.author.name}</Link>
-					<div className={style.links}>
-						{links.map(({ Icon, href, title }) => (
-							<Link key={href} href={href} title={title} target="_blank">
-								<Icon />
-							</Link>
-						))}
-					</div>
+			</div>
+			<div>
+				<div>©</div>
+				<Link href="/author">{site.author.name}</Link>
+				<div className={style.links}>
+					{links.map(({ Icon, href, title }) => (
+						<Link key={href} href={href} title={title} target="_blank">
+							<Icon />
+						</Link>
+					))}
 				</div>
-			</section>
-		</footer>
-	);
-};
+			</div>
+		</section>
+	</footer>
+);

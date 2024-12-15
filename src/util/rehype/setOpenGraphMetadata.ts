@@ -9,6 +9,7 @@ import type { Root, RootContent } from "hast";
 import type { MdxjsEsm } from "mdast-util-mdxjs-esm";
 import { createProperty } from "../estree.ts";
 import { getSingle } from "../getSingle.ts";
+import { site } from "../site";
 import type { PageData } from "../type.ts";
 
 interface RootLike extends Omit<Root, "children"> {
@@ -33,7 +34,7 @@ export const setOpenGraphMetadata = (root: RootLike, page: PageData) => {
 	}
 	if (!propertyMap.has("images")) {
 		const property = createProperty("images", {
-			url: `/cover${page.path}`,
+			url: new URL(`/cover${page.path}`, site.vercelBaseUrl).href,
 			width: 1200,
 			height: 630,
 		});
