@@ -9,7 +9,7 @@ const allResult: Array<[string, Record<string, string>]> = [
 		"Cloud Run",
 		{
 			Ymiddle: "E,C,H,C,H,C,E,C,H,C,E,C,E,,,E,E,,E,,,E,E,",
-			Yserver: "E,C,H,C,H,C,E,C,H,C,E,C,E,,,E,E,,E,,,E,E,",
+			Yserver: "E,C,,C,E,C,E,C,,C,E,C,E,,,E,E,,E,,,E,E,",
 			Yroute: "E,C,H,C,H,C,E,C,H,C,E,C,E,,,E,E,,E,,,E,E,",
 			Yclient: ",C,,C,,C,E,C,,C,E,C,E,,,E,E,,E,,,E,E,",
 		},
@@ -18,7 +18,7 @@ const allResult: Array<[string, Record<string, string>]> = [
 		"Amplify",
 		{
 			Ymiddle: "E,C,,C,E,C,E,C,H,C,H,C,E,,H,E,H,H,E,,H,E,H,H",
-			Yserver: "E,C,,C,E,C,E,C,H,C,H,C,E,,H,E,H,H,E,,H,E,H,H",
+			Yserver: "E,C,H,C,H,C,E,C,H,C,H,C,E,,H,E,H,H,E,,H,E,H,H",
 			Yroute: "E,C,,C,E,C,E,C,H,C,H,C,E,,H,E,H,H,E,,H,E,H,H",
 			Yclient: ",C,,C,,C,E,C,H,C,H,C,E,,H,E,H,H,E,,H,E,H,H",
 		},

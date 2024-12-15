@@ -204,9 +204,9 @@ export const EnvTestClient = () => {
 
 </details>
 
-## 2024年12月9日の結果
+## 2024年12月15日の結果
 
-<span className={IconClass}>public</span> は `NEXT_PUBLIC_` をつけた場合です。
+<span className={IconClass}>public</span> は `NEXT_PUBLIC_` をつけた場合です。後半は `next.config.js` で中継した場合です。
 
 <div className={style.mathRef} id="Xenv">$X_\mathrm{env}$</div>
 <div className={style.mathRef} id="Xconf">$X_\mathrm{conf}$</div>
@@ -217,26 +217,24 @@ export const EnvTestClient = () => {
 <div className={style.mathRef} id="Yclient">$Y_\mathrm{client}$</div>
 <EnvTestSummary/>
 
-1. .envで設定した環境変数はどこで使えるのか (1行目)
+1. .envで設定した環境変数はどこで使えるのか (1, 7, 13, 19行目)
    1. サーバーで使える。`NEXT_PUBLIC_` がついていればクライアントでも使える。
    2. Cloud RunとAmplifyではMiddlewareでも使える。
    3. VercelとNetlifyのMiddlewareでは使えない。`NEXT_PUBLIC_` がついていれば使える。
-2. next.config.jsで設定した環境変数はどこで使えるのか (2)
+2. next.config.jsで設定した環境変数はどこで使えるのか (2, 8, 14, 20行目)
    1. どこでも使える。`NEXT_PUBLIC_` がついていなくてもクライアントで使える。
-3. Cloud Runで設定した環境変数はどこで使えるのか (3)
-   1. クライアント以外で使える。`NEXT_PUBLIC_` がついていてもクライアントでは使えない。
-4. Amplifyで設定した環境変数はどこで使えるのか (3)
-   1. 使えない。`NEXT_PUBLIC_` がついていれば使える。
-   2. next.config.jsで中継すると使える。クライアントでも使える。
-5. Netlify, Vercelで設定した環境変数はどこで使えるのか (3)
+3. Cloud Runで設定した環境変数はどこで使えるのか (3, 9行目)
+   1. middlewareとrouteで使える。`NEXT_PUBLIC_` がついていてもクライアントでは使えない。
+4. Amplifyで設定した環境変数はどこで使えるのか (3, 9行目)
+   1. SSR時に使える。`NEXT_PUBLIC_` がついていれば使える。
+   2. next.config.jsで中継するとどこでも使える。
+5. Netlify, Vercelで設定した環境変数はどこで使えるのか (3, 9行目)
    1. クライアント以外で使える。`NEXT_PUBLIC_` がついていればクライアントでも使える。
-6. .env (E) とnext.config.js (N) とVercel (V) の環境設定変数の優先順位 (4, 5, 6, 10, 11, 12)
-   1. (E, N) はNが勝つ。
-   2. (E, V) は ...
-      - `NEXT_PUBLIC_` がないとき、AmplifyではEが勝つ。それ以外はVが勝つ。
-      - `NEXT_PUBLIC_` があるとき、Cloud RunではEが勝つ。それ以外はVが勝つ。
-   3. (N, V) は N が勝つ。
-7. next.config.js で中継するとどうなるか (13-24)
+6. $X_\mathrm{env}$ と $X_\mathrm{conf}$ と $X_\mathrm{host}$の環境設定変数の優先順位
+   1. $(X_\mathrm{env}, X_\mathrm{conf})$ は $X_\mathrm{conf}$ が勝つ。(4行目)
+   2. $(X_\mathrm{env}, X_\mathrm{host})$ は ... 5行目を見てください。
+   3. $(X_\mathrm{conf}, X_\mathrm{host})$ は $X_\mathrm{conf}$ が勝つ。(6行目)
+7. next.config.js で中継するとどうなるか (13-24行目)
    1. Cloud Runでは.envにある値以外は中継されず、既存の値も隠れてしまう。中継しない方がいい。
    2. Amplify, Netlify, Vercelでは中継される。クライアントでも使える。
 
