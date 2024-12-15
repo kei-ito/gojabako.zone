@@ -27,12 +27,6 @@ const nextConfig: NextConfig = {
 	pageExtensions: ["tsx", "ts", "mdx"],
 	reactStrictMode: true,
 	env: {
-		OTEL_EXPORTER_OTLP_HEADERS: process.env.OTEL_EXPORTER_OTLP_HEADERS,
-		APP_HOST: process.env.APP_HOST,
-		VERCEL: process.env.VERCEL,
-		NETLIFY: process.env.NETLIFY,
-		K_SERVICE: process.env.K_SERVICE,
-		AWS_REGION: process.env.AWS_REGION,
 		EVTEST_CNF: "C",
 		EVTEST_ENV_CNF: "C",
 		EVTEST_CNF_HST: "C",
@@ -51,6 +45,9 @@ const nextConfig: NextConfig = {
 		NEXT_PUBLIC_EVTEST_ENV_CNF2: process.env.NEXT_PUBLIC_EVTEST_ENV_CNF,
 		NEXT_PUBLIC_EVTEST_ENV_HST2: process.env.NEXT_PUBLIC_EVTEST_ENV_HST,
 		NEXT_PUBLIC_EVTEST_CNF_HST2: process.env.NEXT_PUBLIC_EVTEST_CNF_HST,
+		...(process.env.AWS_REGION
+			? { OTEL_EXPORTER_OTLP_HEADERS: process.env.OTEL_EXPORTER_OTLP_HEADERS }
+			: {}),
 	},
 	webpack: (config, _options) => {
 		config.module.rules.push(
