@@ -23,6 +23,7 @@ figure {
     max-inline-size: 100%;
     inline-size: auto;
     overflow-x: auto;
+    background-color: var(--gjGray4);
   }
 }
 
@@ -34,7 +35,6 @@ figure {
   /* stylelint-disable-next-line unit-allowed-list */
   padding: 1px;
   min-inline-size: 100%;
-  background-color: var(--gjGray4);
 
   & > div {
     display: grid;
