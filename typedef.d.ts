@@ -1,14 +1,15 @@
 declare module "@storybook/react" {
-	import type { StoryAnnotations } from "@storybook/csf";
-	import type { ComponentType, ReactElement } from "react";
+	import type { FunctionComponent, ReactElement } from "react";
 
 	interface ReactRenderer<P> {
-		component: ComponentType<P>;
+		component: FunctionComponent<P>;
 		storyResult: ReactElement<unknown>;
 		canvasElement: HTMLElement;
 	}
 
-	export type Story<P = object> = StoryAnnotations<ReactRenderer<P>>;
+	export interface Story<P = object> {
+		render?: ArgsStoryFn<ReactRenderer<P>, []>;
+	}
 
 	export type StoryObj<C = ComponentType> = C extends ComponentType<infer P>
 		? Story<P>
