@@ -8,9 +8,6 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import { rehypeArticle } from "./src/unified/rehypeArticle.ts";
 import { rehypeEmbed } from "./src/unified/rehypeEmbed.ts";
-import { listEnvTestEntries } from "./src/util/testEnv.ts";
-
-console.info("EnvTest:beforeConfig", [...listEnvTestEntries()]);
 
 const withMDX = mdx({
 	options: {

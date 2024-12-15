@@ -6,8 +6,6 @@ import { otelLogger } from "./util/otel/otelLogger";
 import { site } from "./util/site";
 import { listEnvTestEntries } from "./util/testEnv";
 
-console.info("EnvTest:middleware", [...listEnvTestEntries()]);
-
 const proceed = (): NextResponse => {
 	const response = NextResponse.next();
 	if (appHost) {
@@ -93,6 +91,7 @@ const logRequest = (request: NextRequest) => {
 };
 
 export const middleware = async (request: NextRequest) => {
+	console.info(`${request.method} ${request.nextUrl.href}`);
 	for (const handler of handlers) {
 		if (handler.isResponsibleFor(request)) {
 			return handler.handle(request);
