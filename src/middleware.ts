@@ -19,11 +19,14 @@ const handlers: Array<Handler> = [
 	{
 		isResponsibleFor: ({ nextUrl: { pathname } }) =>
 			/\.php\d*$/.test(pathname) ||
-			/^\/wp-\w+$/.test(pathname) ||
+			pathname.includes("wp-") ||
+			pathname.includes("phpinfo") ||
 			[
+				".env",
 				".exe",
 				".sh",
 				".bat",
+				".ini",
 				".pwd",
 				".sql",
 				".db",
@@ -44,6 +47,8 @@ const handlers: Array<Handler> = [
 				"/.kube",
 				"/config",
 				"/_vti_pvt",
+				"/wp",
+				"/wordpress",
 			].some((v) => pathname.startsWith(v)),
 		handle: () => new NextResponse(null, { status: HttpStatusCode.Forbidden }),
 	},
@@ -67,7 +72,9 @@ const handlers: Array<Handler> = [
 			["/_next/static", "/_next/image", "/.netlify/verification"].some((v) =>
 				pathname.startsWith(v),
 			) ||
-			[".js", ".css", ".woff", ".woff2"].some((v) => pathname.endsWith(v)),
+			[".js", ".css", ".woff", ".woff2", "/robots.txt"].some((v) =>
+				pathname.endsWith(v),
+			),
 		handle: proceed,
 	},
 	{

@@ -26,6 +26,7 @@ export const getOtelAttributesFromNextRequest = (request: NextRequest) => {
 		[ATTR_APP_REQ("mode")]: request.mode,
 		[ATTR_APP_REQ("referer")]: request.referrer ?? NA,
 		[ATTR_APP_REQ("user_agent")]: request.headers.get("user-agent") ?? NA,
+		[ATTR_APP("time")]: new Date().toISOString(),
 	};
 	return attributes;
 };

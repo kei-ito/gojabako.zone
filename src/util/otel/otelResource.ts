@@ -16,6 +16,7 @@ const listRuntimeAttributes = function* (): Generator<
 	yield [ATTR_SERVICE_NAME, site.name];
 	yield [ATTR_SERVICE_VERSION, appVersion];
 	yield [`${ns}.app_host`, process.env.NEXT_PUBLIC_APP_HOST];
+	yield [`${ns}.time_start`, new Date().toISOString()];
 	if (hasProcess) {
 		yield [`${ns}.node_env`, process.env.NODE_ENV || process.env.VERCEL_ENV];
 		yield [`${ns}.node_version`, process.version];
