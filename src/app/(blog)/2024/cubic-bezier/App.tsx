@@ -24,7 +24,7 @@ import { clamp } from "../../../../util/clamp";
 import { classnames } from "../../../../util/classnames";
 import { getObjectId } from "../../../../util/getObjectId";
 import { noop } from "../../../../util/noop";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 const getCubicBezierFunction =
 	([x0, y0]: Point, [x1, y1]: Point, [x2, y2]: Point, [x3, y3]: Point) =>
@@ -237,14 +237,14 @@ const App = ({
 	}, [isInView]);
 	const svgStyle = { "--gjPx": `${r(pxScale)}px` } as CSSProperties;
 	return (
-		<div className={style.app}>
+		<div className={css.app}>
 			<DispatchContext.Provider value={dispatch}>
 				<Context.Provider value={context}>
 					<svg
 						viewBox={`${minX} ${minY} ${viewBoxWidth} ${viewBoxHeight}`}
 						className={classnames(
-							style.svg,
-							!context.noControl && style.hasControl,
+							css.svg,
+							!context.noControl && css.hasControl,
 						)}
 						style={svgStyle}
 						ref={setSvg}
@@ -252,7 +252,7 @@ const App = ({
 						<title>{svgTitle}</title>
 						{0 < isInViewCount && children}
 					</svg>
-					<div className={style.spacer} />
+					<div className={css.spacer} />
 					{footer}
 				</Context.Provider>
 			</DispatchContext.Provider>
@@ -332,12 +332,12 @@ const GridAndCurves = ({ step, gridClipPathId }: GridAndCurvesProps) => {
 						}
 					})(),
 				].join("")}
-				className={style.grid}
+				className={css.grid}
 				clipPath={gridClipPathId ? `url(#${gridClipPathId})` : undefined}
 			/>
-			<line x1={p0x} y1={p0y} x2={p1x} y2={p1y} className={style.handleLine} />
-			<line x1={p2x} y1={p2y} x2={p3x} y2={p3y} className={style.handleLine} />
-			<path d={d} className={style.curve} />
+			<line x1={p0x} y1={p0y} x2={p1x} y2={p1y} className={css.handleLine} />
+			<line x1={p2x} y1={p2y} x2={p3x} y2={p3y} className={css.handleLine} />
+			<path d={d} className={css.curve} />
 		</>
 	);
 };
@@ -401,7 +401,7 @@ const ControlPointHandle = ({ index }: { index: ControlPointIndex }) => {
 				cx={r(x)}
 				cy={r(y)}
 				r={r((noControl ? 6 : 10) * pxScale)}
-				className={classnames(style.handle, !noControl && style.control)}
+				className={classnames(css.handle, !noControl && css.control)}
 				data-index={index}
 			/>
 			{!noControl && (
@@ -409,7 +409,7 @@ const ControlPointHandle = ({ index }: { index: ControlPointIndex }) => {
 					cx={r(x)}
 					cy={r(y)}
 					r={r(24 * pxScale)}
-					className={classnames(style.handle, style.cover)}
+					className={classnames(css.handle, css.cover)}
 					tabIndex={0}
 					onPointerDown={onPointerDown}
 					onKeyDown={onKeyDown}
@@ -431,7 +431,7 @@ const GuideAndT = () => {
 				cx={r(p[0])}
 				cy={r(p[1])}
 				r={r((index === 0 ? 6 : 3) * pxScale)}
-				className={index === 0 ? style.point : style.ruler}
+				className={index === 0 ? css.point : css.ruler}
 			/>
 		);
 	});
@@ -474,7 +474,7 @@ export const TimingFunctionApp = ({
 			<clipPath id={clipPathId} ref={setClipPath}>
 				<ClipPath />
 			</clipPath>
-			<rect x="0" y="0" width="100" height="100" className={style.area} />
+			<rect x="0" y="0" width="100" height="100" className={css.area} />
 			<GridAndCurves step={10} gridClipPathId={clipPathId} />
 			<AnimatedShapes />
 			<ControlPointHandle index={1} />
@@ -526,13 +526,13 @@ const AnimatedShapes = () => {
 				d={cb.table
 					.map(([x, y], i) => `${i === 0 ? "M" : "L"}${r(x)} ${r(y)}`)
 					.join("")}
-				className={style.table}
+				className={css.table}
 			/>
 			{isNotMoving && isInView && <AnimatedPoint getY={cb} />}
 			<text
 				x="50"
 				y="130"
-				className={classnames(style.text, style.mono)}
+				className={classnames(css.text, css.mono)}
 				textAnchor="middle"
 			>
 				{pxScale < 0.6 ? "cubic-bezier" : ""}
@@ -574,15 +574,15 @@ const AnimatedPoint = ({ getY }: { getY: (x: number) => number }) => {
 	const rr = r(4 * pxScale);
 	return (
 		<>
-			<line x1={rx} y1="0" x2={rx} y2="100" className={style.guide} />
-			<line x1="0" y1={ry} x2="100" y2={ry} className={style.guide} />
-			<circle cx={rx} cy="100" r={rr} className={style.point} />
-			<circle cx="100" cy={ry} r={rr} className={style.point} />
-			<circle cx={rx} cy={ry} r={rr} className={style.point} />
+			<line x1={rx} y1="0" x2={rx} y2="100" className={css.guide} />
+			<line x1="0" y1={ry} x2="100" y2={ry} className={css.guide} />
+			<circle cx={rx} cy="100" r={rr} className={css.point} />
+			<circle cx="100" cy={ry} r={rr} className={css.point} />
+			<circle cx={rx} cy={ry} r={rr} className={css.point} />
 			<text
 				x={rx}
 				y={100 + 20 * pxScale}
-				className={classnames(style.text, style.math, "katex")}
+				className={classnames(css.text, css.math, "katex")}
 				textAnchor="middle"
 			>
 				<tspan className="mord mathnormal">x</tspan>
@@ -590,12 +590,12 @@ const AnimatedPoint = ({ getY }: { getY: (x: number) => number }) => {
 			<text
 				x={100 + 10 * pxScale}
 				y={ry}
-				className={classnames(style.text, style.math, "katex")}
+				className={classnames(css.text, css.math, "katex")}
 				dominantBaseline="middle"
 			>
 				<tspan className="mord mathnormal">y</tspan>
 			</text>
-			<g className={style.animated}>
+			<g className={css.animated}>
 				<RotatingRect phase={phase} x={-40} y={-10} times={1} />
 				<ScalingRect phase={phase} x={-40} y={30} rx={1} ry={0} />
 				<ScalingRect phase={phase} x={-40} y={70} rx={0} ry={2} />

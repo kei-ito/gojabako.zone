@@ -3,7 +3,7 @@ import type { PropsWithChildren } from "react";
 import { useEffect, useState } from "react";
 import { DataViewer } from "../DataViewer";
 import { FieldSet } from "../Form";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 interface KeyViewProps {
 	name: string;
@@ -29,11 +29,11 @@ export const CryptoKeyView = ({
 			.catch(setJwk);
 	}, [noExtract, keyObject]);
 	return (
-		<FieldSet className={style.container}>
+		<FieldSet className={css.container}>
 			<legend>{name}</legend>
-			<DataViewer value={keyObject} className={style.data} />
+			<DataViewer value={keyObject} className={css.data} />
 			{children}
-			{jwk && <DataViewer value={jwk} className={style.data} />}
+			{jwk && <DataViewer value={jwk} className={css.data} />}
 		</FieldSet>
 	);
 };

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { IconClass } from "../../util/classnames.ts";
 import { getCurrentUrl } from "../../util/getCurrentUrl.ts";
 import { noop } from "../../util/noop.ts";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 export const ElementInspector = () => {
 	const [div, setContainer] = useState<HTMLElement | null>(null);
@@ -14,14 +14,14 @@ export const ElementInspector = () => {
 			return noop;
 		}
 		const abc = new AbortController();
-		parent.classList.add(style.parent);
+		parent.classList.add(css.parent);
 		return () => {
 			abc.abort();
-			parent.classList.remove(style.parent);
+			parent.classList.remove(css.parent);
 		};
 	}, [parent]);
 	return (
-		<div ref={setContainer} className={style.controller}>
+		<div ref={setContainer} className={css.controller}>
 			<BaseWidthSelector parent={parent} />
 		</div>
 	);

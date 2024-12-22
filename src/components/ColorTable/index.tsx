@@ -1,6 +1,6 @@
 import type { CSSProperties, HTMLAttributes } from "react";
 import { classnames } from "../../util/classnames.ts";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 type ColorFn = (a: number, b: number, c: number) => [string, string];
 
@@ -16,7 +16,7 @@ export const ColorTable = ({
 	m = 12,
 	...props
 }: ColorTableProps) => (
-	<div {...props} className={classnames(style.table, props.className)}>
+	<div {...props} className={classnames(css.table, props.className)}>
 		{[...listColors(fn, n, m)]}
 	</div>
 );

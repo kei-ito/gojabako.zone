@@ -7,7 +7,7 @@ import { classnames } from "../../util/classnames.ts";
 import { site } from "../../util/site.ts";
 import { AppHost } from "../AppHost";
 import { SiteMap } from "../SiteMap";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 const links: Array<{ Icon: FC; href: string; title: string }> = [
 	{ Icon: IconRss, href: "/feed.atom", title: "更新情報 (Atom)" },
@@ -24,18 +24,18 @@ const links: Array<{ Icon: FC; href: string; title: string }> = [
 ];
 
 export const SiteFooter = async (props: HTMLAttributes<HTMLElement>) => (
-	<footer {...props} className={classnames(style.container, props.className)}>
-		<section className={style.sitemap}>
+	<footer {...props} className={classnames(css.container, props.className)}>
+		<section className={css.sitemap}>
 			<SiteMap />
 		</section>
-		<section className={style.info}>
+		<section className={css.info}>
 			<div>
 				<AppHost />
 			</div>
 			<div>
 				<div>©</div>
 				<Link href="/author">{site.author.name}</Link>
-				<div className={style.links}>
+				<div className={css.links}>
 					{links.map(({ Icon, href, title }) => (
 						<Link key={href} href={href} title={title} target="_blank">
 							<Icon />

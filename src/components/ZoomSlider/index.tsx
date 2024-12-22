@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { IconClass, classnames } from "../../util/classnames.ts";
 import type { LogSliderProps } from "../LogSlider";
 import { LogSlider, toLinearValue } from "../LogSlider";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 export const ZoomSlider = ({ className, ...props }: LogSliderProps) => {
 	const { onChangeValue, min, max } = props;
@@ -27,7 +27,7 @@ export const ZoomSlider = ({ className, ...props }: LogSliderProps) => {
 		[onChangeValue, min, max],
 	);
 	return (
-		<div className={classnames(style.container, className)}>
+		<div className={classnames(css.container, className)}>
 			<button type="button" className={IconClass} value="-" onClick={onClick}>
 				zoom_out
 			</button>

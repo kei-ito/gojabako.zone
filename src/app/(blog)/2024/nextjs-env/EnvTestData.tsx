@@ -1,4 +1,4 @@
-import style from "./style.module.scss";
+import style from "./style.module.css";
 
 interface EnvTestDataProps {
 	data: Array<[string, string | undefined]>;

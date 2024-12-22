@@ -23,7 +23,7 @@ import { decodeCellList, encodeCellList } from "../../../../util/cellList";
 import { clamp } from "../../../../util/clamp";
 import { IconClass, classnames } from "../../../../util/classnames.ts";
 import { getCurrentUrl } from "../../../../util/getCurrentUrl";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 type Cell = [number, number];
 type Edge = [number, number, number, number];
@@ -233,7 +233,7 @@ export const Cells = ({
 	const minY = vb.minY - size;
 	const maxY = vb.maxY;
 	return (
-		<g className={classnames(style.fill, className)}>
+		<g className={classnames(css.fill, className)}>
 			{cells.map((cell) => {
 				const x = cell[0] + p;
 				const y = cell[1] + p;
@@ -288,7 +288,7 @@ export const Grid = ({
 	return (
 		<path
 			{...props}
-			className={classnames(style.stroke, className)}
+			className={classnames(css.stroke, className)}
 			d={d}
 			style={{ strokeWidth: strokePx * dpx, ...props.style }}
 		/>
@@ -309,7 +309,7 @@ export const Boundary = ({
 	return (
 		<path
 			{...props}
-			className={classnames(style.stroke, className)}
+			className={classnames(css.stroke, className)}
 			d={d}
 			style={{ strokeWidth: strokePx * dpx, ...props.style }}
 		/>
@@ -342,7 +342,7 @@ export const AllEdges = ({
 	return (
 		<path
 			{...props}
-			className={classnames(style.stroke, props.className)}
+			className={classnames(css.stroke, props.className)}
 			style={{ strokeWidth: strokePx * dpx, ...props.style }}
 			d={getEdgesInViewD(edges, vb, arrowSize, 0.1, 0.15)}
 		/>
@@ -359,7 +359,7 @@ export const BoundaryEdges = ({
 	return (
 		<path
 			{...props}
-			className={classnames(style.stroke, props.className)}
+			className={classnames(css.stroke, props.className)}
 			style={{ strokeWidth: strokePx * dpx, ...props.style }}
 			d={getEdgesInViewD(unitEdges.boundary, vb, arrowSize, 0.1, 0.15)}
 		/>
@@ -376,7 +376,7 @@ export const NonBoundaryEdges = ({
 	return (
 		<path
 			{...props}
-			className={classnames(style.stroke, props.className)}
+			className={classnames(css.stroke, props.className)}
 			style={{ strokeWidth: strokePx * dpx, ...props.style }}
 			d={getEdgesInViewD(unitEdges.nonBoundary, vb, arrowSize, 0.1, 0.15)}
 		/>
@@ -392,7 +392,7 @@ export const CellDelimiters = ({
 	return (
 		<path
 			{...props}
-			className={classnames(style.stroke, props.className)}
+			className={classnames(css.stroke, props.className)}
 			style={{ strokeWidth: strokePx * dpx, ...props.style }}
 			d={getEdgesInViewD(unitEdges.cellDelimiter, vb, 0, 0, 0.2)}
 		/>
@@ -644,7 +644,7 @@ export const NormalizeAnimationApp = ({
 		<>
 			<Svg
 				{...props}
-				className={style.app}
+				className={css.app}
 				cells={cells}
 				style={varStyle}
 				setSvgElement={setSvgElement}
@@ -664,8 +664,8 @@ export const NormalizeAnimationApp = ({
 				onRepeat={onRepeat}
 			>
 				{!isDefaultCells && (
-					<button type="button" className={style.reset} onClick={reset}>
-						<span className={classnames(style.icon, IconClass)}>delete</span>
+					<button type="button" className={css.reset} onClick={reset}>
+						<span className={classnames(css.icon, IconClass)}>delete</span>
 						<span>リセット</span>
 					</button>
 				)}
@@ -745,7 +745,7 @@ const TargetCell = ({ cell }: { cell: Cell | null }) => {
 				y={r(cell[1])}
 				width={1}
 				height={1}
-				className={style.target}
+				className={css.target}
 				style={{ strokeWidth: 4 * dpx }}
 			>
 				<title>
@@ -801,7 +801,7 @@ const PhaseControl = ({
 	}, [isPlaying, durationMs, repeatDelayMs, onChangeValue, onRepeat]);
 	const onClickPlay = useCallback(() => setAutoPlay((v) => !v), []);
 	return (
-		<div className={style.control}>
+		<div className={css.control}>
 			<button
 				type="button"
 				title="再生/一時停止"
@@ -848,7 +848,7 @@ const TurnTypeSelector = ({
 		[onChangeValue],
 	);
 	return (
-		<div className={style.turnType}>
+		<div className={css.turnType}>
 			{[...Object.values(TurnType)].map((type) => {
 				const name = `${appId}TurnType`;
 				return (
@@ -882,14 +882,14 @@ const NormalizedPath = ({ edges }: NormalizedPathProps) => {
 				return (
 					<path
 						key={d}
-						className={classnames(style.stroke, style.indexColor)}
+						className={classnames(css.stroke, css.indexColor)}
 						style={pathStyle}
 						d={d}
 					/>
 				);
 			})}
 			<path
-				className={classnames(style.stroke)}
+				className={classnames(css.stroke)}
 				style={{ strokeWidth: 4 * dpx, color: "var(--gjGray6)" }}
 				d={getEdgesInViewD(edges.remainder, vb, dpx * 8, 0, 0.2)}
 			/>
@@ -990,21 +990,21 @@ const DList = ({ edges, partsCount, maxPartsCount }: DListProps) => {
 	);
 	const varStyle = { "--gjTotalCount": `${partsCount}` } as CSSProperties;
 	return (
-		<div className={style.dList} style={varStyle}>
+		<div className={css.dList} style={varStyle}>
 			{dList.map(({ key, d, normalized, remainder }, index) => {
 				const indexStyle = { "--gjIndex": index } as CSSProperties;
 				return (
 					<Fragment key={key}>
 						<div
 							className={classnames(
-								style.badge,
-								normalized && style.indexColor,
-								remainder && style.remainder,
-								!d && style.empty,
+								css.badge,
+								normalized && css.indexColor,
+								remainder && css.remainder,
+								!d && css.empty,
 							)}
 							style={indexStyle}
 						/>
-						<code className={classnames(!d && style.empty)} tabIndex={0}>
+						<code className={classnames(!d && css.empty)} tabIndex={0}>
 							{d}
 						</code>
 					</Fragment>

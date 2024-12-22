@@ -8,7 +8,7 @@ import { ignoreENOENT } from "../util/node/ignoreENOENT.ts";
 import { walkFiles } from "../util/node/walkFiles.ts";
 
 const cliName = import.meta.url.slice(rootDir.href.length);
-const scssSuffix = ".module.scss";
+const cssSuffix = ".module.css";
 const rootPath = fileURLToPath(rootDir);
 
 const generate = async (scssFilePath: string) => {
@@ -24,12 +24,12 @@ const cleanup = async (dtsFilePath: string) => {
 
 if (process.argv.includes("--watch")) {
 	const onChange = (filePath: string) => {
-		if (filePath.endsWith(scssSuffix)) {
+		if (filePath.endsWith(cssSuffix)) {
 			generate(filePath).catch(ignoreENOENT({ throw: false }));
 		}
 	};
 	const onUnlink = (filePath: string) => {
-		if (filePath.endsWith(scssSuffix)) {
+		if (filePath.endsWith(cssSuffix)) {
 			cleanup(`${filePath}.d.ts`).catch(ignoreENOENT({ throw: false }));
 		}
 	};
@@ -42,9 +42,9 @@ if (process.argv.includes("--watch")) {
 	const found = new Set<string>();
 	for await (const file of walkFiles(srcDir)) {
 		const filePath = fileURLToPath(file);
-		if (filePath.endsWith(scssSuffix)) {
+		if (filePath.endsWith(cssSuffix)) {
 			processed.add(await generate(filePath));
-		} else if (filePath.endsWith(`${scssSuffix}.d.ts`)) {
+		} else if (filePath.endsWith(`${cssSuffix}.d.ts`)) {
 			found.add(filePath);
 		}
 	}

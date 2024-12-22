@@ -2,14 +2,14 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { classnames } from "../../util/classnames.ts";
 import { storyGroups } from "./all.ts";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 interface StorybookNavProps {
 	currentPath?: string;
 }
 
 export const StorybookNav = ({ currentPath = "" }: StorybookNavProps) => (
-	<nav className={style.list}>{[...listItems(currentPath)]}</nav>
+	<nav className={css.list}>{[...listItems(currentPath)]}</nav>
 );
 
 const listItems = function* (currentPath: string): Generator<ReactNode> {
@@ -25,7 +25,7 @@ const listItems = function* (currentPath: string): Generator<ReactNode> {
 				<Link
 					key={storyPath}
 					href={`/app/components/${storyPath}`}
-					className={classnames(active && style.active)}
+					className={classnames(active && css.active)}
 				>
 					{storyPath}
 				</Link>

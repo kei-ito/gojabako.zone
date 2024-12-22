@@ -1,0 +1,50 @@
+.container {
+	--gjSize: 1em;
+	--gjSize2: calc(var(--gjSize) * 2);
+	--gjColor: var(--gjGray1);
+	display: grid;
+	grid-template-columns: minmax(10em, auto) 1fr;
+	min-block-size: var(--gjFullScreenAvailableHeight);
+	background-image: linear-gradient(45deg, var(--gjColor) 26%, transparent 26%),
+		linear-gradient(225deg, var(--gjColor) 26%, transparent 26%),
+		linear-gradient(45deg, var(--gjColor) 26%, transparent 26%),
+		linear-gradient(225deg, var(--gjColor) 26%, transparent 26%);
+	background-size: var(--gjSize2) var(--gjSize2);
+	background-repeat: repeat;
+	background-position: 0% 0, calc(0% + var(--gjSize)) var(--gjSize),
+		calc(0% + var(--gjSize)) var(--gjSize), calc(0% + var(--gjSize2)) 0;
+
+	& > nav {
+		background-color: var(--gjGray1);
+		border-inline-end: solid var(--gj1px) var(--gjGray4);
+	}
+
+	@media (width < 40em) {
+		grid-template-columns: 1fr;
+		grid-template-rows: auto 1fr;
+
+		& > nav {
+			border-inline-end: unset;
+			border-block-end: solid var(--gj1px) var(--gjGray4);
+		}
+	}
+}
+
+.list {
+	display: grid;
+	grid-auto-flow: row;
+	align-content: start;
+	padding: var(--gjBasePadding);
+	line-height: 1.4;
+
+	& > .active {
+		font-weight: 700;
+	}
+}
+
+.body {
+	display: grid;
+	grid-auto-flow: row;
+	align-content: start;
+	justify-content: start;
+}

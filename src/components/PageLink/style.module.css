@@ -1,0 +1,27 @@
+.container {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: flex-start;
+	text-decoration: none;
+	color: inherit;
+
+	& > * {
+		margin-inline-end: 0.25em;
+	}
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.time {
+	font-size: 80%;
+	color: var(--gjColorText2);
+}
+
+.description {
+	font-size: 80%;
+	vertical-align: text-top;
+	text-decoration: none;
+}

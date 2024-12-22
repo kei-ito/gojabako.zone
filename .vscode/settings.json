@@ -2,5 +2,9 @@
 	"css.validate": false,
 	"scss.validate": false,
 	"stylelint.enable": true,
-	"stylelint.validate": ["css", "scss"]
+	"stylelint.validate": ["css", "scss"],
+	"explorer.fileNesting.enabled": true,
+	"explorer.fileNesting.patterns": {
+		"*.module.css": "$(capture).module.css.d.ts, $(capture).module.css.d.ts.map"
+	}
 }

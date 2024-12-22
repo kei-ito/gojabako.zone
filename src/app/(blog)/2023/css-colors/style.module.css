@@ -1,0 +1,26 @@
+.table {
+	inline-size: 100% !important;
+	max-inline-size: max-content;
+	padding-inline: 1em;
+	margin-block: 1em;
+	justify-items: center;
+	overflow: auto;
+
+	& > * {
+		min-inline-size: 8em;
+	}
+}
+
+.light {
+	color: #fff;
+	text-shadow: 0 0 0.1em #000;
+}
+
+.dark {
+	color: #000;
+	text-shadow: 0 0 0.1em #fff;
+}
+
+.notext {
+	color: transparent;
+}

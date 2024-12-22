@@ -5,7 +5,7 @@ import { hasWindow } from "../../../../util/env";
 import { gridArea } from "../../../../util/gridArea";
 import { listEnvTestEntries } from "../../../../util/testEnv";
 import { MathRef } from "./MathRef";
-import style from "./style.module.scss";
+import style from "./style.module.css";
 
 interface EnvTestResult {
 	refId: string;

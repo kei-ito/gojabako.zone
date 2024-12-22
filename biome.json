@@ -9,5 +9,10 @@
 				"noUnusedImports": { "level": "error", "fix": "safe" }
 			}
 		}
+	},
+	"css": {
+		"parser": {
+			"cssModules": true
+		}
 	}
 }

@@ -10,7 +10,7 @@ import { EnvTestTable } from "./EnvTestTable.tsx";
 import { EnvTestSummary } from "./EnvTestSummary.tsx";
 import { RefId } from "./refId.ts";
 import { IconClass } from "../../../../util/classnames";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 [前の記事](./multi-cloud)で環境を複数にしたのでログをNewRelicに集めようとしたら環境変数が素直に渡らないことがあったので実験しました。
 
@@ -208,13 +208,13 @@ export const EnvTestClient = () => {
 
 <span className={IconClass}>public</span> は `NEXT_PUBLIC_` をつけた場合です。後半は `next.config.js` で中継した場合です。
 
-<div className={style.mathRef} id="Xenv">$X_\mathrm{env}$</div>
-<div className={style.mathRef} id="Xconf">$X_\mathrm{conf}$</div>
-<div className={style.mathRef} id="Xhost">$X_\mathrm{host}$</div>
-<div className={style.mathRef} id="Ymiddle">$Y_\mathrm{mid}$</div>
-<div className={style.mathRef} id="Yserver">$Y_\mathrm{ssr}$</div>
-<div className={style.mathRef} id="Yroute">$Y_\mathrm{route}$</div>
-<div className={style.mathRef} id="Yclient">$Y_\mathrm{client}$</div>
+<div className={css.mathRef} id="Xenv">$X_\mathrm{env}$</div>
+<div className={css.mathRef} id="Xconf">$X_\mathrm{conf}$</div>
+<div className={css.mathRef} id="Xhost">$X_\mathrm{host}$</div>
+<div className={css.mathRef} id="Ymiddle">$Y_\mathrm{mid}$</div>
+<div className={css.mathRef} id="Yserver">$Y_\mathrm{ssr}$</div>
+<div className={css.mathRef} id="Yroute">$Y_\mathrm{route}$</div>
+<div className={css.mathRef} id="Yclient">$Y_\mathrm{client}$</div>
 <EnvTestSummary/>
 
 1. .envで設定した環境変数はどこで使えるのか (1, 7, 13, 19行目)

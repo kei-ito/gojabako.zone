@@ -1,0 +1,159 @@
+.fill {
+	fill: currentcolor;
+	stroke: none;
+}
+
+.stroke {
+	fill: none;
+	stroke: currentcolor;
+}
+
+.blink {
+	animation: blink 1000ms linear infinite alternate-reverse;
+
+	@keyframes blink {
+		0% {
+			opacity: 1;
+		}
+
+		50% {
+			opacity: 0;
+		}
+
+		100% {
+			opacity: 0;
+		}
+	}
+
+	@media print {
+		animation: none;
+	}
+}
+
+.control {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	column-gap: 0.5em;
+	margin-block-start: 0.5em;
+
+	& > button {
+		font-size: 200%;
+	}
+}
+
+.turnType {
+	grid-column: 1 / -1;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	column-gap: 1em;
+	padding-block: 0.25em;
+
+	& > label {
+		display: grid;
+		grid-auto-flow: column;
+		align-items: center;
+		column-gap: 0.3em;
+		line-height: 1;
+
+		& > input {
+			--gjSize: 1.25em;
+			inline-size: var(--gjSize);
+			block-size: var(--gjSize);
+		}
+	}
+}
+
+.dList {
+	grid-column: 1 / -1;
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	gap: 0.3em;
+	align-items: center;
+	margin-block-start: 0.5em;
+	overflow: hidden;
+	line-height: 1.2;
+
+	& > .badge {
+		justify-self: stretch;
+		inline-size: 1.1em;
+		block-size: 100%;
+		border-radius: var(--gjBorderRadius);
+		border-style: solid;
+		border-color: currentcolor;
+		background-color: currentcolor;
+
+		&.remainder {
+			color: var(--gjGray6);
+		}
+
+		&.empty {
+			color: var(--gjGray6);
+			background-color: transparent;
+		}
+	}
+
+	& > code {
+		white-space: pre;
+		overflow: hidden;
+		text-overflow: ellipsis;
+
+		&:hover,
+		&:focus {
+			white-space: pre-wrap;
+			word-break: break-all;
+		}
+
+		&.empty {
+			&::before {
+				content: "Empty";
+				opacity: 0;
+			}
+		}
+	}
+}
+
+.indexColor {
+	color: oklch(
+		60% 100% calc(360deg * (var(--gjIndex) + 1) / var(--gjTotalCount))
+	);
+}
+
+button.reset {
+	position: absolute;
+	inset-block-end: 100%;
+	inset-inline-end: 0;
+	display: grid;
+	grid-template-columns: max-content max-content;
+	align-items: center;
+	inline-size: auto;
+	padding-inline: 0.1em 0.2em;
+	font-size: 80%;
+	font-weight: bold;
+	background-color: var(--gjGray0);
+	border-style: solid;
+	border-radius: var(--gjBorderRadius);
+
+	& > .icon {
+		font-size: 150%;
+	}
+
+	&:hover {
+		background-color: var(--gjGray2);
+	}
+
+	@media print {
+		display: none;
+	}
+}
+
+.app {
+	cursor: pointer;
+}
+
+.target {
+	fill: currentcolor;
+	stroke: none;
+	opacity: 0.1;
+}

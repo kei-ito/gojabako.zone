@@ -13,7 +13,7 @@ import {
   oklab,
 } from '../../../../components/ColorTable';
 import { classnames } from '../../../../util/classnames.ts';
-import * as style from './style.module.scss';
+import * as css from './style.module.css';
 
 [hsl], [hwb], [lch], [oklch], [lab], [oklab]の色の見え方を確認できます。
 
@@ -28,17 +28,17 @@ import * as style from './style.module.scss';
 
 `color: #ffffff`の場合
 
-<ColorTable fn={hsl.fn} className={classnames(style.table, style.light)} />
+<ColorTable fn={hsl.fn} className={classnames(css.table, css.light)} />
 
 `color: #000000`の場合
 
-<ColorTable fn={hsl.fn} className={classnames(style.table, style.dark)} />
+<ColorTable fn={hsl.fn} className={classnames(css.table, css.dark)} />
 
 `filter: grayscale(100%)`の場合
 
 <ColorTable
   fn={hsl.fn}
-  className={classnames(style.table, style.notext)}
+  className={classnames(css.table, css.notext)}
   style={{ filter: 'grayscale(100%)' }}
 />
 
@@ -46,17 +46,17 @@ import * as style from './style.module.scss';
 
 `color: #ffffff`の場合
 
-<ColorTable fn={hwb.fn} className={classnames(style.table, style.light)} />
+<ColorTable fn={hwb.fn} className={classnames(css.table, css.light)} />
 
 `color: #000000`の場合
 
-<ColorTable fn={hwb.fn} className={classnames(style.table, style.dark)} />
+<ColorTable fn={hwb.fn} className={classnames(css.table, css.dark)} />
 
 `filter: grayscale(100%)`の場合
 
 <ColorTable
   fn={hwb.fn}
-  className={classnames(style.table, style.notext)}
+  className={classnames(css.table, css.notext)}
   style={{ filter: 'grayscale(100%)' }}
 />
 
@@ -64,17 +64,17 @@ import * as style from './style.module.scss';
 
 `color: #ffffff`の場合
 
-<ColorTable fn={lch.fn} className={classnames(style.table, style.light)} />
+<ColorTable fn={lch.fn} className={classnames(css.table, css.light)} />
 
 `color: #000000`の場合
 
-<ColorTable fn={lch.fn} className={classnames(style.table, style.dark)} />
+<ColorTable fn={lch.fn} className={classnames(css.table, css.dark)} />
 
 `filter: grayscale(100%)`の場合
 
 <ColorTable
   fn={lch.fn}
-  className={classnames(style.table, style.notext)}
+  className={classnames(css.table, css.notext)}
   style={{ filter: 'grayscale(100%)' }}
 />
 
@@ -82,17 +82,17 @@ import * as style from './style.module.scss';
 
 `color: #ffffff`の場合
 
-<ColorTable fn={oklch.fn} className={classnames(style.table, style.light)} />
+<ColorTable fn={oklch.fn} className={classnames(css.table, css.light)} />
 
 `color: #000000`の場合
 
-<ColorTable fn={oklch.fn} className={classnames(style.table, style.dark)} />
+<ColorTable fn={oklch.fn} className={classnames(css.table, css.dark)} />
 
 `filter: grayscale(100%)`の場合
 
 <ColorTable
   fn={oklch.fn}
-  className={classnames(style.table, style.notext)}
+  className={classnames(css.table, css.notext)}
   style={{ filter: 'grayscale(100%)' }}
 />
 
@@ -100,17 +100,17 @@ import * as style from './style.module.scss';
 
 `color: #ffffff`の場合
 
-<ColorTable fn={lab.fn} className={classnames(style.table, style.light)} />
+<ColorTable fn={lab.fn} className={classnames(css.table, css.light)} />
 
 `color: #000000`の場合
 
-<ColorTable fn={lab.fn} className={classnames(style.table, style.dark)} />
+<ColorTable fn={lab.fn} className={classnames(css.table, css.dark)} />
 
 `filter: grayscale(100%)`の場合
 
 <ColorTable
   fn={lab.fn}
-  className={classnames(style.table, style.notext)}
+  className={classnames(css.table, css.notext)}
   style={{ filter: 'grayscale(100%)' }}
 />
 
@@ -118,16 +118,16 @@ import * as style from './style.module.scss';
 
 `color: #ffffff`の場合
 
-<ColorTable fn={oklab.fn} className={classnames(style.table, style.light)} />
+<ColorTable fn={oklab.fn} className={classnames(css.table, css.light)} />
 
 `color: #000000`の場合
 
-<ColorTable fn={oklab.fn} className={classnames(style.table, style.dark)} />
+<ColorTable fn={oklab.fn} className={classnames(css.table, css.dark)} />
 
 `filter: grayscale(100%)`の場合
 
 <ColorTable
   fn={oklab.fn}
-  className={classnames(style.table, style.notext)}
+  className={classnames(css.table, css.notext)}
   style={{ filter: 'grayscale(100%)' }}
 />

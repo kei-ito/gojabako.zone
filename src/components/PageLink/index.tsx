@@ -1,7 +1,7 @@
 import { isString } from "@nlib/typing";
 import Link from "next/link";
 import type { PageData } from "../../util/type.ts";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 interface PageLinkProps {
 	page: PageData;
@@ -17,14 +17,14 @@ export const PageLink = ({ page, showDescription }: PageLinkProps) => {
 		getDateString(page.publishedAt) !== getDateString(page.updatedAt);
 	return (
 		<>
-			<Link href={page.path} className={style.container}>
+			<Link href={page.path} className={css.container}>
 				<span>{page.title.join("")}</span>
 				<PageDate dateTime={publishedAt} suffix="公開" />
 				{isUpdated && (
 					<PageDate dateTime={page.updatedAt} suffix="更新" bracket />
 				)}
 				{showDescription && page.description && (
-					<span className={style.description}>{page.description}</span>
+					<span className={css.description}>{page.description}</span>
 				)}
 			</Link>
 		</>
@@ -41,7 +41,7 @@ const PageDate = ({ dateTime, suffix, bracket = false }: PageDateProps) => {
 	const date = new Date(dateTime);
 	return (
 		<time
-			className={style.time}
+			className={css.time}
 			dateTime={date.toISOString()}
 			title={getJstString(date)}
 		>

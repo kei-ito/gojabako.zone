@@ -1,13 +1,15 @@
 import { readFile, writeFile } from "node:fs/promises";
-import type { AtRule, Root, Rule } from "postcss";
-import { parse as parseScss } from "postcss-scss";
+import postcss from "postcss";
+import type { AtRule, Document, Root, Rule } from "postcss";
 import parseSelector from "postcss-selector-parser";
 
 export const generateCssModuleType = async (
 	scssFilePath: string,
 	localByDefault = true,
 ) => {
-	const root = parseScss(await readFile(scssFilePath, "utf-8"));
+	const { root } = await postcss().process(
+		await readFile(scssFilePath, "utf-8"),
+	);
 	const dest = `${scssFilePath}.d.ts`;
 	await writeFile(
 		dest,
@@ -17,7 +19,7 @@ export const generateCssModuleType = async (
 };
 
 export const listLocalNames = function* (
-	container: AtRule | Root | Rule,
+	container: AtRule | Root | Rule | Document,
 	isLocal: boolean,
 ): Generator<string> {
 	const yielded = new Set<string>();
@@ -33,7 +35,7 @@ export const listLocalNames = function* (
 };
 
 export const listSelectors = function* (
-	container: AtRule | Root | Rule,
+	container: AtRule | Root | Rule | Document,
 ): Generator<string> {
 	const selectors = new Set<string>();
 	if ("selector" in container) {

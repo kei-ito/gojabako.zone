@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { Figure } from '../../../../components/Figure';
 import * as BoundaryTracing from './App';
 import { cells2024, cellsWithHoles } from './constants';
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 以下のように格子状の面があり、マス目のいくつかが塗られているとします。
 
@@ -42,13 +42,13 @@ import * as style from "./style.module.scss";
     <BoundaryTracing.Grid strokePx={2} style={{color: 'var(--gjGray3)'}} />
     <BoundaryTracing.Cells style={{color: 'var(--gjGray3)'}} />
     <BoundaryTracing.BoundaryEdges strokePx={4} style={{color: 'var(--gjBlue6)'}} />
-    <BoundaryTracing.NonBoundaryEdges strokePx={4} style={{color: 'var(--gjRed6)'}} className={style.blink} />
+    <BoundaryTracing.NonBoundaryEdges strokePx={4} style={{color: 'var(--gjRed6)'}} className={css.blink} />
   </BoundaryTracing.Svg>
   <BoundaryTracing.Svg cells={cells2024}>
     <BoundaryTracing.Grid strokePx={2} style={{color: 'var(--gjGray3)'}} />
     <BoundaryTracing.Cells style={{color: 'var(--gjGray3)'}} />
     <BoundaryTracing.BoundaryEdges strokePx={4} style={{color: 'var(--gjBlue6)'}} />
-    <BoundaryTracing.CellDelimiters strokePx={4} style={{color: 'var(--gjRed6)'}} className={style.blink} />
+    <BoundaryTracing.CellDelimiters strokePx={4} style={{color: 'var(--gjRed6)'}} className={css.blink} />
   </BoundaryTracing.Svg>
 </Figure>
 
