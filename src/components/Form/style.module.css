@@ -1,0 +1,45 @@
+.form {
+	padding-block: 1em;
+	border-radius: var(--gjBorderRadius);
+	border-style: solid;
+	border-color: var(--gjGray4);
+	background-color: var(--gjGray0);
+
+	& > * {
+		inline-size: 94%;
+		margin-inline: auto;
+		margin-block-end: 1em;
+
+		&:last-child {
+			margin-block-end: 0;
+		}
+	}
+
+	& > legend:first-child + *,
+	& > :first-child {
+		margin-block-start: 0;
+	}
+
+	& > legend {
+		padding-inline: 1%;
+		inline-size: max-content;
+		margin-inline-start: 2%;
+		margin-block-end: 0;
+	}
+
+	& > label {
+		display: block;
+		margin-block-start: 1em;
+		padding-block-end: 0.25em;
+		cursor: pointer;
+	}
+
+	& > input {
+		display: block;
+		padding-block: 0.3em;
+		padding-inline: 0.5em;
+		border-block-end-style: solid;
+		border-color: var(--gjGray5);
+		background-color: var(--gjGray2);
+	}
+}

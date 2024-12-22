@@ -3,7 +3,7 @@ import type { Story } from "@storybook/react";
 import { StoryView } from "../StoryView";
 import { StorybookNav } from "./Nav";
 import { storyGroups } from "./all.ts";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 interface StorybookProps {
 	path: Array<string>;
@@ -12,7 +12,7 @@ interface StorybookProps {
 export const Storybook = ({ path }: StorybookProps) => {
 	const story = getStory(path);
 	return (
-		<div className={style.container}>
+		<div className={css.container}>
 			<StorybookNav currentPath={path.join("/")} />
 			{!story && (
 				<StoryView.Gallery>

@@ -5,10 +5,10 @@ import type {
 	PropsWithChildren,
 	ReactNode,
 } from "react";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 const Heading = (props: PropsWithChildren) => {
-	return <h2 className={style.heading}>{props.children}</h2>;
+	return <h2 className={css.heading}>{props.children}</h2>;
 };
 
 const listColumnHeadings = function* (labelList: Array<ReactNode>, offset = 0) {
@@ -86,7 +86,7 @@ const Table = <C, R>({
 		}
 	};
 	return (
-		<dl {...props} className={style.table}>
+		<dl {...props} className={css.table}>
 			<dt>{title}</dt>
 			{[...listColumnHeadings(columnLabels, 1)]}
 			{[...listRowHeadings(rowLabels, 1)]}
@@ -122,7 +122,7 @@ const Columns = <C,>({
 }: ColumnsProps<C>) => {
 	const { labels: columnLabels, values: columnValues } = parseTuples(columns);
 	return (
-		<dl {...props} className={style.columns}>
+		<dl {...props} className={css.columns}>
 			{[...listColumnHeadings(columnLabels)]}
 			{columnValues.map((columnValue, i) => {
 				const key = `col-${i}`;
@@ -154,7 +154,7 @@ const Rows = <R,>({
 }: RowsProps<R>) => {
 	const { labels: rowLabels, values: rowValues } = parseTuples(rows);
 	return (
-		<dl {...props} className={style.rows}>
+		<dl {...props} className={css.rows}>
 			{[...listRowHeadings(rowLabels)]}
 			{rowValues.map((rowValue, i) => {
 				const key = `row-${i}`;
@@ -173,7 +173,7 @@ const Rows = <R,>({
 };
 
 const Gallery = (props: PropsWithChildren) => (
-	<main className={style.gallery}>{props.children}</main>
+	<main className={css.gallery}>{props.children}</main>
 );
 
 const FullScreen = (props: PropsWithChildren) => <main>{props.children}</main>;

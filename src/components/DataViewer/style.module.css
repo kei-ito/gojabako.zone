@@ -1,0 +1,39 @@
+.container {
+	display: grid;
+	grid-auto-flow: row;
+	gap: 0.2em;
+	padding: var(--gjBasePadding);
+	font-size: 14px;
+	font-family: var(--gjFontMonospace);
+	line-height: 1;
+	background-color: var(--gjGray1);
+	overflow-x: auto;
+
+	& > dl {
+		flex-direction: row;
+		white-space: pre-wrap;
+		word-break: break-all;
+
+		& > dt {
+			display: inline;
+			color: var(--gjRed9);
+		}
+
+		& > dd {
+			display: inline;
+
+			&[title="String"] {
+				color: var(--gjRed6);
+			}
+
+			&[title="Number"],
+			&[title="Boolean"] {
+				color: var(--gjBlue6);
+			}
+
+			&[title="Undefined"] {
+				color: var(--gjGray5);
+			}
+		}
+	}
+}

@@ -1,7 +1,7 @@
 import * as assert from "node:assert";
 import { readFileSync } from "node:fs";
 import { describe, test } from "node:test";
-import { parse as parseScss } from "postcss-scss";
+import postcss from "postcss";
 import parseSelector from "postcss-selector-parser";
 import { srcDir } from "./directories.ts";
 import {
@@ -32,8 +32,8 @@ describe(listSelectors.name, () => {
 		],
 	];
 	for (const [input, ...expected] of cases) {
-		test(`${listSelectors.name} ${input}`, () => {
-			const root = parseScss(input);
+		test(`${listSelectors.name} ${input}`, async () => {
+			const { root } = await postcss().process(input);
 			const actual = [...listSelectors(root)];
 			assert.deepStrictEqual(actual, expected);
 		});
@@ -88,15 +88,15 @@ describe(listLocalNames.name, () => {
 		],
 		[
 			readFileSync(
-				new URL("components/Article/style.module.scss", srcDir),
+				new URL("components/Article/style.module.css", srcDir),
 				"utf8",
 			),
 			"container",
 		],
 	];
 	for (const [input, ...expected] of cases) {
-		test(`${listLocalNames.name} ${input}`, () => {
-			const root = parseScss(input);
+		test(`${listLocalNames.name} ${input}`, async () => {
+			const { root } = await postcss().process(input);
 			const actual = [...listLocalNames(root, true)];
 			assert.deepStrictEqual(actual, expected);
 		});

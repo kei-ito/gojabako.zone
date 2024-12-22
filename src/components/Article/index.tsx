@@ -1,9 +1,9 @@
 import type { PropsWithChildren } from "react";
 import { CodeLineHandlers } from "../CodeLineHandlers";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 export const Article = ({ children }: PropsWithChildren) => (
-	<article className={style.container}>
+	<article className={css.container}>
 		{children}
 		<CodeLineHandlers />
 	</article>

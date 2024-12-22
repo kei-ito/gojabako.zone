@@ -32,7 +32,7 @@ yarn-error.log*
 tsconfig.tsbuildinfo
 
 # CSS
-*.scss.d.ts
+*.css.d.ts
 
 *.component.tsx
 next-env.d.ts

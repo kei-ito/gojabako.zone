@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { IconClass } from "../../util/classnames";
 import { useIsInView } from "../use/IsInView";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 export const AppHost = () => {
 	const [div, setDiv] = useState<HTMLElement | null>(null);
@@ -27,7 +27,7 @@ export const AppHost = () => {
 		return () => abc.abort();
 	}, [isInView]);
 	return (
-		<div className={style.host} ref={setDiv}>
+		<div className={css.host} ref={setDiv}>
 			<span className={IconClass}>
 				{isInView && appHost ? "cloud_done" : "cloud"}
 			</span>

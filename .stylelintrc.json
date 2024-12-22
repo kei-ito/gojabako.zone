@@ -1,5 +1,5 @@
 {
-	"extends": ["stylelint-config-standard-scss"],
+	"extends": "stylelint-config-recommended",
 	"rules": {
 		"declaration-empty-line-before": ["never", {}],
 		"unit-allowed-list": [
@@ -11,6 +11,8 @@
 						"filter",
 						"backdrop-filter",
 						"box-shadow",
+						"border-width",
+						"border",
 						"/^--gj/"
 					]
 				}

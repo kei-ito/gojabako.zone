@@ -1,6 +1,6 @@
 import type { HTMLAttributes } from "react";
 import { classnames } from "../../util/classnames.ts";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 export interface ToggleProps extends HTMLAttributes<HTMLButtonElement> {
 	state: boolean;
@@ -10,7 +10,7 @@ export interface ToggleProps extends HTMLAttributes<HTMLButtonElement> {
 export const Toggle = ({ state, ...props }: ToggleProps) => (
 	<button
 		{...props}
-		className={classnames(style.container, props.className)}
+		className={classnames(css.container, props.className)}
 		data-state={state ? "1" : "0"}
 	/>
 );

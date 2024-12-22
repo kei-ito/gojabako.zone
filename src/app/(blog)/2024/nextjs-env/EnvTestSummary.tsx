@@ -2,7 +2,7 @@ import { IconClass, classnames } from "../../../../util/classnames";
 import { gridArea } from "../../../../util/gridArea";
 import { listEnvTestEntries } from "../../../../util/testEnv";
 import { MathRef } from "./MathRef";
-import style from "./style.module.scss";
+import style from "./style.module.css";
 
 const allResult: Array<[string, Record<string, string>]> = [
 	[

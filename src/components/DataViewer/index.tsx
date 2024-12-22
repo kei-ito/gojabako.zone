@@ -1,7 +1,7 @@
 import type { HTMLAttributes } from "react";
 import { classnames } from "../../util/classnames";
 import { walkValue } from "../../util/walkValue";
-import * as style from "./style.module.scss";
+import * as css from "./style.module.css";
 
 export interface DataViewerProps<T = unknown>
 	extends HTMLAttributes<HTMLElement> {
@@ -9,7 +9,7 @@ export interface DataViewerProps<T = unknown>
 }
 
 export const DataViewer = <T,>({ value, ...props }: DataViewerProps<T>) => (
-	<div {...props} className={classnames(style.container, props.className)}>
+	<div {...props} className={classnames(css.container, props.className)}>
 		{[
 			...(function* () {
 				for (const { text, type, path } of walkValue(value)) {

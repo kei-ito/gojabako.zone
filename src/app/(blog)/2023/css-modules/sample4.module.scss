@@ -1,19 +1,19 @@
 .aaa {
-  :global {
-    .bbb :local .ccc {
-      font: inherit;
+	:global {
+		.bbb :local .ccc {
+			font: inherit;
 
-      .ddd {
-        font: inherit;
-      }
-    }
+			.ddd {
+				font: inherit;
+			}
+		}
 
-    .eee :local(.fff) .ggg {
-      font: inherit;
+		.eee :local(.fff) .ggg {
+			font: inherit;
 
-      .hhh {
-        font: inherit;
-      }
-    }
-  }
+			.hhh {
+				font: inherit;
+			}
+		}
+	}
 }
