@@ -200,7 +200,7 @@
 			overflow: visible;
 			transform: translateY(-1lh);
 
-			& > .fragment-ref {
+			& > :global(.fragment-ref) {
 				opacity: 0;
 
 				&:focus {
@@ -211,7 +211,7 @@
 
 		&:hover {
 			& > figcaption {
-				& > .fragment-ref {
+				& > :global(.fragment-ref) {
 					opacity: 1;
 				}
 			}
