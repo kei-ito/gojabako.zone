@@ -1,5 +1,5 @@
 import { type ExportResult, ExportResultCode } from "@opentelemetry/core";
-import { createExportLogsServiceRequest } from "@opentelemetry/otlp-transformer/build/src/logs";
+import { JsonLogsSerializer } from "@opentelemetry/otlp-transformer/build/src/logs/json";
 import type {
 	LogRecordExporter,
 	ReadableLogRecord,
@@ -36,7 +36,7 @@ export class OtelLogExporter implements LogRecordExporter {
 		if (endpoint && commonHeaders) {
 			const promise = fetch(endpoint, {
 				method: "POST",
-				body: serializeLogs(logs),
+				body: JsonLogsSerializer.serializeRequest(logs),
 				headers: new Headers(commonHeaders),
 			})
 				.then((res) => handleResponse(resultCallback, res))
@@ -55,15 +55,6 @@ export class OtelLogExporter implements LogRecordExporter {
 		await Promise.all([...this.promises]);
 	}
 }
-
-const serializeLogs = (logs: Array<ReadableLogRecord>): Uint8Array => {
-	const encoder = new TextEncoder();
-	const request = createExportLogsServiceRequest(logs, {
-		useHex: true,
-		useLongBits: false,
-	});
-	return encoder.encode(JSON.stringify(request));
-};
 
 const handleResponse = async (
 	resultCallback: (result: ExportResult) => void,
