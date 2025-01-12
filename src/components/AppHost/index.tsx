@@ -6,11 +6,17 @@ import * as css from "./style.module.css";
 
 export const AppHost = () => {
 	const [div, setDiv] = useState<HTMLElement | null>(null);
+	const [appHost, setAppHost] = useState("Loading");
+	const [hidden, setHidden] = useState(true);
 	const isInView = useIsInView(div);
-	const [appHost, setAppHost] = useState("");
+	useEffect(() => {
+		if (isInView) {
+			setHidden(false);
+		}
+	}, [isInView]);
 	useEffect(() => {
 		const abc = new AbortController();
-		if (isInView) {
+		if (!hidden) {
 			fetch("/apphost", { signal: abc.signal })
 				.then(async (res) => {
 					if (res.ok) {
@@ -25,7 +31,7 @@ export const AppHost = () => {
 				});
 		}
 		return () => abc.abort();
-	}, [isInView]);
+	}, [hidden]);
 	return (
 		<div className={css.host} ref={setDiv}>
 			<span className={IconClass}>
